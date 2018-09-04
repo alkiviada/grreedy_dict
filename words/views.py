@@ -44,7 +44,7 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
     queryset = self.get_queryset()
     language = orig_word = ''
     print(word);
-    orig_word = Word.objects.get(word=word);
+    orig_word = Word.objects.get(word=word, language='english');
     translated_words = Word.objects.filter(translations=orig_word);
     print(translated_words);
     if not translated_words:

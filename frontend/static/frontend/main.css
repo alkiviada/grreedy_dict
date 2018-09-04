@@ -15,7 +15,6 @@ border-bottom-style: none;
   height: 150px;
   overflow:auto;
   padding-left: 10px;
-  padding-right: 10px;
 }
 
 .etym-style ul {
@@ -28,6 +27,7 @@ border-bottom-style: none;
   background: #FFFCF9;
   font-family: Abel;
   padding-left: 10px;
+  padding-right: 10px;
 }
 
 .lang-head {

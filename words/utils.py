@@ -4,7 +4,7 @@ from django.utils import timezone
 from bs4 import BeautifulSoup
 import os
 from words.models import Word, Definition, Etymology, Example
-from words.helpers import scrape_wordref_words, try_fetch
+from words.helpers import scrape_wordref_words, try_fetch, oxford_word
 from words.constants import EXTENSIONS, LANG_MAP, TRANSL_MAP
 
 def fetch_translations(word, orig_word):
@@ -63,6 +63,9 @@ def get_wordref_word_specs(r, language, def_class, exmpl_class):
         if to_exmpls:
           to_exmpls = [ s.get_text() for s in tr_wd.findAll('td', {'class': exmpl_class[1]}) ]
           examples += ' (' + ' '.join(to_exmpls) + ')'
+        print(definition)
+        print(examples)
+        print(to_exmpls)
         if definition and examples and len(to_exmpls):
           defs_exmpls_map[definition] = examples
           definition = ''
@@ -137,34 +140,6 @@ def wordref_word(r, word_id, language, def_class, exmpl_class):
   specs = get_wordref_word_specs(r, language, def_class, exmpl_class)  
   
 
-def oxford_word(r, word_id, *args):
-  etymologies = []
-  definitions = []
-  examples = []
-  oxford_word = r.json()
-
-  word_entries = []
-  for i in oxford_word["results"]:
-    for j in i["lexicalEntries"]:
-      for k in j["entries"]: 
-        sense = {}
-        if 'etymologies' in k:
-          sense['etymology'] = k["etymologies"][0]
-        else:
-          sense['etymology'] = '' 
-        sense['definitions'] = []
-        if 'senses' in k:
-          for v in k["senses"]: 
-            if 'definitions' in v:
-              for d in v["definitions"]:
-                def_exmpls = {}
-                def_exmpls['definition'] = d 
-                if "examples" in v:
-                  def_exmpls['examples'] = [ {'example': e['text']} for e in v["examples"] ]
-                sense['definitions'].append(def_exmpls);
-        word_entries.append(sense)
-   
-  return word_entries 
 
 def create_my_word(word_specs):
   word_id = word_specs.get('word');
