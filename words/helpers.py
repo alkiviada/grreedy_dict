@@ -7,7 +7,7 @@ def scrape_wordref_words(words_string, split=1):
   if not words_string:
     return ''
   words_string = words_string.get_text()   
-  words_string = re.sub(r'(?<!^)\b(nm|nf|vi|vtr|v rif|v pron|loc |v$|agg|adj|nnoun|npl|v expr|interj).*', 
+  words_string = re.sub(r'(?<!^)\b(nm|nf|vi|vtr|v rif|v pron|loc |v$|agg|adj|nnoun|npl|v expr|interj|adv|avv|inter).*', 
                    '', words_string)
   if not split:
     return words_string.strip().translate(str.maketrans(dict.fromkeys(delchars)))
@@ -61,4 +61,4 @@ def oxford_word(r, word_id, *args):
                 sense['definitions'].append(def_exmpls);
         word_entries.append(sense)
    
-  return word_entries 
+  return {'language': 'english', 'specs': word_entries }

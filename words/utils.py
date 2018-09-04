@@ -48,6 +48,7 @@ def get_wordref_word_specs(r, language, def_class, exmpl_class):
 
     defs_exmpls_map = {}
     definition = examples = ''
+    to_exmpls_arr = []
     
     word_table = word_soup.find('table', {'class': 'WRD'});
     print ("NEW TABLE");
@@ -55,23 +56,22 @@ def get_wordref_word_specs(r, language, def_class, exmpl_class):
       for tr_wd in word_table.findAll("tr", {"class": "even"}):
         new_def = scrape_wordref_words(tr_wd.find('td', {'class': def_class}), 0)
         if new_def:
+          if (not new_def == definition) and definition:
+            if len(to_exmpls_arr):
+              examples += ' (' + ' '.join(to_exmpls_arr) + ')'
+            defs_exmpls_map[definition] = examples
+            examples = '' 
+            to_exmpls_arr = []
           definition = new_def
         fr_exmpl = scrape_wordref_words(tr_wd.find('td', {'class': exmpl_class[0]}), 0)
         if fr_exmpl:
           examples = fr_exmpl
-        to_exmpls = tr_wd.findAll('td', {'class': exmpl_class[1]})
-        if to_exmpls:
-          to_exmpls = [ s.get_text() for s in tr_wd.findAll('td', {'class': exmpl_class[1]}) ]
-          examples += ' (' + ' '.join(to_exmpls) + ')'
-        print(definition)
-        print(examples)
-        print(to_exmpls)
-        if definition and examples and len(to_exmpls):
-          defs_exmpls_map[definition] = examples
-          definition = ''
-          examples = '' 
-    print(defs_exmpls_map)
-    return defs_exmpls_map
+        to_exmpl = scrape_wordref_words(tr_wd.find('td', {'class': exmpl_class[1]}), 0)
+        if to_exmpl:
+          to_exmpls_arr.append(to_exmpl)
+    if definition:
+      defs_exmpls_map[definition] = examples
+    return { LANG_MAP.get(language).get('db_language'): defs_exmpls_map }
 
 def fetch_word(word_id):
   apis = [
@@ -103,19 +103,18 @@ def fetch_word(word_id):
       r = try_fetch(u.get('url'), u.get('headers'))
       if r:
         specs = loc.get('create_function')(r, word_id, u.get('lang'), u.get('definition_class'), u.get('example_class'))
-        word_specs = loc.get('compose_specs')(specs, word_specs) if loc.get('compose_specs') else specs
+        compose_func = loc.get('compose_specs')
+        word_specs = compose_func(specs, word_specs) if compose_func else [{'word': word_id, **specs}]
         print(word_specs)
     if r:
       break
   if len(word_specs):
-    create_my_word({ 'word': word_id, 'specs': word_specs}) 
+    [ create_my_word(ws) for ws in word_specs ]
 
 def compose_wordref_specs(specs, all_specs):
-  print('SPECS')
-  print(specs)
   if not specs:
     return all_specs
-  print(all_specs)
+  
 
 def oxford_url(api, word_id): 
    url = api.get('url')
@@ -137,15 +136,14 @@ def wordref_url(api, word_id):
 def wordref_word(r, word_id, language, def_class, exmpl_class):
   word_page = r.content
   word_soup = BeautifulSoup(word_page, features="html.parser")
-  specs = get_wordref_word_specs(r, language, def_class, exmpl_class)  
+  return get_wordref_word_specs(r, language, def_class, exmpl_class)  
   
-
-
 def create_my_word(word_specs):
   word_id = word_specs.get('word');
+  language = word_specs.get('language');
   word_entries = word_specs.get('specs');
   
-  w = Word.objects.create(word=word_id, lookup_date=timezone.now(), language='english')
+  w = Word.objects.create(word=word_id, lookup_date=timezone.now(), language=language)
   for e in word_entries:
     ety = Etymology.objects.create(word=w, etymology=e['etymology']);
     for d in e['definitions']:
