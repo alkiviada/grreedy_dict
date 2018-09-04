@@ -1,0 +1,82 @@
+{% load static %}
+<html>
+    <head>
+        <title>Dictionary App</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href="//fonts.googleapis.com/css?family=Keania+One|Libre+Baskerville" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/word.css' %}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="{% static 'js/jQuery.highlighter.js' %}"></script>
+        <script src="{% static 'js/word.js' %}"></script>
+
+    </head>
+    <body>
+
+<script type="text/javascript">
+$(document).ready(init);
+
+
+	function init() 
+	{
+
+$('.post').highlighter({
+                           'selector': '.js-highlight',
+                           'minWords': 0,
+                           'complete': function (data) { 
+                             $(".wd-lookup-link").prop("onclick", null).off("click"); 
+                             $(".wd-lookup-link").click(function() { lookup_word(data); }); }
+}
+);
+ $("#wd-look-up").click(function() { lookup_word($("#id_word").val() ); });
+// $("#id_word").change(function() { lookup_word($(this).val() ); });
+// $("#id_word").keyup(function() { if (e.keyCode == 13) { lookup_word($(this).val() ); } });
+};
+
+
+
+function lookup_word(word) {
+    let all_words = $.map($(".word"), function(n) { return $(n).text(); });
+    if (all_words.indexOf(word) != -1) {
+      alert(`i already have the word ${word}`);
+    }
+    else { 
+      $.ajax({
+        type: "POST",
+        url: "/words/", 
+        data: {'word': word, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        success : function(data) {
+             $('.content').append(data);
+$('.post').highlighter({
+                           'selector': '.js-highlight',
+                           'minWords': 0,
+                           'complete': function (data) { $(".wd-lookup-link").prop("onclick", null).off("click"); $(".wd-lookup-link").click(function() { lookup_word(data); }); }
+}
+);
+         }
+});
+
+    }
+};
+
+</script>
+
+<div class="content container">
+  <div class="row">
+    <form action="/words/" method="post">
+    {% csrf_token %}
+    <div class="wd-form-cont">
+      <div class="wd-lbl">New Word:</div><div class="wd-input">{{ form.word }} <button id="wd-look-up" type="button" class="btn btn-primary">Look Up</button></div>
+    </div>
+    </form>
+  </div>
+{% include "words/one_word.html" %}
+  </div>
+</div>
+
+<div class="lookup-bar-highlight js-highlight yr-highlight" style="display:none">
+<div class="yr-lookup"><a class="wd-lookup-link lookup-bar-highlight">Look Up</a>
+</div>
+</div>
+</body>
+</html>

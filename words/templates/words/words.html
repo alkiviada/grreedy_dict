@@ -1,0 +1,63 @@
+{% load static %}
+<html>
+    <head>
+        <title>Dictionary App</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href="//fonts.googleapis.com/css?family=Keania+One|Libre+Baskerville" rel="stylesheet" type="text/css">
+        <link href="//fonts.googleapis.com/css?family=Keania&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/word.css' %}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="{% static 'js/jQuery.highlighter.js' %}"></script>
+        <script src="{% static 'js/word.js' %}"></script>
+
+    </head>
+    <body>
+
+<script type="text/javascript">
+$(document).ready(init);
+	function init() 
+	{
+$('.post').highlighter({
+                           'selector': '.js-highlight',
+                           'minWords': 0,
+                           'complete': function (data) {  }
+}
+);
+}
+</script>
+<form action="/words/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Look Up" />
+</form>
+
+        <div>
+            <h1><a href="/">{{ word }}</a></h1>
+        </div>
+<div class="content container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="wd-scr">
+            {% for e in content %}
+                <div class="post">
+<div class="lookup-bar-highlight js-highlight yr-highlight">
+<div class="yr-lookup"><a class="lookup-bar-highlight">Look me up too</a>
+</div>
+</div>
+                    {% if e.etymology %}<p>{{ e.etymology }}</p>{% endif %}
+                    {% for d in e.definitions %}
+                      <p>{{ d.definition }}</p>
+                      {% for e in d.examples %}
+                      <li>{{ e.example }}</li>
+                      {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

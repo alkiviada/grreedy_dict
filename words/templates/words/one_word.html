@@ -1,0 +1,22 @@
+{% if word %}
+  <div class="row">
+<div> <h1 class="word"><a href="/">{{ word }}</a></h1> </div>
+        <div class="col-md-8">
+            <div class="wd-scr">
+            {% for e in content %}
+                <div class="post">
+                    {% if e.etymology %}<p>{{ e.etymology }}</p>{% endif %}
+                    {% for d in e.definitions %}
+                      <div class="definition">
+                      <p>{{ d.definition }}</p>
+                      </div>
+                      {% for e in d.examples %}
+                      <li>{{ e.example }}</li>
+                      {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        </div>
+</div>
+{% endif %}
