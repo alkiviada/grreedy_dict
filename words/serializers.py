@@ -15,7 +15,6 @@ class DefinitionSerializer(serializers.ModelSerializer):
         model = Definition 
         fields = ['definition', 'examples']
 
-
 class EtymologySerializer(serializers.ModelSerializer):
     definitions = DefinitionSerializer(many=True)
     class Meta:
@@ -24,10 +23,10 @@ class EtymologySerializer(serializers.ModelSerializer):
 
 
 class WordSerializer(serializers.ModelSerializer):
-    etymologies = EtymologySerializer(many=True)
+    word_etymologies = EtymologySerializer(many=True)
     class Meta:
         model = Word
-        fields = ['word', 'etymologies']
+        fields = ['word', 'word_etymologies', 'language']
 
 class TranslationSerializer(serializers.ModelSerializer):
     class Meta:

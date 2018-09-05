@@ -1,5 +1,8 @@
 import re
 import requests
+from words.models import Word, Definition, Etymology, Example
+from datetime import datetime
+from django.utils import timezone
 
 delchars = ''.join(c for c in map(chr, [8594, 8658]) if not c.isalnum())
 
@@ -20,7 +23,7 @@ def scrape_wordref_words(words_string, split=1):
 def try_fetch(url, headers={}):
   r = ''
   try:
-    r = requests.get(url,timeout=3, headers = headers)
+    r = requests.get(url,timeout=3, headers = headers, allow_redirects=False)
     r.raise_for_status()
   except requests.exceptions.HTTPError as errh:
     print ("Http Error:", errh)
@@ -62,3 +65,20 @@ def oxford_word(r, word_id, *args):
         word_entries.append(sense)
    
   return {'language': 'english', 'specs': word_entries }
+
+
+def create_my_word(word_specs):
+  word_id = word_specs.get('word');
+  language = word_specs.get('language');
+  word_entries = word_specs.get('specs');
+  
+  w = Word.objects.create(word=word_id, lookup_date=timezone.now(), language=language)
+  for e in word_entries:
+    print(e['etymology'])
+    ety = Etymology.objects.create(word=w, etymology=e['etymology']);
+    for d in e['definitions']:
+      exmpls = []
+      edef = Definition.objects.create(word=w, definition=d['definition'], etymology=ety);
+      if 'examples' in d:
+        exmpls = [ Example.objects.create(definition=edef, example=e['example'], word=w) for e in d['examples'] ] 
+

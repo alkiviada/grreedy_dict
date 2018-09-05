@@ -21,7 +21,7 @@ const Translations = (props) => {
     ) : 
     ( Object.keys(word_trans).map(e =>  
         <div className="etym-style">
-        <p style={fontStylesForLang[e]} className="heading lang-head"><strong>{e}</strong></p>
+        <p style={fontStylesForLang[e]} className="heading lang-head">{e}</p>
         <DecorateWithLinks words={word_trans[e].join(', ')} onLinkClick={fn}/>
         </div>)
       

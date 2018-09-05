@@ -16,24 +16,23 @@ class WordList(generics.ListAPIView):
         queryset = Word.objects.filter(word_examples__isnull=False).distinct()
         return queryset
 
-class WordSingleCreate(generics.RetrieveAPIView):
-  queryset = Word.objects.all()
+class WordSingleCreate(generics.ListAPIView):
   lookup_field = 'word'
   serializer_class = WordSerializer
+
   def get(self, request, word, *args, **kwargs):
-    queryset = self.get_queryset()
-    try:
-      db_word = Word.objects.get(word=word);
-    except ObjectDoesNotExist:
+    print('GET ' + word);
+    db_words = Word.objects.filter(word=word);
+    print('no word')
+    if not db_words:
       print("Word is not in our DB");
       fetch_word(word);
-      try:
-        db_word = Word.objects.get(word=word);
-      except ObjectDoesNotExist:
+      db_words = Word.objects.filter(word=word);
+      if not db_words:
         print("Word is not in our DB");
         raise Http404("No API for the word:", word)
       
-    serializer = WordSerializer(db_word)
+    serializer = WordSerializer(db_words, many=True)
     return Response(serializer.data)
     
 class WordSingleCreateTranslate(generics.RetrieveAPIView):

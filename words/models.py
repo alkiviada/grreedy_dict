@@ -2,7 +2,7 @@ from django.db import models
 
 class Etymology(models.Model):
     etymology = models.CharField(max_length=200)
-    word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='etymologies')
+    word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_etymologies')
     def __str__(self):
         return self.etymology
 

@@ -1,10 +1,10 @@
 import json
-from datetime import datetime
-from django.utils import timezone
 from bs4 import BeautifulSoup
-import os
 from words.models import Word, Definition, Etymology, Example
-from words.helpers import scrape_wordref_words, try_fetch, oxford_word
+from django.utils import timezone
+from datetime import datetime
+import os
+from words.helpers import scrape_wordref_words, try_fetch, oxford_word, create_my_word
 from words.constants import EXTENSIONS, LANG_MAP, TRANSL_MAP
 
 def fetch_translations(word, orig_word):
@@ -71,7 +71,13 @@ def get_wordref_word_specs(r, language, def_class, exmpl_class):
           to_exmpls_arr.append(to_exmpl)
     if definition:
       defs_exmpls_map[definition] = examples
-    return { LANG_MAP.get(language).get('db_language'): defs_exmpls_map }
+    if not defs_exmpls_map.keys():
+      return
+    return { 'language' : LANG_MAP.get(language).get('db_language'), 
+             'specs': [{ 'etymology' : '', 
+                        'definitions': [ {'definition': d, 'examples': [ { 'example': defs_exmpls_map.get(d) } ] } for d in defs_exmpls_map ] 
+                      }],
+           }
 
 def fetch_word(word_id):
   apis = [
@@ -89,7 +95,6 @@ def fetch_word(word_id):
                      'languages': ['fren', 'iten', ],
                      'create_function': wordref_word,
                      'create_url': wordref_url,
-                     'compose_specs': compose_wordref_specs,
       },
     },
   ] 
@@ -103,18 +108,35 @@ def fetch_word(word_id):
       r = try_fetch(u.get('url'), u.get('headers'))
       if r:
         specs = loc.get('create_function')(r, word_id, u.get('lang'), u.get('definition_class'), u.get('example_class'))
-        compose_func = loc.get('compose_specs')
-        word_specs = compose_func(specs, word_specs) if compose_func else [{'word': word_id, **specs}]
+        if specs:
+          word_specs.append(specs)
         print(word_specs)
-    if r:
-      break
-  if len(word_specs):
-    [ create_my_word(ws) for ws in word_specs ]
+  if word_specs:
+    word_specs = compose_specs(word_specs)
+    [ create_my_word({'word': word_id, 'specs': w.get('specs'), 'language': w.get('language')}) for w in word_specs ]
 
-def compose_wordref_specs(specs, all_specs):
-  if not specs:
-    return all_specs
-  
+def compose_specs(all_specs):
+  print(all_specs)
+  specs_to_lang_map = {}
+  new_specs = []
+  for s in all_specs:
+    language = s.get('language');
+    if specs_to_lang_map.get(language):
+      specs_to_lang_map[language].append(s.get('specs'))
+    else:
+      specs_to_lang_map[language] = [ s.get('specs') ]
+
+  for l in specs_to_lang_map:
+    specs = specs_to_lang_map.get(l)
+    if len(specs) == 1:
+      new_specs.append({ 'language': l, 'specs': specs[0] })  
+    else:
+      for s in specs:
+        print(specs)
+        for d in s.get('definitions'): 
+          print(d)
+      
+  return new_specs
 
 def oxford_url(api, word_id): 
    url = api.get('url')
@@ -138,17 +160,3 @@ def wordref_word(r, word_id, language, def_class, exmpl_class):
   word_soup = BeautifulSoup(word_page, features="html.parser")
   return get_wordref_word_specs(r, language, def_class, exmpl_class)  
   
-def create_my_word(word_specs):
-  word_id = word_specs.get('word');
-  language = word_specs.get('language');
-  word_entries = word_specs.get('specs');
-  
-  w = Word.objects.create(word=word_id, lookup_date=timezone.now(), language=language)
-  for e in word_entries:
-    ety = Etymology.objects.create(word=w, etymology=e['etymology']);
-    for d in e['definitions']:
-      exmpls = []
-      edef = Definition.objects.create(word=w, definition=d['definition'], etymology=ety);
-      if 'examples' in d:
-        exmpls = [ Example.objects.create(definition=edef, example=e['example'], word=w) for e in d['examples'] ] 
-

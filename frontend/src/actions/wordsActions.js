@@ -37,10 +37,17 @@ export const lookUpWord = (word, words) => dispatch => {
           console.log('Server returned error status');
         } else {
           // Status looks good
-          var word = Object.assign({}, json);
+          var word = json;
+          const obj = word.reduce((o, e) =>
+                               (o['word'] = e['word'], 
+                                o['description'] = [ ...o['decrition'] ? o['decrition'] : '', 
+                                                     {'language' : e['language'], 
+                                                      'etymology': e['word_etymologies']} ], o), {}
+                              );
+          console.log(obj);
           dispatch({
             type: FETCH_WORDS,
-            payload: [word, ...words]
+            payload: [obj, ...words]
           })
         }
       },
