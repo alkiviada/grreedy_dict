@@ -5,7 +5,7 @@ from django.utils import timezone
 from datetime import datetime
 import os
 import re
-from words.helpers import scrape_wordref_words, try_fetch, oxford_word, create_my_word
+from words.helpers import scrape_wordref_words, try_fetch, oxford_word, create_my_word, collect_examples
 from words.constants import EXTENSIONS, LANG_MAP, TRANSL_MAP
 
 def fetch_translations(word, orig_word):
@@ -48,37 +48,51 @@ def get_wordref_word_specs(r, language, def_class, exmpl_class):
     word_soup = BeautifulSoup(word_page, features="html.parser")
 
     defs_exmpls_map = {}
-    definition = examples = ''
-    to_exmpls_arr = []
+    defs = []
+    fr_exmpls = []
+    to_exmpls = []
     
     word_table = word_soup.find('table', {'class': 'WRD'});
     print ("NEW TABLE");
     if word_table:
-      for tr_wd in word_table.findAll("tr", {"class": "even"}):
-        new_def = scrape_wordref_words(tr_wd.find('td', {'class': def_class}), 0)
-        if new_def:
-          if (not new_def == definition) and definition:
-            if len(to_exmpls_arr):
-              examples += ' (' + ' '.join(to_exmpls_arr) + ')'
+      group_class = ''
+      for tr_wd in word_table.findAll("tr", {"class": ["even", "odd"]}):
+        new_class = tr_wd['class'][0];
+        if not group_class:
+          group_class = new_class
+        if group_class != new_class:
+          group_class = new_class          
+          definition = ', '.join(defs)
+          if definition:
+            examples = collect_examples(fr_exmpls, to_exmpls)
             defs_exmpls_map[definition] = examples
-            examples = '' 
-            to_exmpls_arr = []
-          definition = new_def
-        fr_exmpl = scrape_wordref_words(tr_wd.find('td', {'class': exmpl_class[0]}), 0)
-        if fr_exmpl:
-          examples = fr_exmpl
-        to_exmpl = scrape_wordref_words(tr_wd.find('td', {'class': exmpl_class[1]}), 0)
-        if to_exmpl:
-          to_exmpls_arr.append(to_exmpl)
-    if definition:
-      defs_exmpls_map[definition] = examples
+          defs = []
+          fr_exmpls = []
+          to_exmpls = []
+        new_def = scrape_wordref_words(tr_wd.find('td', {'class': def_class}), 0)
+        new_fr_ex = scrape_wordref_words(tr_wd.find('td', {'class': exmpl_class[0]}), 0)
+        new_to_ex = scrape_wordref_words(tr_wd.find('td', {'class': exmpl_class[1]}), 0)
+        if new_def:
+          defs.append(new_def)
+        if new_fr_ex:
+          fr_exmpls.append(new_fr_ex)
+        if new_to_ex:
+          to_exmpls.append(new_to_ex)
+    if defs:
+      definition = ', '.join(defs)
+      if definition: 
+        defs_exmpls_map[definition] = collect_examples(fr_exmpls, to_exmpls)
+
     if not defs_exmpls_map.keys():
       return
+
     return { 'language' : LANG_MAP.get(language).get('db_language'), 
              'specs': [{ 'etymology' : '', 
                         'definitions': [ {'definition': d, 'examples': [ { 'example': defs_exmpls_map.get(d) } ] } for d in defs_exmpls_map ] 
                       }],
            }
+
+
 
 def fetch_word(word_id):
   apis = [
@@ -111,7 +125,6 @@ def fetch_word(word_id):
         specs = loc.get('create_function')(r, word_id, u.get('lang'), u.get('definition_class'), u.get('example_class'))
         if specs:
           word_specs.append(specs)
-        print(word_specs)
   if word_specs:
     word_specs = compose_specs(word_specs)
     [ create_my_word({'word': word_id, 'specs': w.get('specs'), 'language': w.get('language')}) for w in word_specs ]
@@ -145,7 +158,6 @@ def compose_specs(all_specs):
           match = ''
           matched_d = ''
           for d_to_match in all_defs_for_lang:
-            print(d)
             print(d_to_match)
             match = re(d, d_to_match)
             if match:
@@ -158,7 +170,6 @@ def compose_specs(all_specs):
             next
           else:
             uniq_defs.append(d) 
-        print(uniq_defs);
       
   return new_specs
 

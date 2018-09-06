@@ -25,7 +25,6 @@ class DefinitionSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         result = super(DefinitionSerializer, self).to_representation(instance)
-        [print(key, result[key][0]) for key in result if bool(result[key])]
         return OrderedDict([(key, result[key]) for key in result if not (len(result[key]) == 1 and not result[key][0]) ])
 
 
