@@ -27,13 +27,6 @@ class Table extends Component {
     }
   }
 
-  modifyRow (e, u, word) {
-    console.log('translate up');
-    e.preventDefault();
-    this.props.lookUpTranslation(u, word);
-  }
-
-
   render () {
     const data = this.props.data;
     return !data.length ? (

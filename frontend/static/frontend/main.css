@@ -1,12 +1,19 @@
 .def-style li {
- list-style-type: circle;
- margin-left: 2em;
+  list-style-type: circle;
+  margin-left: 2em;
 }
 
 .exmpl-style li {
- list-style-type: square;
- margin-left: 2em;
-border-bottom-style: none;
+  list-style-type: square;
+  margin-left: 2em;
+}
+
+.etym-style {
+  background: #FFFCF9;
+  font-family: Abel;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: 0.5em;
 }
 
 .word {
@@ -15,19 +22,6 @@ border-bottom-style: none;
   height: 150px;
   overflow:auto;
   padding-left: 10px;
-}
-
-.etym-style ul {
-  background: #FFFCF9;
-  font-family: Abel;
-  padding-left: 10px;
-}
-
-.etym-style {
-  background: #FFFCF9;
-  font-family: Abel;
-  padding-left: 10px;
-  padding-right: 10px;
 }
 
 .lang-head {

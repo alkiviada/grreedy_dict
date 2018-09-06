@@ -7,6 +7,12 @@ import key from "weak-key";
 import { connect } from 'react-redux';
 import { lookUpTranslations, switchTab } from '../actions/wordsActions';
 
+const fontStylesForLang =  {
+ 'french': {'fontFamily': 'Parisienne', 'color': '#c18eda'},
+ 'italian': {'fontFamily': 'Italiana', 'color': '#2e8286'},
+ 'english': {'fontFamily': 'IM Fell English SC', 'color': '#6c8dbc'},
+}
+
 const mapStateToProps = state => ({
   mapTabIndex: state.words.mapTabIndex,
   allTranslations: state.words.allTranslations,
@@ -57,7 +63,13 @@ class WordTabs extends Component {
           <Tab>Synonyms</Tab>
         </TabList>
         <TabPanel>
-          { renderList(element, fn[0], listStyles, 0) }
+          { element.map(e => 
+                <div>
+                <p style={fontStylesForLang[e['language']]} className="heading lang-head">{e['language']}</p>
+                { renderList(e['etymology'], fn[0], listStyles, 0) }
+                </div>
+               )
+          }
         </TabPanel>
         <TabPanel>
           <Translations word={word} fn={fn[0]}/> 
@@ -70,17 +82,22 @@ class WordTabs extends Component {
   }
 }
 
+
 function renderList(el, fn, styles, styleCount) {
   styleCount += 1;
   let listClass = styles[styleCount];
-  return el.map(el => (
+  if (!el.length) { 
+    return ''
+  }
+  console.log(el)
+  return el.map(el => ( 
     <ul className={listClass} key={el.id}>
     <li>
       {Object.entries(el).map(el => typeof(el[1]) === 'string' ? 
       <DecorateWithLinks words={el[1]} onLinkClick={fn}/> : 
       renderList(el[1], fn, styles, styleCount))}
     </li>
-    </ul>
+    </ul> 
    )
   );
 }

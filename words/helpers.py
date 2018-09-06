@@ -10,7 +10,7 @@ def scrape_wordref_words(words_string, split=1):
   if not words_string:
     return ''
   words_string = words_string.get_text()   
-  words_string = re.sub(r'(?<!^)\b(nm|nf|vi|vtr|v rif|v pron|loc |v$|agg|adj|nnoun|npl|v expr|interj|adv|avv|inter).*', 
+  words_string = re.sub(r'(?<!^)\b(nm|nf|viintransitiv|vtr|v rif|v pron|loc |v$|agg|adj|nnoun|npl|v expr|interj|adv|avv|inter).*', 
                    '', words_string)
   if not split:
     return words_string.strip().translate(str.maketrans(dict.fromkeys(delchars)))

@@ -4,6 +4,7 @@ from words.models import Word, Definition, Etymology, Example
 from django.utils import timezone
 from datetime import datetime
 import os
+import re
 from words.helpers import scrape_wordref_words, try_fetch, oxford_word, create_my_word
 from words.constants import EXTENSIONS, LANG_MAP, TRANSL_MAP
 
@@ -116,25 +117,48 @@ def fetch_word(word_id):
     [ create_my_word({'word': word_id, 'specs': w.get('specs'), 'language': w.get('language')}) for w in word_specs ]
 
 def compose_specs(all_specs):
-  print(all_specs)
   specs_to_lang_map = {}
   new_specs = []
+
   for s in all_specs:
     language = s.get('language');
     if specs_to_lang_map.get(language):
-      specs_to_lang_map[language].append(s.get('specs'))
+      specs_to_lang_map[language].append(*s.get('specs'))
     else:
-      specs_to_lang_map[language] = [ s.get('specs') ]
+      specs_to_lang_map[language] = s.get('specs')
+  return [ {'language': l, 'specs': specs_to_lang_map.get(l) } for l in specs_to_lang_map ]  
 
   for l in specs_to_lang_map:
+    all_defs_for_lang = []
+    uniq_defs_for_lang = []
+    defs_to_exmpls_map = {}
     specs = specs_to_lang_map.get(l)
     if len(specs) == 1:
       new_specs.append({ 'language': l, 'specs': specs[0] })  
     else:
       for s in specs:
-        print(specs)
         for d in s.get('definitions'): 
-          print(d)
+          definition = d.get('definition')
+          all_defs_for_lang.append(definition)
+          defs_to_exmpls_map[definition] = d.get('examples')
+        for d in all_defs_for_lang: 
+          match = ''
+          matched_d = ''
+          for d_to_match in all_defs_for_lang:
+            print(d)
+            print(d_to_match)
+            match = re(d, d_to_match)
+            if match:
+              matched_d = d_to_match;
+              next
+          if match:
+            examples = def_to_examples_map[d];
+            defs_to_examples_map[matched_d].append(examples);
+            matched_d = match = ''
+            next
+          else:
+            uniq_defs.append(d) 
+        print(uniq_defs);
       
   return new_specs
 
