@@ -52,14 +52,15 @@ class WordTabs extends Component {
 
   render() {
     const { word, element, fn } = this.props;
-    if (!(typeof (this.props.mapTabIndex[word]) === 'undefined')) {
-    }
+    const is_english_word = element.reduce((english_flag, e) => 
+      {return e['language'] === 'english' ?  ++english_flag : english_flag}, 0)
+    console.log(is_english_word);
     return ( 
       <Tabs selectedIndex={this.state.tabIndex} 
         onSelect={(prev, index) => this.handleSelect(index, prev, word)}>
         <TabList>
           <Tab>Original Word</Tab>
-          <Tab>Translations</Tab>
+          { is_english_word ? <Tab>Translations</Tab> : <Tab>Collocations</Tab> }
           <Tab>Synonyms</Tab>
         </TabList>
         <TabPanel>
@@ -72,7 +73,7 @@ class WordTabs extends Component {
           }
         </TabPanel>
         <TabPanel>
-          <Translations word={word} fn={fn[0]}/> 
+          { is_english_word ? <Translations word={word} fn={fn[0]}/> <Collocations word={word} fn={fn[1]} >}
         </TabPanel>
         <TabPanel>
         <h2>Any content 2</h2>
@@ -89,7 +90,6 @@ function renderList(el, fn, styles, styleCount) {
   if (!el.length) { 
     return ''
   }
-  console.log(el)
   return el.map(el => ( 
     <ul className={listClass} key={el.id}>
     <li>

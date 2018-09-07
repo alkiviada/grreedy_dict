@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Case, When, Value, IntegerField
 
 class Etymology(models.Model):
     etymology = models.CharField(max_length=200)
@@ -23,6 +24,18 @@ class Example(models.Model):
     definition = models.ForeignKey(Definition, on_delete=models.CASCADE, related_name='examples')
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_examples')
 
+class WordManager(models.Manager):
+  def get_queryset(self):
+    return super().get_queryset().filter(language__in=['english', 'french', 'italian']).annotate(order=Case(
+      When(language='english', then=Value(0)),
+      When(language='french', then=Value(1)),
+      When(language='italian', then=Value(2)),
+      output_field=IntegerField())).order_by('order')
+
+class EnglishWordManager(models.Manager):
+  def get_queryset(self):
+    return super().get_queryset().filter(language='english')
+
 class Word(models.Model):
     word = models.CharField(max_length=30)
     language = models.CharField(max_length=33)
@@ -30,6 +43,8 @@ class Word(models.Model):
     notes = models.CharField(max_length=200)
     translations = models.ManyToManyField("self", blank=True, related_name='translations')
     
+    objects = WordManager()
+    english_objects = EnglishWordManager()
     
     def __str__(self):
         return self.word
@@ -42,9 +57,12 @@ class Collection(models.Model):
     words = models.ManyToManyField(Word, blank=True, related_name='words')
     created_date = models.DateTimeField('date created')
     notes = models.CharField(max_length=200)
-    
+      
+
     def __str__(self):
         return self.name
 
     class Meta:
         ordering = ('-created_date',)
+
+

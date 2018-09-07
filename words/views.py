@@ -9,7 +9,6 @@ from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist 
 from django.http import Http404
 
-
 class WordList(generics.ListAPIView):
     serializer_class = WordSerializer
     def get_queryset(self):
@@ -23,15 +22,22 @@ class WordSingleCreate(generics.ListAPIView):
   def get(self, request, word, *args, **kwargs):
     print('GET ' + word);
     db_words = Word.objects.filter(word=word);
-    print('no word')
-    if not db_words:
+    complete_word = 0
+    for w in db_words:
+      for d in w.word_definitions.all():
+        print(d.definition)
+        if d.definition: 
+          complete_word = 1        
+    print(complete_word)
+
+    if not db_words or not complete_word:
       print("Word is not in our DB");
       fetch_word(word);
       db_words = Word.objects.filter(word=word);
       if not db_words:
-        print("Word is not in our DB");
+        print("Could not fetch word:" + word);
         raise Http404("No API for the word:", word)
-      
+
     serializer = WordSerializer(db_words, many=True)
     return Response(serializer.data)
     
@@ -43,7 +49,7 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
     queryset = self.get_queryset()
     language = orig_word = ''
     print(word);
-    orig_word = Word.objects.get(word=word, language='english');
+    orig_word = Word.english_objects.get(word=word);
     translated_words = Word.objects.filter(translations=orig_word);
     print(translated_words);
     if not translated_words:

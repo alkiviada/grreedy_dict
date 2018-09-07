@@ -3,6 +3,7 @@ import requests
 from words.models import Word, Definition, Etymology, Example
 from datetime import datetime
 from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
 
 delchars = ''.join(c for c in map(chr, [8594, 8658]) if not c.isalnum())
 
@@ -10,15 +11,15 @@ def scrape_wordref_words(words_string, split=1):
   if not words_string:
     return ''
   words_string = words_string.get_text()   
-  words_string = re.sub(r'(?<!^)\b(nm|nf|viintransitiv|vtr|v rif|v pron|loc |v$|agg|adj|nnoun|npl|v expr|interj|adv|avv|inter| contraction|expr|abbr).*', 
-                   '', words_string)
+  words_string = re.sub(
+    r'(?<!^)\b(nm|nf|viintransitiv|vtr|v rif|v pron|loc |v$|agg|adj|nnoun|npl|v expr|interj|adv|avv|inter| contraction|expr|abbr|vi +).*', 
+    '', words_string)
   if not split:
     return words_string.strip().translate(str.maketrans(dict.fromkeys(delchars)))
 
   words = [ w.strip().translate(str.maketrans(dict.fromkeys(delchars))) 
     for w in words_string.split(',') ]
   return words
-
 
 def try_fetch(url, headers={}):
   r = ''
@@ -72,7 +73,12 @@ def create_my_word(word_specs):
   language = word_specs.get('language');
   word_entries = word_specs.get('specs');
   
-  w = Word.objects.create(word=word_id, lookup_date=timezone.now(), language=language)
+  w = ''
+  try:
+    w = Word.objects.get(word=word_id, language=language) 
+  except ObjectDoesNotExist:
+    w = Word.objects.create(word=word_id, lookup_date=timezone.now(), language=language)
+
   for e in word_entries:
     print(e['etymology'])
     ety = Etymology.objects.create(word=w, etymology=e['etymology']);
