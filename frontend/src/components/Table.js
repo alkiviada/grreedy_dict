@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import WordTabs from "./WordTabs";
 import key from "weak-key";
 import { connect } from 'react-redux';
-import { lookUpWord, fetchWords } from '../actions/wordsActions';
+import { lookUpWord, fetchWords, requestWords } from '../actions/wordsActions';
 
 
 class Table extends Component {
@@ -13,6 +13,7 @@ class Table extends Component {
   }
   componentWillMount() {
     console.log('mounting table');
+    this.props.requestWords();
     this.props.fetchWords();
   }
 
@@ -23,12 +24,14 @@ class Table extends Component {
     console.log(this.props.allWordsMap);
     console.log('checking map');
     if (!this.props.allWordsMap[word]) {
+      this.props.requestWords();
       this.props.lookUpWord(word, this.props.data);
     }
   }
 
   render () {
     const data = this.props.data;
+    const fetching = this.props.fetching;
     return !data.length ? (
       <div className="container">
       <div className="notification" className="clear-notification">
@@ -70,12 +73,14 @@ class Table extends Component {
 const mapStateToProps = state => ({
   data: state.words.items,
   allWordsMap: state.words.allWordsMap,
+  fetching: state.words.fetching,
 });
 
 Table.propTypes = {
   data: PropTypes.array.isRequired,
   lookUpWord: PropTypes.func.isRequired,
   fetchWords: PropTypes.func.isRequired,
+  requestWords: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, { lookUpWord, fetchWords })(Table);
+export default connect(mapStateToProps, { lookUpWord, fetchWords, requestWords })(Table);

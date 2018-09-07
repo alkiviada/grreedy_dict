@@ -1,10 +1,16 @@
-import { FETCH_WORDS, FETCH_WORD, FETCH_TRANSLATION, SWITCH_TAB } from './types';
+import { FETCH_WORDS, FETCH_WORDS_FULFILLED, FETCH_WORDS_REJECTED, FETCH_WORD, FETCH_TRANSLATION, SWITCH_TAB } from './types';
 
 export const switchTab = (index, word, map) => dispatch => {
   console.log('switching tab');
   dispatch({
     type: SWITCH_TAB,
     payload: { ...map, ...{[word]: index} }
+  })
+};
+
+export const requestWords = () => dispatch => {
+  dispatch({
+    type: FETCH_WORDS,
   })
 };
 
@@ -27,7 +33,7 @@ export const fetchWords = () => dispatch => {
       }
       conflated_words = conflated_words.map(w => ({'word': w, 'description': word_map[w]}))
       dispatch({
-        type: FETCH_WORDS,
+        type: FETCH_WORDS_FULFILLED,
         payload: conflated_words
       })
      }
@@ -49,6 +55,7 @@ export const lookUpWord = (word, words) => dispatch => {
         if (status >= 400) {
           // Status looks bad
           console.log('Server returned error status');
+          dispatch({type: FETCH_WORDS_REJECTED, payload: 'fetching words failed', })
         } else {
           // Status looks good
           var word = json;
@@ -59,7 +66,7 @@ export const lookUpWord = (word, words) => dispatch => {
                                                       'etymology': e['word_etymologies']} ], o), {}
                               );
           dispatch({
-            type: FETCH_WORDS,
+            type: FETCH_WORDS_FULFILLED,
             payload: [obj, ...words]
           })
         }
@@ -67,6 +74,7 @@ export const lookUpWord = (word, words) => dispatch => {
       // Either fetching or parsing failed!
       err => {
         console.log('problems');
+        dispatch({type: FETCH_WORDS_REJECTED, payload: 'fetching words failed', })
       }
     ); 
 };

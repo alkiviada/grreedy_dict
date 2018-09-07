@@ -6,16 +6,26 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = state => ({
   trans: state.words.allTranslations,
+  fetching: state.words.fetching,
   newTrans: state.words.translations,
 });
 
 const Translations = (props) => {
-    const { word, trans, fn } = props;
+    const { word, trans, fn, fetching } = props;
     const word_trans = trans[word];
+    if (fetching) {
+      return (
+        <div className="container">
+          <div className="notification" className="clear-notification">
+            Loading...
+          </div>
+        </div>
+      )
+    }
     return !word_trans || !Object.keys(word_trans).length ? ( 
       <div className="container">
       <div className="notification" className="clearNotification">
-      Nothing to show
+        Nothing to show
       </div>
       </div>
     ) : 

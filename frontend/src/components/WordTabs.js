@@ -73,7 +73,7 @@ class WordTabs extends Component {
           }
         </TabPanel>
         <TabPanel>
-          { is_english_word ? <Translations word={word} fn={fn[0]}/> <Collocations word={word} fn={fn[1]} >}
+          { is_english_word ? <Translations word={word} fn={fn[0]}/> : ''}
         </TabPanel>
         <TabPanel>
         <h2>Any content 2</h2>

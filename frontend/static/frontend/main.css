@@ -39,7 +39,9 @@
 }
 
 .clear-notification {
- background-color: inherit;
+  background-color: inherit;
+  color: red;;
+  font-family: Abel;
 }
 
 .react-tabs__tab-list {
