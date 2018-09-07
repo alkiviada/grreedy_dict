@@ -119,6 +119,7 @@ def fetch_word(word_id):
     urls = loc.get('create_url')(loc, word_id);
     r = ''
     for u in urls:
+      print(u)
       specs = {}
       r = try_fetch(u.get('url'), u.get('headers'))
       if r:
