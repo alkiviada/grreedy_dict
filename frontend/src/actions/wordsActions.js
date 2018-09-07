@@ -1,4 +1,4 @@
-import { FETCH_WORDS, FETCH_WORDS_FULFILLED, FETCH_WORDS_REJECTED, FETCH_WORD, FETCH_TRANSLATION, SWITCH_TAB } from './types';
+import { FETCH_WORDS, FETCH_WORDS_FULFILLED, FETCH_WORDS_REJECTED, FETCH_WORD, FETCH_WORD_FULFILLED, FETCH_TRANSLATION, SWITCH_TAB } from './types';
 
 export const switchTab = (index, word, map) => dispatch => {
   console.log('switching tab');
@@ -14,6 +14,12 @@ export const requestWords = () => dispatch => {
   })
 };
 
+export const requestWord = () => dispatch => {
+  dispatch({
+    type: FETCH_WORD,
+  })
+};
+
 export const fetchWords = () => dispatch => {
   console.log('fetching words');
   fetch('api/word')
@@ -24,7 +30,9 @@ export const fetchWords = () => dispatch => {
       for (let w of words) {
         const word = w.word;
         if (word_map[word]) {
-          word_map[word] = [...word_map[word], { 'language': w.language, 'etymology': w.word_etymologies }]
+          word_map[word] = [ ...word_map[word], 
+                             { 'language': w.language, 'etymology': w.word_etymologies }
+                           ]
         }
         else {
           word_map[word] = [ { 'language': w.language, 'etymology': w.word_etymologies } ]
@@ -36,8 +44,8 @@ export const fetchWords = () => dispatch => {
         type: FETCH_WORDS_FULFILLED,
         payload: conflated_words
       })
-     }
-    );
+    }
+  );
 };
 
 export const lookUpWord = (word, words) => dispatch => {
@@ -66,7 +74,7 @@ export const lookUpWord = (word, words) => dispatch => {
                                                       'etymology': e['word_etymologies']} ], o), {}
                               );
           dispatch({
-            type: FETCH_WORDS_FULFILLED,
+            type: FETCH_WORD_FULFILLED,
             payload: [obj, ...words]
           })
         }

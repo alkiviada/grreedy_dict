@@ -17,7 +17,6 @@ class Table extends Component {
     this.props.fetchWords();
   }
 
-
   addRow (e, word) {
     console.log('look up');
     e.preventDefault();
@@ -32,9 +31,12 @@ class Table extends Component {
   render () {
     const data = this.props.data;
     const fetching = this.props.fetching;
+    if (fetching && !data.length) {
+      return <p className="clear-notification-message">Loading...</p> 
+    } 
     return !data.length ? (
       <div className="container">
-      <div className="notification" className="clear-notification">
+      <div className="notification" className="clear-notification-message">
       Nothing to show
       </div>
       </div>
@@ -73,7 +75,7 @@ class Table extends Component {
 const mapStateToProps = state => ({
   data: state.words.items,
   allWordsMap: state.words.allWordsMap,
-  fetching: state.words.fetching,
+  fetching: state.words.allWordsFetching,
 });
 
 Table.propTypes = {

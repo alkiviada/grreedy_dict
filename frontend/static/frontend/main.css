@@ -38,9 +38,15 @@
   color: black;
 }
 
-.clear-notification {
+.clear-notification-warn {
   background-color: inherit;
-  color: red;;
+  color: red;
+  font-family: Abel;
+}
+
+.clear-notification-message {
+  background-color: inherit;
+  color: black;
   font-family: Abel;
 }
 

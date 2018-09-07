@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { lookUpWord, requestWords } from '../actions/wordsActions';
+import { lookUpWord, requestWord } from '../actions/wordsActions';
 
 
 const lookUpBtn = {
@@ -29,7 +29,7 @@ class NewWordForm extends Component {
     console.log('looking up');
     console.log(this.props.allWordsMap);
     if (!this.props.allWordsMap[this.state.word]) {
-      this.props.requestWords();
+      this.props.requestWord();
       this.props.lookUpWord(this.state.word, this.props.allWords);
     }
     this.setState({word: ''});
@@ -51,7 +51,7 @@ class NewWordForm extends Component {
         </p>
       </div>
     </form> 
-    { this.props.fetching ? <p className="clear-notification">Loading...</p> : this.props.error ? <p className="clear-notification">Can't load this word</p> : ''}
+    { this.props.fetching ? <p className="clear-notification-message">Loading...</p> : this.props.error ? <p className="clear-notification-warn">Can't load this word</p> : ''}
     </div>
     );
   }
@@ -60,13 +60,13 @@ class NewWordForm extends Component {
 const mapStateToProps = state => ({
   allWordsMap: state.words.allWordsMap,
   allWords: state.words.items,
-  fetching: state.words.fetching,
+  fetching: state.words.newWordFetching,
   error: state.words.error,
 });
 
 NewWordForm.propTypes = {
   lookUpWord: PropTypes.func.isRequired,
-  requestWords: PropTypes.func.isRequired
+  requestWord: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, { lookUpWord, requestWords })(NewWordForm);
+export default connect(mapStateToProps, { lookUpWord, requestWord })(NewWordForm);
