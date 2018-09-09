@@ -51,7 +51,8 @@ class NewWordForm extends Component {
         </p>
       </div>
     </form> 
-    { this.props.fetching ? <p className="clear-notification-message">Loading...</p> : this.props.error ? <p className="clear-notification-warn">Can't load this word</p> : ''}
+    { this.props.fetching ? <p className="clear-notification-message">Loading...</p> : 
+        this.props.error ? <p className="clear-notification-warn">Can't load this word</p> : ''}
     </div>
     );
   }

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import WordTabs from "./WordTabs";
 import key from "weak-key";
 import { connect } from 'react-redux';
-import { lookUpWord, fetchWords, requestWords } from '../actions/wordsActions';
+import { lookUpWord, fetchWords, requestWords, requestWord } from '../actions/wordsActions';
 
 
 class Table extends Component {
@@ -11,6 +11,14 @@ class Table extends Component {
     super(props)
     this.addRow = this.addRow.bind(this) 
   }
+  static propTypes = {
+    data: PropTypes.array.isRequired,
+    lookUpWord: PropTypes.func.isRequired,
+    fetchWords: PropTypes.func.isRequired,
+    requestWords: PropTypes.func.isRequired,
+    requestWord: PropTypes.func.isRequired,
+  };
+
   componentWillMount() {
     console.log('mounting table');
     this.props.requestWords();
@@ -23,15 +31,16 @@ class Table extends Component {
     console.log(this.props.allWordsMap);
     console.log('checking map');
     if (!this.props.allWordsMap[word]) {
-      this.props.requestWords();
+      this.props.requestWord();
       this.props.lookUpWord(word, this.props.data);
     }
   }
 
   render () {
     const data = this.props.data;
-    const fetching = this.props.fetching;
-    if (fetching && !data.length) {
+    const allFetching = this.props.allFetching;
+    const wordFetching = this.props.newWordFetching;
+    if (allFetching && !data.length) {
       return <p className="clear-notification-message">Loading...</p> 
     } 
     return !data.length ? (
@@ -41,6 +50,8 @@ class Table extends Component {
       </div>
       </div>
     ) : (
+    <div className="container">
+    { wordFetching ? <p className="clear-notification-message">Loading...</p> : '' }
     <div className="column">
       <h2 className="subtitle">
         Showing <strong>{data.length} items</strong>
@@ -68,6 +79,7 @@ class Table extends Component {
         </tbody>
       </table>
     </div>
+    </div>
     );
   }
 }
@@ -75,14 +87,8 @@ class Table extends Component {
 const mapStateToProps = state => ({
   data: state.words.items,
   allWordsMap: state.words.allWordsMap,
-  fetching: state.words.allWordsFetching,
+  allFetching: state.words.allWordsFetching,
+  wordFetching: state.words.newWordFetching,
 });
 
-Table.propTypes = {
-  data: PropTypes.array.isRequired,
-  lookUpWord: PropTypes.func.isRequired,
-  fetchWords: PropTypes.func.isRequired,
-  requestWords: PropTypes.func.isRequired,
-};
-
-export default connect(mapStateToProps, { lookUpWord, fetchWords, requestWords })(Table);
+export default connect(mapStateToProps, { lookUpWord, fetchWords, requestWords, requestWord })(Table);

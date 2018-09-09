@@ -1,12 +1,9 @@
-import { FETCH_WORDS, FETCH_WORDS_FULFILLED, FETCH_WORDS_REJECTED, FETCH_WORD, FETCH_WORD_FULFILLED, FETCH_TRANSLATION, SWITCH_TAB } from '../actions/types';
+import { FETCH_WORDS, FETCH_WORDS_FULFILLED, FETCH_WORDS_REJECTED, FETCH_WORD, FETCH_WORD_FULFILLED } from '../actions/types';
 
 const initialState = {
   items: [],
   item: {},
-  allTranslations: {},
-  translations: {},
   allWordsMap: {},
-  mapTabIndex: {},
   newWordFetching: false,
   allWordsFetching: false,
   newWordFetched: false,
@@ -37,8 +34,6 @@ export default function(state = initialState, action) {
                                          allWordsMap: { ...action.payload.map(e => e.word).reduce((o, e) => (o[e] = 1, o), {}) } 
                                        };
     case FETCH_WORDS_REJECTED: return {...state, allWordsfetching: false, newWordFetching: false, error: action.payload};
-    case SWITCH_TAB: return { ...state, mapTabIndex: action.payload };
-    case FETCH_TRANSLATION: return { ...state, allTranslations: action.payload };
     default:
       return state;
   }

@@ -25,12 +25,24 @@
   padding-right: 7px;
 }
 
+.lang-english {
+  font-family: IM Fell English SC;
+}
+
+.lang-french {
+  font-family: Parisienne;
+}
+
+.lang-italian {
+  font-family: Italiana;
+}
 .lang-head {
   text-transform:capitalize;
   font-weight: bold;
   font-size: 16px;
   line-height: 0.7;
   padding-top: 7.5px;
+  color: rgb(164, 173, 202);
 }
 
 .word-link {

@@ -5,43 +5,44 @@ import key from "weak-key";
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => ({
-  trans: state.words.allTranslations,
-  fetching: state.words.fetching,
-  newTrans: state.words.translations,
+  trans: state.translations.allTranslations,
+  fetchingMap: state.translations.fetchingMap,
+  newTrans: state.translations.translations,
 });
 
 const Translations = (props) => {
-    const { word, trans, fn, fetching } = props;
+    const { word, trans, fn, fetchingMap } = props;
     const word_trans = trans[word];
-    if (fetching) {
+    if (fetchingMap[word]) {
       return (
         <div className="container">
-          <div className="notification" className="clear-notification">
+          <div className="notification" className="clear-notification-message">
             Loading...
           </div>
         </div>
       )
     }
-    return !word_trans || !Object.keys(word_trans).length ? ( 
+    return word_trans['error'] ? ( 
       <div className="container">
-      <div className="notification" className="clearNotification">
-        Nothing to show
+      <div className="notification" className="clear-notification-warn">
+        No translation
       </div>
       </div>
     ) : 
     ( Object.keys(word_trans).map(e =>  
         <div className="etym-style">
-        <p style={fontStylesForLang[e]} className="heading lang-head">{e}</p>
+        <p className={`heading lang-head lang-${e}`}>{e}</p>
         <DecorateWithLinks words={word_trans[e].join(', ')} onLinkClick={fn}/>
         </div>)
       
     );
 }
 
-const fontStylesForLang =  {
- 'french': {'fontFamily': 'Parisienne', 'color': '#c18eda'},
- 'italian': {'fontFamily': 'Italiana', 'color': '#2e8286'},
- 'english': {'fontFamily': 'IM Fell English SC', 'color': '#6c8dbc'},
-}
-
+Translations.propTypes = {
+  word: PropTypes.string.isRequired,
+  trans: PropTypes.object.isRequired,
+  fetchingMap: PropTypes.object.isRequired,
+  fn: PropTypes.func.isRequired,
+};  
+    
 export default connect(mapStateToProps)(Translations);

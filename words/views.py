@@ -1,5 +1,6 @@
 from words.models import Word, Definition, Etymology, Example
 from words.utils import fetch_translations, fetch_word
+from django.db.models import Q
 
 from words.serializers import WordSerializer, TranslationSerializer
 
@@ -12,7 +13,7 @@ from django.http import Http404
 class WordList(generics.ListAPIView):
     serializer_class = WordSerializer
     def get_queryset(self):
-        queryset = Word.objects.filter(word_examples__isnull=False).distinct()
+        queryset = Word.objects.filter(Q(word_examples__isnull=False)|Q(word_etymologies__isnull=False)).distinct()
         return queryset
 
 class WordSingleCreate(generics.ListAPIView):
@@ -24,10 +25,17 @@ class WordSingleCreate(generics.ListAPIView):
     db_words = Word.objects.filter(word=word);
     complete_word = 0
     for w in db_words:
-      for d in w.word_definitions.all():
-        print(d.definition)
-        if d.definition: 
+      for e in w.word_etymologies.all():
+        print(e.etymology)
+        if e.etymology: 
           complete_word = 1        
+          break
+      if not complete_word:
+        for d in w.word_definitions.all():
+          print(d.definition)
+          if d.definition: 
+            complete_word = 1        
+            break
     print(complete_word)
 
     if not db_words or not complete_word:
