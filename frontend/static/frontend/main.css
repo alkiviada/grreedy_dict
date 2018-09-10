@@ -8,6 +8,33 @@
   margin-left: 2em;
 }
 
+.save-coll { 
+  position:fixed; 
+  left:0px;
+  bottom:0px;
+  width:100%;
+} 
+
+.new-word { 
+  position:fixed; 
+  left:0px;
+  top:0px;
+  width:100%;
+  z-index: 10;
+} 
+
+.look-up-btn {
+  background-color: #856831;
+  border-color: transparent;
+  color: #fff;
+}
+
+.save-btn {
+  background-color: #84a6d2;
+  border-color: transparent;
+  color: #fff;
+}
+
 .etym-style {
   background: #FFFCF9;
   font-family: Abel;
@@ -36,6 +63,7 @@
 .lang-italian {
   font-family: Italiana;
 }
+
 .lang-head {
   text-transform:capitalize;
   font-weight: bold;
@@ -54,6 +82,18 @@
   background-color: inherit;
   color: red;
   font-family: Abel;
+}
+
+.clear-notification {
+  background-color: inherit;
+}
+
+.word-notification {
+  background-color: #84a6d2;
+}
+
+.coll-notification {
+  background-color: #856831;
 }
 
 .clear-notification-message {

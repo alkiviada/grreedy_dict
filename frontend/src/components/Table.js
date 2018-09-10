@@ -50,18 +50,22 @@ class Table extends Component {
     const allFetching = this.props.allFetching;
     const wordFetching = this.props.newWordFetching;
     if (allFetching && !data.length) {
-      return <p className="clear-notification-message">Loading...</p> 
+      return (
+        <div className="container">
+        <div className="clear-notification-message notification">Loading...</div> 
+        </div>
+      )
     } 
     return !data.length ? (
       <div className="container" ref={this.myRef}>
-      <div className="notification" className="clear-notification-message">
+      <div className="notification clear-notification-message">
       Nothing to show
       </div>
       </div>
     ) : (
     <div className="container" ref={this.myRef}>
-    { wordFetching ? <p className="clear-notification-message">Loading...</p> : '' }
-    <div className="column">
+    { wordFetching ? <div className="notification clear-notification-message">Loading...</div> : '' }
+    <div className="column is-10">
       <h2 className="subtitle">
         Showing <strong>{data.length} items</strong>
       </h2>

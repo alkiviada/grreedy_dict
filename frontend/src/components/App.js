@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import Table from "./Table";
 import NewWordForm from "./NewWordForm";
+import SaveCollection from "./SaveCollection";
 import {Provider} from "react-redux";
 
 import store from "./store";
@@ -14,7 +15,7 @@ class App extends Component {
     }
   }
   render () {
-    return <Provider store={store}><div><NewWordForm /><Table /></div></Provider>
+    return <Provider store={store}><div><NewWordForm /><Table /><SaveCollection /></div></Provider>
   }
 }
 
