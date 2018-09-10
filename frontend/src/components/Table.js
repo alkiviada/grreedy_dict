@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import WordTabs from "./WordTabs";
 import key from "weak-key";
@@ -10,6 +11,7 @@ class Table extends Component {
   constructor(props) { 
     super(props)
     this.addRow = this.addRow.bind(this) 
+    this.myRef = React.createRef();
   }
   static propTypes = {
     data: PropTypes.array.isRequired,
@@ -34,6 +36,13 @@ class Table extends Component {
       this.props.requestWord();
       this.props.lookUpWord(word, this.props.data);
     }
+    this.scrollToDomRef()
+  }
+
+  scrollToDomRef = () => {
+    console.log(this.myRef)
+    const domNode = ReactDOM.findDOMNode(this.myRef.current)
+    window.scrollTo(0, domNode.offsetTop-20)
   }
 
   render () {
@@ -44,13 +53,13 @@ class Table extends Component {
       return <p className="clear-notification-message">Loading...</p> 
     } 
     return !data.length ? (
-      <div className="container">
+      <div className="container" ref={this.myRef}>
       <div className="notification" className="clear-notification-message">
       Nothing to show
       </div>
       </div>
     ) : (
-    <div className="container">
+    <div className="container" ref={this.myRef}>
     { wordFetching ? <p className="clear-notification-message">Loading...</p> : '' }
     <div className="column">
       <h2 className="subtitle">
