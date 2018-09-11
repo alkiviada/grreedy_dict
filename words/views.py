@@ -1,8 +1,9 @@
-from words.models import Word, Definition, Etymology, Example
+from words.models import Word, Definition, Etymology, Example, Collection
 from words.utils import fetch_translations, fetch_word
 from django.db.models import Q
+from django.utils import timezone
 
-from words.serializers import WordSerializer, TranslationSerializer
+from words.serializers import WordSerializer, TranslationSerializer, CollectionSerializer
 
 from rest_framework import generics
 from rest_framework.response import Response
@@ -15,6 +16,25 @@ class WordList(generics.ListAPIView):
     def get_queryset(self):
         queryset = Word.objects.filter(Q(word_examples__isnull=False)|Q(word_etymologies__isnull=False)).distinct()
         return queryset
+
+class CollectionCreate(generics.ListCreateAPIView):
+  lookup_field = 'name'
+  serializer_class = CollectionSerializer
+  def post(self, request):
+    words = request.data.get('collection').split(',')
+    name = request.data.get('name')
+    words = Word.objects.filter(word__in=words)
+    coll = Collection.objects.create(created_date=timezone.now(), name=name)
+    coll.words.add(*words)
+    colls = Collection.objects.all()
+    serializer = CollectionSerializer(colls, many=True)
+    return Response(serializer.data)
+    
+
+  def get_queryset(self):
+    queryset = Collection.objects.all()
+    return queryset
+
 
 class WordSingleCreate(generics.ListAPIView):
   lookup_field = 'word'

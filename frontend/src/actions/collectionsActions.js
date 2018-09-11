@@ -1,35 +1,48 @@
 import { SAVE_COLLECTION, SAVE_COLLECTION_FULFILLED, SAVE_COLLECTION_REJECTED } from './types';
 
 export const requestSave = () => dispatch => {
+ console.log('requesting save');
   dispatch({
     type: SAVE_COLLECTION,
   })
 };
 
-export const saveCollection = () => dispatch => {
-  console.log('fetching words');
-  fetch('api/word')
-    .then(res => res.json())
-    .then(words => {
-      let conflated_words = [];
-      let word_map = {}
-      for (let w of words) {
-        const word = w.word;
-        if (word_map[word]) {
-          word_map[word] = [ ...word_map[word], 
-                             { 'language': w.language, 'etymology': w.word_etymologies }
-                           ]
-        }
-        else {
-          word_map[word] = [ { 'language': w.language, 'etymology': w.word_etymologies } ]
-          conflated_words.push(word)
-        }
-      }
-      conflated_words = conflated_words.map(w => ({'word': w, 'description': word_map[w]}))
-      dispatch({
-        type: FETCH_WORDS_FULFILLED,
-        payload: conflated_words
+export const saveCollection = (name, words) => dispatch => {
+  console.log('saving words');
+  fetch('api/collection/', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+     collection: words,
+     name: name,
+    }),})
+  .then(response =>
+      response.json().then(json => ({
+        status: response.status,
+        json
       })
-    }
-  );
+    ))
+  .then(
+      // Both fetching and parsing succeeded!
+      ({ status, json }) => {
+        if (status >= 400) {
+          // Status looks bad
+          console.log('Server returned error status');
+          dispatch({type: SAVE_COLLECTION_REJECTED, payload: 'saving words failed', })
+        } else {
+          // Status looks good
+          dispatch({
+            type: SAVE_COLLECTION_FULFILLED,
+          })
+        }
+      },
+      // Either fetching or parsing failed!
+      err => {
+        console.log('problems');
+        dispatch({type: SAVE_COLLECTION_REJECTED, payload: 'saving words failed', })
+      }
+    ); 
 };

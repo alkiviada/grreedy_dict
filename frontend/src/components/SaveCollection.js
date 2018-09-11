@@ -21,16 +21,21 @@ class SaveCollection extends Component {
     e.preventDefault();
     console.log('saving');
     this.props.requestSave();
-    this.props.saveCollection(this.state.name, this.props.allWords);
-    this.setState({name: ''});
+    console.log(this.props.allWords)
+    this.props.saveCollection(this.state.name, this.props.allWords.map(e => e.word).join(','));
+    this.setState({name: name});
   }
 
   render () {
+    const words = this.props.allWords;
+    const saving = this.props.saving
+    console.log(saving);
     console.log('rendering save form');
     return (
       <div className="save-coll notification coll-notification">
+      { words.length && !saving ?
       <form onSubmit={(e) => this.onSubmitSave(e)}> 
-      <div className="field has-addons has-addons-centered">
+      <div className="field has-addons has-addons-left">
         <p className="control">
         <input class="input" type="text" placeholder="New Collection" value={this.state.name} onChange={this.handleNameChange} />
         </p>
@@ -40,9 +45,9 @@ class SaveCollection extends Component {
         </a>
         </p>
       </div>
-    </form> 
-    { this.props.saving? <p className="clear-notification-message">Saving...</p> : 
-        this.props.error ? <p className="clear-notification-warn">Can't save this collection</p> : ''}
+    </form>  : '' }
+    { saving ? <p className="clear-notification-message">Saving...</p> : 
+      this.props.error ? <p className="clear-notification-warn">Can't save this collection</p> : ''}
     </div>
     );
   }

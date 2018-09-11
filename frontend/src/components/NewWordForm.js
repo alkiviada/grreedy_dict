@@ -29,11 +29,14 @@ class NewWordForm extends Component {
   }
 
   render () {
-    console.log('rendering form');
+    const fetching = this.props.fetching;
+    console.log('rendering new word form');
     return (
       <div className="new-word word-notification">
+      { !fetching ? 
       <form onSubmit={(e) => this.onSubmitLookUp(e)}> 
-      <div className="field has-addons has-addons-centered">
+      { this.props.error ? <div className="clear-notification-warn">  Can't load this word   </div> : '' }
+      <div className="field has-addons has-addons-left">
         <p className="control">
         <input className="input" type="text" placeholder="New Word" value={this.state.word} onChange={this.handleWordChange} />
         </p>
@@ -43,9 +46,8 @@ class NewWordForm extends Component {
         </a>
         </p>
       </div>
-    </form> 
-    { this.props.fetching ? <p className="clear-notification-message">Loading...</p> : 
-        this.props.error ? <p className="clear-notification-warn">Can't load this word</p> : ''}
+    </form> : '' }
+    { this.props.fetching ? <p className="clear-notification-message">Loading...</p> : '' }
     </div>
     );
   }

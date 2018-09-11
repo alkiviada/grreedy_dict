@@ -30,7 +30,6 @@ class Table extends Component {
   addRow (e, word) {
     console.log('look up');
     e.preventDefault();
-    console.log(this.props.allWordsMap);
     console.log('checking map');
     if (!this.props.allWordsMap[word]) {
       this.props.requestWord();
@@ -40,7 +39,6 @@ class Table extends Component {
   }
 
   scrollToDomRef = () => {
-    console.log(this.myRef)
     const domNode = ReactDOM.findDOMNode(this.myRef.current)
     window.scrollTo(0, domNode.offsetTop-35)
   }
@@ -57,17 +55,19 @@ class Table extends Component {
       )
     } 
     return !data.length ? (
+    <div className="column is-10">
       <div className="words-container" ref={this.myRef}>
       <div className="notification clear-notification-message">
-      Nothing to show
+      Start new collection
+      </div>
       </div>
       </div>
     ) : (
     <div className="words-container" ref={this.myRef}>
     { wordFetching ? <div className="clear-notification-message">Loading...</div> : '' }
     <div className="column is-10">
-      <h2 className="subtitle table-subtitle is-4">
-        Showing <strong>{data.length} items</strong>
+      <h2 className="subtitle table-subtitle is-6">
+        Showing <strong>{data.length} word{data.length > 1 ? 's' : ''}</strong>
       </h2>
       <table className="table is-striped">
         <thead>

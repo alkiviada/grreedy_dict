@@ -52,7 +52,6 @@ class WordTabs extends Component {
     const { word, element, fn } = this.props;
     const is_english_word = element.reduce((english_flag, e) => 
       {return e['language'] === 'english' ?  ++english_flag : english_flag}, 0)
-    console.log(is_english_word);
     return ( 
       <Tabs selectedIndex={this.state.tabIndex} 
         onSelect={(prev, index) => this.handleSelect(index, prev, word)}>

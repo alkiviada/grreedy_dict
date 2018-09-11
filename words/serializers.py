@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from words.models import Word, Etymology, Definition, Example
+from words.models import Word, Etymology, Definition, Example, Collection
 from collections import OrderedDict
 
 class NonNullModelSerializer(serializers.ModelSerializer):
@@ -45,4 +45,9 @@ class TranslationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Word
         fields = ['word', 'language']
+
+class CollectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Collection
+        fields = ['name', 'created_date']
 
