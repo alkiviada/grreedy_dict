@@ -32,7 +32,7 @@ class SaveCollection extends Component {
     console.log(saving);
     console.log('rendering save form');
     return words.length ? (
-      <div className="save-coll notification coll-notification">
+      <div className="save-coll notification coll-notification column">
       { !saving ?
       <form onSubmit={(e) => this.onSubmitSave(e)}> 
       <div className="field has-addons has-addons-left">

@@ -32,10 +32,10 @@ class NewWordForm extends Component {
     const fetching = this.props.fetching;
     console.log('rendering new word form');
     return (
-      <div className="new-word word-notification">
+      <div className="new-word word-notification column">
       { !fetching ? 
       <form onSubmit={(e) => this.onSubmitLookUp(e)}> 
-      { this.props.error ? <div className="clear-notification-warn">  Can't load this word   </div> : '' }
+      { this.props.error ? <div className="clear-notification-warn column is-half">  Can't load this word   </div> : '' }
       <div className="field has-addons has-addons-left">
         <p className="control">
         <input className="input" type="text" placeholder="New Word" value={this.state.word} onChange={this.handleWordChange} />
