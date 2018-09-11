@@ -55,17 +55,14 @@ class Table extends Component {
       )
     } 
     return !data.length ? (
-    <div className="column is-10">
       <div className="words-container" ref={this.myRef}>
       <div className="notification clear-notification-message">
       Start new collection
       </div>
       </div>
-      </div>
     ) : (
-    <div className="words-container" ref={this.myRef}>
+    <div className="words-container column is-10" ref={this.myRef}>
     { wordFetching ? <div className="clear-notification-message">Loading...</div> : '' }
-    <div className="column is-10">
       <h2 className="subtitle table-subtitle is-6">
         Showing <strong>{data.length} word{data.length > 1 ? 's' : ''}</strong>
       </h2>
@@ -91,7 +88,6 @@ class Table extends Component {
           })}
         </tbody>
       </table>
-    </div>
     </div>
     );
   }

@@ -1,4 +1,4 @@
-import { SAVE_COLLECTION, SAVE_COLLECTION_FULFILLED, SAVE_COLLECTION_REJECTED, FETCH_WORDS_FULFILLED } from './types';
+import { SAVE_COLLECTION, SAVE_COLLECTION_FULFILLED, SAVE_COLLECTION_REJECTED, FETCH_WORDS_FULFILLED, FETCH_COLLECTIONS_FULFILLED, FETCH_COLLECTIONS } from './types';
 
 export const requestSave = () => dispatch => {
  console.log('requesting save');
@@ -6,6 +6,26 @@ export const requestSave = () => dispatch => {
     type: SAVE_COLLECTION,
   })
 };
+
+export const requestCollections = () => dispatch => {
+ console.log('requesting collections');
+  dispatch({
+    type: FETCH_COLLECTIONS,
+  })
+};
+
+export const fetchCollections = () => dispatch => {
+  console.log('fetching collections');
+  fetch('api/collection/')
+    .then(res => res.json())
+    .then(items => {
+      dispatch({
+        type: FETCH_COLLECTIONS_FULFILLED,
+        payload: items
+      })
+    })
+};
+
 
 export const saveCollection = (name, words) => dispatch => {
   console.log('saving words');

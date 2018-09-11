@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { saveCollection, requestSave } from '../actions/collectionsActions';
@@ -23,7 +24,8 @@ class SaveCollection extends Component {
     this.props.requestSave();
     console.log(this.props.allWords)
     this.props.saveCollection(this.state.name, this.props.allWords.map(e => e.word).join(','));
-    this.setState({name: name});
+    const root = ReactDOM.findDOMNode(this).parentNode;
+    window.scrollTo(0, root.offsetTop-35)
   }
 
   render () {

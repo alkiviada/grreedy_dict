@@ -1,10 +1,11 @@
-import { SAVE_COLLECTION, SAVE_COLLECTION_REJECTED, SAVE_COLLECTION_FULFILLED } from '../actions/types';
+import { SAVE_COLLECTION, SAVE_COLLECTION_REJECTED, SAVE_COLLECTION_FULFILLED, FETCH_COLLECTIONS, FETCH_COLLECTIONS_FULFILLED } from '../actions/types';
 
 const initialState = {
   saving: false,
   saved: false,
   error: null,
-  collections: [],
+  fetching: false,
+  items: [],
 };
 
 export default function(state = initialState, action) {
@@ -16,9 +17,11 @@ export default function(state = initialState, action) {
                                              saving: false, 
                                              error: null, 
                                              saved: true,
-                                             collections: action.payload,
+                                             items: action.payload,
                                            };
-    case SAVE_COLLECTION_REJECTED: return {...state, saving: false, error: action.payload};
+    case SAVE_COLLECTION_REJECTED: return { ...state, saving: false, error: action.payload };
+    case FETCH_COLLECTIONS_FULFILLED: return { ...state, fetching: false, items: action.payload };
+    case FETCH_COLLECTIONS: return { ...state, fetching: true };
     default:
       return state;
   }

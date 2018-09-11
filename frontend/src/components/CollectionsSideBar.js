@@ -1,48 +1,45 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import DecorateWithLinks from "./DecorateWithLinks";
 import key from "weak-key";
 import { connect } from 'react-redux';
+import { fetchCollections, requestCollections } from '../actions/collectionsActions';
 
 const mapStateToProps = state => ({
-  trans: state.translations.allTranslations,
-  fetchingMap: state.translations.fetchingMap,
-  newTrans: state.translations.translations,
+  colls: state.collections.items,
 });
 
-const Translations = (props) => {
-    const { word, trans, fn, fetchingMap } = props;
-    const word_trans = trans[word];
-    if (fetchingMap[word]) {
-      return (
-        <div className="container">
-          <div className="notification" className="clear-notification-message">
-            Loading...
-          </div>
-        </div>
-      )
-    }
-    return word_trans['error'] ? ( 
-      <div className="container">
-      <div className="notification" className="clear-notification-warn">
-        No translation
-      </div>
-      </div>
-    ) : 
-    ( Object.keys(word_trans).map(e =>  
-        <div className="etym-style">
-        <p className={`heading lang-head lang-${e}`}>{e}</p>
-        <DecorateWithLinks words={word_trans[e].join(', ')} onLinkClick={fn}/>
-        </div>)
-      
-    );
+class CollectionsSideBar extends Component {
+  constructor(props) { 
+    super(props)
+  }
+
+  static propTypes = {
+    items: PropTypes.array.isRequired,
+  }
+
+  componentWillMount() {
+    console.log('mounting sidebar');
+    this.props.requestCollections();
+    this.props.fetchCollections();
+  }
+  
+  render () {
+    const { colls } = this.props;
+    return colls.length ? ( 
+      <aside class="column is-2 is-narrow-mobile is-fullheight section">
+      <p class="menu-label is-hidden-touch">Collections</p>
+      <ul class="menu-list">
+       { colls.map(e => 
+        <li>
+          <a href="#" class="">
+            <span class="icon"><i class="fa fa-home"></i></span> { `${e.name} ${e.created_date}` }
+          </a>
+        </li>
+       )}
+      </ul>
+    </aside>
+   ) : '';
+ }
 }
 
-Translations.propTypes = {
-  word: PropTypes.string.isRequired,
-  trans: PropTypes.object.isRequired,
-  fetchingMap: PropTypes.object.isRequired,
-  fn: PropTypes.func.isRequired,
-};  
-    
-export default connect(mapStateToProps)(Translations);
+export default connect(mapStateToProps, { requestCollections, fetchCollections })(CollectionsSideBar);
