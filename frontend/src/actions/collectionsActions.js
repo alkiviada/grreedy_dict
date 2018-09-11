@@ -1,4 +1,4 @@
-import { SAVE_COLLECTION, SAVE_COLLECTION_FULFILLED, SAVE_COLLECTION_REJECTED } from './types';
+import { SAVE_COLLECTION, SAVE_COLLECTION_FULFILLED, SAVE_COLLECTION_REJECTED, FETCH_WORDS_FULFILLED } from './types';
 
 export const requestSave = () => dispatch => {
  console.log('requesting save');
@@ -34,8 +34,14 @@ export const saveCollection = (name, words) => dispatch => {
           dispatch({type: SAVE_COLLECTION_REJECTED, payload: 'saving words failed', })
         } else {
           // Status looks good
+          var colls = json;
           dispatch({
             type: SAVE_COLLECTION_FULFILLED,
+            payload: colls
+          }),
+          dispatch({
+            type: FETCH_WORDS_FULFILLED,
+            payload: []
           })
         }
       },

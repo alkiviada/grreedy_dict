@@ -3,7 +3,8 @@ import { SAVE_COLLECTION, SAVE_COLLECTION_REJECTED, SAVE_COLLECTION_FULFILLED } 
 const initialState = {
   saving: false,
   saved: false,
-  error: null
+  error: null,
+  collections: [],
 };
 
 export default function(state = initialState, action) {
@@ -15,6 +16,7 @@ export default function(state = initialState, action) {
                                              saving: false, 
                                              error: null, 
                                              saved: true,
+                                             collections: action.payload,
                                            };
     case SAVE_COLLECTION_REJECTED: return {...state, saving: false, error: action.payload};
     default:

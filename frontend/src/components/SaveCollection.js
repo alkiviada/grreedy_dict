@@ -31,9 +31,9 @@ class SaveCollection extends Component {
     const saving = this.props.saving
     console.log(saving);
     console.log('rendering save form');
-    return (
+    return words.length ? (
       <div className="save-coll notification coll-notification">
-      { words.length && !saving ?
+      { !saving ?
       <form onSubmit={(e) => this.onSubmitSave(e)}> 
       <div className="field has-addons has-addons-left">
         <p className="control">
@@ -49,7 +49,7 @@ class SaveCollection extends Component {
     { saving ? <p className="clear-notification-message">Saving...</p> : 
       this.props.error ? <p className="clear-notification-warn">Can't save this collection</p> : ''}
     </div>
-    );
+    ) : '';
   }
 };
 
