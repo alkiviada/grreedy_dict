@@ -42,7 +42,7 @@ class Table extends Component {
   scrollToDomRef = () => {
     console.log(this.myRef)
     const domNode = ReactDOM.findDOMNode(this.myRef.current)
-    window.scrollTo(0, domNode.offsetTop-20)
+    window.scrollTo(0, domNode.offsetTop-35)
   }
 
   render () {
@@ -51,22 +51,22 @@ class Table extends Component {
     const wordFetching = this.props.newWordFetching;
     if (allFetching && !data.length) {
       return (
-        <div className="container">
+        <div className="words-container">
         <div className="clear-notification-message notification">Loading...</div> 
         </div>
       )
     } 
     return !data.length ? (
-      <div className="container" ref={this.myRef}>
+      <div className="words-container" ref={this.myRef}>
       <div className="notification clear-notification-message">
       Nothing to show
       </div>
       </div>
     ) : (
-    <div className="container" ref={this.myRef}>
-    { wordFetching ? <div className="notification clear-notification-message">Loading...</div> : '' }
+    <div className="words-container" ref={this.myRef}>
+    { wordFetching ? <div className="clear-notification-message">Loading...</div> : '' }
     <div className="column is-10">
-      <h2 className="subtitle">
+      <h2 className="subtitle table-subtitle is-4">
         Showing <strong>{data.length} items</strong>
       </h2>
       <table className="table is-striped">

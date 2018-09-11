@@ -31,7 +31,7 @@ class NewWordForm extends Component {
   render () {
     console.log('rendering form');
     return (
-      <div className="new-word word-notification notification">
+      <div className="new-word word-notification">
       <form onSubmit={(e) => this.onSubmitLookUp(e)}> 
       <div className="field has-addons has-addons-centered">
         <p className="control">
