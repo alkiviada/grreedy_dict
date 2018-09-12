@@ -123,6 +123,11 @@ body {
   color: black;
 }
 
+.coll-text {
+ color: rgba(0,0,0,0.1);
+ text-shadow: 4px 3px 0px #fff, 9px 8px 0px rgba(0,0,0,0.15);
+}
+
 .clear-notification-warn {
   background-color: inherit;
   color: red;

@@ -22,8 +22,10 @@ class SaveCollection extends Component {
     e.preventDefault();
     console.log('saving');
     this.props.requestSave();
-    console.log(this.props.allWords)
-    this.props.saveCollection(this.state.name, this.props.allWords.map(e => e.word).join(','));
+    const { uuid } = this.props
+    const name = this.state.name;
+    console.log(name);
+    this.props.saveCollection(name, uuid, this.props.allWords.map(e => e.word).join(','));
     const root = ReactDOM.findDOMNode(this).parentNode;
     window.scrollTo(0, root.offsetTop-35)
   }
@@ -32,8 +34,7 @@ class SaveCollection extends Component {
     const words = this.props.allWords;
     const saving = this.props.saving
     const name = this.props.name
-    console.log(saving);
-    console.log('rendering save form');
+    console.log(name);
     return words.length ? (
       <div className="save-coll notification coll-notification column">
       { !saving ?

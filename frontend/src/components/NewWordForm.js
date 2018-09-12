@@ -25,7 +25,9 @@ class NewWordForm extends Component {
       this.props.requestWord();
       this.props.lookUpWord(this.state.word, this.props.allWords);
     }
-    this.setState({word: ''});
+    if (!this.props.error) {
+      this.setState({word: ''});
+    }
   }
 
   render () {

@@ -7,6 +7,7 @@ import os
 import re
 from words.helpers import scrape_wordref_words, try_fetch, oxford_word, create_my_word, collect_examples
 from words.constants import EXTENSIONS, LANG_MAP, TRANSL_MAP
+from django.core.exceptions import ObjectDoesNotExist 
 
 def fetch_translations(word, orig_word):
   base_url = 'http://www.wordreference.com/' 
@@ -21,7 +22,11 @@ def fetch_translations(word, orig_word):
 
     translated_words = list(set(all_trans_for_lang));
     for w in translated_words:
-      w = Word.objects.create(word=w, lookup_date=timezone.now(), language=TRANSL_MAP.get(l).get('db_language')) 
+      try:
+        print(w, ' ', TRANSL_MAP.get(l).get('db_language'));
+        w = Word.objects.get(word=w, language=TRANSL_MAP.get(l).get('db_language')) 
+      except ObjectDoesNotExist:
+        w = Word.objects.create(word=w, lookup_date=timezone.now(), language=TRANSL_MAP.get(l).get('db_language')) 
       w.translations.add(orig_word)
 
 def fetch_wordref_translation(language, url, wclass):

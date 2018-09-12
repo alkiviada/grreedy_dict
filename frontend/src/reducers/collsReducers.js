@@ -27,6 +27,8 @@ export default function(state = initialState, action) {
                                              saving: false, 
                                              error: null, 
                                              saved: true,
+                                             name: '',
+                                             uuid: '',
                                              items: action.payload,
                                            };
     case SAVE_COLLECTION_REJECTED: return { ...state, saving: false, error: action.payload };

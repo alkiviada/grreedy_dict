@@ -87,8 +87,9 @@ export const fetchCollection = (uuid) => dispatch => {
     ); 
 };
 
-export const saveCollection = (name, words) => dispatch => {
+export const saveCollection = (name, uuid, words) => dispatch => {
   console.log('saving words');
+  console.log(uuid);
   fetch('api/collection/', {
     method: 'POST',
     headers: {
@@ -98,6 +99,7 @@ export const saveCollection = (name, words) => dispatch => {
     body: JSON.stringify({
      collection: words,
      name: name,
+     uuid: uuid,
     }),})
   .then(response =>
       response.json().then(json => ({

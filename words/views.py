@@ -14,7 +14,10 @@ from django.http import Http404
 class WordList(generics.ListAPIView):
     serializer_class = WordSerializer
     def get_queryset(self):
-        queryset = Word.objects.filter(Q(word_examples__isnull=False)|Q(word_etymologies__isnull=False)).filter(words=None).distinct()
+        queryset = Word.objects.filter(
+          Q(word_examples__isnull=False)|
+          Q(word_etymologies__isnull=False)
+          ).filter(words=None).distinct()
         return queryset
 
 class CollectionDetail(generics.RetrieveUpdateAPIView):
@@ -28,9 +31,23 @@ class CollectionCreate(generics.ListCreateAPIView):
   serializer_class = CollectionSerializer
   def post(self, request):
     words = request.data.get('collection').split(',')
+
     name = request.data.get('name')
+    uuid = request.data.get('uuid')
+    print(uuid);
+    print(name);
+    coll = '';
+    if uuid:
+      try:
+        coll = Collection.objects.get(uuid=uuid) 
+        coll.name = name
+        coll.save()
+      except ObjectDoesNotExist:
+        print ("Something Wrong with UUID: ", uuid)
+    else: 
+      coll = Collection.objects.create(created_date=timezone.now(), name=name, last_modified_date=timezone.now())
+
     words = Word.objects.filter(word__in=words)
-    coll = Collection.objects.create(created_date=timezone.now(), name=name)
     coll.words.add(*words)
     colls = Collection.objects.all()
     serializer = CollectionSerializer(colls, many=True)

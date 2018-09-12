@@ -34,10 +34,10 @@ class CollectionsSideBar extends Component {
     const { colls } = this.props;
     return colls.length ? ( 
       <aside class="column is-2 is-narrow-mobile is-fullheight section">
-      <p class="menu-label">Collections</p>
-      <ul class="menu-list">
+      <p className="menu-label">Collections</p>
+      <ul className="menu-list">
        { colls.map(e => 
-        <li>
+        <li className="coll-text">
           <a target="_blank" href={`/api/collection/${e.uuid}`} 
           onClick={(c) => this.onCollectionClick(c, e.uuid)} className="coll-link">
             { `${e.name} ${e.last_modified_date}` }
