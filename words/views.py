@@ -3,7 +3,7 @@ from words.utils import fetch_translations, fetch_word
 from django.db.models import Q
 from django.utils import timezone
 
-from words.serializers import WordSerializer, TranslationSerializer, CollectionSerializer
+from words.serializers import WordSerializer, TranslationSerializer, CollectionSerializer, CollectionDetailSerializer
 
 from rest_framework import generics
 from rest_framework.response import Response
@@ -14,8 +14,14 @@ from django.http import Http404
 class WordList(generics.ListAPIView):
     serializer_class = WordSerializer
     def get_queryset(self):
-        queryset = Word.objects.filter(Q(word_examples__isnull=False)|Q(word_etymologies__isnull=False)).distinct()
+        queryset = Word.objects.filter(Q(word_examples__isnull=False)|Q(word_etymologies__isnull=False)).filter(words=None).distinct()
         return queryset
+
+class CollectionDetail(generics.RetrieveUpdateAPIView):
+  queryset = Collection.objects.all()
+  lookup_field = 'uuid'
+  serializer_class = CollectionDetailSerializer
+
 
 class CollectionCreate(generics.ListCreateAPIView):
   lookup_field = 'name'
@@ -29,7 +35,6 @@ class CollectionCreate(generics.ListCreateAPIView):
     colls = Collection.objects.all()
     serializer = CollectionSerializer(colls, many=True)
     return Response(serializer.data)
-    
 
   def get_queryset(self):
     queryset = Collection.objects.all()
@@ -39,6 +44,7 @@ class CollectionCreate(generics.ListCreateAPIView):
 class WordSingleCreate(generics.ListAPIView):
   lookup_field = 'word'
   serializer_class = WordSerializer
+  queryset = Word.objects.all()
 
   def get(self, request, word, *args, **kwargs):
     print('GET ' + word);

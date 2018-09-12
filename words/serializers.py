@@ -49,5 +49,11 @@ class TranslationSerializer(serializers.ModelSerializer):
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
-        fields = ['name', 'created_date']
+        fields = ['name', 'uuid', 'last_modified_date']
+
+class CollectionDetailSerializer(serializers.ModelSerializer):
+    words = WordSerializer(many=True)
+    class Meta:
+        model = Collection
+        fields = ['name', 'uuid', 'words']
 

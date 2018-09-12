@@ -31,6 +31,7 @@ class SaveCollection extends Component {
   render () {
     const words = this.props.allWords;
     const saving = this.props.saving
+    const name = this.props.name
     console.log(saving);
     console.log('rendering save form');
     return words.length ? (
@@ -39,7 +40,7 @@ class SaveCollection extends Component {
       <form onSubmit={(e) => this.onSubmitSave(e)}> 
       <div className="field has-addons has-addons-left">
         <p className="control">
-        <input class="input" type="text" placeholder="New Collection" value={this.state.name} onChange={this.handleNameChange} />
+        <input class="input" type="text" placeholder="Save Collection" value={this.state.name} onChange={this.handleNameChange} />
         </p>
         <p className="control">
         <a className="button save-btn" onClick={(e) => this.onSubmitSave(e)}>
@@ -58,12 +59,16 @@ class SaveCollection extends Component {
 const mapStateToProps = state => ({
   allWords: state.words.items,
   saving: state.collections.saving,
+  name: state.collections.name,
+  uuid: state.collections.uuid,
   error: state.collections.error,
 });
 
 SaveCollection.propTypes = {
   saveCollection: PropTypes.func.isRequired,
-  requestSave: PropTypes.func.isRequired
+  requestSave: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  uuid: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps, { saveCollection, requestSave })(SaveCollection);

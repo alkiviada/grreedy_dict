@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import key from "weak-key";
 import { connect } from 'react-redux';
-import { fetchCollections, requestCollections } from '../actions/collectionsActions';
+import { fetchCollections, fetchCollection, requestCollections, requestCollection } from '../actions/collectionsActions';
 
 const mapStateToProps = state => ({
   colls: state.collections.items,
@@ -11,6 +11,7 @@ const mapStateToProps = state => ({
 class CollectionsSideBar extends Component {
   constructor(props) { 
     super(props)
+    this.onCollectionClick = this.onCollectionClick.bind(this) 
   }
 
   static propTypes = {
@@ -22,6 +23,12 @@ class CollectionsSideBar extends Component {
     this.props.requestCollections();
     this.props.fetchCollections();
   }
+  onCollectionClick(e, uuid) {
+    console.log('collection look up');
+    e.preventDefault();
+    this.props.requestCollection();
+    this.props.fetchCollection(uuid);
+  }
   
   render () {
     const { colls } = this.props;
@@ -31,8 +38,9 @@ class CollectionsSideBar extends Component {
       <ul class="menu-list">
        { colls.map(e => 
         <li>
-          <a href="#" class="">
-            { `${e.name} ${e.created_date}` }
+          <a target="_blank" href={`/api/collection/${e.uuid}`} 
+          onClick={(c) => this.onCollectionClick(c, e.uuid)} className="coll-link">
+            { `${e.name} ${e.last_modified_date}` }
           </a>
         </li>
        )}
@@ -42,4 +50,4 @@ class CollectionsSideBar extends Component {
  }
 }
 
-export default connect(mapStateToProps, { requestCollections, fetchCollections })(CollectionsSideBar);
+export default connect(mapStateToProps, { requestCollections, fetchCollections, fetchCollection, requestCollection })(CollectionsSideBar);

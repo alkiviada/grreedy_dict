@@ -118,6 +118,11 @@ body {
   color: black;
 }
 
+.coll-link {
+  text-decoration: none;
+  color: black;
+}
+
 .clear-notification-warn {
   background-color: inherit;
   color: red;

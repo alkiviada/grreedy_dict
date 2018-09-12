@@ -1,4 +1,5 @@
 from django.db import models
+import uuid as uuid_lib
 from django.db.models import Case, When, Value, IntegerField
 
 class Etymology(models.Model):
@@ -17,7 +18,6 @@ class Definition(models.Model):
 
     def __str__(self):
         return self.definition
-
 
 class Example(models.Model):
     example = models.CharField(max_length=200)
@@ -56,13 +56,12 @@ class Collection(models.Model):
     name = models.CharField(max_length=30, blank=True)
     words = models.ManyToManyField(Word, blank=True, related_name='words')
     created_date = models.DateTimeField('date created')
+    last_modified_date = models.DateTimeField('date modified')
     notes = models.CharField(max_length=200)
-      
+    uuid = models.UUIDField(db_index=True, default=uuid_lib.uuid4, editable=False)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        ordering = ('-created_date',)
-
-
+        ordering = ('-last_modified_date',)

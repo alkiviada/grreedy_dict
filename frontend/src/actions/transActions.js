@@ -1,4 +1,5 @@
 import { FETCH_TRANSLATION, FETCH_TRANSLATION_FULFILLED, FETCH_TRANSLATION_REJECTED, SWITCH_TAB } from './types';
+import { translationsToMap } from './helpers';
 
 export const switchTab = (index, word, map) => dispatch => {
   console.log('switching tab');
@@ -56,10 +57,3 @@ export const requestTranslations = (word, fetchingMap) => dispatch => {
   })
 };
 
-const translationsToMap = (w) => {
-  const obj = w.reduce((o, e) => 
-    (o[e['language']] = [...o[e['language']] ? 
-      o[e['language']] : '', e['word'] ], o), {}
-  );
-  return obj
-}
