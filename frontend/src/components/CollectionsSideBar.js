@@ -27,12 +27,12 @@ class CollectionsSideBar extends Component {
     const { colls } = this.props;
     return colls.length ? ( 
       <aside class="column is-2 is-narrow-mobile is-fullheight section">
-      <p class="menu-label is-hidden-touch">Collections</p>
+      <p class="menu-label">Collections</p>
       <ul class="menu-list">
        { colls.map(e => 
         <li>
           <a href="#" class="">
-            <span class="icon"><i class="fa fa-home"></i></span> { `${e.name} ${e.created_date}` }
+            { `${e.name} ${e.created_date}` }
           </a>
         </li>
        )}
