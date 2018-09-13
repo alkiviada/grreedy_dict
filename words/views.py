@@ -14,7 +14,7 @@ from django.http import Http404
 class WordList(generics.ListAPIView):
     serializer_class = WordSerializer
     def get_queryset(self):
-        queryset = Word.single_object.filter(
+        queryset = Word.objects.filter(
           Q(word_examples__isnull=False)|
           Q(word_etymologies__isnull=False)
           ).filter(words=None).distinct()
@@ -31,6 +31,7 @@ class CollectionCreate(generics.ListCreateAPIView):
   serializer_class = CollectionSerializer
   def post(self, request):
     words = request.data.get('collection').split(',')
+    print(words)
 
     name = request.data.get('name')
     uuid = request.data.get('uuid')
@@ -47,7 +48,7 @@ class CollectionCreate(generics.ListCreateAPIView):
         print ("Something Wrong with UUID: ", uuid)
     elif name:
       print('i have no uuid but i have name')
-      coll = Collection.objects.filter(name=name)[0] 
+      coll = Collection.objects.filter(name=name).first() 
       if not coll: 
         coll = Collection.objects.create(created_date=timezone.now(), name=name, last_modified_date=timezone.now())
       else:
@@ -58,7 +59,10 @@ class CollectionCreate(generics.ListCreateAPIView):
       name = 'Untitled: ' + next_count;
       coll = Collection.objects.create(created_date=timezone.now(), name=name, last_modified_date=timezone.now())
 
+    words_test = Word.objects.filter(word__in=words)
+    print(words_test)
     words = Word.objects.filter(word__in=words).exclude(words=coll)
+    print(words)
     coll.words.add(*words)
     colls = Collection.objects.all()
     serializer = CollectionSerializer(colls, many=True)

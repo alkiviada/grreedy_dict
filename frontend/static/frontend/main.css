@@ -16,8 +16,6 @@ body {
  margin-bottom: 7px;
 }
 
-
-
 .def-style {
   list-style-type: circle;
   margin-left: 2em;
@@ -97,11 +95,11 @@ body {
 }
 
 .lang-french {
-  font-family: Parisienne;
+  font-family: Croissant One;
 }
 
 .lang-italian {
-  font-family: Italiana;
+  font-family: Vesper Libre;
 }
 
 .lang-head {
@@ -124,8 +122,10 @@ body {
 }
 
 .coll-text {
- color: rgba(0,0,0,0.1);
- text-shadow: 4px 3px 0px #fff, 9px 8px 0px rgba(0,0,0,0.15);
+  font-weight: bold;
+  color: rgba(0,0,0,0.1);
+  text-shadow: 1px 1px 0px #856831);
+  list-style-type: katakana;
 }
 
 .clear-notification-warn {

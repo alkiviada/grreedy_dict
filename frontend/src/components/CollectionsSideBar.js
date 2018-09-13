@@ -40,7 +40,7 @@ class CollectionsSideBar extends Component {
         <li className="coll-text">
           <a target="_blank" href={`/api/collection/${e.uuid}`} 
           onClick={(c) => this.onCollectionClick(c, e.uuid)} className="coll-link">
-            { `${e.name} ${e.last_modified_date}` }
+            {e.name}<br />{e.last_modified_date}
           </a>
         </li>
        )}
