@@ -1,9 +1,15 @@
-import { FETCH_WORDS, FETCH_WORDS_FULFILLED, FETCH_WORDS_REJECTED, FETCH_WORD, FETCH_WORD_FULFILLED } from './types';
+import { CLEAR_ERROR, FETCH_WORDS, FETCH_WORDS_FULFILLED, FETCH_WORDS_REJECTED, FETCH_WORD, FETCH_WORD_FULFILLED } from './types';
 import { conflateWords } from './helpers';
 
 export const requestWords = () => dispatch => {
   dispatch({
     type: FETCH_WORDS,
+  })
+};
+
+export const clearError = () => dispatch => {
+  dispatch({
+    type: CLEAR_ERROR,
   })
 };
 
@@ -42,10 +48,10 @@ export const lookUpWord = (word, words) => dispatch => {
         if (status >= 400) {
           // Status looks bad
           console.log('Server returned error status');
-          dispatch({type: FETCH_WORDS_REJECTED, payload: 'fetching words failed', })
+          dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed', word: word}})
         } else {
           // Status looks good
-          var word = json;
+          const word = json;
           const obj = word.reduce((o, e) =>
                                (o['word'] = e['word'], 
                                 o['description'] = [ ...o['description'] ? o['description'] : '', 
@@ -61,7 +67,7 @@ export const lookUpWord = (word, words) => dispatch => {
       // Either fetching or parsing failed!
       err => {
         console.log('problems');
-        dispatch({type: FETCH_WORDS_REJECTED, payload: 'fetching words failed', })
+        dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed', }})
       }
     ); 
 };

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { lookUpWord, requestWord } from '../actions/wordsActions';
+import { lookUpWord, requestWord, clearError } from '../actions/wordsActions';
 
 class NewWordForm extends Component {
   constructor(props) { 
@@ -14,6 +14,7 @@ class NewWordForm extends Component {
   };
 
   handleWordChange(w) {
+   this.props.clearError();
    this.setState({word: w.target.value});
   }
 
@@ -25,13 +26,12 @@ class NewWordForm extends Component {
       this.props.requestWord();
       this.props.lookUpWord(this.state.word, this.props.allWords);
     }
-    if (!this.props.error) {
-      this.setState({word: ''});
-    }
+    this.setState({word: ''})
   }
 
   render () {
     const fetching = this.props.fetching;
+    const word = !this.props.error ? this.state.word : this.props.word
     console.log('rendering new word form');
     return (
       <div className="new-word word-notification column">
@@ -40,7 +40,7 @@ class NewWordForm extends Component {
       { this.props.error ? <div className="clear-notification-warn column is-half">  Can't load this word   </div> : '' }
       <div className="field has-addons has-addons-left">
         <p className="control">
-        <input className="input" type="text" placeholder="New Word" value={this.state.word} onChange={this.handleWordChange} />
+        <input className="input" type="text" placeholder="New Word" value={word} onChange={this.handleWordChange} />
         </p>
         <p className="control">
         <a className="button look-up-btn" onClick={(e) => this.onSubmitLookUp(e)}>
@@ -60,6 +60,7 @@ const mapStateToProps = state => ({
   allWords: state.words.items,
   fetching: state.words.newWordFetching,
   error: state.words.error,
+  word: state.words.word,
 });
 
 NewWordForm.propTypes = {
@@ -67,4 +68,4 @@ NewWordForm.propTypes = {
   requestWord: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, { lookUpWord, requestWord })(NewWordForm);
+export default connect(mapStateToProps, { lookUpWord, requestWord, clearError })(NewWordForm);
