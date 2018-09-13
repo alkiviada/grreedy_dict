@@ -24,7 +24,7 @@ class Example(models.Model):
     definition = models.ForeignKey(Definition, on_delete=models.CASCADE, related_name='examples')
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_examples')
 
-class WordManager(models.Manager):
+class SingleWordManager(models.Manager):
   def get_queryset(self):
     return super().get_queryset().filter(language__in=['english', 'french', 'italian']).annotate(order=Case(
       When(language='english', then=Value(0)),
@@ -43,8 +43,9 @@ class Word(models.Model):
     notes = models.CharField(max_length=200)
     translations = models.ManyToManyField("self", blank=True, related_name='translations')
     
-    objects = WordManager()
+    single_object = SingleWordManager()
     english_objects = EnglishWordManager()
+    objects = models.Manager()
     
     def __str__(self):
         return self.word

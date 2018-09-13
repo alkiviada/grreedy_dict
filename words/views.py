@@ -14,7 +14,7 @@ from django.http import Http404
 class WordList(generics.ListAPIView):
     serializer_class = WordSerializer
     def get_queryset(self):
-        queryset = Word.objects.filter(
+        queryset = Word.single_object.filter(
           Q(word_examples__isnull=False)|
           Q(word_etymologies__isnull=False)
           ).filter(words=None).distinct()
@@ -61,11 +61,11 @@ class CollectionCreate(generics.ListCreateAPIView):
 class WordSingleCreate(generics.ListAPIView):
   lookup_field = 'word'
   serializer_class = WordSerializer
-  queryset = Word.objects.all()
+  queryset = Word.single_object.all()
 
   def get(self, request, word, *args, **kwargs):
     print('GET ' + word);
-    db_words = Word.objects.filter(word=word);
+    db_words = Word.single_object.filter(word=word);
     complete_word = 0
     for w in db_words:
       for e in w.word_etymologies.all():
@@ -84,7 +84,7 @@ class WordSingleCreate(generics.ListAPIView):
     if not db_words or not complete_word:
       print("Word is not in our DB");
       fetch_word(word);
-      db_words = Word.objects.filter(word=word);
+      db_words = Word.single_object.filter(word=word);
       if not db_words:
         print("Could not fetch word:" + word);
         raise Http404("No API for the word:", word)
@@ -101,7 +101,7 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
     language = orig_word = ''
     print(word);
     orig_word = Word.english_objects.get(word=word);
-    translated_words = Word.objects.filter(translations=orig_word);
+    translated_words = Word.single_object.filter(translations=orig_word);
     print(translated_words);
     if not translated_words:
       print("Translations for this Word are not in our DB");

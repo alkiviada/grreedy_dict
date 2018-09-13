@@ -14,7 +14,9 @@ class NewWordForm extends Component {
   };
 
   handleWordChange(w) {
-   this.props.clearError();
+   if (this.props.error) {
+     this.props.clearError();
+   }
    this.setState({word: w.target.value});
   }
 

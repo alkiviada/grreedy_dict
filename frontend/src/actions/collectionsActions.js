@@ -6,7 +6,8 @@ import { SAVE_COLLECTION,
          FETCH_WORDS_FULFILLED, 
          FETCH_COLLECTIONS_FULFILLED, 
          FETCH_COLLECTION_FULFILLED, 
-         FETCH_COLLECTIONS 
+         FETCH_COLLECTIONS, 
+         CLEAR_FETCHED
        } from './types';
 
 import { conflateWords } from './helpers';
@@ -15,6 +16,13 @@ export const requestSave = () => dispatch => {
  console.log('requesting save');
   dispatch({
     type: SAVE_COLLECTION,
+  })
+};
+
+export const clearFetched = () => dispatch => {
+ console.log('clearing fetched');
+  dispatch({
+    type: CLEAR_FETCHED,
   })
 };
 
