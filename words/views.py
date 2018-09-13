@@ -2,6 +2,7 @@ from words.models import Word, Definition, Etymology, Example, Collection
 from words.utils import fetch_translations, fetch_word
 from django.db.models import Q
 from django.utils import timezone
+from sortedm2m.fields import SortedManyToManyField
 
 from words.serializers import WordSerializer, TranslationSerializer, CollectionSerializer, CollectionDetailSerializer
 
@@ -31,7 +32,6 @@ class CollectionCreate(generics.ListCreateAPIView):
   serializer_class = CollectionSerializer
   def post(self, request):
     words = request.data.get('collection').split(',')
-    print(words)
 
     name = request.data.get('name')
     uuid = request.data.get('uuid')
@@ -59,10 +59,8 @@ class CollectionCreate(generics.ListCreateAPIView):
       name = 'Untitled: ' + next_count;
       coll = Collection.objects.create(created_date=timezone.now(), name=name, last_modified_date=timezone.now())
 
-    words_test = Word.objects.filter(word__in=words)
-    print(words_test)
-    words = Word.objects.filter(word__in=words).exclude(words=coll)
-    print(words)
+    words = Word.objects.filter(word__in=words)
+    coll.words.clear()
     coll.words.add(*words)
     colls = Collection.objects.all()
     serializer = CollectionSerializer(colls, many=True)

@@ -1,4 +1,5 @@
 from django.db import models
+from sortedm2m.fields import SortedManyToManyField
 import uuid as uuid_lib
 from django.db.models import Case, When, Value, IntegerField
 
@@ -55,7 +56,7 @@ class Word(models.Model):
 
 class Collection(models.Model):
     name = models.CharField(max_length=30, blank=True)
-    words = models.ManyToManyField(Word, blank=True, related_name='words')
+    words = SortedManyToManyField(Word, related_name='words')
     created_date = models.DateTimeField('date created')
     last_modified_date = models.DateTimeField('date modified')
     notes = models.CharField(max_length=200)
