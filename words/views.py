@@ -41,13 +41,24 @@ class CollectionCreate(generics.ListCreateAPIView):
       try:
         coll = Collection.objects.get(uuid=uuid) 
         coll.name = name
+        coll.last_modified_date = timezone.now() 
         coll.save()
       except ObjectDoesNotExist:
         print ("Something Wrong with UUID: ", uuid)
+    elif name:
+      print('i have no uuid but i have name')
+      coll = Collection.objects.filter(name=name)[0] 
+      if not coll: 
+        coll = Collection.objects.create(created_date=timezone.now(), name=name, last_modified_date=timezone.now())
+      else:
+        coll.last_modified_date = timezone.now() 
+        coll.save()
     else: 
+      next_count = str(Collection.objects.filter(name__startswith='Untitled').count() + 1)
+      name = 'Untitled: ' + next_count;
       coll = Collection.objects.create(created_date=timezone.now(), name=name, last_modified_date=timezone.now())
 
-    words = Word.objects.filter(word__in=words)
+    words = Word.objects.filter(word__in=words).exclude(words=coll)
     coll.words.add(*words)
     colls = Collection.objects.all()
     serializer = CollectionSerializer(colls, many=True)

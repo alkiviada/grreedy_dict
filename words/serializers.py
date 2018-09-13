@@ -7,7 +7,6 @@ class NonNullModelSerializer(serializers.ModelSerializer):
         result = super(NonNullModelSerializer, self).to_representation(instance)
         return OrderedDict([(key, result[key]) for key in result if result[key] is not None])
 
-
 class ExampleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Example 
@@ -15,7 +14,6 @@ class ExampleSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         result = super(ExampleSerializer, self).to_representation(instance)
         return OrderedDict([(key, result[key]) for key in result if result[key] is not ''])
-
 
 class DefinitionSerializer(serializers.ModelSerializer):
     examples = ExampleSerializer(many=True)
@@ -27,13 +25,11 @@ class DefinitionSerializer(serializers.ModelSerializer):
         result = super(DefinitionSerializer, self).to_representation(instance)
         return OrderedDict([(key, result[key]) for key in result if not (len(result[key]) == 1 and not result[key][0]) ])
 
-
 class EtymologySerializer(serializers.ModelSerializer):
     definitions = DefinitionSerializer(many=True)
     class Meta:
         model = Etymology 
         fields = ['etymology', 'definitions']
-
 
 class WordSerializer(serializers.ModelSerializer):
     word_etymologies = EtymologySerializer(many=True)
@@ -47,6 +43,7 @@ class TranslationSerializer(serializers.ModelSerializer):
         fields = ['word', 'language']
 
 class CollectionSerializer(serializers.ModelSerializer):
+    last_modified_date = serializers.DateTimeField(format="%m-%d %H:%M", required=False, read_only=True)
     class Meta:
         model = Collection
         fields = ['name', 'uuid', 'last_modified_date']
@@ -56,4 +53,3 @@ class CollectionDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
         fields = ['name', 'uuid', 'words']
-
