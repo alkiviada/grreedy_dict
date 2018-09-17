@@ -12,7 +12,7 @@ def scrape_wordref_words(words_string, split=1):
     return ''
   words_string = words_string.get_text()   
   words_string = re.sub(
-    r'(?<!^)\b(inter$|nm|nf|viintransitiv|vtr|v (rif|refl|past)|v pron|loc |v(i)?( tr|pres)?$|agg|adj|nnoun|npl|v expr|interj|adv|avv| contraction|expr|abbr|vi +|n as|prepp|conjc|cong|idiom$|pronpron|prep +|viverbe).*', 
+    r'(?<!^)\b(inter$|nm|nf|viintransitiv|vtr|v(i)? (rif|refl|past|aux|pron|expr|tr|pres)|loc |agg|adj|nnoun|npl|interj|adv|avv| contraction|expr|abbr|vi +|n as|prepp|conjc|cong|idiom$|pronpron|prep +|viverbe).*', 
     '', words_string)
   if not split:
     return words_string.strip().translate(str.maketrans(dict.fromkeys(delchars)))
@@ -21,10 +21,11 @@ def scrape_wordref_words(words_string, split=1):
     for w in words_string.split(',') ]
   return words
 
-def try_fetch(url, headers={}):
+def try_fetch(url, headers={}, params={}):
   r = ''
   try:
-    r = requests.get(url,timeout=3, headers = headers, allow_redirects=False)
+    print(params)
+    r = requests.get(url, timeout=3, headers = headers, allow_redirects=False, params=params)
     r.raise_for_status()
   except requests.exceptions.HTTPError as errh:
     print ("Http Error:", errh)

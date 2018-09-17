@@ -94,6 +94,14 @@ body {
   font-family: IM Fell English SC;
 }
 
+.lang-ukrainian {
+  font-family: Volkhov;
+}
+
+.lang-russian {
+  font-family: Russo One;
+}
+
 .lang-french {
   font-family: Croissant One;
 }

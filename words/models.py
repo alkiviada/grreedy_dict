@@ -4,8 +4,8 @@ import uuid as uuid_lib
 from django.db.models import Case, When, Value, IntegerField
 
 class Etymology(models.Model):
-    etymology = models.CharField(max_length=200)
-    word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_etymologies')
+    etymology = models.CharField(max_length=200, null=True)
+    word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_etymologies', null=True)
     def __str__(self):
         return self.etymology
 
@@ -13,24 +13,26 @@ class Etymology(models.Model):
         return self.etymology
 
 class Definition(models.Model):
-    definition = models.CharField(max_length=200)
+    definition = models.CharField(max_length=200, null=True)
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_definitions')
-    etymology = models.ForeignKey(Etymology, on_delete=models.CASCADE, related_name='definitions')
+    etymology = models.ForeignKey(Etymology, on_delete=models.CASCADE, related_name='definitions', null=True)
 
     def __str__(self):
         return self.definition
 
 class Example(models.Model):
     example = models.CharField(max_length=200)
-    definition = models.ForeignKey(Definition, on_delete=models.CASCADE, related_name='examples')
+    definition = models.ForeignKey(Definition, on_delete=models.CASCADE, related_name='examples', blank=True, null=True)
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_examples')
 
 class SingleWordManager(models.Manager):
   def get_queryset(self):
-    return super().get_queryset().filter(language__in=['english', 'french', 'italian']).annotate(order=Case(
+    return super().get_queryset().filter(language__in=['english', 'french', 'italian', 'russian', 'ukrainian']).annotate(order=Case(
       When(language='english', then=Value(0)),
       When(language='french', then=Value(1)),
       When(language='italian', then=Value(2)),
+      When(language='russian', then=Value(3)),
+      When(language='ukrainian', then=Value(4)),
       output_field=IntegerField())).order_by('order')
 
 class EnglishWordManager(models.Manager):

@@ -31,6 +31,10 @@ class EtymologySerializer(serializers.ModelSerializer):
         model = Etymology 
         fields = ['etymology', 'definitions']
 
+    def to_representation(self, instance):
+        result = super(EtymologySerializer, self).to_representation(instance)
+        return OrderedDict([(key, result[key]) for key in result if not (len(result[key]) == 1 and not result[key][0]) ])
+
 class WordSerializer(serializers.ModelSerializer):
     word_etymologies = EtymologySerializer(many=True)
     class Meta:

@@ -1,0 +1,22 @@
+import requests
+r = requests.get('https://dictionary.yandex.net/api/v1/dicservice.json/lookup', timeout=3, headers = {}, allow_redirects=False, params={'key': 'dict.1.1.20180805T185344Z.55f2c2cb3a648836.7bbf15c7374a967b79489eb097a0403e309aebcc', 'lang':'en-ru', 'text': 'bear'})
+t = [ d['tr'] for d in r.json()['def'] ]
+words = []
+word_exmpls = {}
+for t in t:
+  for t in t:
+    word, syn, ex = [ t.get(i) for i in ['text', 'syn', 'ex'] ]
+    words.append(word)
+    ex_items = []
+    if syn:
+      [ print(i.keys()) for i in syn ]
+      [ words.append(t['text']) for t in syn ]
+    if ex:
+      for t in ex:
+        text = t['text']
+        trans = ' ,'.join([ i['text'] for i in t['tr'] ])
+        ex_items.append(text + ' (' + trans + ')')
+      word_exmpls[word] = ex_items
+       
+print(words) 
+print(word_exmpls)

@@ -6,36 +6,102 @@ from datetime import datetime
 import os
 import re
 from words.helpers import scrape_wordref_words, try_fetch, oxford_word, create_my_word, collect_examples
-from words.constants import EXTENSIONS, LANG_MAP, TRANSL_MAP
+from words.constants import EXTENSIONS, LANG_MAP
 from django.core.exceptions import ObjectDoesNotExist 
 
-def fetch_translations(word, orig_word):
-  base_url = 'http://www.wordreference.com/' 
 
-  for l in TRANSL_MAP:
+def fetch_translations(word, orig_word):
+  TRANSL_APIS = {
+    'wordfref': { 'langs': [
+                           { 'enit': { 'db_language': 'italian', 'wref_language': ['Italiano', 'Inglese'] }, },
+                           { 'enfr': { 'db_language': 'french', 'wref_language': ['Français', 'Anglais'] }, }
+                         ],
+                  'url': 'http://www.wordreference.com/',
+                  'prep': prep_wordref_translations,
+                },
+    'yandex': { 'langs': [ { 'en-ru': { 'db_language': 'russian' }, }, { 'en-uk': { 'db_language': 'ukrainian' }, } ], 
+                'url': 'https://dictionary.yandex.net/api/v1/dicservice.json/lookup',
+                'prep': prep_yandex_translations,
+              },
+  }
+
+  for api_lbl, api_specs in TRANSL_APIS.items():
+    print(api_lbl)
+    api_specs.get('prep')(api_specs, word, orig_word);
+
+def prep_yandex_translations(api, word_to_translate, orig_word):
+  base_url = api.get('url')
+  for l in api.get('langs'):
+    lang, specs = list(l.items())[0]
+    params = {
+              'key': 'dict.1.1.20180805T185344Z.55f2c2cb3a648836.7bbf15c7374a967b79489eb097a0403e309aebcc',
+              'lang': lang,
+              'text': word_to_translate,
+             }
+    
+    r = try_fetch(base_url, {}, params)
+    translations = [ d['tr'] for d in r.json()['def'] ]
+    words = []
+    word_exmpls = {}
+    for t in translations:
+      for t in t:
+        word, syn, ex = [ t.get(i) for i in ['text', 'syn', 'ex'] ]
+        words.append(word)
+        ex_items = []
+        if syn:
+          [ print(i.keys()) for i in syn ]
+          [ words.append(t['text']) for t in syn ]
+        if ex:
+          for t in ex:
+            text = t['text']
+            trans = ' ,'.join([ i['text'] for i in t['tr'] ])
+            ex_items.append(text + ' (' + trans + ')')
+          word_exmpls[word] = ex_items
+    print(word_exmpls) 
+  
+    db_language = specs.get('db_language')
+    for w in words:
+      try:
+        print(w, ' ', db_language);
+        db_w = Word.objects.get(word=w, language=db_language) 
+      except ObjectDoesNotExist:
+        db_w = Word.objects.create(word=w, lookup_date=timezone.now(), language=db_language) 
+      if word_exmpls.get(w):
+        faux_etym = Etymology.objects.create(word=db_w, etymology='') 
+        faux_def = Definition.objects.create(word=db_w, etymology=faux_etym, definition=word_to_translate) 
+        [ Example.objects.create(example=e, word=db_w, definition=faux_def) for e in word_exmpls[w] ]
+      db_w.translations.add(orig_word)
+
+
+def prep_wordref_translations(api, word, orig_word):
+  base_url = api.get('url') 
+  for l in api.get('langs'):
+    lang, specs = list(l.items())[0]
+    print (lang, specs)
     all_trans_for_lang = []
     for e in EXTENSIONS:
-      url = base_url + l + e + word
+      url = base_url + lang + e + word
       wclass = EXTENSIONS.get(e).get('definition');
-      translations = fetch_wordref_translation(l, url, wclass)
+      translations = fetch_wordref_translation(lang, url, wclass, specs.get('wref_language'))
       all_trans_for_lang.extend(translations)
 
     translated_words = list(set(all_trans_for_lang));
+    db_language = specs.get('db_language');
     for w in translated_words:
       try:
-        print(w, ' ', TRANSL_MAP.get(l).get('db_language'));
-        w = Word.objects.get(word=w, language=TRANSL_MAP.get(l).get('db_language')) 
+        print(w, ' ', db_language);
+        w = Word.objects.get(word=w, language=db_language) 
       except ObjectDoesNotExist:
-        w = Word.objects.create(word=w, lookup_date=timezone.now(), language=TRANSL_MAP.get(l).get('db_language')) 
+        w = Word.objects.create(word=w, lookup_date=timezone.now(), language=db_language) 
       w.translations.add(orig_word)
 
-def fetch_wordref_translation(language, url, wclass):
+def fetch_wordref_translation(language, url, wclass, exclude_wref_lang_words):
   r = try_fetch(url)
   if r: 
-    return get_wordref_words(r, language, wclass);
+    return get_wordref_words(r, language, wclass, exclude_wref_lang_words);
 
 
-def get_wordref_words(r, language, wclass):
+def get_wordref_words(r, language, wclass, exclude_wref_lang_words):
     word_page = r.content
     word_soup = BeautifulSoup(word_page, features="html.parser")
     words = []
@@ -45,7 +111,7 @@ def get_wordref_words(r, language, wclass):
         for e in word_table.findAll("td", {"class" : wclass}) ]
 
     words = list(set(words));
-    words = [ e for e in words if e not in TRANSL_MAP[language].get('wref_language') ];
+    words = [ e for e in words if e not in exclude_wref_lang_words ];
     return words 
 
 def get_wordref_word_specs(r, language, def_class, exmpl_class):

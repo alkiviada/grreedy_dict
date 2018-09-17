@@ -16,8 +16,8 @@ class WordList(generics.ListAPIView):
     serializer_class = WordSerializer
     def get_queryset(self):
         queryset = Word.objects.filter(
-          Q(word_examples__isnull=False)|
-          Q(word_etymologies__isnull=False)
+          Q(word_etymologies__isnull=False)|
+          Q(word_definitions__isnull=False)
           ).filter(words=None).distinct()
         return queryset
 
@@ -59,9 +59,13 @@ class CollectionCreate(generics.ListCreateAPIView):
       name = 'Untitled: ' + next_count;
       coll = Collection.objects.create(created_date=timezone.now(), name=name, last_modified_date=timezone.now())
 
-    words = Word.objects.filter(word__in=words)
+    updated_words = []
+    for w in words:
+      w = Word.single_object.filter(word=w)
+      updated_words.extend(w)
+    
     coll.words.clear()
-    coll.words.add(*words)
+    coll.words.add(*updated_words)
     colls = Collection.objects.all()
     serializer = CollectionSerializer(colls, many=True)
     return Response(serializer.data)
@@ -119,7 +123,7 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
     if not translated_words:
       print("Translations for this Word are not in our DB");
       fetch_translations(word, orig_word);
-      translated_words = Word.objects.filter(translations=orig_word);
+      translated_words = Word.single_object.filter(translations=orig_word);
       print(translated_words);
       if not translated_words:
         print("Word is not in our DB");
