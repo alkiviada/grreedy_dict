@@ -34,7 +34,7 @@ def prep_yandex_translations(api, word_to_translate, orig_word):
   for l in api.get('langs'):
     lang, specs = list(l.items())[0]
     params = {
-              'key': 'dict.1.1.20180805T185344Z.55f2c2cb3a648836.7bbf15c7374a967b79489eb097a0403e309aebcc',
+              'key': os.environ.get('YANDEX_API_KEY'),
               'lang': lang,
               'text': word_to_translate,
              }

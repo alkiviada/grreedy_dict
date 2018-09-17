@@ -31,7 +31,7 @@ class SaveCollection extends Component {
     this.props.saveCollection(name, uuid, this.props.allWords.map(e => e.word).join(','));
     const root = ReactDOM.findDOMNode(this).parentNode;
     window.scrollTo(0, root.offsetTop-35)
-    this.setState({word: ''})
+    this.setState({name: ''})
   }
 
   render () {
