@@ -44,9 +44,16 @@ export const requestCollection = () => dispatch => {
   })
 };
 
-export const fetchCollections = () => dispatch => {
+export const fetchCollections = () => (dispatch, getState) => {
   console.log('fetching collections');
-  fetch('api/collection/')
+  let headers = {"Content-Type": "application/json"};
+  let {token} = getState().auth;
+
+  console.log(token)
+  if (token) {
+      headers["Authorization"] = `Token ${token}`;
+  }
+  fetch('api/collection/', {headers, })
     .then(res => res.json())
     .then(items => {
       dispatch({
@@ -95,15 +102,21 @@ export const fetchCollection = (uuid) => dispatch => {
     ); 
 };
 
-export const saveCollection = (name, uuid, words) => dispatch => {
+export const saveCollection = (name, uuid, words) => (dispatch, getState) => {
   console.log('saving words');
   console.log(uuid);
+  let {token} = getState().auth;
+  let headers = {
+                 Accept: 'application/json',
+                 "Content-Type": "application/json"
+                };
+  console.log(token)
+  if (token) {
+      headers["Authorization"] = `Token ${token}`;
+  }
   fetch('api/collection/', {
     method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+    headers: headers,
     body: JSON.stringify({
      collection: words,
      name: name,

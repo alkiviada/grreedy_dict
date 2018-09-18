@@ -162,10 +162,15 @@ def get_wordref_word_specs(r, language, def_class, exmpl_class):
                       }],
            }
 
-
-
 def fetch_word(word_id):
   apis = [
+    { 'name': 'WORDREF',
+      'api_specs': { 'url': 'http://www.wordreference.com/',
+                     'languages': ['iten', 'fren', ],
+                     'create_function': wordref_word,
+                     'create_url': wordref_url,
+      },
+    },
     { 'name': 'OXFORD',
       'api_specs': { 'url': 'https://od-api.oxforddictionaries.com:443/api/v1/entries/',
                     'app_key': os.environ.get('OXFORD_API_KEY'),
@@ -173,13 +178,6 @@ def fetch_word(word_id):
                     'languages': ['en'], 
                     'create_function': oxford_word,
                     'create_url': oxford_url,
-      },
-    },
-    { 'name': 'WORDREF',
-      'api_specs': { 'url': 'http://www.wordreference.com/',
-                     'languages': ['fren', 'iten', ],
-                     'create_function': wordref_word,
-                     'create_url': wordref_url,
       },
     },
   ] 

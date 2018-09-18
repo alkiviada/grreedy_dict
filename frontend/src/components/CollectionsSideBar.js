@@ -3,9 +3,11 @@ import PropTypes from "prop-types";
 import key from "weak-key";
 import { connect } from 'react-redux';
 import { fetchCollections, fetchCollection, requestCollections, requestCollection } from '../actions/collectionsActions';
+import { loadUser } from '../actions/authActions';
 
 const mapStateToProps = state => ({
   colls: state.collections.items,
+  auth: state.auth,
 });
 
 class CollectionsSideBar extends Component {
@@ -20,6 +22,8 @@ class CollectionsSideBar extends Component {
 
   componentWillMount() {
     console.log('mounting sidebar');
+    this.props.loadUser();
+    console.log(this.props.auth)
     this.props.requestCollections();
     this.props.fetchCollections();
   }
@@ -50,4 +54,4 @@ class CollectionsSideBar extends Component {
  }
 }
 
-export default connect(mapStateToProps, { requestCollections, fetchCollections, fetchCollection, requestCollection })(CollectionsSideBar);
+export default connect(mapStateToProps, { loadUser, requestCollections, fetchCollections, fetchCollection, requestCollection })(CollectionsSideBar);

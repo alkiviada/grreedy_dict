@@ -15,35 +15,35 @@ from django.http import Http404
 
 
 class LoginAPI(generics.GenericAPIView):
-    serializer_class = LoginUserSerializer
+  serializer_class = LoginUserSerializer
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data
-        return Response({
-            "user": UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": AuthToken.objects.create(user)
-        })
+  def post(self, request, *args, **kwargs):
+    serializer = self.get_serializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    user = serializer.validated_data
+    return Response({
+      "user": UserSerializer(user, context=self.get_serializer_context()).data,
+      "token": AuthToken.objects.create(user)
+    })
 
 class RegistrationAPI(generics.GenericAPIView):
-    serializer_class = CreateUserSerializer
+  serializer_class = CreateUserSerializer
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        return Response({
-            "user": UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": AuthToken.objects.create(user)
-        })
+  def post(self, request, *args, **kwargs):
+    serializer = self.get_serializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    user = serializer.save()
+    return Response({
+      "user": UserSerializer(user, context=self.get_serializer_context()).data,
+      "token": AuthToken.objects.create(user)
+    })
 
 class UserAPI(generics.RetrieveAPIView):
     permission_classes = [ IsAuthenticated, ]
     serializer_class = UserSerializer
 
     def get_object(self):
-        return self.request.user
+      return self.request.user
 
 class WordList(generics.ListAPIView):
   serializer_class = WordSerializer
@@ -54,15 +54,18 @@ class WordList(generics.ListAPIView):
 class CollectionDetail(generics.RetrieveUpdateAPIView):
   permission_classes = [ IsAuthenticated, ]
   def get_queryset(self):
+    print(self.request.user)
     return Collection.objects.all()
 
   lookup_field = 'uuid'
   serializer_class = CollectionDetailSerializer
 
-class CollectionCreate(generics.ListCreateAPIView):
+
+class CollectionListCreate(generics.ListCreateAPIView):
   permission_classes = [ IsAuthenticated, ]
   lookup_field = 'name'
   serializer_class = CollectionSerializer
+
   def post(self, request):
     words = request.data.get('collection').split(',')
 
@@ -76,21 +79,21 @@ class CollectionCreate(generics.ListCreateAPIView):
         coll = Collection.objects.get(uuid=uuid) 
         coll.name = name
         coll.last_modified_date = timezone.now() 
-        coll.save()
+        coll.save(owner=self.request.user)
       except ObjectDoesNotExist:
         print ("Something Wrong with UUID: ", uuid)
     elif name:
       print('i have no uuid but i have name')
       coll = Collection.objects.filter(name=name).first() 
       if not coll: 
-        coll = Collection.objects.create(created_date=timezone.now(), name=name, last_modified_date=timezone.now())
+        coll = Collection.objects.create(owner=self.request.user, created_date=timezone.now(), name=name, last_modified_date=timezone.now())
       else:
         coll.last_modified_date = timezone.now() 
-        coll.save()
+        coll.save(owner=self.request.user)
     else: 
       next_count = str(Collection.objects.filter(name__startswith='Untitled').count() + 1)
       name = 'Untitled: ' + next_count;
-      coll = Collection.objects.create(created_date=timezone.now(), name=name, last_modified_date=timezone.now())
+      coll = Collection.objects.create(owner=self.request.user, created_date=timezone.now(), name=name, last_modified_date=timezone.now())
 
     updated_words = []
     for w in words:
@@ -99,12 +102,14 @@ class CollectionCreate(generics.ListCreateAPIView):
     
     coll.words.clear()
     coll.words.add(*updated_words)
-    colls = Collection.objects.all()
+    colls = Collection.objects.filter(owner=self.request.user)
     serializer = CollectionSerializer(colls, many=True)
     return Response(serializer.data)
 
   def get_queryset(self):
-    queryset = Collection.objects.all()
+    print(self.request.user)
+    print('retrieving collections for user');
+    queryset = self.request.user.collections.all()
     return queryset
 
 class WordSingleCreate(generics.ListAPIView):

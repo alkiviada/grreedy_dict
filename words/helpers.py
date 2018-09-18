@@ -48,13 +48,18 @@ def oxford_word(r, word_id, *args):
   word_entries = []
   for i in oxford_word["results"]:
     for j in i["lexicalEntries"]:
+      if j.get('derivativeOf'):
+        definition = 'Derivative of ' + j.get('derivativeOf')[0].get('text')
+        entry = {'etymology': '', 'definitions': [{'definition': definition}]}
+        word_entries.append(entry)
+
       for k in j["entries"]: 
         sense = {}
+        sense['definitions'] = []
         if 'etymologies' in k:
           sense['etymology'] = k["etymologies"][0]
         else:
           sense['etymology'] = '' 
-        sense['definitions'] = []
         if 'senses' in k:
           for v in k["senses"]: 
             if 'definitions' in v:
@@ -64,6 +69,10 @@ def oxford_word(r, word_id, *args):
                 if "examples" in v:
                   def_exmpls['examples'] = [ {'example': e['text']} for e in v["examples"] ]
                 sense['definitions'].append(def_exmpls);
+            elif 'crossReferenceMarkers' in v:
+              for c in v["crossReferenceMarkers"]:
+                print(c)
+                sense['definitions'].append({'definition': c});
         word_entries.append(sense)
    
   return {'language': 'english', 'specs': word_entries }
