@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { login, } from '../actions/authActions';
 import { Link, Redirect } from "react-router-dom";
 
-
 class Login extends Component {
   constructor(props) { 
     super(props)
@@ -22,6 +21,7 @@ class Login extends Component {
   }
 
   render () {
+    console.log(this.props)
     if (this.props.isAuthenticated) {
       return <Redirect to="/" />
     }

@@ -64,7 +64,7 @@ def prep_yandex_translations(api, word_to_translate, orig_word):
         print(w, ' ', db_language);
         db_w = Word.objects.get(word=w, language=db_language) 
       except ObjectDoesNotExist:
-        db_w = Word.objects.create(word=w, lookup_date=timezone.now(), language=db_language) 
+        db_w = Word.objects.create(word=w, lookup_date=timezone.now(), language=db_language, from_translation=True) 
       if word_exmpls.get(w):
         faux_etym = Etymology.objects.create(word=db_w, etymology='') 
         faux_def = Definition.objects.create(word=db_w, etymology=faux_etym, definition=word_to_translate) 

@@ -45,7 +45,7 @@ class FreeWordsManager(models.Manager):
   def get_queryset(self):
     return super().get_queryset().filter(Q(word_etymologies__isnull=False)|
           Q(word_definitions__isnull=False)
-          ).filter(words=None).distinct()
+          ).exclude(from_translation=True).filter(words=None).distinct()
 
 class Word(models.Model):
     word = models.CharField(max_length=30)
@@ -53,6 +53,7 @@ class Word(models.Model):
     lookup_date = models.DateTimeField('date looked up')
     notes = models.CharField(max_length=200)
     translations = models.ManyToManyField("self", blank=True, related_name='translations')
+    from_translation = models.BooleanField(default=False)
     
     single_object = SingleWordManager()
     english_objects = EnglishWordManager()

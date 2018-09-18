@@ -52,15 +52,15 @@ class WordList(generics.ListAPIView):
     return Word.free_words.all()
 
 class CollectionDetail(generics.RetrieveUpdateAPIView):
+  permission_classes = [ IsAuthenticated, ]
   def get_queryset(self):
     return Collection.objects.all()
 
   lookup_field = 'uuid'
   serializer_class = CollectionDetailSerializer
 
-
 class CollectionCreate(generics.ListCreateAPIView):
-  permission_classes = [ AllowAny, ]
+  permission_classes = [ IsAuthenticated, ]
   lookup_field = 'name'
   serializer_class = CollectionSerializer
   def post(self, request):
@@ -143,6 +143,7 @@ class WordSingleCreate(generics.ListAPIView):
     return Response(serializer.data)
     
 class WordSingleCreateTranslate(generics.RetrieveAPIView):
+  permission_classes = [ AllowAny, ]
   def get_queryset(self):
     queryset = Word.objects.all()
     return queryset
