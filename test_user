@@ -1,0 +1,1 @@
+curl --request POST  --url http://localhost:8000/api/auth/login/  --header 'content-type: application/json' --data '{ "username": "user1", "password": "hunter2" }'

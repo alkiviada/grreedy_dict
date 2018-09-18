@@ -1,7 +1,9 @@
 from django.db import models
+from django.contrib.auth.models import User
 from sortedm2m.fields import SortedManyToManyField
 import uuid as uuid_lib
 from django.db.models import Case, When, Value, IntegerField
+from django.db.models import Q
 
 class Etymology(models.Model):
     etymology = models.CharField(max_length=200, null=True)
@@ -39,6 +41,12 @@ class EnglishWordManager(models.Manager):
   def get_queryset(self):
     return super().get_queryset().filter(language='english')
 
+class FreeWordsManager(models.Manager):
+  def get_queryset(self):
+    return super().get_queryset().filter(Q(word_etymologies__isnull=False)|
+          Q(word_definitions__isnull=False)
+          ).filter(words=None).distinct()
+
 class Word(models.Model):
     word = models.CharField(max_length=30)
     language = models.CharField(max_length=33)
@@ -48,6 +56,7 @@ class Word(models.Model):
     
     single_object = SingleWordManager()
     english_objects = EnglishWordManager()
+    free_words = FreeWordsManager()
     objects = models.Manager()
     
     def __str__(self):
@@ -63,6 +72,7 @@ class Collection(models.Model):
     last_modified_date = models.DateTimeField('date modified')
     notes = models.CharField(max_length=200)
     uuid = models.UUIDField(db_index=True, default=uuid_lib.uuid4, editable=False)
+    owner = models.ForeignKey(User, related_name="collections", on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name

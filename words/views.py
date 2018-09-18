@@ -1,10 +1,11 @@
 from words.models import Word, Definition, Etymology, Example, Collection
 from words.utils import fetch_translations, fetch_word
-from django.db.models import Q
 from django.utils import timezone
-from sortedm2m.fields import SortedManyToManyField
+from knox.models import AuthToken
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from words.serializers import WordSerializer, TranslationSerializer, CollectionSerializer, CollectionDetailSerializer
+from words.serializers import (WordSerializer, TranslationSerializer, CollectionSerializer, 
+                               CollectionDetailSerializer, CreateUserSerializer, UserSerializer, LoginUserSerializer)
 
 from rest_framework import generics
 from rest_framework.response import Response
@@ -12,17 +13,48 @@ from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist 
 from django.http import Http404
 
+
+class LoginAPI(generics.GenericAPIView):
+    serializer_class = LoginUserSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data
+        return Response({
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "token": AuthToken.objects.create(user)
+        })
+
+class RegistrationAPI(generics.GenericAPIView):
+    serializer_class = CreateUserSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response({
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "token": AuthToken.objects.create(user)
+        })
+
+class UserAPI(generics.RetrieveAPIView):
+    permission_classes = [ IsAuthenticated, ]
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user
+
 class WordList(generics.ListAPIView):
-    serializer_class = WordSerializer
-    def get_queryset(self):
-        queryset = Word.objects.filter(
-          Q(word_etymologies__isnull=False)|
-          Q(word_definitions__isnull=False)
-          ).filter(words=None).distinct()
-        return queryset
+  serializer_class = WordSerializer
+  permission_classes = [ AllowAny, ]
+  def get_queryset(self):
+    return Word.free_words.all()
 
 class CollectionDetail(generics.RetrieveUpdateAPIView):
-  queryset = Collection.objects.all()
+  def get_queryset(self):
+    return Collection.objects.all()
+
   lookup_field = 'uuid'
   serializer_class = CollectionDetailSerializer
 
@@ -74,8 +106,8 @@ class CollectionCreate(generics.ListCreateAPIView):
     queryset = Collection.objects.all()
     return queryset
 
-
 class WordSingleCreate(generics.ListAPIView):
+  permission_classes = [ AllowAny, ]
   lookup_field = 'word'
   serializer_class = WordSerializer
   queryset = Word.single_object.all()
@@ -110,11 +142,12 @@ class WordSingleCreate(generics.ListAPIView):
     return Response(serializer.data)
     
 class WordSingleCreateTranslate(generics.RetrieveAPIView):
-  queryset = Word.objects.all()
+  def get_queryset(self):
+    queryset = Word.objects.all()
+    return queryset
   lookup_field = 'word'
   serializer_class = TranslationSerializer
   def get(self, request, translate, word, *args, **kwargs):
-    queryset = self.get_queryset()
     language = orig_word = ''
     print(word);
     orig_word = Word.english_objects.get(word=word);
@@ -132,8 +165,6 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
     serializer = TranslationSerializer(translated_words, many=True)
     return Response(serializer.data)
 
-
-yandex_api_key = "dict.1.1.20180805T185344Z.55f2c2cb3a648836.7bbf15c7374a967b79489eb097a0403e309aebcc"
 lingvo_api_key = 'OTQwMTgzY2EtYmI3NC00OGQ4LTgyNjctYzhiYTI2ZWM4NzU4OjEwNTljMTg1MTEyOTQ5ODlhMmEyMThmY2Q0Y2M2MjE5'
 
 

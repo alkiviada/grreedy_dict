@@ -9,7 +9,6 @@ from words.helpers import scrape_wordref_words, try_fetch, oxford_word, create_m
 from words.constants import EXTENSIONS, LANG_MAP
 from django.core.exceptions import ObjectDoesNotExist 
 
-
 def fetch_translations(word, orig_word):
   TRANSL_APIS = {
     'wordfref': { 'langs': [

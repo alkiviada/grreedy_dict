@@ -11,7 +11,7 @@ export const switchTab = (index, word, map) => dispatch => {
 
 export const lookUpTranslations = (word, allTranslations, fetchingMap) => dispatch => {
   console.log('fetching word translation');
-  fetch('api/word/enit/' + word)
+  fetch('api/word/translate/' + word)
   .then(response =>
       response.json().then(json => ({
         status: response.status,

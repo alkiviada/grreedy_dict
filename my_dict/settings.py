@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'knox',
     'rest_framework',
     'frontend',
     'words.apps.WordsConfig',
@@ -41,6 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ['knox.auth.TokenAuthentication', ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
