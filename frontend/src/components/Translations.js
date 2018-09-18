@@ -24,7 +24,7 @@ const Translations = (props) => {
     }
     return word_trans['error'] ? ( 
       <div className="container">
-      <div className="notification" className="clear-notification-warn">
+      <div className="notification" className="clear-notification-trans-warn">
         No translation
       </div>
       </div>

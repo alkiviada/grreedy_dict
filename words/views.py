@@ -79,7 +79,8 @@ class CollectionListCreate(generics.ListCreateAPIView):
         coll = Collection.objects.get(uuid=uuid) 
         coll.name = name
         coll.last_modified_date = timezone.now() 
-        coll.save(owner=self.request.user)
+        coll.owner = self.request.user
+        coll.save()
       except ObjectDoesNotExist:
         print ("Something Wrong with UUID: ", uuid)
     elif name:
@@ -89,7 +90,8 @@ class CollectionListCreate(generics.ListCreateAPIView):
         coll = Collection.objects.create(owner=self.request.user, created_date=timezone.now(), name=name, last_modified_date=timezone.now())
       else:
         coll.last_modified_date = timezone.now() 
-        coll.save(owner=self.request.user)
+        coll.owner = self.request.user
+        coll.save()
     else: 
       next_count = str(Collection.objects.filter(name__startswith='Untitled').count() + 1)
       name = 'Untitled: ' + next_count;

@@ -164,6 +164,12 @@ body {
   font-family: Abel;
 }
 
+.clear-notification-trans-warn {
+  background-color: inherit;
+  color: red;
+  font-family: Abel;
+}
+
 .react-tabs__tab-list {
   border-bottom: 1px solid #aaa;
   margin: 0 0 10px;

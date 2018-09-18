@@ -63,9 +63,16 @@ export const fetchCollections = () => (dispatch, getState) => {
     })
 };
 
-export const fetchCollection = (uuid) => dispatch => {
+export const fetchCollection = (uuid) => (dispatch, getState) => {
   console.log('fetching words for collection');
-  fetch('api/collection/' + uuid)
+  let headers = {"Content-Type": "application/json"};
+  let {token} = getState().auth;
+  if (token) {
+      headers["Authorization"] = `Token ${token}`;
+  }
+
+  console.log(token)
+  fetch('api/collection/' + uuid, {headers, })
   .then(response =>
       response.json().then(json => ({
         status: response.status,
