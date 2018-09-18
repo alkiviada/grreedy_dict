@@ -60,6 +60,7 @@ class CollectionDetail(generics.RetrieveUpdateAPIView):
 
 
 class CollectionCreate(generics.ListCreateAPIView):
+  permission_classes = [ AllowAny, ]
   lookup_field = 'name'
   serializer_class = CollectionSerializer
   def post(self, request):
