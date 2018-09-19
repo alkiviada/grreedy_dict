@@ -9,6 +9,7 @@ from words.serializers import (WordSerializer, TranslationSerializer, Collection
 
 from rest_framework import generics
 from rest_framework.response import Response
+from django.db.models import F
 
 from django.core.exceptions import ObjectDoesNotExist 
 from django.http import Http404
@@ -71,32 +72,48 @@ class CollectionListCreate(generics.ListCreateAPIView):
 
     name = request.data.get('name')
     uuid = request.data.get('uuid')
+    user = self.request.user
     print(uuid);
     print(name);
     coll = '';
+    new_fields = { 
+                  'name': name, 
+                  'last_modified_date': timezone.now(),
+                 }
     if uuid:
       try:
-        coll = Collection.objects.get(uuid=uuid) 
-        coll.name = name
-        coll.last_modified_date = timezone.now() 
-        coll.owner = self.request.user
-        coll.save()
+        coll = Collection.objects.get(uuid=uuid, owner=user) 
+        for k, v in new_fields.items():
+          print(k, ' ', v)
+          setattr(coll, k, v)
+        coll.save(update_fields=[*new_fields.keys()])
       except ObjectDoesNotExist:
         print ("Something Wrong with UUID: ", uuid)
     elif name:
+# this is a new collection of words and the name given is either new
+# or could be of a previously saved collection
       print('i have no uuid but i have name')
-      coll = Collection.objects.filter(name=name).first() 
+      coll = Collection.objects.filter(name=name, owner=user).first() 
       if not coll: 
-        coll = Collection.objects.create(owner=self.request.user, created_date=timezone.now(), name=name, last_modified_date=timezone.now())
-      else:
-        coll.last_modified_date = timezone.now() 
-        coll.owner = self.request.user
+# this is a brand new collection
+        coll = Collection(created_date=timezone.now(), owner=user, **new_fields)
         coll.save()
+      else:
+# this is a request to resave a collection with the new set of words
+        coll.last_modified_date = timezone.now() 
+        coll.save(update_fields=['last_modified_date'])
+# will have to 'conflate' old set with the new one
+        old_words_coll = [ w.word for w in coll.words.all() ]
+        words.extend(w for w in old_words_coll if w not in words)
     else: 
-      next_count = str(Collection.objects.filter(name__startswith='Untitled').count() + 1)
-      name = 'Untitled: ' + next_count;
-      coll = Collection.objects.create(owner=self.request.user, created_date=timezone.now(), name=name, last_modified_date=timezone.now())
-
+# this is a new and unnamed collection (someone is lazy)
+      next_count = Collection.objects.filter(name__startswith='Untitled', owner=user).count()
+      next_count += 1
+      new_fields['name'] = 'Untitled: ' + str(next_count);
+      coll = Collection(created_date=timezone.now(), owner=user, **new_fields)
+      coll.save()
+# need to get the words for the collection not only in their right order
+# but also in their right order by language
     updated_words = []
     for w in words:
       w = Word.single_object.filter(word=w)
@@ -104,7 +121,7 @@ class CollectionListCreate(generics.ListCreateAPIView):
     
     coll.words.clear()
     coll.words.add(*updated_words)
-    colls = Collection.objects.filter(owner=self.request.user)
+    colls = Collection.objects.filter(owner=user)
     serializer = CollectionSerializer(colls, many=True)
     return Response(serializer.data)
 

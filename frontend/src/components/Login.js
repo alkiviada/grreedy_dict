@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { login, } from '../actions/authActions';
+import { login, loadUser } from '../actions/authActions';
 import { Link, Redirect } from "react-router-dom";
 
 class Login extends Component {
@@ -13,6 +13,10 @@ class Login extends Component {
     };
     this.onSubmit = this.onSubmitLogin.bind(this);
   };
+
+ componentDidMount() {
+    this.props.loadUser();
+  }
 
   onSubmitLogin(e) {
     e.preventDefault();
@@ -28,18 +32,19 @@ class Login extends Component {
     console.log('rendering login');
     return (
       <div className="section">
+      <div class="container">
       <div className="column">
       <form onSubmit={(e) => this.onSubmitLogin(e)}> 
       <div class="field">
-      <label class="label">Username:</label>
+      <label class="label">Whose there?</label>
        <div class="control">
-        <input className="input" type="text" placeholder="e.g. John Donne" id="username" onChange={e => this.setState({username: e.target.value})} />
+        <input className="input" type="text" placeholder="Username" id="username" onChange={e => this.setState({username: e.target.value})} />
        </div>
       </div>
       <div class="field">
-      <label class="label">Password:</label>
+      <label class="label">Unfold yourself!</label>
        <div class="control">
-        <input className="input" type="password" placeholder="******" id="password" onChange={e => this.setState({password: e.target.value})} />
+        <input className="input" type="password" placeholder="Password" id="password" onChange={e => this.setState({password: e.target.value})} />
         </div>
       </div>
       <div class="field">
@@ -55,6 +60,7 @@ class Login extends Component {
         </a>
         </div>
     </form>
+    </div>
     </div>
     </div>
     );
@@ -74,4 +80,4 @@ const mapStateToProps = state => {
   };
 }
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { login, loadUser })(Login);

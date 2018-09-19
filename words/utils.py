@@ -82,7 +82,8 @@ def prep_wordref_translations(api, word, orig_word):
       url = base_url + lang + e + word
       wclass = EXTENSIONS.get(e).get('definition');
       translations = fetch_wordref_translation(lang, url, wclass, specs.get('wref_language'))
-      all_trans_for_lang.extend(translations)
+      if translations:
+        all_trans_for_lang.extend(translations)
 
     translated_words = list(set(all_trans_for_lang));
     db_language = specs.get('db_language');
@@ -98,7 +99,6 @@ def fetch_wordref_translation(language, url, wclass, exclude_wref_lang_words):
   r = try_fetch(url)
   if r: 
     return get_wordref_words(r, language, wclass, exclude_wref_lang_words);
-
 
 def get_wordref_words(r, language, wclass, exclude_wref_lang_words):
     word_page = r.content
@@ -158,7 +158,12 @@ def get_wordref_word_specs(r, language, def_class, exmpl_class):
 
     return { 'language' : LANG_MAP.get(language).get('db_language'), 
              'specs': [{ 'etymology' : '', 
-                        'definitions': [ {'definition': d, 'examples': [ { 'example': defs_exmpls_map.get(d) } ] } for d in defs_exmpls_map ] 
+                        'definitions': [ 
+                                        {
+                                         'definition': d, 
+                                         'examples': [ { 'example': defs_exmpls_map.get(d) } ] 
+                                        } for d in defs_exmpls_map 
+                                       ] 
                       }],
            }
 
