@@ -4,6 +4,7 @@ from sortedm2m.fields import SortedManyToManyField
 import uuid as uuid_lib
 from django.db.models import Case, When, Value, IntegerField
 from django.db.models import Q
+from words.api_call_helpers import fetch_straight_collocations, fetch_reverse_collocations
 
 class Etymology(models.Model):
     etymology = models.CharField(max_length=200, null=True)
@@ -13,6 +14,15 @@ class Etymology(models.Model):
 
     def __unicode__(self):
         return self.etymology
+
+class Collocation(models.Model):
+    expression = models.CharField(max_length=200, null=True)
+    translation = models.CharField(max_length=200, null=True)
+    word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_collocations')
+    example = models.CharField(max_length=200, null=True)
+
+    def __str__(self):
+        return self.expression
 
 class Definition(models.Model):
     definition = models.CharField(max_length=200, null=True)
@@ -47,6 +57,35 @@ class FreeWordsManager(models.Manager):
           Q(word_definitions__isnull=False)
           ).exclude(from_translation=True).filter(words=None).distinct().order_by('-lookup_date')
 
+class FrenchWordManager(models.Manager):
+  def get_queryset(self):
+    return super().get_queryset().filter(language='french')
+ 
+  def fetch_collocations(self, word):
+    straight_collocs_map = fetch_straight_collocations(word)
+    reverse_collocs_map = fetch_reverse_collocations(word)
+    collocs_map = { **straight_collocs_map, **reverse_collocs_map }
+    collocs = []
+    for expr, specs in collocs_map.items():
+      #print(specs)
+      expl = specs['expl']
+      to_exmpl = specs.get('to_exmpl')
+      fr_exmpl = specs.get('fr_exmpl')
+      example = specs.get('exmpl', '')
+      if expl:
+        expr = expr + ' ' + expl
+      if fr_exmpl:
+         example = ', '.join(fr_exmpl)
+      if to_exmpl:
+         example += ' (' + ' '.join(to_exmpl) + ')' if example else ' '.join(to_exmpl)
+
+      c = Collocation.objects.create(word=word, 
+                                     expression=expr, 
+                                     translation=', '.join(specs['trans']), 
+                                     example=example) 
+      collocs.append(c)
+    return collocs
+
 class Word(models.Model):
     word = models.CharField(max_length=30)
     language = models.CharField(max_length=33)
@@ -55,10 +94,11 @@ class Word(models.Model):
     translations = models.ManyToManyField("self", blank=True, related_name='translations')
     from_translation = models.BooleanField(default=False)
     
+    objects = models.Manager()
     single_object = SingleWordManager()
     english_objects = EnglishWordManager()
+    french_objects = FrenchWordManager()
     free_words = FreeWordsManager()
-    objects = models.Manager()
     
     def __str__(self):
         return self.word

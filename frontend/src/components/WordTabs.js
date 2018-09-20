@@ -5,12 +5,16 @@ import DecorateWithLinks from "./DecorateWithLinks";
 import Translations from "./Translations";
 import key from "weak-key";
 import { connect } from 'react-redux';
-import { lookUpTranslations, requestTranslations, switchTab } from '../actions/transActions';
+import { switchTab } from '../actions/tabActions';
+import { lookUpTranslations, requestTranslations, } from '../actions/transActions';
+import { lookUpCollocations, requestCollocations, } from '../actions/collocationsActions';
 
 const mapStateToProps = state => ({
-  mapTabIndex: state.translations.mapTabIndex,
+  mapTabIndex: state.tabs.mapTabIndex,
   allTranslations: state.translations.allTranslations,
-  fetchingMap: state.translations.fetchingMap,
+  allCollocations: state.collocations.allCollocations,
+  transFetchingMap: state.translations.fetchingMap,
+  collocsFetchingMap: state.collocations.fetchingMap,
 });
 
 const listStyles = {1: 'etym-style', 2: 'def-style', 3: 'exmpl-style'};
@@ -30,18 +34,38 @@ class WordTabs extends Component {
     element: PropTypes.array.isRequired,
   };
 
-  handleSelect(prev, index, word) {
+  handleSelect(prev, index, word, isEnglishWord) {
     this.props.switchTab(index, word, this.props.mapTabIndex);
     this.setState( { tabIndex: index } );
 
-    const tabMap = { 1: 'TRANSLATIONS' };
+    const tabWordMap = {
+                        'english': { 1: 'TRANSLATIONS' },
+                        'non-english': { 1: 'COLLOCATIONS' },
+                       }
+    let tabMap = {}
+    if (isEnglishWord) {
+      tabMap = tabWordMap['english']
+    }
+    else {
+      tabMap = tabWordMap['non-english']
+    }
+    console.log(tabMap)
+    console.log(tabMap[index])
 
     switch (tabMap[index]) {
       case 'TRANSLATIONS':
         if (!this.props.allTranslations[word]) {
           console.log('looking up translations'); 
-          this.props.requestTranslations(word, this.props.fetchingMap)
-          this.props.lookUpTranslations(word, this.props.allTranslations, this.props.fetchingMap)
+          this.props.requestTranslations(word, this.props.transFetchingMap)
+          this.props.lookUpTranslations(word, this.props.allTranslations, this.props.transFetchingMap)
+          break
+        }
+      case 'COLLOCATIONS':
+        if (!this.props.allCollocations[word]) {
+          console.log('looking up collocations'); 
+          this.props.requestCollocations(word, this.props.collocsFetchingMap)
+          this.props.lookUpCollocations(word, this.props.allCollocations, this.props.collocsFetchingMap)
+          break
         }
       default:
         Function.prototype()
@@ -50,14 +74,14 @@ class WordTabs extends Component {
 
   render() {
     const { word, element, fn } = this.props;
-    const is_english_word = element.reduce((english_flag, e) => 
-      {return e['language'] === 'english' ?  ++english_flag : english_flag}, 0)
+    const isEnglishWord = element.reduce((englishFlag, e) => 
+      {return e['language'] === 'english' ?  ++englishFlag : englishFlag}, 0)
     return ( 
       <Tabs selectedIndex={this.state.tabIndex} 
-        onSelect={(prev, index) => this.handleSelect(index, prev, word)}>
+        onSelect={(prev, index) => this.handleSelect(index, prev, word, isEnglishWord)}>
         <TabList>
           <Tab>Original Word</Tab>
-          { is_english_word ? <Tab>Translations</Tab> : <Tab>Collocations</Tab> }
+          { isEnglishWord ? <Tab>Translations</Tab> : <Tab>Collocations</Tab> }
           <Tab>Synonyms</Tab>
         </TabList>
         <TabPanel>
@@ -70,7 +94,7 @@ class WordTabs extends Component {
           }
         </TabPanel>
         <TabPanel>
-          { is_english_word ? <Translations word={word} fn={fn[0]}/> : ''}
+          { isEnglishWord ? <Translations word={word} fn={fn[0]}/> : ''}
         </TabPanel>
         <TabPanel>
         <h2>Any content 2</h2>
@@ -99,4 +123,4 @@ function renderList(el, fn, styles, styleCount) {
   );
 }
 
-export default connect(mapStateToProps, { switchTab, lookUpTranslations, requestTranslations })(WordTabs);
+export default connect(mapStateToProps, { switchTab, lookUpTranslations, requestTranslations, lookUpCollocations, requestCollocations })(WordTabs);

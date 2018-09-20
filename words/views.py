@@ -1,15 +1,15 @@
-from words.models import Word, Definition, Etymology, Example, Collection
+from words.models import Word, Definition, Etymology, Example, Collection, Collocation
 from words.utils import fetch_translations, fetch_word
 from django.utils import timezone
 from knox.models import AuthToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from words.serializers import (WordSerializer, TranslationSerializer, CollectionSerializer, 
-                               CollectionDetailSerializer, CreateUserSerializer, UserSerializer, LoginUserSerializer)
+                               CollectionDetailSerializer, CollocationSerializer,
+                               CreateUserSerializer, UserSerializer, LoginUserSerializer)
 
 from rest_framework import generics
 from rest_framework.response import Response
-from django.db.models import F
 
 from django.core.exceptions import ObjectDoesNotExist 
 from django.http import Http404
@@ -139,23 +139,9 @@ class WordSingleCreate(generics.ListAPIView):
 
   def get(self, request, word, *args, **kwargs):
     print('GET ' + word);
-    db_words = Word.single_object.filter(word=word);
-    complete_word = 0
-    for w in db_words:
-      for e in w.word_etymologies.all():
-        print(e.etymology)
-        if e.etymology: 
-          complete_word = 1        
-          break
-      if not complete_word:
-        for d in w.word_definitions.all():
-          print(d.definition)
-          if d.definition: 
-            complete_word = 1        
-            break
-    print(complete_word)
+    db_words = Word.single_object.filter(word=word, from_translation=False);
 
-    if not db_words or not complete_word:
+    if not len(db_words):
       print("Word is not in our DB");
       fetch_word(word);
       db_words = Word.single_object.filter(word=word);
@@ -169,28 +155,69 @@ class WordSingleCreate(generics.ListAPIView):
 class WordSingleCreateTranslate(generics.RetrieveAPIView):
   permission_classes = [ AllowAny, ]
   def get_queryset(self):
-    queryset = Word.objects.all()
-    return queryset
+    word = self.kwargs['word']
+    word = Word.english_objects.get(word=word)
+    return w.translations.all() 
+
   lookup_field = 'word'
   serializer_class = TranslationSerializer
-  def get(self, request, translate, word, *args, **kwargs):
+
+  def get(self, request, word, *args, **kwargs):
     language = orig_word = ''
     print(word);
-    orig_word = Word.english_objects.get(word=word);
-    translated_words = Word.single_object.filter(translations=orig_word);
+
+    orig_word = Word.english_objects.get(word=word)
+    translated_words = orig_word.translations.all()
+
     print(translated_words);
+
     if not translated_words:
       print("Translations for this Word are not in our DB");
       fetch_translations(word, orig_word);
       translated_words = Word.single_object.filter(translations=orig_word);
       print(translated_words);
       if not translated_words:
-        print("Word is not in our DB");
+        print("Tranlations for this word are  not in our DB");
         raise Http404("No Translation API for the word:", word)
       
     serializer = TranslationSerializer(translated_words, many=True)
     return Response(serializer.data)
 
+class WordSingleCreateCollocations(generics.RetrieveAPIView):
+  permission_classes = [ AllowAny, ]
+  lookup_field = 'word'
+
+  def get_queryset(self):
+    word = self.kwargs['word']
+    words = Word.single_object.filter(word=word)
+    return [ w.word_collocations.all() for w in words ] 
+
+  serializer_class = CollocationSerializer
+
+  def get(self, request, word, *args, **kwargs):
+    print(word);
+    all_collocs = []
+    words = Word.single_object.filter(word=word)
+    for w in words:
+      collocs = w.word_collocations.all()
+      if not collocs:
+        try:
+          foreign_objects = getattr(Word, w.language + '_objects')
+          print(foreign_objects)
+          try:
+            collocs_method = getattr(foreign_objects, 'fetch_collocations')
+            collocs = collocs_method(w)
+            all_collocs.extend(collocs)
+          except:
+            print('No method to get collocations')
+            raise Http404("No Collocations API for the word:", word)
+        except:
+          print('No method to get collocations')
+          raise Http404("No Collocations API for the word:", word)
+      else:
+        all_collocs.extend(collocs)
+    #print(all_collocs) 
+    serializer = CollocationSerializer(all_collocs, many=True)
+    return Response(serializer.data)
+
 lingvo_api_key = 'OTQwMTgzY2EtYmI3NC00OGQ4LTgyNjctYzhiYTI2ZWM4NzU4OjEwNTljMTg1MTEyOTQ5ODlhMmEyMThmY2Q0Y2M2MjE5'
-
-

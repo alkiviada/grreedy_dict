@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from words.models import Word, Etymology, Definition, Example, Collection
+from words.models import Word, Etymology, Definition, Example, Collection, Collocation
 from collections import OrderedDict
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -59,6 +59,13 @@ class TranslationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Word
         fields = ['word', 'language']
+
+class CollocationSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Collocation
+    fields = ['expression', 'translation', 'example']
+  
+   
 
 class CollectionSerializer(serializers.ModelSerializer):
     last_modified_date = serializers.DateTimeField(format="%m-%d %H:%M", required=False, read_only=True)

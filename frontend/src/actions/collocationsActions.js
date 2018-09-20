@@ -1,9 +1,8 @@
-import { FETCH_TRANSLATION, FETCH_TRANSLATION_FULFILLED, FETCH_TRANSLATION_REJECTED, } from './types';
-import { translationsToMap } from './helpers';
+import { FETCH_COLLOCATIONS, FETCH_COLLOCATIONS_FULFILLED, FETCH_COLLOCATIONS_REJECTED, } from './types';
 
-export const lookUpTranslations = (word, allTranslations, fetchingMap) => dispatch => {
-  console.log('fetching word translation');
-  fetch('api/word/translate/' + word)
+export const lookUpCollocations = (word, allCollocations, fetchingMap) => dispatch => {
+  console.log('fetching word collocations');
+  fetch('api/word/collocations/' + word)
   .then(response =>
       response.json().then(json => ({
         status: response.status,
@@ -16,18 +15,18 @@ export const lookUpTranslations = (word, allTranslations, fetchingMap) => dispat
         if (status >= 400) {
           // Status looks bad
           console.log('Server returned error status');
-          dispatch({type: FETCH_TRANSLATION_REJECTED, 
+          dispatch({type: FETCH_COLLOCATIONS_REJECTED, 
                     payload: { 
-                      allTranslations: { ...allTranslations, ...{ [word]: {error: true} } },
+                      allCollocations: { ...allCollocations, ...{ [word]: {error: true} } },
                       fetchingMap: { ...fetchingMap, ...{ [word]: false } }
                     }
           })
         } else {
           // Status looks good
           dispatch({
-            type: FETCH_TRANSLATION_FULFILLED,
+            type: FETCH_COLLOCATIONS_FULFILLED,
             payload: {
-                      allTranslations: { ...allTranslations, ...{ [word]: translationsToMap(json) } },
+                      allCollocations: { ...allCollocations, ...{ [word]: json } },
                       fetchingMap: { ...fetchingMap, ...{[word]: false} }
             }
           })
@@ -41,10 +40,11 @@ export const lookUpTranslations = (word, allTranslations, fetchingMap) => dispat
     ); 
 };
 
-export const requestTranslations = (word, fetchingMap) => dispatch => {
-  console.log('requesting word translation')
+export const requestCollocations= (word, fetchingMap) => dispatch => {
+  console.log('requesting word collocation')
   dispatch({
-    type: FETCH_TRANSLATION,
+    type: FETCH_COLLOCATIONS,
     payload: { ...fetchingMap, ...{[word]: true} }
   })
 };
+

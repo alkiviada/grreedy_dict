@@ -5,7 +5,7 @@ from django.utils import timezone
 from datetime import datetime
 import os
 import re
-from words.helpers import scrape_wordref_words, try_fetch, oxford_word, create_my_word, collect_examples
+from words.helpers import scrape_wordref_words, try_fetch, oxford_word, create_or_update_my_word, collect_examples
 from words.constants import EXTENSIONS, LANG_MAP
 from django.core.exceptions import ObjectDoesNotExist 
 
@@ -64,13 +64,13 @@ def prep_yandex_translations(api, word_to_translate, orig_word):
         print(w, ' ', db_language);
         db_w = Word.objects.get(word=w, language=db_language) 
       except ObjectDoesNotExist:
+# mark the new word ad 'from_translation' so it does not appear in the 'legitimate' word feed
         db_w = Word.objects.create(word=w, lookup_date=timezone.now(), language=db_language, from_translation=True) 
       if word_exmpls.get(w):
         faux_etym = Etymology.objects.create(word=db_w, etymology='') 
         faux_def = Definition.objects.create(word=db_w, etymology=faux_etym, definition=word_to_translate) 
         [ Example.objects.create(example=e, word=db_w, definition=faux_def) for e in word_exmpls[w] ]
       db_w.translations.add(orig_word)
-
 
 def prep_wordref_translations(api, word, orig_word):
   base_url = api.get('url') 
@@ -92,7 +92,7 @@ def prep_wordref_translations(api, word, orig_word):
         print(w, ' ', db_language);
         w = Word.objects.get(word=w, language=db_language) 
       except ObjectDoesNotExist:
-        w = Word.objects.create(word=w, lookup_date=timezone.now(), language=db_language) 
+        w = Word.objects.create(word=w, lookup_date=timezone.now(), language=db_language, from_translation=True) 
       w.translations.add(orig_word)
 
 def fetch_wordref_translation(language, url, wclass, exclude_wref_lang_words):
@@ -104,10 +104,11 @@ def get_wordref_words(r, language, wclass, exclude_wref_lang_words):
     word_page = r.content
     word_soup = BeautifulSoup(word_page, features="html.parser")
     words = []
-    word_table = word_soup.find('table', {'class': 'WRD'});
-    if word_table:
-      [ words.extend(scrape_wordref_words(e)) 
-        for e in word_table.findAll("td", {"class" : wclass}) ]
+    word_tables = word_soup.findAll('table', {'class': 'WRD'});
+    if len(word_tables):
+      for word_table in word_tables:
+        [ words.extend(scrape_wordref_words(e)) 
+          for e in word_table.findAll("td", {"class" : wclass}) ]
 
     words = list(set(words));
     words = [ e for e in words if e not in exclude_wref_lang_words ];
@@ -201,7 +202,7 @@ def fetch_word(word_id):
           word_specs.append(specs)
   if word_specs:
     word_specs = compose_specs(word_specs)
-    [ create_my_word({'word': word_id, 'specs': w.get('specs'), 'language': w.get('language')}) for w in word_specs ]
+    [ create_or_update_my_word({'word': word_id, 'specs': w.get('specs'), 'language': w.get('language')}) for w in word_specs ]
 
 def compose_specs(all_specs):
   specs_to_lang_map = {}
@@ -244,7 +245,6 @@ def compose_specs(all_specs):
             next
           else:
             uniq_defs.append(d) 
-      
   return new_specs
 
 def oxford_url(api, word_id): 
@@ -268,4 +268,57 @@ def wordref_word(r, word_id, language, def_class, exmpl_class):
   word_page = r.content
   word_soup = BeautifulSoup(word_page, features="html.parser")
   return get_wordref_word_specs(r, language, def_class, exmpl_class)  
-  
+
+def get_collocations(r, language, def_class, exmpl_class):
+    word_page = r.content
+    word_soup = BeautifulSoup(word_page, features="html.parser")
+
+    defs_exmpls_map = {}
+    defs = []
+    fr_exmpls = []
+    to_exmpls = []
+    
+    word_table = word_soup.find('table', {'class': 'WRD'});
+    print ("NEW TABLE");
+    if word_table:
+      group_class = ''
+      for tr_wd in word_table.findAll("tr", {"class": ["even", "odd"]}):
+        new_class = tr_wd['class'][0];
+        if not group_class:
+          group_class = new_class
+        if group_class != new_class:
+          group_class = new_class          
+          definition = ', '.join(defs)
+          if definition:
+            examples = collect_examples(fr_exmpls, to_exmpls)
+            defs_exmpls_map[definition] = examples
+          defs = []
+          fr_exmpls = []
+          to_exmpls = []
+        new_def = scrape_wordref_words(tr_wd.find('td', {'class': def_class}), 0)
+        new_fr_ex = scrape_wordref_words(tr_wd.find('td', {'class': exmpl_class[0]}), 0)
+        new_to_ex = scrape_wordref_words(tr_wd.find('td', {'class': exmpl_class[1]}), 0)
+        if new_def:
+          defs.append(new_def)
+        if new_fr_ex:
+          fr_exmpls.append(new_fr_ex)
+        if new_to_ex:
+          to_exmpls.append(new_to_ex)
+    if defs:
+      definition = ', '.join(defs)
+      if definition: 
+        defs_exmpls_map[definition] = collect_examples(fr_exmpls, to_exmpls)
+
+    if not defs_exmpls_map.keys():
+      return
+
+    return { 'language' : LANG_MAP.get(language).get('db_language'), 
+             'specs': [{ 'etymology' : '', 
+                        'definitions': [ 
+                                        {
+                                         'definition': d, 
+                                         'examples': [ { 'example': defs_exmpls_map.get(d) } ] 
+                                        } for d in defs_exmpls_map 
+                                       ] 
+                      }],
+           }
