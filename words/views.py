@@ -192,13 +192,29 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
 
     print(translated_words);
 
+    LANGUAGES = [ 'french', 'italian', 'english' ]
+
     if not translated_words:
+      translated_words = ()
       print("Translations for this Word are not in our DB");
-      translated_words = Word.english_objects.fetch_translations(orig_word)
-      print(translated_words);
-      if not translated_words:
-        print("Tranlations for this word are  not in our DB");
-        raise Http404("No Translation API for the word:", word)
+      for language in LANGUAGES:
+        print(language)
+        try:
+          foreign_objects_manager = getattr(Word, language + '_objects')
+          print(foreign_objects_manager)
+          try:
+            fetch_method = getattr(foreign_objects_manager, 'fetch_translation')
+            translations = fetch_method(word)
+            if translations:
+              translated_words = translations + translated_words
+          except Exception as e:
+            print(e)
+            print('No method to translate word')
+            raise Http404("No Tranlate API for the word:", word)
+        except Exception as e:
+          print(e)
+          print('No method to translate word')
+          raise Http404("No Translate API for the word:", word)
       
     serializer = TranslationSerializer(translated_words, many=True)
     return Response(serializer.data)

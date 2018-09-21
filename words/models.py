@@ -99,7 +99,7 @@ class EnglishWordManager(models.Manager):
           exmpls = [ Example.objects.create(definition=edef, example=e['example'], word=w) for e in d.get('examples', []) ] 
           print('all is well')
       return (w, )
-    
+
 class FreeWordsManager(models.Manager):
   def get_queryset(self):
     return super().get_queryset().filter(Q(word_etymologies__isnull=False)|
