@@ -1,5 +1,5 @@
 import requests
-from words.soup_helpers import parse_straight_collocations, parse_reverse_collocations
+from words.soup_helpers import parse_straight_collocations, parse_reverse_collocations, parse_straight_word
 
 def try_fetch(url, **args):
   headers = args.get('headers', {})
@@ -19,6 +19,13 @@ def try_fetch(url, **args):
     print ("OOps: Something Else", err)
   return r;
 
+def fetch_straight_word(word):
+  base_url = "http://www.wordreference.com/fren/" + word.word
+  r = try_fetch(base_url)
+  if r:
+    return parse_straight_word(r)
+
+
 def fetch_reverse_collocations(word):
   base_url = "http://www.wordreference.com/fren/reverse/" + word.word
   r = try_fetch(base_url)
@@ -30,3 +37,4 @@ def fetch_straight_collocations(word):
   r = try_fetch(base_url)
   if r:
     return parse_straight_collocations(r)
+

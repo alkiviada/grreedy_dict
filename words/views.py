@@ -135,23 +135,44 @@ class WordSingleCreate(generics.ListAPIView):
   permission_classes = [ AllowAny, ]
   lookup_field = 'word'
   serializer_class = WordSerializer
-  queryset = Word.single_object.all()
+  def get_queryset(self):
+    word = self.kwargs['word']
+    return Word.single_object.filter(word=word)
 
   def get(self, request, word, *args, **kwargs):
     print('GET ' + word);
     db_words = Word.single_object.filter(word=word, from_translation=False);
+   
+    LANGUAGES = [ 'french', 'italian', 'english' ]
 
-    if not len(db_words):
+    if not db_words:
+      db_words = ()
       print("Word is not in our DB");
-      fetch_word(word);
-      db_words = Word.single_object.filter(word=word);
+      for language in LANGUAGES:
+        print(language)
+        try:
+          foreign_objects_manager = getattr(Word, language + '_objects')
+          print(foreign_objects_manager)
+          try:
+            fetch_method = getattr(foreign_objects_manager, 'fetch_word')
+            words = fetch_method(word)
+            if words:
+              db_words = words + db_words
+          except Exception as e:
+            print(e)
+            print('No method to fetch word')
+            raise Http404("No Fetch API for the word:", word)
+        except Exception as e:
+          print(e)
+          print('No method to fecth word')
+          raise Http404("No Fetch API for the word:", word)
       if not db_words:
         print("Could not fetch word:" + word);
         raise Http404("No API for the word:", word)
 
     serializer = WordSerializer(db_words, many=True)
     return Response(serializer.data)
-    
+
 class WordSingleCreateTranslate(generics.RetrieveAPIView):
   permission_classes = [ AllowAny, ]
   def get_queryset(self):
@@ -173,8 +194,7 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
 
     if not translated_words:
       print("Translations for this Word are not in our DB");
-      fetch_translations(word, orig_word);
-      translated_words = Word.single_object.filter(translations=orig_word);
+      translated_words = Word.english_objects.fetch_translations(orig_word)
       print(translated_words);
       if not translated_words:
         print("Tranlations for this word are  not in our DB");
@@ -208,10 +228,12 @@ class WordSingleCreateCollocations(generics.RetrieveAPIView):
             collocs_method = getattr(foreign_objects, 'fetch_collocations')
             collocs = collocs_method(w)
             all_collocs.extend(collocs)
-          except:
+          except Exception as e: 
+            print(e)
             print('No method to get collocations')
             raise Http404("No Collocations API for the word:", word)
-        except:
+        except Exception as e: 
+          print(e)
           print('No method to get collocations')
           raise Http404("No Collocations API for the word:", word)
       else:
