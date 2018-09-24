@@ -184,7 +184,7 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
   serializer_class = TranslationSerializer
 
   def get(self, request, word, *args, **kwargs):
-    language = orig_word = ''
+    orig_word = ''
     print(word);
 
     orig_word = Word.english_objects.get(word=word)
@@ -192,10 +192,10 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
 
     print(translated_words);
 
-    LANGUAGES = [ 'french', 'italian', 'english' ]
+    LANGUAGES = [ 'french', 'italian' ]
 
     if not translated_words:
-      translated_words = ()
+      translated_words = []
       print("Translations for this Word are not in our DB");
       for language in LANGUAGES:
         print(language)
@@ -204,7 +204,7 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
           print(foreign_objects_manager)
           try:
             fetch_method = getattr(foreign_objects_manager, 'fetch_translation')
-            translations = fetch_method(word)
+            translations = fetch_method(orig_word)
             if translations:
               translated_words = translations + translated_words
           except Exception as e:
@@ -254,6 +254,9 @@ class WordSingleCreateCollocations(generics.RetrieveAPIView):
           raise Http404("No Collocations API for the word:", word)
       else:
         all_collocs.extend(collocs)
+    if not all_collocs:
+      print("Could not fetch collocations:" + word);
+      raise Http404("No API for the word:", word)
     #print(all_collocs) 
     serializer = CollocationSerializer(all_collocs, many=True)
     return Response(serializer.data)

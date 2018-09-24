@@ -64,9 +64,10 @@ class CollocationSerializer(serializers.ModelSerializer):
   class Meta:
     model = Collocation
     fields = ['expression', 'translation', 'example']
+  def to_representation(self, instance):
+    result = super(CollocationSerializer, self).to_representation(instance)
+    return OrderedDict([(key, result[key]) for key in result if result[key] is not ''])
   
-   
-
 class CollectionSerializer(serializers.ModelSerializer):
     last_modified_date = serializers.DateTimeField(format="%m-%d %H:%M", required=False, read_only=True)
     class Meta:

@@ -10,6 +10,7 @@ from django.utils import timezone
 from bs4 import BeautifulSoup
 from words.soup_helpers import scrape_wordref_words, parse_straight_word, parse_reverse_word
 from words.words_helpers import prep_def_exmpl
+#from words.objects_helpers import create_word
 
 class Etymology(models.Model):
     etymology = models.CharField(max_length=200, null=True)
@@ -41,6 +42,84 @@ class Example(models.Model):
     example = models.CharField(max_length=200)
     definition = models.ForeignKey(Definition, on_delete=models.CASCADE, related_name='examples', blank=True, null=True)
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_examples')
+
+class FetchWordMixin(models.Manager):
+
+  def fetch_wordref_translation(self, orig_word, **args):
+    print(args)
+    language, ext = [ args[i] for i in ['language', 'ext']]
+    r = try_fetch("http://www.wordreference.com/" + ext + "/" + orig_word.word)
+    word_page = r.content
+    word_soup = BeautifulSoup(word_page, features="html.parser")
+    words_tables = word_soup.findAll('table', {'class': 'WRD'}, id=lambda x: x != 'compound_forms');
+    if not words_tables:
+      return []
+    word_trans = []
+    for wd_table in words_tables:
+      for tr_wd in wd_table.findAll("tr", {"class": ["even", "odd"]}):
+        new_trans = scrape_wordref_words(tr_wd.find('td', {'class': 'ToWrd'}), 0)
+        #print('TRANS: ' + new_trans)
+        if new_trans:
+          word_trans.append(new_trans)
+    r = try_fetch("http://www.wordreference.com/" + ext + "/reverse/" + orig_word.word)
+    word_page = r.content
+    word_soup = BeautifulSoup(word_page, features="html.parser")
+    words_tables = word_soup.findAll('table', {'class': 'WRD'}, id=lambda x: x != 'compound_forms');
+    
+    if not words_tables:
+      return []
+    for wd_table in words_tables:
+      #print(wd_table)
+      for tr_wd in wd_table.findAll("tr", {"class": ["even", "odd"]}):
+        new_trans = scrape_wordref_words(tr_wd.find('td', {'class': 'FrWrd'}), 0)
+        #print('TRANS: ' + new_trans)
+        if new_trans:
+          word_trans.append(new_trans)
+
+    word_trans = list(set(word_trans));
+    trans = []
+    for new_trans in word_trans:
+      w = Word.objects.filter(word=new_trans, language=language).first()
+      if not w:
+        w = Word.objects.create(word=new_trans, lookup_date=timezone.now(), language=language, from_translation=True) 
+      w.translations.add(orig_word)
+      trans.append(w)
+    
+    print(trans)
+    return trans
+    
+  def fetch_and_parse_word(self, **args):
+    word = args['word']
+    ext = args['ext']
+    r = try_fetch("http://www.wordreference.com/" + ext + "/" + word)
+    straight_words_map = parse_straight_word(r)
+    r = try_fetch("http://www.wordreference.com/" + ext + "/reverse/" + word)
+    reverse_words_map = parse_reverse_word(r)
+    return [ *straight_words_map, *reverse_words_map ]
+
+  def create_word(self, **args):
+    print('MIXINI');
+    word = args['word']
+    language = args['language']
+    words_map = args['words_map']
+    if not words_map:
+      return ()
+    w = Word.objects.create(word=word, lookup_date=timezone.now(), language=language)
+    ety = Etymology.objects.create(word=w, etymology='');
+
+    for defs in words_map:
+      definition, example = prep_def_exmpl(defs)
+      if not definition:
+        continue
+      print(definition)
+      print(example)
+       
+      d = Definition.objects.filter(definition=definition, word=w).first()
+      if not d:
+        d = Definition.objects.create(word=w, definition=definition, etymology=ety);
+      if example:
+        Example.objects.create(definition=d, example=example, word=w)
+    return (w,)
 
 class SingleWordManager(models.Manager):
   def get_queryset(self):
@@ -88,7 +167,7 @@ class EnglishWordManager(models.Manager):
               for c in v.get("crossReferenceMarkers", []):
                 sense['definitions'].append({'definition': c});
             word_entries.append(sense)
-      print(word_entries)      
+      #print(word_entries)      
       w = Word.objects.create(word=word, lookup_date=timezone.now(), language='english')
       for e in word_entries:
         ety = Etymology.objects.create(word=w, etymology=e['etymology']);
@@ -106,10 +185,13 @@ class FreeWordsManager(models.Manager):
           Q(word_definitions__isnull=False)
           ).exclude(from_translation=True).filter(words=None).distinct().order_by('-lookup_date')
 
-class ItalianWordManager(models.Manager):
+class ItalianWordManager(FetchWordMixin, models.Manager):
   def get_queryset(self):
     return super().get_queryset().filter(language='italian')
  
+  def fetch_translation(self, orig_word):
+    return self.fetch_wordref_translation(orig_word, language='italian', ext='enit')
+
   def fetch_collocations(self, word):
     straight_collocs_map = fetch_straight_collocations(word)
     reverse_collocs_map = fetch_reverse_collocations(word)
@@ -136,34 +218,11 @@ class ItalianWordManager(models.Manager):
     return collocs
 
   def fetch_word(self, word):
-    r = try_fetch("http://www.wordreference.com/iten/" + word)
-    straight_words_map = parse_straight_word(r)
-    print(straight_words_map)
-    r = try_fetch("http://www.wordreference.com/iten/reverse/" + word)
-    reverse_words_map = parse_reverse_word(r)
-    print(reverse_words_map)
-    words_map = [ *straight_words_map, *reverse_words_map ]
+    words_map = self.fetch_and_parse_word(ext='iten', word=word)
+    return self.create_word(word=word, words_map=words_map, language='italian')
     
-    if not words_map:
-      return ()
-    w = Word.objects.create(word=word, lookup_date=timezone.now(), language='italian')
-    ety = Etymology.objects.create(word=w, etymology='');
 
-    for defs in words_map:
-      definition, example = prep_def_exmpl(defs)
-      if not definition:
-        continue
-      print(definition)
-      print(example)
-       
-      d = Definition.objects.filter(definition=definition, word=w).first()
-      if not d:
-        d = Definition.objects.create(word=w, definition=definition, etymology=ety);
-      if example:
-        Example.objects.create(definition=d, example=example, word=w)
-    return (w,)
-
-class FrenchWordManager(models.Manager):
+class FrenchWordManager(FetchWordMixin, models.Manager):
   def get_queryset(self):
     return super().get_queryset().filter(language='french')
  
@@ -192,32 +251,12 @@ class FrenchWordManager(models.Manager):
       collocs.append(c)
     return collocs
 
+  def fetch_translation(self, orig_word):
+    return self.fetch_wordref_translation(orig_word, language='french', ext='enfr')
+    
   def fetch_word(self, word):
-    r = try_fetch("http://www.wordreference.com/fren/" + word)
-    straight_words_map = parse_straight_word(r)
-    r = try_fetch("http://www.wordreference.com/fren/reverse/" + word)
-    reverse_words_map = parse_reverse_word(r)
-    words_map = [ *straight_words_map, *reverse_words_map ]
-    
-    if not words_map:
-      return ()
-    
-    w = Word.objects.create(word=word, lookup_date=timezone.now(), language='french')
-    ety = Etymology.objects.create(word=w, etymology='');
-
-    for defs in words_map:
-      definition, example = prep_def_exmpl(defs)
-      if not definition:
-        continue
-      print(definition)
-      print(example)
-       
-      d = Definition.objects.filter(definition=definition, word=w).first()
-      if not d:
-        d = Definition.objects.create(word=w, definition=definition, etymology=ety);
-      if example:
-        Example.objects.create(definition=d, example=example, word=w)
-    return (w,)
+    words_map = self.fetch_and_parse_word(ext='fren', word=word)
+    return self.create_word(word=word, words_map=words_map, language='french')
 
 class Word(models.Model):
     word = models.CharField(max_length=30)

@@ -74,7 +74,7 @@ def parse_straight_collocations(r):
 def parse_reverse_word(r):
   word_page = r.content
   word_soup = BeautifulSoup(word_page, features="html.parser")
-  words_tables = word_soup.findAll('table', {'class': 'WRD'}, id_=lambda x: x != 'compound_forms');
+  words_tables = word_soup.findAll('table', {'class': 'WRD'}, id=lambda x: x != 'compound_forms');
   if not words_tables:
     return []
   words_map = []
@@ -113,7 +113,7 @@ def parse_straight_word(r):
   print('STRAIGHT')
   word_page = r.content
   word_soup = BeautifulSoup(word_page, features="html.parser")
-  words_tables = word_soup.findAll('table', {'class': 'WRD'}, id_=lambda x: x != 'compound_forms');
+  words_tables = word_soup.findAll('table', {'class': 'WRD'}, id=lambda x: x != 'compound_forms');
   if not words_tables:
     return []
   words_map = []

@@ -3,11 +3,13 @@ import PropTypes from "prop-types";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import DecorateWithLinks from "./DecorateWithLinks";
 import Translations from "./Translations";
+import Collocations from "./Collocations";
 import key from "weak-key";
 import { connect } from 'react-redux';
 import { switchTab } from '../actions/tabActions';
 import { lookUpTranslations, requestTranslations, } from '../actions/transActions';
 import { lookUpCollocations, requestCollocations, } from '../actions/collocationsActions';
+import { renderList, listStyles } from './helpers';
 
 const mapStateToProps = state => ({
   mapTabIndex: state.tabs.mapTabIndex,
@@ -17,7 +19,6 @@ const mapStateToProps = state => ({
   collocsFetchingMap: state.collocations.fetchingMap,
 });
 
-const listStyles = {1: 'etym-style', 2: 'def-style', 3: 'exmpl-style'};
 
 class WordTabs extends Component {
   constructor(props) { 
@@ -94,7 +95,7 @@ class WordTabs extends Component {
           }
         </TabPanel>
         <TabPanel>
-          { isEnglishWord ? <Translations word={word} fn={fn[0]}/> : ''}
+          { isEnglishWord ? <Translations word={word} fn={fn[0]}/> : <Collocations word={word} fn={fn[0]} />}
         </TabPanel>
         <TabPanel>
         <h2>Any content 2</h2>
@@ -105,22 +106,5 @@ class WordTabs extends Component {
 }
 
 
-function renderList(el, fn, styles, styleCount) {
-  styleCount += 1;
-  let listClass = styles[styleCount];
-  if (!el.length) { 
-    return ''
-  }
-  return el.map(el => ( 
-    <ul className={listClass} key={el.id}>
-    <li>
-      {Object.entries(el).map(el => typeof(el[1]) === 'string' ? 
-      <DecorateWithLinks words={el[1]} onLinkClick={fn}/> : 
-      renderList(el[1], fn, styles, styleCount))}
-    </li>
-    </ul> 
-   )
-  );
-}
 
 export default connect(mapStateToProps, { switchTab, lookUpTranslations, requestTranslations, lookUpCollocations, requestCollocations })(WordTabs);

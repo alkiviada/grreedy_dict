@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from . import views
 
 urlpatterns = [
-    url(r'^api/word/(?P<word>[-\w]+)$', views.WordSingleCreate.as_view(), name='word-detail'),
+    url(r'^api/word/(?P<word>[-\w ]+)$', views.WordSingleCreate.as_view(), name='word-detail'),
     url(r'^api/word/translate/(?P<word>[-\w]+)$', views.WordSingleCreateTranslate.as_view(), name='word-translate'),
     url(r'^api/word/collocations/(?P<word>[-\w]+)$', views.WordSingleCreateCollocations.as_view(), name='word-collocations'),
     url(r'^api/word/$', views.WordList.as_view(), name='words'),

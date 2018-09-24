@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 const mapStateToProps = state => ({
   trans: state.translations.allTranslations,
   fetchingMap: state.translations.fetchingMap,
-  newTrans: state.translations.translations,
 });
 
 const Translations = (props) => {
