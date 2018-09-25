@@ -2,7 +2,6 @@ from words.models import Word, Definition, Etymology, Example, Collection, Collo
 from words.utils import fetch_translations, fetch_word
 from django.utils import timezone
 from knox.models import AuthToken
-from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from words.serializers import (WordSerializer, TranslationSerializer, CollectionSerializer, 
@@ -14,13 +13,6 @@ from rest_framework.response import Response
 
 from django.core.exceptions import ObjectDoesNotExist 
 from django.http import Http404
-
-class LogoutAPI(generics.GenericAPIView):
-
-  def post(self, request, *args, **kwargs):
-    print(request.user.auth_token)
-    request.user.auth_token.delete()
-    return Response(status=status.HTTP_200_OK)
 
 class LoginAPI(generics.GenericAPIView):
   serializer_class = LoginUserSerializer

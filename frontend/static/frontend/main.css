@@ -146,6 +146,12 @@ body {
   display: inline-block;
 }
 
+.login-notif {
+  background-color: inherit;
+  color: white;
+  font-family: Abel;
+  margin-top:5px;
+}
 .user-tag {
   background-color: inherit;
   color: white;

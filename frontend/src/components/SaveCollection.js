@@ -51,7 +51,8 @@ class SaveCollection extends Component {
     console.log(this.props.auth)
     const auth = this.props.auth
 
-    if (auth.isAuthenticated && words.length) {
+    if (auth.isAuthenticated) { 
+      if (words.length) {
         return (
         <div className="save-coll notification coll-notification column is-mobile">
         { !saving ?
@@ -77,6 +78,19 @@ class SaveCollection extends Component {
     }
     else {
       return ''
+    }
+    }
+    else {
+      if (words.length) {
+        return (
+        <div className="save-coll notification coll-notification column is-mobile">
+        <div className="login-notif"><Link className="is-link" to="/login">Login</Link> or <Link className="is-link" to="/register">Register</Link> to save this collection of words</div>
+        </div>
+       )
+      }
+      else {
+        return ''
+      }
    }
   }
 };
