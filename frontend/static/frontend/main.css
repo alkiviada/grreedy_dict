@@ -146,6 +146,17 @@ body {
   display: inline-block;
 }
 
+.user-tag {
+  background-color: inherit;
+  color: white;
+  font-family: Abel;
+  float: right;
+  position: relative;
+  bottom: 29px;
+  right: -34px;
+  display: inline-block;
+}
+
 .clear-notification {
   background-color: inherit;
 }

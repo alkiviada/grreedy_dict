@@ -3,6 +3,8 @@ import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { saveCollection, requestSave, clearFetched } from '../actions/collectionsActions';
+import { loadUser, logout } from '../actions/authActions';
+import { Link } from "react-router-dom";
 
 class SaveCollection extends Component {
   constructor(props) { 
@@ -13,6 +15,12 @@ class SaveCollection extends Component {
     this.handleNameChange = this.handleNameChange.bind(this);
     this.onSubmit = this.onSubmitSave.bind(this);
   };
+
+  componentWillMount() {
+    console.log('mounting save bar');
+    this.props.loadUser();
+    console.log(this.props.auth)
+  }
 
   handleNameChange(n) {
    if (this.props.fetched) {
@@ -39,25 +47,37 @@ class SaveCollection extends Component {
     const saving = this.props.saving
     const name = !this.props.fetched ? this.state.name : this.props.name
     console.log(name);
-    return words.length ? (
-      <div className="save-coll notification coll-notification column">
-      { !saving ?
-      <form onSubmit={(e) => this.onSubmitSave(e)}> 
-      <div className="field has-addons has-addons-left">
-        <p className="control">
-        <input class="input" type="text" placeholder="Save Collection" value={name} onChange={this.handleNameChange} />
-        </p>
-        <p className="control">
-        <a className="button save-btn" onClick={(e) => this.onSubmitSave(e)}>
-         Save Words 
-        </a>
-        </p>
+
+    console.log(this.props.auth)
+    const auth = this.props.auth
+
+    if (auth.isAuthenticated && words.length) {
+        return (
+        <div className="save-coll notification coll-notification column is-mobile">
+        { !saving ?
+        <form onSubmit={(e) => this.onSubmitSave(e)}> 
+        <div className="field has-addons has-addons-left">
+          <p className="control">
+          <input class="input" type="text" placeholder="Save Collection" value={name} onChange={this.handleNameChange} />
+          </p>
+          <p className="control">
+          <a className="button save-btn" onClick={(e) => this.onSubmitSave(e)}>
+           Save Words 
+          </a>
+          </p>
+        </div>
+      </form>  : '' }
+      { saving ? <p className="clear-notification-message">Saving...</p> : 
+        this.props.error ? <p className="clear-notification-warn">Can't save this collection</p> : ''}
+      <div className="user-tag">
+      {auth.user.username} (<a onClick={this.props.logout}>logout</a>)
       </div>
-    </form>  : '' }
-    { saving ? <p className="clear-notification-message">Saving...</p> : 
-      this.props.error ? <p className="clear-notification-warn">Can't save this collection</p> : ''}
-    </div>
-    ) : '';
+      </div>
+      );
+    }
+    else {
+      return ''
+   }
   }
 };
 
@@ -68,13 +88,15 @@ const mapStateToProps = state => ({
   name: state.collections.name,
   uuid: state.collections.uuid,
   error: state.collections.error,
+  auth: state.auth,
 });
 
 SaveCollection.propTypes = {
   saveCollection: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
   requestSave: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
 };
 
-export default connect(mapStateToProps, { saveCollection, requestSave, clearFetched })(SaveCollection);
+export default connect(mapStateToProps, { logout, loadUser, saveCollection, requestSave, clearFetched })(SaveCollection);

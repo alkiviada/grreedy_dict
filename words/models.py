@@ -126,7 +126,12 @@ class WordRefWordMixin(models.Manager):
     words_map = args['words_map']
     if not words_map:
       return ()
-    w = Word.objects.create(word=word, lookup_date=timezone.now(), language=language)
+    w = Word.objects.filter(word=word, language=language).first()
+    if not w:
+      w = Word.objects.create(word=word, lookup_date=timezone.now(), language=language)
+    else:
+      w.from_translation = False
+      w.save(update_fields=['from_translation'])
     ety = Etymology.objects.create(word=w, etymology='');
 
     for defs in words_map:

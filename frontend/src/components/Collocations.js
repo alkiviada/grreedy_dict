@@ -37,7 +37,7 @@ const Collocations = (props) => {
         }
         return (
          <ul className="etym-style">
-         { renderList([new_el], fn[0], listStyles, 0) }
+         { renderList([new_el], fn, listStyles, 0) }
         </ul>)})
     );
 }

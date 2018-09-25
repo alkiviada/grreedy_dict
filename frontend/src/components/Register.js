@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { login, loadUser } from '../actions/authActions';
+import { register, loadUser } from '../actions/authActions';
 import { Link, Redirect } from "react-router-dom";
 
-class Login extends Component {
+class Register extends Component {
   constructor(props) { 
     super(props)
     this.state = {
       username: '',
       password: '',
     };
-    this.onSubmit = this.onSubmitLogin.bind(this);
+    this.onSubmit = this.onSubmitRegister.bind(this);
   };
 
-  onSubmitLogin(e) {
+
+  onSubmitRegister(e) {
     e.preventDefault();
     console.log('login');
-    this.props.login(this.state.username, this.state.password);
+    this.props.register(this.state.username, this.state.password);
   }
 
   render () {
@@ -25,13 +26,15 @@ class Login extends Component {
     if (this.props.isAuthenticated) {
       return <Redirect to="/" />
     }
-    console.log('rendering login');
+    console.log('rendering register');
     return (
       <div className="section">
       <div className="container">
       <div className="columns is-mobile is-centered">
       <div className="column is-narrow">
-      <form onSubmit={(e) => this.onSubmitLogin(e)}> 
+      <form onSubmit={(e) => this.onSubmitRegister(e)}> 
+      <div class="field">
+      <label class="label">Register</label>
        {this.props.errors.length > 0 && (
             <ul>
               {this.props.errors.map(error => (
@@ -39,27 +42,26 @@ class Login extends Component {
               ))}
             </ul>
           )}
+       </div>
       <div class="field">
-      <label class="label">Whose there?</label>
        <div class="control">
         <input className="input" type="text" placeholder="Username" id="username" onChange={e => this.setState({username: e.target.value})} />
        </div>
       </div>
       <div class="field">
-      <label class="label">Unfold yourself!</label>
        <div class="control">
         <input className="input" type="password" placeholder="Password" id="password" onChange={e => this.setState({password: e.target.value})} />
         </div>
       </div>
       <div class="field">
         <div className="control">
-        <a className="button look-up-btn" onClick={(e) => this.onSubmitLogin(e)}>
-         Login 
+        <a className="button look-up-btn" onClick={(e) => this.onSubmitRegister(e)}>
+        Register
         </a>
         </div>
         </div>
         <div className="control">
-        Do not have an account? <Link className="is-link" to="/register">Register</Link>
+        Already have an account? <Link className="is-link" to="/login">Login</Link>
         </div>
     </form>
     </div>
@@ -83,4 +85,4 @@ const mapStateToProps = state => {
   };
 }
 
-export default connect(mapStateToProps, { login, loadUser })(Login);
+export default connect(mapStateToProps, { register, loadUser })(Register);

@@ -39,7 +39,7 @@ class NewWordForm extends Component {
       <div className="new-word word-notification column">
       { !fetching ? 
       <form onSubmit={(e) => this.onSubmitLookUp(e)}> 
-      { this.props.error ? <div className="clear-notification-warn column is-half">  Can't load this word   </div> : '' }
+      { this.props.error ? <div className="clear-notification-warn column is-narrow">  Can't load this word   </div> : '' }
       <div className="field has-addons has-addons-left">
         <p className="control">
         <input className="input" type="text" placeholder="New Word" value={word} onChange={this.handleWordChange} />
@@ -63,6 +63,7 @@ const mapStateToProps = state => ({
   fetching: state.words.newWordFetching,
   error: state.words.error,
   word: state.words.word,
+  user: state.auth.user,
 });
 
 NewWordForm.propTypes = {
