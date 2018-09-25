@@ -19,3 +19,17 @@ def create_word(**args):
     if example:
       Example.objects.create(definition=d, example=example, word=w)
   return (w,)
+
+def create_tranlations(**args):
+  new_trans, orig_word, language = [ args[i] for i in ['translations', 'original', 'language'] ]
+  trans = []
+  for new_trans in word_trans:
+    w = Word.objects.filter(word=new_trans, language=language).first()
+    if not w:
+      w = Word.objects.create(word=new_trans, lookup_date=timezone.now(), language=language, from_translation=True) 
+    w.translations.add(orig_word)
+    trans.append(w)
+    
+  print(trans)
+  return trans
+

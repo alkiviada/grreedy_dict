@@ -147,3 +147,35 @@ def parse_straight_word(r):
     words_map.append(word_trans)
   print('STRAIGHT: ')
   return words_map 
+
+def parse_straight_translations(r):
+  word_page = r.content
+  word_soup = BeautifulSoup(word_page, features="html.parser")
+  words_tables = word_soup.findAll('table', {'class': 'WRD'}, id=lambda x: x != 'compound_forms');
+  if not words_tables:
+    return []
+  word_trans = []
+  for wd_table in words_tables:
+    for tr_wd in wd_table.findAll("tr", {"class": ["even", "odd"]}):
+      new_trans = scrape_wordref_words(tr_wd.find('td', {'class': 'ToWrd'}), 0)
+      print('TRANS: ' + new_trans)
+      if new_trans:
+        word_trans.extend(new_trans.split(' ,'))
+  return word_trans
+
+def parse_reverse_translations(r):
+  word_page = r.content
+  word_soup = BeautifulSoup(word_page, features="html.parser")
+  words_tables = word_soup.findAll('table', {'class': 'WRD'}, id=lambda x: x != 'compound_forms');
+  
+  word_trans = []
+  if not words_tables:
+   return []
+  for wd_table in words_tables:
+    #print(wd_table)
+    for tr_wd in wd_table.findAll("tr", {"class": ["even", "odd"]}):
+      new_trans = scrape_wordref_words(tr_wd.find('td', {'class': 'FrWrd'}), 0)
+      print('TRANS: ' + new_trans)
+      if new_trans:
+        word_trans.extend(new_trans.split(' ,'))
+  return word_trans

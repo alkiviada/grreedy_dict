@@ -7,7 +7,7 @@ def prep_def_exmpl(defs):
   definition = ', '.join(defs['trans'])
   expl = ''.join(defs['expl'])
   if fr_word:
-    definition += ' [' + fr_word + ']' 
+    definition = fr_word + ' [' + definition + ']' 
   if expl:
      definition += ' ' + expl
 

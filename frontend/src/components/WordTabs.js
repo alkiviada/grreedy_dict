@@ -59,15 +59,15 @@ class WordTabs extends Component {
           console.log('looking up translations'); 
           this.props.requestTranslations(word, this.props.transFetchingMap)
           this.props.lookUpTranslations(word, this.props.allTranslations, this.props.transFetchingMap)
-          break
         }
+        break
       case 'COLLOCATIONS':
         if (!this.props.allCollocations[word]) {
           console.log('looking up collocations'); 
           this.props.requestCollocations(word, this.props.collocsFetchingMap)
           this.props.lookUpCollocations(word, this.props.allCollocations, this.props.collocsFetchingMap)
-          break
         }
+        break
       default:
         Function.prototype()
     }
