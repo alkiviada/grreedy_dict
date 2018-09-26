@@ -49,11 +49,18 @@ class EtymologySerializer(serializers.ModelSerializer):
         result = super(EtymologySerializer, self).to_representation(instance)
         return OrderedDict([(key, result[key]) for key in result if not (len(result[key]) == 1 and not result[key][0]) ])
 
+class CollectionUUIDSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Collection
+        fields = [ 'uuid', 'name' ]
+
 class WordSerializer(serializers.ModelSerializer):
     word_etymologies = EtymologySerializer(many=True)
+    words = CollectionUUIDSerializer(many=True)
+
     class Meta:
         model = Word
-        fields = ['word', 'word_etymologies', 'language']
+        fields = ['word', 'word_etymologies', 'language', 'words']
 
 class TranslationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -73,6 +80,7 @@ class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
         fields = ['name', 'uuid', 'last_modified_date']
+
 
 class CollectionDetailSerializer(serializers.ModelSerializer):
     words = WordSerializer(many=True)

@@ -51,6 +51,7 @@ class WordList(generics.ListAPIView):
   def get_queryset(self):
     return Word.free_words.all()
 
+
 class CollectionDetail(generics.RetrieveUpdateAPIView):
   permission_classes = [ IsAuthenticated, ]
   def get_queryset(self):
@@ -138,7 +139,7 @@ class WordSingleCreate(generics.ListAPIView):
     word = self.kwargs['word']
     return Word.single_object.filter(word=word)
 
-  def get(self, request, word, *args, **kwargs):
+  def get(self, request, word, uuid, *args, **kwargs):
     print('GET ' + word);
     db_words = Word.single_object.filter(word=word, from_translation=False);
    
@@ -165,10 +166,26 @@ class WordSingleCreate(generics.ListAPIView):
           print(e)
           print('No method to fecth word')
           raise Http404("No Fetch API for the word:", word)
-      if not db_words:
-        print("Could not fetch word:" + word);
-        raise Http404("No API for the word:", word)
 
+    if not db_words:
+      print("Could not fetch word:" + word);
+      raise Http404("No API for the word:", word)
+
+# now that i have words in the db 
+# it is time to collect them for the user 
+    if uuid:
+      print('I have an UUID: ' + uuid)
+
+    if request.user.is_authenticated:
+      print('I have my user')
+    else:
+      print('I am anonymous')
+      if not uuid:
+        coll = Collection.objects.create(created_date=timezone.now(), last_modified_date=timezone.now())
+      else: 
+        coll = Collection.objects.get(uuid=uuid)
+      coll.words.add(*db_words)
+      
     serializer = WordSerializer(db_words, many=True)
     return Response(serializer.data)
 

@@ -1,3 +1,7 @@
+import {  
+         FETCH_WORDS_FULFILLED, 
+       } from './types';
+
 export const loadUser = () => {
   return (dispatch, getState) => {
     dispatch({type: "USER_LOADING"});
@@ -122,6 +126,10 @@ export const logout = () => {
       .then(res => {
         if (res.status === 204) {
           dispatch({type: 'LOGOUT_SUCCESSFUL'});
+  dispatch({
+    type: FETCH_WORDS_FULFILLED,
+    payload: []
+  });
           return res.data;
         } else if (res.status === 403 || res.status === 401) {
           dispatch({type: "AUTHENTICATION_ERROR", data: res.data});

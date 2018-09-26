@@ -33,9 +33,9 @@ export const fetchWords = () => dispatch => {
   );
 };
 
-export const lookUpWord = (word, words) => dispatch => {
+export const lookUpWord = (word, words, uuid) => dispatch => {
   console.log('fetching word');
-  fetch('api/word/' + word)
+  fetch('api/word/' + word + '/' + uuid)
   .then(response =>
       response.json().then(json => ({
         status: response.status,
@@ -52,6 +52,10 @@ export const lookUpWord = (word, words) => dispatch => {
         } else {
           // Status looks good
           const word = json;
+          console.log(word)
+          const collUUID = word[0].words[0].uuid
+          const collName = word[0].words[0].name
+
           const obj = word.reduce((o, e) =>
                                (o['word'] = e['word'], 
                                 o['description'] = [ ...o['description'] ? o['description'] : '', 
@@ -61,6 +65,10 @@ export const lookUpWord = (word, words) => dispatch => {
           dispatch({
             type: FETCH_WORD_FULFILLED,
             payload: [obj, ...words]
+          });
+          dispatch({
+            type: FETCH_COLLECTION_FULFILLED,
+            payload: { uuid: collUUID, name: collName }
           })
         }
       },

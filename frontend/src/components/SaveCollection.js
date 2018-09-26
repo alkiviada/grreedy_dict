@@ -18,7 +18,6 @@ class SaveCollection extends Component {
 
   componentWillMount() {
     console.log('mounting save bar');
-    this.props.loadUser();
     console.log(this.props.auth)
   }
 
@@ -51,6 +50,8 @@ class SaveCollection extends Component {
     console.log(this.props.auth)
     const auth = this.props.auth
 
+    const userTagStyle = { bottom: '29px', right: '-34px'}
+
     if (auth.isAuthenticated) { 
       if (words.length) {
         return (
@@ -70,14 +71,20 @@ class SaveCollection extends Component {
       </form>  : '' }
       { saving ? <p className="clear-notification-message">Saving...</p> : 
         this.props.error ? <p className="clear-notification-warn">Can't save this collection</p> : ''}
-      <div className="user-tag">
+      <div className="user-tag" style={userTagStyle}>
       {auth.user.username} (<a onClick={this.props.logout}>logout</a>)
       </div>
       </div>
       );
     }
     else {
-      return ''
+        return (
+        <div className="save-coll notification coll-notification column is-mobile">
+     <div className="user-tag">
+      {auth.user.username} (<a onClick={this.props.logout}>logout</a>)
+      </div>
+        </div>
+    )
     }
     }
     else {

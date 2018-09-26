@@ -22,10 +22,11 @@ class CollectionsSideBar extends Component {
 
   componentWillMount() {
     console.log('mounting sidebar');
-    this.props.loadUser();
     console.log(this.props.auth)
-    this.props.requestCollections();
-    this.props.fetchCollections();
+    if (this.props.auth.isAuthenticated) {
+      this.props.requestCollections();
+      this.props.fetchCollections();
+    }
   }
   onCollectionClick(e, uuid) {
     console.log('collection look up');

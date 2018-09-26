@@ -5,6 +5,7 @@ import WordTabs from "./WordTabs";
 import key from "weak-key";
 import { connect } from 'react-redux';
 import { lookUpWord, fetchWords, requestWords, requestWord } from '../actions/wordsActions';
+import { Link } from "react-router-dom";
 
 
 class Table extends Component {
@@ -33,7 +34,8 @@ class Table extends Component {
     console.log('checking map');
     if (!this.props.allWordsMap[word]) {
       this.props.requestWord();
-      this.props.lookUpWord(word, this.props.data);
+      const uuid = this.props.uuid
+      this.props.lookUpWord(word, this.props.data, uuid);
     }
     this.scrollToDomRef()
   }
@@ -54,10 +56,13 @@ class Table extends Component {
         </div>
       )
     } 
+    const auth = this.props.auth
     return !data.length ? (
       <div className="words-container" ref={this.myRef}>
       <div className="notification clear-notification-message">
       Start new collection
+      { !auth.isAuthenticated ? 
+          <span> or <Link className="is-link" to="/login">Login</Link> or <Link className="is-link" to="/register">Register</Link></span> : '' }
       </div>
       </div>
     ) : (
@@ -94,6 +99,8 @@ class Table extends Component {
 }
 
 const mapStateToProps = state => ({
+  auth: state.auth,
+  uuid: state.collections.uuid,
   data: state.words.items,
   allWordsMap: state.words.allWordsMap,
   allFetching: state.words.allWordsFetching,
