@@ -172,10 +172,11 @@ def parse_reverse_translations(r):
   if not words_tables:
    return []
   for wd_table in words_tables:
-    #print(wd_table)
+    print(wd_table)
     for tr_wd in wd_table.findAll("tr", {"class": ["even", "odd"]}):
       new_trans = scrape_wordref_words(tr_wd.find('td', {'class': 'FrWrd'}), 0)
       print('TRANS: ' + new_trans)
       if new_trans:
         word_trans.extend(new_trans.split(' ,'))
   return word_trans
+

@@ -94,6 +94,7 @@ class WordRefWordMixin(models.Manager):
 
     r = try_fetch("http://www.wordreference.com/" + ext + "/reverse/" + orig_word.word)
     reverse_translations = parse_reverse_translations(r)
+    print(reverse_translations)
 
     return [ *straight_translations, *reverse_translations ]
 
@@ -158,7 +159,6 @@ class SingleWordManager(models.Manager):
       When(language='russian', then=Value(3)),
       When(language='ukrainian', then=Value(4)),
       output_field=IntegerField())).order_by('order')
-
 
 class EnglishWordManager(models.Manager):
   def get_queryset(self):
@@ -272,9 +272,25 @@ class Word(models.Model):
     class Meta:
         ordering = ('-lookup_date',)
 
-class Collection(models.Model):
+class CollectionMixin(object):
+  def update_last_modified(self):
+    print('I am updating collection')
+    self.last_modified_date = timezone.now() 
+    self.save(update_fields=['last_modified_date'])
+  
+  def add_to_collection(self, word):
+      cw = CollectionOfWords(word=word, collection=self, date_added=timezone.now())
+      cw.save()
+
+  def update_fields(self, new_fields):
+    for k, v in new_fields.items():
+      print(k, ' ', v)
+      setattr(self, k, v)
+    self.save(update_fields=[*new_fields.keys()])
+
+class Collection(CollectionMixin, models.Model):
     name = models.CharField(max_length=30, blank=True)
-    words = SortedManyToManyField(Word, related_name='words')
+    words = models.ManyToManyField(Word, related_name='words', through='CollectionOfWords')
     created_date = models.DateTimeField('date created')
     last_modified_date = models.DateTimeField('date modified')
     notes = models.CharField(max_length=200)
@@ -286,3 +302,8 @@ class Collection(models.Model):
 
     class Meta:
         ordering = ('-last_modified_date',)
+
+class CollectionOfWords(models.Model):
+    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
+    date_added = models.DateTimeField()

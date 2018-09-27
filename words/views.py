@@ -1,8 +1,8 @@
 from words.models import Word, Definition, Etymology, Example, Collection, Collocation
-from words.utils import fetch_translations, fetch_word
 from django.utils import timezone
 from knox.models import AuthToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from words.constants import LANGUAGES
 
 from words.serializers import (WordSerializer, TranslationSerializer, CollectionSerializer, 
                                CollectionDetailSerializer, CollocationSerializer,
@@ -51,6 +51,16 @@ class WordList(generics.ListAPIView):
   def get_queryset(self):
     return Word.free_words.all()
 
+  def get(self, request, uuid, *args, **kwargs):
+    words = []
+    if uuid:
+      print('I have UUID: ' + uuid)
+      coll = Collection.objects.get(uuid=uuid) 
+      words = coll.words
+      
+    serializer = WordSerializer(words, many=True)
+    return Response(serializer.data)
+
 
 class CollectionDetail(generics.RetrieveUpdateAPIView):
   permission_classes = [ IsAuthenticated, ]
@@ -77,51 +87,27 @@ class CollectionListCreate(generics.ListCreateAPIView):
     print(name);
     coll = '';
     new_fields = { 
+                  'owner': user,
                   'name': name, 
                   'last_modified_date': timezone.now(),
                  }
     if uuid:
+      if not name:
+        next_count = Collection.objects.filter(name__startswith='Untitled', owner=user).count()
+        next_count += 1
+        new_fields['name'] = 'Untitled: ' + str(next_count);
       try:
-        coll = Collection.objects.get(uuid=uuid, owner=user) 
-        for k, v in new_fields.items():
-          print(k, ' ', v)
-          setattr(coll, k, v)
-        coll.save(update_fields=[*new_fields.keys()])
+        coll = Collection.objects.get(uuid=uuid) 
+        coll.update_fields(new_fields)
       except ObjectDoesNotExist:
         print ("Something Wrong with UUID: ", uuid)
-    elif name:
-# this is a new collection of words and the name given is either new
-# or could be of a previously saved collection
-      print('i have no uuid but i have name')
-      coll = Collection.objects.filter(name=name, owner=user).first() 
-      if not coll: 
-# this is a brand new collection
-        coll = Collection(created_date=timezone.now(), owner=user, **new_fields)
-        coll.save()
-      else:
-# this is a request to resave a collection with the new set of words
-        coll.last_modified_date = timezone.now() 
-        coll.save(update_fields=['last_modified_date'])
-# will have to 'conflate' old set with the new one
-        old_words_coll = [ w.word for w in coll.words.all() ]
-        words.extend(w for w in old_words_coll if w not in words)
+        raise Http404("No Fetch API for the word:", word)
     else: 
-# this is a new and unnamed collection (someone is lazy)
-      next_count = Collection.objects.filter(name__startswith='Untitled', owner=user).count()
-      next_count += 1
-      new_fields['name'] = 'Untitled: ' + str(next_count);
-      coll = Collection(created_date=timezone.now(), owner=user, **new_fields)
-      coll.save()
-# need to get the words for the collection not only in their right order
-# but also in their right order by language
-    updated_words = []
-    for w in words:
-      w = Word.single_object.filter(word=w)
-      updated_words.extend(w)
-    
-    coll.words.clear()
-    coll.words.add(*updated_words)
+      print ("Something Wrong with UUID: ", uuid)
+      raise Http404("No Fetch API for the word:", word)
+
     colls = Collection.objects.filter(owner=user)
+
     serializer = CollectionSerializer(colls, many=True)
     return Response(serializer.data)
 
@@ -143,8 +129,6 @@ class WordSingleCreate(generics.ListAPIView):
     print('GET ' + word);
     db_words = Word.single_object.filter(word=word, from_translation=False);
    
-    LANGUAGES = [ 'french', 'italian', 'english' ]
-
     if not db_words:
       db_words = ()
       print("Word is not in our DB");
@@ -172,19 +156,20 @@ class WordSingleCreate(generics.ListAPIView):
       raise Http404("No API for the word:", word)
 
 # now that i have words in the db 
-# it is time to collect them for the user 
-    if uuid:
-      print('I have an UUID: ' + uuid)
+# it is time to collect them in a collection
 
-    if request.user.is_authenticated:
-      print('I have my user')
-    else:
-      print('I am anonymous')
-      if not uuid:
-        coll = Collection.objects.create(created_date=timezone.now(), last_modified_date=timezone.now())
-      else: 
-        coll = Collection.objects.get(uuid=uuid)
-      coll.words.add(*db_words)
+    if not uuid:
+      coll = Collection.objects.create(created_date=timezone.now(), 
+                                       last_modified_date=timezone.now())
+    else: 
+      print('I have an UUID: ' + uuid)
+      coll = Collection.objects.get(uuid=uuid)
+      coll.update_last_modified()
+
+# now that we have our collection - new or current
+# let's add newly looked up words to it
+    for w in db_words:
+      coll.add_to_collection(w)
       
     serializer = WordSerializer(db_words, many=True)
     return Response(serializer.data)
@@ -206,15 +191,13 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
     orig_word = Word.english_objects.get(word=word)
     translated_words = orig_word.translations.all()
 
-    print(translated_words);
-
-    LANGUAGES = [ 'french', 'italian' ]
-
     if not translated_words:
       translated_words = []
       print("Translations for this Word are not in our DB");
       for language in LANGUAGES:
         print(language)
+        if orig_word.language == language:
+          continue
         try:
           foreign_objects_manager = getattr(Word, language + '_objects')
           print(foreign_objects_manager)

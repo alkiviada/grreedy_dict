@@ -1,4 +1,11 @@
-import { CLEAR_ERROR, FETCH_WORDS, FETCH_WORDS_FULFILLED, FETCH_WORDS_REJECTED, FETCH_WORD, FETCH_WORD_FULFILLED } from './types';
+import { 
+  FETCH_COLLECTION_FULFILLED, 
+  CLEAR_ERROR, FETCH_WORDS, 
+  FETCH_WORDS_FULFILLED, 
+  FETCH_WORDS_REJECTED, 
+  FETCH_WORD, 
+  FETCH_WORD_FULFILLED } from './types';
+
 import { conflateWords } from './helpers';
 
 export const requestWords = () => dispatch => {
@@ -19,9 +26,10 @@ export const requestWord = () => dispatch => {
   })
 };
 
-export const fetchWords = () => dispatch => {
+export const fetchWords = (uuid) => dispatch => {
   console.log('fetching words');
-  fetch('api/word')
+  const url = 'api/words/' + (uuid ? uuid : '')
+  fetch(url)
     .then(res => res.json())
     .then(words => {
       const conflated_words = conflateWords(words)
@@ -35,7 +43,8 @@ export const fetchWords = () => dispatch => {
 
 export const lookUpWord = (word, words, uuid) => dispatch => {
   console.log('fetching word');
-  fetch('api/word/' + word + '/' + uuid)
+  const url = 'api/word/' + word + '/' + (uuid ? uuid : '')
+  fetch(url)
   .then(response =>
       response.json().then(json => ({
         status: response.status,
@@ -45,6 +54,7 @@ export const lookUpWord = (word, words, uuid) => dispatch => {
   .then(
       // Both fetching and parsing succeeded!
       ({ status, json }) => {
+        console.log(status)
         if (status >= 400) {
           // Status looks bad
           console.log('Server returned error status');
@@ -75,7 +85,7 @@ export const lookUpWord = (word, words, uuid) => dispatch => {
       // Either fetching or parsing failed!
       err => {
         console.log('problems');
-        dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed', }})
+        dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed', word: word}})
       }
     ); 
 };

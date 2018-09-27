@@ -26,7 +26,7 @@ class NewWordForm extends Component {
     console.log(this.props.allWordsMap);
     if (!this.props.allWordsMap[this.state.word]) {
       this.props.requestWord();
-      this.props.lookUpWord(this.state.word, this.props.allWords);
+      this.props.lookUpWord(this.state.word, this.props.allWords, this.props.uuid);
     }
     this.setState({word: ''})
   }
@@ -58,6 +58,7 @@ class NewWordForm extends Component {
 };
 
 const mapStateToProps = state => ({
+  uuid: state.collections.uuid,
   allWordsMap: state.words.allWordsMap,
   allWords: state.words.items,
   fetching: state.words.newWordFetching,

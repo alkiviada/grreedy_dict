@@ -1,5 +1,6 @@
 import {  
          FETCH_WORDS_FULFILLED, 
+         SAVE_COLLECTION_FULFILLED, 
        } from './types';
 
 export const loadUser = () => {
@@ -130,6 +131,10 @@ export const logout = () => {
     type: FETCH_WORDS_FULFILLED,
     payload: []
   });
+          dispatch({
+            type: SAVE_COLLECTION_FULFILLED,
+            payload:[] 
+          });
           return res.data;
         } else if (res.status === 403 || res.status === 401) {
           dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
