@@ -47,6 +47,141 @@ class Example(models.Model):
     definition = models.ForeignKey(Definition, on_delete=models.CASCADE, related_name='examples', blank=True, null=True)
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_examples')
 
+class YandexWordMixin(models.Manager):
+
+  def create_collocations(self, **args):
+    pass
+
+  def collocations(self, orig_word, **args):
+    return orig_word.word_collocations.all()
+
+  def create_or_get_translations(self, orig_word, **args):
+    translations = []
+
+    lang = args['ya_lang']
+    language = args['language']
+
+    base_url = 'https://dictionary.yandex.net/api/v1/dicservice.json/lookup'
+    params = {
+              'key': os.environ.get('YANDEX_API_KEY'),
+              'lang': lang,
+              'text': orig_word.word,
+             }
+    
+    r = try_fetch(base_url, params=params)
+    t = [ d['tr'] for d in r.json()['def'] ]
+    words = []
+    collocations = {}
+    synonyms = {}
+    for t in t:
+      for t in t:
+        word, syn, ex = [ t.get(i) for i in [ 'text', 'syn', 'ex' ] ]
+        words.append(word)
+        coll_items = []
+        word_syns = []
+        if syn:
+          for s in syn:
+            word_syns.append(s['text'])
+          synonyms[word] = word_syns
+        if ex:
+          for t in ex:
+            text = t['text']
+            trans = ' ,'.join([ i['text'] for i in t['tr'] ])
+            coll_items.append({ text: trans })
+          collocations[word] = coll_items
+
+    for new_trans in words:
+      w = Word.objects.filter(word=new_trans, language=language).first()
+      if not w:
+        w = Word.objects.create(word=new_trans, lookup_date=timezone.now(), language=language, from_translation=True) 
+      w.translations.add(orig_word)
+      translations.append(w)
+      if synonyms and synonyms.get(new_trans):
+        for new_syn in synonyms.get(new_trans):
+          s = Word.objects.filter(word=new_syn, language=language).first()
+          if not s:
+            s = Word.objects.create(word=new_syn, lookup_date=timezone.now(), language=language, from_translation=True) 
+          s.synonyms.add(w)
+
+      if collocations and collocations.get(new_trans):
+        for expr_trans in collocations.get(new_trans):
+          expr_trans = list(*expr_trans.items())
+          expr = expr_trans[1]
+          trans = expr_trans[0]
+          c = Collocation.objects.filter(expression=expr).first()
+          print(c)
+          if not c:
+            print('I am creating some collocations')
+            c = Collocation.objects.create(word=w, 
+                                           expression=expr, 
+                                           translation=trans, 
+                                          ) 
+            print('collocs2')
+    print('something worng?')
+    print(translations)
+    return translations
+
+  def create_or_get_word(self, **args):
+    orig_word = args['word']
+    lang = args['ya_lang']
+    language = args['language']
+    
+    base_url = 'https://dictionary.yandex.net/api/v1/dicservice.json/lookup'
+    params = {
+              'key': os.environ.get('YANDEX_API_KEY'),
+              'lang': lang,
+              'text': orig_word,
+             }
+    
+    r = try_fetch(base_url, params=params)
+
+    t = [ d['tr'] for d in r.json()['def'] ]
+    words = []
+    examples = {}
+    for t in t:
+      for t in t:
+        word, syn, ex, mean = [ t.get(i) for i in ['text', 'syn', 'ex', 'mean'] ]
+        print('WOrD: ' + word)
+        print('ex: ', ex)
+        words.append(word)
+        ex_items = []
+        if ex:
+          for t in ex:
+            text = t['text']
+            trans = ' ,'.join([ i['text'] for i in t['tr'] ])
+            ex_items.append(text + ' (' + trans + ')')
+          examples[word] = ex_items
+        else:
+          examples[word] = []
+    print(examples)
+    return self.create_word(language=language, words_map=examples, word=orig_word)
+
+  def create_word(self, **args):
+    print('MIXIN');
+    word = args['word']
+    language = args['language']
+    words_map = args['words_map']
+    if not words_map:
+      return ()
+    w = Word.objects.filter(word=word, language=language).first()
+    if not w:
+      w = Word.objects.create(word=word, lookup_date=timezone.now(), language=language)
+    else:
+      w.from_translation = False
+      w.save(update_fields=['from_translation'])
+    ety = Etymology.objects.create(word=w, etymology='');
+
+    for definition, examples in words_map.items():
+      print(definition)
+      print(examples)
+       
+      d = Definition.objects.filter(definition=definition, word=w).first()
+      if not d:
+        d = Definition.objects.create(word=w, definition=definition, etymology=ety);
+      if examples:
+        [ Example.objects.create(definition=d, example=e, word=w) for e in examples ]
+    return (w,)
+
 class WordRefWordMixin(models.Manager):
 
   def create_collocations(self, **args):
@@ -213,6 +348,32 @@ class FreeWordsManager(models.Manager):
           Q(word_definitions__isnull=False)
           ).exclude(from_translation=True).filter(words=None).distinct().order_by('-lookup_date')
 
+class UkrainianWordManager(YandexWordMixin, models.Manager):
+  def get_queryset(self):
+    return super().get_queryset().filter(language='ukrainian')
+ 
+  def fetch_translation(self, orig_word):
+    return self.create_or_get_translations(orig_word, language='ukrainian', ya_lang='en-uk')
+
+  def fetch_collocations(self, word):
+    return self.collocations(word)
+
+  def fetch_word(self, word):
+    return self.create_or_get_word(ya_lang='uk-en', word=word, language='ukrainian')
+
+class RussianWordManager(YandexWordMixin, models.Manager):
+  def get_queryset(self):
+    return super().get_queryset().filter(language='russian')
+ 
+  def fetch_translation(self, orig_word):
+    return self.create_or_get_translations(orig_word, language='russian', ya_lang='en-ru')
+
+  def fetch_collocations(self, word):
+    return self.collocations(word)
+
+  def fetch_word(self, word):
+    return self.create_or_get_word(ya_lang='ru-en', word=word, language='russian')
+
 class ItalianWordManager(WordRefWordMixin, models.Manager):
   def get_queryset(self):
     return super().get_queryset().filter(language='italian')
@@ -257,11 +418,14 @@ class Word(models.Model):
     lookup_date = models.DateTimeField('date looked up')
     notes = models.CharField(max_length=200)
     translations = models.ManyToManyField("self", blank=True, related_name='translations')
+    synonyms = models.ManyToManyField("self", blank=True, related_name='synonyms')
     from_translation = models.BooleanField(default=False)
     
     objects = models.Manager()
     single_object = SingleWordManager()
     english_objects = EnglishWordManager()
+    russian_objects = RussianWordManager()
+    ukrainian_objects = UkrainianWordManager()
     french_objects = FrenchWordManager()
     italian_objects = ItalianWordManager()
     free_words = FreeWordsManager()

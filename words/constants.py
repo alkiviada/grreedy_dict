@@ -1,1 +1,1 @@
-LANGUAGES = [ 'french', 'italian', 'english' ]
+LANGUAGES = [ 'ukrainian', 'russian', 'french', 'italian', 'english' ]
