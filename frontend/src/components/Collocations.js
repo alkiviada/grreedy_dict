@@ -31,14 +31,21 @@ const Collocations = (props) => {
       </div>
     ) : 
     ( wordCollocs.map(e => { 
-         const new_el = {'expression': e['expression'], 'trans': [ { 'trans': e['translation'], } ]}
-        if (e['example']) {
-          new_el['trans'][0]['exmpl'] = [{'exmpl': e['example']}]
-        }
-        return (
-         <ul className="etym-style">
-         { renderList([new_el], fn, listStyles, 0) }
-        </ul>)})
+         const new_el = {'expression': e['expression'] }  
+         const isEnglishWord = e['translation'] ? 0 : 1
+         if (!isEnglishWord) {
+           new_el['trans'] = [ { 'trans': e['translation'], } ]
+         }
+
+         if (e['example']) {
+           new_el['trans'][0]['exmpl'] = [{'exmpl': e['example']}]
+         }
+         return isEnglishWord ? (<div className="etym-style"><a target="_blank" href={`/api/word/${e['expression']}`}
+                                 onClick={(i) => fn(i, e['expression'])} className="word-link">
+                                 {e['expression']}</a></div>) : (
+           <ul className="etym-style">
+           { renderList([new_el], fn, listStyles, 0) }
+           </ul>)})
     );
 }
 

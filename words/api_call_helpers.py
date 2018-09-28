@@ -25,7 +25,6 @@ def fetch_straight_word(word):
   if r:
     return parse_straight_word(r)
 
-
 def fetch_reverse_collocations(word):
   base_url = "http://www.wordreference.com/fren/reverse/" + word.word
   r = try_fetch(base_url)

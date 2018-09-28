@@ -49,12 +49,6 @@ class Example(models.Model):
 
 class YandexWordMixin(models.Manager):
 
-  def create_collocations(self, **args):
-    pass
-
-  def collocations(self, orig_word, **args):
-    return orig_word.word_collocations.all()
-
   def create_or_get_translations(self, orig_word, **args):
     translations = []
 
@@ -118,7 +112,6 @@ class YandexWordMixin(models.Manager):
                                           ) 
             print('collocs2')
     print('something worng?')
-    print(translations)
     return translations
 
   def create_or_get_word(self, **args):
@@ -141,8 +134,6 @@ class YandexWordMixin(models.Manager):
     for t in t:
       for t in t:
         word, syn, ex, mean = [ t.get(i) for i in ['text', 'syn', 'ex', 'mean'] ]
-        print('WOrD: ' + word)
-        print('ex: ', ex)
         words.append(word)
         ex_items = []
         if ex:
@@ -153,11 +144,9 @@ class YandexWordMixin(models.Manager):
           examples[word] = ex_items
         else:
           examples[word] = []
-    print(examples)
     return self.create_word(language=language, words_map=examples, word=orig_word)
 
   def create_word(self, **args):
-    print('MIXIN');
     word = args['word']
     language = args['language']
     words_map = args['words_map']
@@ -172,7 +161,6 @@ class YandexWordMixin(models.Manager):
     ety = Etymology.objects.create(word=w, etymology='');
 
     for definition, examples in words_map.items():
-      print(definition)
       print(examples)
        
       d = Definition.objects.filter(definition=definition, word=w).first()
@@ -189,7 +177,6 @@ class WordRefWordMixin(models.Manager):
     word = args['word']
     collocs = []
     for expr, specs in collocs_map.items():
-      #print(specs)
       expl = specs['expl']
       to_exmpl = specs.get('to_exmpl')
       fr_exmpl = specs.get('fr_exmpl')
@@ -201,15 +188,16 @@ class WordRefWordMixin(models.Manager):
       if to_exmpl:
          example += ' (' + ' '.join(to_exmpl) + ')' if example else ' '.join(to_exmpl)
 
-      c = Collocation.objects.create(word=word, 
-                                     expression=expr, 
-                                     translation=', '.join(specs['trans']), 
-                                     example=example) 
+      c = Collocation.objects.filter(expression=expr).first()
+      if not c:
+        c = Collocation.objects.create(word=word, 
+                                       expression=expr, 
+                                       translation=', '.join(specs['trans']), 
+                                       example=example) 
       collocs.append(c)
     return collocs
 
   def fetch_and_parse_collocations(self, orig_word, **args):
-    print(args)
     ext = args['ext']
 
     r = try_fetch("http://www.wordreference.com/" + ext + "/" + orig_word.word)
@@ -221,7 +209,6 @@ class WordRefWordMixin(models.Manager):
     return { **straight_collocations, **reverse_collocations }
 
   def fetch_and_parse_translations(self, orig_word, **args):
-    print(args)
     ext = args['ext']
 
     r = try_fetch("http://www.wordreference.com/" + ext + "/" + orig_word.word)
@@ -229,7 +216,6 @@ class WordRefWordMixin(models.Manager):
 
     r = try_fetch("http://www.wordreference.com/" + ext + "/reverse/" + orig_word.word)
     reverse_translations = parse_reverse_translations(r)
-    print(reverse_translations)
 
     return [ *straight_translations, *reverse_translations ]
 
@@ -243,7 +229,6 @@ class WordRefWordMixin(models.Manager):
       w.translations.add(orig_word)
       trans.append(w)
     
-    print(trans)
     return trans
 
   def fetch_and_parse_word(self, **args):
@@ -256,7 +241,6 @@ class WordRefWordMixin(models.Manager):
     return [ *straight_words_map, *reverse_words_map ]
 
   def create_word(self, **args):
-    print('MIXIN');
     word = args['word']
     language = args['language']
     words_map = args['words_map']
@@ -274,8 +258,6 @@ class WordRefWordMixin(models.Manager):
       definition, example = prep_def_exmpl(defs)
       if not definition:
         continue
-      #print(definition)
-      #print(example)
        
       d = Definition.objects.filter(definition=definition, word=w).first()
       if not d:
@@ -298,6 +280,34 @@ class SingleWordManager(models.Manager):
 class EnglishWordManager(models.Manager):
   def get_queryset(self):
     return super().get_queryset().filter(language='english')
+
+  def fetch_collocations(self, word):
+    print('fetching')
+    base_url = 'https://od-api.oxforddictionaries.com:443/api/v1/search/'
+    url = base_url + 'en' + '?q=' + word.word + '&prefix=false'
+    r = try_fetch(url, 
+                  headers={ 'app_key': os.environ.get('OXFORD_API_KEY'), 
+                            'app_id': os.environ.get('OXFORD_API_ID')})
+    if not r:
+      print('no r')
+    if r:
+      collocs = []
+      oxford_word = r.json()
+      word_entries = []
+      for r in oxford_word["results"]:
+        colloc = r['word']
+        print(word.word)
+        if colloc == word.word:
+          continue
+        c = Collocation.objects.filter(expression=colloc).first()
+        if not c:
+          c = Collocation.objects.create(word=word, 
+                                         expression=colloc, 
+                                         ) 
+        collocs.append(c)
+    return collocs
+        
+
 
   def fetch_word(self, word):
     print('Fetching')
@@ -325,21 +335,17 @@ class EnglishWordManager(models.Manager):
                 def_exmpls = {'definition': '', 'examples': []}
                 def_exmpls['definition'] = d 
                 def_exmpls['examples'] = [ {'example': e['text']} for e in v.get("examples", []) ]
-                print('examples')
                 sense['definitions'].append(def_exmpls);
               for c in v.get("crossReferenceMarkers", []):
                 sense['definitions'].append({'definition': c});
             word_entries.append(sense)
-      #print(word_entries)      
       w = Word.objects.create(word=word, lookup_date=timezone.now(), language='english')
       for e in word_entries:
         ety = Etymology.objects.create(word=w, etymology=e['etymology']);
         for d in e['definitions']:
-          print(d)
           exmpls = []
           edef = Definition.objects.create(word=w, definition=d['definition'], etymology=ety);
           exmpls = [ Example.objects.create(definition=edef, example=e['example'], word=w) for e in d.get('examples', []) ] 
-          print('all is well')
       return (w, )
 
 class FreeWordsManager(models.Manager):
@@ -355,8 +361,11 @@ class UkrainianWordManager(YandexWordMixin, models.Manager):
   def fetch_translation(self, orig_word):
     return self.create_or_get_translations(orig_word, language='ukrainian', ya_lang='en-uk')
 
+  def fetch_synonyms(self, word):
+    return word.synonyms.all()
+
   def fetch_collocations(self, word):
-    return self.collocations(word)
+    return word.word_collocations.all()
 
   def fetch_word(self, word):
     return self.create_or_get_word(ya_lang='uk-en', word=word, language='ukrainian')
@@ -368,8 +377,11 @@ class RussianWordManager(YandexWordMixin, models.Manager):
   def fetch_translation(self, orig_word):
     return self.create_or_get_translations(orig_word, language='russian', ya_lang='en-ru')
 
+  def fetch_synonyms(self, word):
+    return word.synonyms.all()
+
   def fetch_collocations(self, word):
-    return self.collocations(word)
+    return word.word_collocations.all()
 
   def fetch_word(self, word):
     return self.create_or_get_word(ya_lang='ru-en', word=word, language='russian')
@@ -380,9 +392,7 @@ class ItalianWordManager(WordRefWordMixin, models.Manager):
  
   def fetch_translation(self, orig_word):
     trans = self.fetch_and_parse_translations(orig_word, ext='enit')
-    print(trans)
     trans = list(set(trans))
-    print(trans)
     return self.create_translations(language='italian', translations=trans, original=orig_word)
 
   def fetch_collocations(self, word):
@@ -404,7 +414,6 @@ class FrenchWordManager(WordRefWordMixin, models.Manager):
 
   def fetch_translation(self, orig_word):
     trans = self.fetch_and_parse_translations(orig_word, ext='enfr')
-    print(trans)
     trans = list(set(trans))
     return self.create_translations(language='french', translations=trans, original=orig_word)
     
@@ -448,7 +457,6 @@ class CollectionMixin(object):
 
   def update_fields(self, new_fields):
     for k, v in new_fields.items():
-      print(k, ' ', v)
       setattr(self, k, v)
     self.save(update_fields=[*new_fields.keys()])
 

@@ -40,7 +40,7 @@ class WordTabs extends Component {
     this.setState( { tabIndex: index } );
 
     const tabWordMap = {
-                        'english': { 1: 'TRANSLATIONS' },
+                        'english': { 1: 'TRANSLATIONS', 2: 'COLLOCATIONS' },
                         'non-english': { 1: 'COLLOCATIONS' },
                        }
     let tabMap = {}
@@ -83,7 +83,8 @@ class WordTabs extends Component {
         <TabList>
           <Tab>Original Word</Tab>
           { isEnglishWord ? <Tab>Translations</Tab> : <Tab>Collocations</Tab> }
-          <Tab>Synonyms</Tab>
+          { isEnglishWord ? <Tab>Collocations</Tab> : <Tab>Synonyms</Tab> }
+          { isEnglishWord ? <Tab>Synonyms and Antonyms</Tab> : '' }
         </TabList>
         <TabPanel>
           { element.map(e => 
@@ -98,13 +99,12 @@ class WordTabs extends Component {
           { isEnglishWord ? <Translations word={word} fn={fn[0]}/> : <Collocations word={word} fn={fn[0]} />}
         </TabPanel>
         <TabPanel>
-        <h2>Any content 2</h2>
+          { isEnglishWord ? <Collocations word={word} fn={fn[0]}/> : ''}
         </TabPanel>
+        { isEnglishWord ? <TabPanel>Synonyms and Antonyms</TabPanel> : '' }
      </Tabs>
     );
   }
 }
-
-
 
 export default connect(mapStateToProps, { switchTab, lookUpTranslations, requestTranslations, lookUpCollocations, requestCollocations })(WordTabs);

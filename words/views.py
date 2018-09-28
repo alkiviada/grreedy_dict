@@ -135,10 +135,10 @@ class WordSingleCreate(generics.ListAPIView):
       for language in LANGUAGES:
         print(language)
         try:
-          foreign_objects_manager = getattr(Word, language + '_objects')
-          print(foreign_objects_manager)
+          objects_manager = getattr(Word, language + '_objects')
+          print(objects_manager)
           try:
-            fetch_method = getattr(foreign_objects_manager, 'fetch_word')
+            fetch_method = getattr(objects_manager, 'fetch_word')
             words = fetch_method(word)
             if words:
               db_words = words + db_words
@@ -199,10 +199,10 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
         if orig_word.language == language:
           continue
         try:
-          foreign_objects_manager = getattr(Word, language + '_objects')
-          print(foreign_objects_manager)
+          objects_manager = getattr(Word, language + '_objects')
+          print(objects_manager)
           try:
-            fetch_method = getattr(foreign_objects_manager, 'fetch_translation')
+            fetch_method = getattr(objects_manager, 'fetch_translation')
             translations = fetch_method(orig_word)
             if translations:
               translated_words = translations + translated_words
@@ -233,17 +233,17 @@ class WordSingleCreateCollocations(generics.RetrieveAPIView):
   serializer_class = CollocationSerializer
 
   def get(self, request, word, *args, **kwargs):
-    print(word);
+    print('Collocs: ', word);
     all_collocs = []
     words = Word.single_object.filter(word=word)
     for w in words:
       collocs = w.word_collocations.all()
       if not collocs:
         try:
-          foreign_objects = getattr(Word, w.language + '_objects')
-          print(foreign_objects)
+          objects_manager = getattr(Word, w.language + '_objects')
+          print(objects_manager)
           try:
-            collocs_method = getattr(foreign_objects, 'fetch_collocations')
+            collocs_method = getattr(objects_manager, 'fetch_collocations')
             collocs = collocs_method(w)
             all_collocs.extend(collocs)
           except Exception as e: 
@@ -259,7 +259,6 @@ class WordSingleCreateCollocations(generics.RetrieveAPIView):
     if not all_collocs:
       print("Could not fetch collocations:" + word);
       raise Http404("No API for the word:", word)
-    #print(all_collocs) 
     serializer = CollocationSerializer(all_collocs, many=True)
     return Response(serializer.data)
 
