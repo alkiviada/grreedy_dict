@@ -4,7 +4,7 @@ from knox.models import AuthToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from words.constants import LANGUAGES
 
-from words.serializers import (WordSerializer, TranslationSerializer, CollectionSerializer, 
+from words.serializers import (WordSerializer, SynonymSerializer, TranslationSerializer, CollectionSerializer, 
                                CollectionDetailSerializer, CollocationSerializer,
                                CreateUserSerializer, UserSerializer, LoginUserSerializer)
 
@@ -174,6 +174,58 @@ class WordSingleCreate(generics.ListAPIView):
     serializer = WordSerializer(db_words, many=True)
     return Response(serializer.data)
 
+class WordSingleCreateSynonyms(generics.RetrieveAPIView):
+  permission_classes = [ AllowAny, ]
+  def get_queryset(self):
+    word = self.kwargs['word']
+    words = Word.single_object.filter(word=word)
+    print('synonyms')
+    synonyms = []
+    [ synonyms.extend(w.synonyms.all()) for w in words ]
+    return synonyms
+
+  lookup_field = 'word'
+  serializer_class = SynonymSerializer
+
+  def get(self, request, word, *args, **kwargs):
+    orig_word = ''
+    print(word);
+
+    synonyms = self.get_queryset()
+    print(synonyms)
+
+    if not synonyms:
+      print("Synonyms for this Word are not in our DB");
+      words = Word.single_object.filter(word=word)
+      for w in words:
+        language = w.language
+        print(language)
+        try:
+          objects_manager = getattr(Word, language + '_objects')
+          print(objects_manager)
+          try:
+            fetch_method = getattr(objects_manager, 'fetch_synonyms')
+            word_synonyms = fetch_method(w)
+            if word_synonyms:
+              print(word_synonyms)
+              w.synonyms.add(*word_synonyms)
+              synonyms = synonyms + word_synonyms
+          except Exception as e:
+            print(e)
+            print('No method to get synonyms of word')
+            raise Http404("No SYnonyms API for the word:", word)
+        except Exception as e:
+          print(e)
+          print('No method to get synonyms for word')
+          raise Http404("No Synonyms API for the word:", word)
+    if not synonyms:
+      print("Could not fetch synonyms:" + word);
+      raise Http404("No SYnonyms API for the word:", word)
+      
+    print(synonyms)
+    serializer = SynonymSerializer(synonyms, many=True)
+    return Response(serializer.data)
+
 class WordSingleCreateTranslate(generics.RetrieveAPIView):
   permission_classes = [ AllowAny, ]
   def get_queryset(self):
@@ -205,6 +257,7 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
             fetch_method = getattr(objects_manager, 'fetch_translation')
             translations = fetch_method(orig_word)
             if translations:
+              orig_word.translations.add(*translations)
               translated_words = translations + translated_words
           except Exception as e:
             print(e)

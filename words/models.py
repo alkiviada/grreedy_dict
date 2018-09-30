@@ -9,6 +9,7 @@ import os
 from django.utils import timezone
 from bs4 import BeautifulSoup
 from words.soup_helpers import (scrape_wordref_words, 
+                                parse_synonyms,
                                 parse_straight_word, 
                                 parse_reverse_word, 
                                 parse_straight_translations, parse_reverse_translations,
@@ -208,6 +209,15 @@ class WordRefWordMixin(models.Manager):
 
     return { **straight_collocations, **reverse_collocations }
 
+  def fetch_and_parse_synonyms(self, orig_word, **args):
+    ext = args['ext']
+    print('in fetching')
+
+    r = try_fetch("http://www.wordreference.com/" + ext + "/" + orig_word.word)
+    synonyms = parse_synonyms(r)
+
+    return synonyms
+
   def fetch_and_parse_translations(self, orig_word, **args):
     ext = args['ext']
 
@@ -219,17 +229,16 @@ class WordRefWordMixin(models.Manager):
 
     return [ *straight_translations, *reverse_translations ]
 
-  def create_translations(self, **args):
-    word_trans, orig_word, language = [ args[i] for i in ['translations', 'original', 'language'] ]
-    trans = []
-    for new_trans in word_trans:
-      w = Word.objects.filter(word=new_trans, language=language).first()
+  def create_bare_word(self, **args):
+    words, orig_word, language = [ args[i] for i in ['words', 'original', 'language'] ]
+    db_words = []
+    for new_w in words:
+      w = Word.objects.filter(word=new_w, language=language).first()
       if not w:
-        w = Word.objects.create(word=new_trans, lookup_date=timezone.now(), language=language, from_translation=True) 
-      w.translations.add(orig_word)
-      trans.append(w)
+        w = Word.objects.create(word=new_w, lookup_date=timezone.now(), language=language, from_translation=True) 
+      db_words.append(w)
     
-    return trans
+    return db_words
 
   def fetch_and_parse_word(self, **args):
     word = args['word']
@@ -288,10 +297,10 @@ class EnglishWordManager(models.Manager):
     r = try_fetch(url, 
                   headers={ 'app_key': os.environ.get('OXFORD_API_KEY'), 
                             'app_id': os.environ.get('OXFORD_API_ID')})
+    collocs = []
     if not r:
       print('no r')
     if r:
-      collocs = []
       oxford_word = r.json()
       word_entries = []
       for r in oxford_word["results"]:
@@ -307,7 +316,35 @@ class EnglishWordManager(models.Manager):
         collocs.append(c)
     return collocs
         
+  def fetch_synonyms(self, word):
+    print('fetching')
+    base_url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/'
+    url = base_url + 'en' + '/' + word.word + '/synonyms'
+    r = try_fetch(url, 
+                  headers={'app_key': os.environ.get('OXFORD_API_KEY'), 
+                           'app_id': os.environ.get('OXFORD_API_ID')})
+    synonyms = []
+    word_synonyms = []
+    if not r:
+      print('no r')
+    if r:
+      oxford_word = r.json()
+      word_entries = []
+      for r in oxford_word["results"]:
+        for l in r.get('lexicalEntries'):
+          for e in l['entries']:
+            for sens in e['senses']:
+              for synonym in sens['synonyms']:
+                word_synonyms.append(synonym['text'])
 
+    for new_syn in word_synonyms:
+      w = Word.objects.filter(word=new_syn, language='english').first()
+      if not w:
+        w = Word.objects.create(word=new_syn, lookup_date=timezone.now(), language='english', from_translation=True) 
+      w.synonyms.add(word)
+      synonyms.append(w)
+
+    return synonyms 
 
   def fetch_word(self, word):
     print('Fetching')
@@ -390,10 +427,16 @@ class ItalianWordManager(WordRefWordMixin, models.Manager):
   def get_queryset(self):
     return super().get_queryset().filter(language='italian')
  
+  def fetch_synonyms(self, orig_word):
+    print('doing the fetch')
+    synonyms = self.fetch_and_parse_synonyms(orig_word, ext='iten')
+    synonyms = list(set(synonyms))
+    return self.create_bare_word(language='italian', words=synonyms, original=orig_word)
+
   def fetch_translation(self, orig_word):
     trans = self.fetch_and_parse_translations(orig_word, ext='enit')
     trans = list(set(trans))
-    return self.create_translations(language='italian', translations=trans, original=orig_word)
+    return self.create_bare_word(language='italian', words=trans, original=orig_word)
 
   def fetch_collocations(self, word):
     collocs_map = self.fetch_and_parse_collocations(word, ext='iten')
@@ -412,10 +455,15 @@ class FrenchWordManager(WordRefWordMixin, models.Manager):
     collocs_map = self.fetch_and_parse_collocations(word, ext='fren')
     return self.create_collocations(collocations=collocs_map, word=word)
 
+  def fetch_synonyms(self, orig_word):
+    synonyms = self.fetch_and_parse_synonyms(orig_word, ext='fren')
+    synonyms = list(set(synonyms))
+    return self.create_bare_word(language='french', words=synonyms, original=orig_word)
+    
   def fetch_translation(self, orig_word):
     trans = self.fetch_and_parse_translations(orig_word, ext='enfr')
     trans = list(set(trans))
-    return self.create_translations(language='french', translations=trans, original=orig_word)
+    return self.create_bare_word(language='french', words=trans, original=orig_word)
     
   def fetch_word(self, word):
     words_map = self.fetch_and_parse_word(ext='fren', word=word)

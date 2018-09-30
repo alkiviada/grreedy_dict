@@ -6,7 +6,6 @@ def try_fetch(url, **args):
   params = args.get('params', {});
   r = ''
   try:
-    print(params)
     r = requests.get(url, timeout=3, headers = headers, allow_redirects=False, params=params)
     r.raise_for_status()
   except requests.exceptions.HTTPError as errh:

@@ -67,6 +67,11 @@ class TranslationSerializer(serializers.ModelSerializer):
         model = Word
         fields = ['word', 'language']
 
+class SynonymSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Word
+        fields = ['word', 'language']
+
 class CollocationSerializer(serializers.ModelSerializer):
   class Meta:
     model = Collocation
