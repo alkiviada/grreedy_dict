@@ -28,7 +28,7 @@ SECRET_KEY = 'k*u^kx*$d%m&(20zw$q2#%i*jvz5kq%-s25$o+dg$fu)zjvn0l'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['my-dict.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['grreedy-dict-env.gdrwwvm2as.us-east-1.elasticbeanstalk.com', '127.0.0.1']
 
 
 # Application definition

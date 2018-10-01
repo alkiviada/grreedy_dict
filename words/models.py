@@ -15,7 +15,7 @@ from words.soup_helpers import (scrape_wordref_words,
                                 parse_straight_translations, parse_reverse_translations,
                                 parse_straight_collocations, parse_reverse_collocations)
 from words.words_helpers import prep_def_exmpl
-#from words.objects_helpers import create_word
+from words.constants import WORDREF_BASE
 
 class Etymology(models.Model):
     etymology = models.CharField(max_length=200, null=True)
@@ -201,10 +201,10 @@ class WordRefWordMixin(models.Manager):
   def fetch_and_parse_collocations(self, orig_word, **args):
     ext = args['ext']
 
-    r = try_fetch("http://148.251.23.152/" + ext + "/" + orig_word.word)
+    r = try_fetch(WORDREF_BASE + ext + "/" + orig_word.word)
     straight_collocations = parse_straight_collocations(r)
 
-    r = try_fetch("http://148.251.23.152/" + ext + "/reverse/" + orig_word.word)
+    r = try_fetch(WORDREF_BASE + ext + "/reverse/" + orig_word.word)
     reverse_collocations = parse_reverse_collocations(r)
 
     return { **straight_collocations, **reverse_collocations }
@@ -213,7 +213,7 @@ class WordRefWordMixin(models.Manager):
     ext = args['ext']
     print('in fetching')
 
-    r = try_fetch("http://148.251.23.152/" + ext + "/" + orig_word.word)
+    r = try_fetch(WORDREF_BASE + ext + "/" + orig_word.word)
     synonyms = parse_synonyms(r)
 
     return synonyms
@@ -221,10 +221,10 @@ class WordRefWordMixin(models.Manager):
   def fetch_and_parse_translations(self, orig_word, **args):
     ext = args['ext']
 
-    r = try_fetch("http://148.251.23.152/" + ext + "/" + orig_word.word)
+    r = try_fetch(WORDREF_BASE + ext + "/" + orig_word.word)
     straight_translations = parse_straight_translations(r)
 
-    r = try_fetch("http://148.251.23.152/" + ext + "/reverse/" + orig_word.word)
+    r = try_fetch(WORDREF_BASE + ext + "/reverse/" + orig_word.word)
     reverse_translations = parse_reverse_translations(r)
 
     return [ *straight_translations, *reverse_translations ]
@@ -243,9 +243,9 @@ class WordRefWordMixin(models.Manager):
   def fetch_and_parse_word(self, **args):
     word = args['word']
     ext = args['ext']
-    r = try_fetch("http://148.251.23.152/" + ext + "/" + word)
+    r = try_fetch(WORDREF_BASE + ext + "/" + word)
     straight_words_map = parse_straight_word(r)
-    r = try_fetch("http://148.251.23.152/" + ext + "/reverse/" + word)
+    r = try_fetch(WORDREF_BASE + ext + "/reverse/" + word)
     reverse_words_map = parse_reverse_word(r)
     return [ *straight_words_map, *reverse_words_map ]
 
@@ -381,7 +381,10 @@ class EnglishWordManager(models.Manager):
         ety = Etymology.objects.create(word=w, etymology=e['etymology']);
         for d in e['definitions']:
           exmpls = []
-          edef = Definition.objects.create(word=w, definition=d['definition'], etymology=ety);
+          edef = Definition.objects.filter(word=w, definition=d['definition']).first()
+          print(edef)
+          if not edef:
+            edef = Definition.objects.create(word=w, definition=d['definition'], etymology=ety);
           exmpls = [ Example.objects.create(definition=edef, example=e['example'], word=w) for e in d.get('examples', []) ] 
       return (w, )
 
