@@ -1,2 +1,2 @@
 LANGUAGES = [ 'ukrainian', 'russian', 'french', 'italian', 'english' ]
-WORDREF_BASE = 'http://wordreference.com/'
+WORDREF_BASE = 'http://www.wordreference.com/'
