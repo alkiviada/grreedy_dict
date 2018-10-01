@@ -1,0 +1,239 @@
+body {
+  text-rendering: optimizeLegibility;
+  background: linear-gradient(#84a6d2, #b2b8c4, #856831);
+  background-image: url("/static/frontend/img/36655700945_5f48011db9_k.fdc66dd22e5b.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: Abel;
+  max-height: 100%;
+  min-height: 100vh;
+  height: 100%;
+  width: 100%;
+}
+
+.table-subtitle:not(:last-child) {
+ margin-bottom: 7px;
+}
+
+.def-style {
+  list-style-type: circle;
+  margin-left: 2em;
+}
+
+.exmpl-style {
+  list-style-type: square;
+  margin-left: 2em;
+}
+
+.save-coll { 
+  padding: 0.7rem 2.5rem 1.55rem 1.25rem;
+  position: fixed;
+  letter-spacing: 0;
+  bottom:0px;
+  left:0px;
+  width:100%;
+  height: 9%;
+} 
+
+.new-word { 
+  padding: 0.7rem 2.5rem 1.2rem 1.25rem;
+  position: fixed;
+  letter-spacing: 0;
+  left:0px;
+  top:0px;
+  display: block;
+  z-index: 500;
+  width: 100%;
+  height: 9%;
+} 
+
+.dict-container {
+  display: block;
+  width: 100%;
+}
+
+.words-container { 
+  position: relative; 
+  bottom:100px;
+  top:20px;
+  width: 100%;
+} 
+
+.look-up-btn {
+  background-color: #856831;
+  border-color: transparent;
+  color: #fff;
+}
+
+.save-btn {
+  background-color: #84a6d2;
+  border-color: transparent;
+  color: #fff;
+}
+
+.etym-style {
+  background: #FFFCF9;
+  font-family: Abel;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 2px;
+  margin-left: 0.5em;
+}
+
+.word {
+  background: #F5FBFD;
+  font-family: Black And White Picture;
+  height: 150px;
+  overflow:auto;
+  padding-left: 10px;
+  padding-right: 7px;
+}
+
+.lang-english {
+  font-family: IM Fell English SC;
+}
+
+.lang-ukrainian {
+  font-family: Volkhov;
+}
+
+.lang-russian {
+  font-family: Russo One;
+}
+
+.lang-french {
+  font-family: Croissant One;
+}
+
+.lang-italian {
+  font-family: Vesper Libre;
+}
+
+.lang-head {
+  text-transform:capitalize;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 0.7;
+  padding-top: 7.5px;
+  color: rgb(164, 173, 202);
+}
+
+.word-link {
+  text-decoration: none;
+  color: black;
+}
+
+.coll-link {
+  text-decoration: none;
+  color: black;
+}
+
+.coll-text {
+  font-weight: bold;
+  color: rgba(0,0,0,0.1);
+  text-shadow: 1px 1px 0px #856831);
+  list-style-type: katakana;
+}
+
+.clear-notification-warn {
+  background-color: inherit;
+  color: red;
+  font-family: Abel;
+  float: right;
+  position: relative;
+  left: 5px;
+  display: inline-block;
+}
+
+.login-notif {
+  background-color: inherit;
+  color: white;
+  font-family: Abel;
+  margin-top:5px;
+}
+.user-tag {
+  background-color: inherit;
+  color: white;
+  font-family: Abel;
+  float: right;
+  position: relative;
+  display: inline-block;
+}
+
+.clear-notification {
+  background-color: inherit;
+}
+
+.word-notification {
+  background-color: #84a6d2;
+}
+
+.coll-notification {
+  background-color: #856831;
+}
+
+.clear-notification-message {
+  background-color: inherit;
+  color: black;
+  font-family: Abel;
+}
+
+.clear-notification-trans-warn {
+  background-color: inherit;
+  color: red;
+  font-family: Abel;
+}
+
+.react-tabs__tab-list {
+  border-bottom: 1px solid #aaa;
+  margin: 0 0 10px;
+  padding: 0;
+}
+
+.react-tabs__tab {
+  display: inline-block;
+  border: 1px solid transparent;
+  border-bottom: none;
+  bottom: -1px;
+  position: relative;
+  list-style: none;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.react-tabs__tab--selected {
+  background: #fff;
+  border-color: #aaa;
+  color: black;
+  border-radius: 5px 5px 0 0;
+}
+
+.react-tabs__tab--disabled {
+  color: GrayText;
+  cursor: default;
+}
+
+.react-tabs__tab:focus {
+  box-shadow: 0 0 5px hsl(208, 99%, 50%);
+  border-color: hsl(208, 99%, 50%);
+  outline: none;
+}
+
+.react-tabs__tab:focus:after {
+  content: "";
+  position: absolute;
+  height: 5px;
+  left: -4px;
+  right: -4px;
+  bottom: -5px;
+  background: #fff;
+}
+
+.react-tabs__tab-panel {
+  display: none;
+}
+
+.react-tabs__tab-panel--selected {
+  display: block;
+}
