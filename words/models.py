@@ -243,9 +243,9 @@ class WordRefWordMixin(models.Manager):
   def fetch_and_parse_word(self, **args):
     word = args['word']
     ext = args['ext']
-    r = try_fetch("http://www.wordreference.com/" + ext + "/" + word)
+    r = try_fetch("http://148.251.23.152/" + ext + "/" + word)
     straight_words_map = parse_straight_word(r)
-    r = try_fetch("http://www.wordreference.com/" + ext + "/reverse/" + word)
+    r = try_fetch("http://148.251.23.152/" + ext + "/reverse/" + word)
     reverse_words_map = parse_reverse_word(r)
     return [ *straight_words_map, *reverse_words_map ]
 
