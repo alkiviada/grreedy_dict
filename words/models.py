@@ -201,10 +201,10 @@ class WordRefWordMixin(models.Manager):
   def fetch_and_parse_collocations(self, orig_word, **args):
     ext = args['ext']
 
-    r = try_fetch("http://www.wordreference.com/" + ext + "/" + orig_word.word)
+    r = try_fetch("http://148.251.23.152/" + ext + "/" + orig_word.word)
     straight_collocations = parse_straight_collocations(r)
 
-    r = try_fetch("http://www.wordreference.com/" + ext + "/reverse/" + orig_word.word)
+    r = try_fetch("http://148.251.23.152/" + ext + "/reverse/" + orig_word.word)
     reverse_collocations = parse_reverse_collocations(r)
 
     return { **straight_collocations, **reverse_collocations }
@@ -213,7 +213,7 @@ class WordRefWordMixin(models.Manager):
     ext = args['ext']
     print('in fetching')
 
-    r = try_fetch("http://www.wordreference.com/" + ext + "/" + orig_word.word)
+    r = try_fetch("http://148.251.23.152/" + ext + "/" + orig_word.word)
     synonyms = parse_synonyms(r)
 
     return synonyms
@@ -221,10 +221,10 @@ class WordRefWordMixin(models.Manager):
   def fetch_and_parse_translations(self, orig_word, **args):
     ext = args['ext']
 
-    r = try_fetch("http://www.wordreference.com/" + ext + "/" + orig_word.word)
+    r = try_fetch("http://148.251.23.152/" + ext + "/" + orig_word.word)
     straight_translations = parse_straight_translations(r)
 
-    r = try_fetch("http://www.wordreference.com/" + ext + "/reverse/" + orig_word.word)
+    r = try_fetch("http://148.251.23.152/" + ext + "/reverse/" + orig_word.word)
     reverse_translations = parse_reverse_translations(r)
 
     return [ *straight_translations, *reverse_translations ]
