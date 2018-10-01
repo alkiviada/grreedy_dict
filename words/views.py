@@ -257,6 +257,7 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
             fetch_method = getattr(objects_manager, 'fetch_translation')
             translations = fetch_method(orig_word)
             if translations:
+              print(translations)
               orig_word.translations.add(*translations)
               translated_words = translations + translated_words
           except Exception as e:
