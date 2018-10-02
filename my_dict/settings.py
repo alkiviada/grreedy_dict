@@ -94,6 +94,15 @@ DATABASES = {
     }
 }
 
+print(os.environ.get('DB_NAME'))
+print(os.environ.get('DB_USER'))
+
+DATABASES['default']['HOST'] = '/cloudsql/grreedy-dict:us-east1:grreedy-dict-db'
+if os.getenv('GAE_INSTANCE'):
+    pass
+else:
+    DATABASES['default']['HOST'] = '127.0.0.1'
+
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 

@@ -27,10 +27,10 @@ class Etymology(models.Model):
         return self.etymology
 
 class Collocation(models.Model):
-    expression = models.CharField(max_length=300, null=True)
-    translation = models.CharField(max_length=300, null=True)
+    expression = models.CharField(max_length=400, null=True)
+    translation = models.CharField(max_length=400, null=True)
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_collocations')
-    example = models.CharField(max_length=300, null=True)
+    example = models.CharField(max_length=400, null=True)
 
     def __str__(self):
         return self.expression
@@ -44,7 +44,7 @@ class Definition(models.Model):
         return self.definition
 
 class Example(models.Model):
-    example = models.CharField(max_length=300)
+    example = models.CharField(max_length=400)
     definition = models.ForeignKey(Definition, on_delete=models.CASCADE, related_name='examples', blank=True, null=True)
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_examples')
 
@@ -470,7 +470,7 @@ class FrenchWordManager(WordRefWordMixin, models.Manager):
     return self.create_word(word=word, words_map=words_map, language='french')
 
 class Word(models.Model):
-    word = models.CharField(max_length=30)
+    word = models.CharField(max_length=100)
     language = models.CharField(max_length=33)
     lookup_date = models.DateTimeField('date looked up')
     notes = models.CharField(max_length=200)
@@ -509,7 +509,7 @@ class CollectionMixin(object):
     self.save(update_fields=[*new_fields.keys()])
 
 class Collection(CollectionMixin, models.Model):
-    name = models.CharField(max_length=30, blank=True)
+    name = models.CharField(max_length=100, blank=True)
     words = models.ManyToManyField(Word, related_name='words', through='CollectionOfWords')
     created_date = models.DateTimeField('date created')
     last_modified_date = models.DateTimeField('date modified')
