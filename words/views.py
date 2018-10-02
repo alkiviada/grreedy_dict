@@ -128,6 +128,7 @@ class WordSingleCreate(generics.ListAPIView):
   def get(self, request, word, uuid, *args, **kwargs):
     print('GET ' + word);
     db_words = Word.single_object.filter(word=word, from_translation=False);
+    print(db_words)
    
     if not db_words:
       db_words = ()

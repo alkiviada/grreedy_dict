@@ -1,7 +1,7 @@
 body {
   text-rendering: optimizeLegibility;
   background: linear-gradient(#84a6d2, #b2b8c4, #856831);
-  background-image: url("/static/frontend/img/36655700945_5f48011db9_k.jpg");
+  background-image: url("img/36655700945_5f48011db9_k.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
