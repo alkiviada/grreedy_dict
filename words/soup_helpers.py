@@ -6,7 +6,6 @@ delchars = ''.join(c for c in map(chr, [8594, 8658]) if not c.isalnum())
 def scrape_wordref_words(words_string, split=1):
   if not words_string:
     return ''
-  print('hmm ', words_string)
   words_string = words_string.get_text()   
   words_string = re.sub(
     r'(?<!^)\b(ab(b)?r|inter$|n(m|f|noun|pl)|viintransitiv|vtr|v(i)? (rif|refl|past|aux|pron|expr|tr|pres)|loc |agg|adj|interj|adv|avv| contraction|expr|vi +|n as|prepp|conjc|cong|idiom$|pronpron|prep +|viverbe).*', 
@@ -152,7 +151,6 @@ def parse_synonyms(r):
   if not synonyms_list:
    return []
   word_synonyms = []
-  print(synonyms_list)
   for syn in synonyms_list.findAll('a'):
     word_synonyms.append(scrape_wordref_words(syn, 0))
   return word_synonyms
