@@ -164,8 +164,16 @@ class WordSingleCreate(generics.ListAPIView):
                                        last_modified_date=timezone.now())
     else: 
       print('I have an UUID: ' + uuid)
-      coll = Collection.objects.get(uuid=uuid)
-      coll.update_last_modified()
+      try:
+        coll = Collection.objects.get(uuid=uuid)
+        coll.update_last_modified()
+      except Exception as e:
+# it was a rougue uuid but we will try to use it anew
+        print(e)
+        coll = Collection.objects.create(uuid=uuid, 
+                                         created_date=timezone.now(), 
+                                         last_modified_date=timezone.now())
+        
 
 # now that we have our collection - new or current
 # let's add newly looked up words to it

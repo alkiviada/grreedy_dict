@@ -470,7 +470,7 @@ class FrenchWordManager(WordRefWordMixin, models.Manager):
     return self.create_word(word=word, words_map=words_map, language='french')
 
 class Word(models.Model):
-    word = models.CharField(max_length=100)
+    word = models.CharField(max_length=200)
     language = models.CharField(max_length=33)
     lookup_date = models.DateTimeField('date looked up')
     notes = models.CharField(max_length=200)

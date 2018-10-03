@@ -12,6 +12,14 @@ body {
   width: 100%;
 }
 
+.th-is-0 {
+ width: 100px !important;
+}
+
+.th-is-1 {
+ width: 600px !important;
+}
+
 .table-subtitle:not(:last-child) {
  margin-bottom: 7px;
 }

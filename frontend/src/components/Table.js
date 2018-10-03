@@ -50,6 +50,7 @@ class Table extends Component {
     const data = this.props.data;
     const allFetching = this.props.allFetching;
     const wordFetching = this.props.newWordFetching;
+    console.log(allFetching)
     if (allFetching && !data.length) {
       return (
         <div className="words-container">
@@ -75,7 +76,7 @@ class Table extends Component {
       <table className="table is-striped">
         <thead>
           <tr>
-            {Object.entries(data[0]).map(el => <th key={key(el)}>{el[0]}</th>)}
+            {Object.entries(data[0]).map((el, i) => <th key={key(el)} className={`th-is-${i}`}>{el[0]}</th>)}
           </tr>
         </thead>
         <tbody>

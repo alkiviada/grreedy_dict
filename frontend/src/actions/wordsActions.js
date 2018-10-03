@@ -30,15 +30,34 @@ export const fetchWords = (uuid) => dispatch => {
   console.log('fetching words');
   const url = 'api/words/' + (uuid ? uuid : '')
   fetch(url)
-    .then(res => res.json())
-    .then(words => {
-      const conflated_words = conflateWords(words)
+  .then(response =>
+      response.json().then(json => ({
+        status: response.status,
+        json
+      })
+    ))
+  .then(
+      // Both fetching and parsing succeeded!
+      ({ status, json }) => {
+        console.log(status)
+        if (status >= 400) {
+          // Status looks bad
+          console.log('Server returned error status');
+          dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed'}})
+        } else {
+      const conflated_words = conflateWords(json)
       dispatch({
         type: FETCH_WORDS_FULFILLED,
         payload: conflated_words
       })
     }
-  );
+      },
+      // Either fetching or parsing failed!
+      err => {
+        console.log('problems');
+        dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed'}})
+      }
+    ); 
 };
 
 export const lookUpWord = (word, words, uuid) => dispatch => {

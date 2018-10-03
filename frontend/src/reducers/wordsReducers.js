@@ -36,7 +36,7 @@ export default function(state = initialState, action) {
                                          items: action.payload, 
                                          allWordsMap: { ...action.payload.map(e => e.word).reduce((o, e) => (o[e] = 1, o), {}) } 
                                        };
-    case FETCH_WORDS_REJECTED: return { ...state, allWordsfetching: false, 
+    case FETCH_WORDS_REJECTED: return { ...state, allWordsFetching: false, 
                                         newWordFetching: false, 
                                         error: action.payload.error, 
                                         word: action.payload.word 
