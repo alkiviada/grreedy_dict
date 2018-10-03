@@ -74,9 +74,10 @@ class Register extends Component {
 
 const mapStateToProps = state => {
   let errors = [];
-  if (state.auth.errors) {
-    errors = Object.keys(state.auth.errors).map(field => {
-      return {field, message: state.auth.errors[field]};
+  if (state.auth.registerErrors) {
+  console.log(state.auth.registerErrors)
+    errors = Object.keys(state.auth.registerErrors).map(field => {
+      return {field, message: state.auth.registerErrors[field]};
     });
   }
   return {

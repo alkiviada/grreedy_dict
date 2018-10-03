@@ -3,7 +3,8 @@ const initialState = {
   isAuthenticated: null,
   isLoading: true,
   user: null,
-  errors: {},
+  loginErrors: {},
+  registerErrors: {},
 };
 
 
@@ -17,18 +18,18 @@ export default function auth(state=initialState, action) {
 
     case 'LOGIN_SUCCESSFUL':
       localStorage.setItem("token", action.data.token);
-      return {...state, ...action.data, isAuthenticated: true, isLoading: false, errors: null};
+      return {...state, ...action.data, isAuthenticated: true, isLoading: false, loginErrors: null};
 
     case 'REGISTRATION_SUCCESSFUL':
     localStorage.setItem("token", action.data.token);
-    return {...state, ...action.data, isAuthenticated: true, isLoading: false, errors: null};
+    return {...state, ...action.data, isAuthenticated: true, isLoading: false, registerErrors: null};
 
     case 'AUTHENTICATION_ERROR':
     case 'LOGIN_FAILED':
     case 'LOGOUT_SUCCESSFUL':
       localStorage.removeItem("token");
       localStorage.removeItem("uuid");
-      return {...state, errors: action.data, token: null, user: null,
+      return {...state, loginErrors: action.data, token: null, user: null,
         isAuthenticated: false, isLoading: false};
 
     default:
