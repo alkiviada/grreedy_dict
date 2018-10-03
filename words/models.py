@@ -27,10 +27,10 @@ class Etymology(models.Model):
         return self.etymology
 
 class Collocation(models.Model):
-    expression = models.CharField(max_length=400, null=True)
-    translation = models.CharField(max_length=400, null=True)
+    expression = models.CharField(max_length=600, null=True)
+    translation = models.CharField(max_length=600, null=True)
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_collocations')
-    example = models.CharField(max_length=400, null=True)
+    example = models.CharField(max_length=600, null=True)
 
     def __str__(self):
         return self.expression
@@ -44,7 +44,7 @@ class Definition(models.Model):
         return self.definition
 
 class Example(models.Model):
-    example = models.CharField(max_length=400)
+    example = models.CharField(max_length=600)
     definition = models.ForeignKey(Definition, on_delete=models.CASCADE, related_name='examples', blank=True, null=True)
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_examples')
 
