@@ -73,7 +73,7 @@ class Table extends Component {
       <h2 className="subtitle table-subtitle is-6">
         Showing <strong>{data.length} word{data.length > 1 ? 's' : ''}</strong>
       </h2>
-      <table className="table is-striped">
+      <table className="table is-striped is-narrow">
         <thead>
           <tr>
             {Object.entries(data[0]).map((el, i) => <th key={key(el)} className={`th-is-${i}`}>{el[0]}</th>)}

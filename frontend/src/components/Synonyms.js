@@ -17,18 +17,14 @@ const Synonyms = (props) => {
     const wordSyns = synonyms[word];
     if (fetchingMap[word]) {
       return (
-        <div className="container">
           <div className="notification" className="clear-notification-message">
             Loading...
-          </div>
         </div>
       )
     }
     return wordSyns['error'] ? ( 
-      <div className="container">
       <div className="notification" className="clear-notification-trans-warn">
         No synonyms
-      </div>
       </div>
     ) : 
     ( Object.keys(wordSyns).map(e =>  

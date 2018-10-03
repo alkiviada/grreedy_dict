@@ -373,7 +373,13 @@ class EnglishWordManager(models.Manager):
               for c in v.get("crossReferenceMarkers", []):
                 sense['definitions'].append({'definition': c});
             word_entries.append(sense)
-      w = Word.objects.create(word=word, lookup_date=timezone.now(), language='english')
+
+      try:
+        w = Word.english_objects.get(word=word)
+        w.from_translation = False
+      except:
+        w = Word.objects.create(word=word, lookup_date=timezone.now(), language='english')
+
       for e in word_entries:
         ety = Etymology.objects.create(word=w, etymology=e['etymology']);
         for d in e['definitions']:
