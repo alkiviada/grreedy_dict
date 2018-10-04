@@ -60,7 +60,7 @@ class Table extends Component {
     } 
     const auth = this.props.auth
     return !data.length ? (
-      <div className="words-container" ref={this.myRef}>
+      <div className="words-container column is-10" ref={this.myRef}>
       <div className="notification clear-notification-message">
       Start new collection
       { !auth.isAuthenticated ? 
@@ -68,12 +68,16 @@ class Table extends Component {
       </div>
       </div>
     ) : (
-    <div className="words-container column is-10" ref={this.myRef}>
+    <div className="words-container column is-10 section words-column" ref={this.myRef}>
     { wordFetching ? <div className="clear-notification-message">Loading...</div> : '' }
       <h2 className="subtitle table-subtitle is-6">
         Showing <strong>{data.length} word{data.length > 1 ? 's' : ''}</strong>
       </h2>
       <table className="table is-striped is-narrow">
+        <colgroup>
+    <col className="word-col" />
+    <col className="descr-col" />
+  </colgroup>  
         <thead>
           <tr>
             {Object.entries(data[0]).map((el, i) => <th key={key(el)} className={`th-is-${i}`}>{el[0]}</th>)}

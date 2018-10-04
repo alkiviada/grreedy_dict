@@ -38,7 +38,7 @@ class CollectionsSideBar extends Component {
   render () {
     const { colls, auth } = this.props;
     return auth.isAuthenticated && colls.length ? (
-      <aside class="column is-2 is-narrow-mobile is-fullheight section">
+      <aside class="column is-2 is-narrow-mobile is-fullheight section colls-column">
       <p className="menu-label">Collections</p>
       <ul className="menu-list">
        { colls.map(e => 

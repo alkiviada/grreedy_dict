@@ -34,7 +34,6 @@ class Register extends Component {
       <div className="column is-narrow">
       <form onSubmit={(e) => this.onSubmitRegister(e)}> 
       <div class="field">
-      <label class="label">Register</label>
        {this.props.errors.length > 0 && (
             <ul>
               {this.props.errors.map(error => (

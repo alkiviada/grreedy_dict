@@ -55,10 +55,10 @@ class SaveCollection extends Component {
     if (auth.isAuthenticated) { 
       if (words.length) {
         return (
-        <div className="save-coll notification coll-notification column is-mobile">
+        <div className="save-coll coll-notification column">
         { !saving ?
         <form onSubmit={(e) => this.onSubmitSave(e)}> 
-        <div className="field has-addons has-addons-left">
+        <div className="field is-narrow has-addons has-addons-left save-form is-grouped-multiline">
           <p className="control">
           <input class="input" type="text" placeholder="Save Collection" value={name} onChange={this.handleNameChange} />
           </p>
@@ -67,13 +67,13 @@ class SaveCollection extends Component {
            Save Words 
           </a>
           </p>
+      <div className="control user-tag">
+      {auth.user.username} (<a onClick={this.props.logout}>logout</a>)
+      </div>
         </div>
       </form>  : '' }
       { saving ? <p className="clear-notification-message">Saving...</p> : 
         this.props.error ? <p className="clear-notification-warn">Can't save this collection</p> : ''}
-      <div className="user-tag" style={userTagStyle}>
-      {auth.user.username} (<a onClick={this.props.logout}>logout</a>)
-      </div>
       </div>
       );
     }

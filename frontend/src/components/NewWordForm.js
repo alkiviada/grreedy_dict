@@ -39,7 +39,6 @@ class NewWordForm extends Component {
       <div className="new-word word-notification column">
       { !fetching ? 
       <form onSubmit={(e) => this.onSubmitLookUp(e)}> 
-      { this.props.error ? <div className="clear-notification-warn column is-narrow">  Can't load this word   </div> : '' }
       <div className="field has-addons has-addons-left">
         <p className="control">
         <input className="input" type="text" placeholder="New Word" value={word} onChange={this.handleWordChange} />
@@ -49,6 +48,7 @@ class NewWordForm extends Component {
           Look Up
         </a>
         </p>
+      { this.props.error ? <div className="clear-notification-warn">Can't load word</div> : '' }
       </div>
     </form> : '' }
     { this.props.fetching ? <p className="clear-notification-message">Loading...</p> : '' }
