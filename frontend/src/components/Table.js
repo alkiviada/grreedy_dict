@@ -68,7 +68,7 @@ class Table extends Component {
       </div>
       </div>
     ) : (
-    <div className="words-container column is-10 section words-column" ref={this.myRef}>
+    <div className="words-container column is-9 section words-column is-offset-1" ref={this.myRef}>
     { wordFetching ? <div className="clear-notification-message">Loading...</div> : '' }
       <h2 className="subtitle table-subtitle is-6">
         Showing <strong>{data.length} word{data.length > 1 ? 's' : ''}</strong>

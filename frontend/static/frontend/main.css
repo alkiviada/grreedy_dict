@@ -1,11 +1,19 @@
+:root {
+  --field-color: #856831;
+  --sky-color: #84a6d2;
+  --body-font: Alegreya;
+  --word-font: Cormorant Garamond;
+}
+
+
 body {
   text-rendering: optimizeLegibility;
-  background: linear-gradient(#84a6d2, #b2b8c4, #856831);
+  background: linear-gradient(var(--sky-color), #b2b8c4, var(--field-color));
   background-image: url("img/36655700945_5f48011db9_k.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  font-family: Abel;
+  font-family: var(--body-font);
   max-height: 100%;
   min-height: 100vh;
   height: 100%;
@@ -58,7 +66,7 @@ body {
 
 .words-container { 
   position: relative; 
-  bottom:100px;
+  bottom:50px;
   top:20px;
   width: 100%;
 } 
@@ -67,8 +75,10 @@ body {
   margin-top: 10px;
 }
 
+
+
 .look-up-btn {
-  background-color: #856831;
+  background-color: var(--field-color);
   border-color: transparent;
   color: #fff;
 }
@@ -82,7 +92,7 @@ body {
 }
 
 .save-btn {
-  background-color: #84a6d2;
+  background-color: var(--sky-color);
   border-color: transparent;
   color: #fff;
   width: 100px;
@@ -90,7 +100,7 @@ body {
 
 .etym-style {
   background: #FFFCF9;
-  font-family: Abel;
+  font-family: var(--body-font);
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 2px;
@@ -99,7 +109,7 @@ body {
 
 .word {
   background: #F5FBFD;
-  font-family: Black And White Picture;
+  font-family: var(--word-font);
   height: 150px;
   overflow:auto;
   padding-left: 10px;
@@ -148,14 +158,14 @@ body {
 .coll-text {
   font-weight: bold;
   color: rgba(0,0,0,0.1);
-  text-shadow: 1px 1px 0px #856831);
+  text-shadow: 0 2px 0 0px var(--field-color), 0 3px 2px 0px var(--sky-color);
   list-style-type: katakana;
 }
 
 .clear-notification-warn {
   background-color: inherit;
   color: red;
-  font-family: Abel;
+  font-family: var(--body-font);
   float: right;
   position: relative;
   display: inline-block;
@@ -168,14 +178,14 @@ body {
 .login-notif {
   background-color: inherit;
   color: white;
-  font-family: Abel;
+  font-family: var(--body-font);
   margin-top:5px;
 }
 
 .user-tag {
   background-color: inherit;
   color: white;
-  font-family: Abel;
+  font-family: var(--body-font);
   float: right;
   margin-left: auto;
   margin-top: 7px;
@@ -190,6 +200,12 @@ body {
     margin-left: auto!important;
     margin-right: auto!important;
   }
+
+ .colls-column {
+    margin-left: auto!important;
+    margin-right: auto!important;
+    text-align: center
+ }
 }
 
 
@@ -207,19 +223,19 @@ body {
 }
 
 .coll-notification {
-  background-color: #856831;
+  background-color: var(--field-color);
 }
 
 .clear-notification-message {
   background-color: inherit;
   color: black;
-  font-family: Abel;
+  font-family: var(--body-font);
 }
 
 .clear-notification-trans-warn {
   background-color: inherit;
   color: red;
-  font-family: Abel;
+  font-family: var(--body-font);
 }
 
 .react-tabs__tab-list {
