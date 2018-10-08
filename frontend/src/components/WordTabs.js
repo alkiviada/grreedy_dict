@@ -97,7 +97,7 @@ class WordTabs extends Component {
           <Tab>Original Word</Tab>
           { isEnglishWord ? <Tab>Translations</Tab> : <Tab>Collocations</Tab> }
           { isEnglishWord ? <Tab>Collocations</Tab> : <Tab>Synonyms</Tab> }
-          { isEnglishWord ? <Tab>Synonyms and Antonyms</Tab> : '' }
+          { isEnglishWord ? <Tab>Synonyms</Tab> : '' }
         </TabList>
         <TabPanel>
           { element.map(e => 

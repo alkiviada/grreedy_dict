@@ -4,10 +4,10 @@ from . import views
 from knox import views as knox_views
 
 urlpatterns = [
-    url(r'^api/word/translate/(?P<word>[-\w() ]+)$', views.WordSingleCreateTranslate.as_view(), name='word-translate'),
-    url(r'^api/word/synonyms/(?P<word>[-\w() ]+)$', views.WordSingleCreateSynonyms.as_view(), name='word-synonyms'),
-    url(r'^api/word/collocations/(?P<word>[-\w() ]+)$', views.WordSingleCreateCollocations.as_view(), name='word-collocations'),
-    url(r'^api/word/(?P<word>[-\w() ]+)/(?P<uuid>[0-9a-f-]+)?$', views.WordSingleCreate.as_view(), name='word-detail'),
+    url(r'^api/word/translate/(?P<word>[-\'\w() ]+)$', views.WordSingleCreateTranslate.as_view(), name='word-translate'),
+    url(r'^api/word/synonyms/(?P<word>[-\'\w() ]+)$', views.WordSingleCreateSynonyms.as_view(), name='word-synonyms'),
+    url(r'^api/word/collocations/(?P<word>[-\'\w() ]+)$', views.WordSingleCreateCollocations.as_view(), name='word-collocations'),
+    url(r'^api/word/(?P<word>[-\'\w() ]+)/(?P<uuid>[0-9a-f-]+)?$', views.WordSingleCreate.as_view(), name='word-detail'),
     url(r'^api/words/(?P<uuid>[0-9a-f-]+)?$', views.WordList.as_view(), name='words'),
     url(r'^api/collection/$', views.CollectionListCreate.as_view(), name='save-collection'),
     url(r'^api/collection/(?P<uuid>[0-9a-f-]+)$', views.CollectionDetail.as_view(), name='collection-detail'),

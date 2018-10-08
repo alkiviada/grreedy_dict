@@ -110,7 +110,6 @@ class YandexWordMixin(models.Manager):
                                            expression=expr, 
                                            translation=trans, 
                                           ) 
-    print('something worng?')
     return translations
 
   def create_or_get_word(self, **args):
@@ -302,7 +301,6 @@ class EnglishWordManager(models.Manager):
       word_entries = []
       for r in oxford_word["results"]:
         colloc = r['word']
-        print(word.word)
         if colloc == word.word:
           continue
         c = Collocation.objects.filter(expression=colloc).first()
@@ -385,7 +383,6 @@ class EnglishWordManager(models.Manager):
         for d in e['definitions']:
           exmpls = []
           edef = Definition.objects.filter(word=w, definition=d['definition']).first()
-          print(edef)
           if not edef:
             edef = Definition.objects.create(word=w, definition=d['definition'], etymology=ety);
           exmpls = [ Example.objects.create(definition=edef, example=e['example'], word=w) for e in d.get('examples', []) ] 

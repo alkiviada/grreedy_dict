@@ -8,7 +8,9 @@ def scrape_wordref_words(words_string, split=1):
     return ''
   words_string = words_string.get_text()   
   words_string = re.sub(
-    r'(?<!^)\b(ab(b)?r|inter$|n(m|f|noun|pl)|viintransitiv|v(i|tr)\b|v(i)?( +|rif|refl|past|aux|pron|expr|tr|pres)|loc |agg|adj|interj|adv|avv| contraction|expr|n as|prepp|conjc|cong|idiom$|pronpron|prep +|viverbe).*', 
+    r'(?<!^)\b(ab(b)?r|inter$|n(m|f|noun|pl)'
+     '|suffix|viintransitiv|v(i|tr)\b|v(i)?( +|rif|refl|past|aux|pron|expr|tr|pres)|'
+     'loc |agg|adj|interj|adv|avv| contraction|expr|n as|prepp|conjc|cong|idiom$|pronpron|prep +|viverbe).*', 
     '', words_string)
   if not split:
     return words_string.strip().translate(str.maketrans(dict.fromkeys(delchars)))
@@ -21,7 +23,6 @@ def parse_reverse_collocations(r):
   word_page = r.content
   word_soup = BeautifulSoup(word_page, features="html.parser")
   collocs_tables = word_soup.findAll('table', attrs={'class': 'WRD', 'id': 'compound_forms'});
-  print(len(collocs_tables))
   expr_map = {}
   if collocs_tables:
     for collocs_table in collocs_tables:

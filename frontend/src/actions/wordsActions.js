@@ -45,10 +45,17 @@ export const fetchWords = (uuid) => dispatch => {
           console.log('Server returned error status');
           dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed'}})
         } else {
+      console.log(json)
+      const collName = json[0].words[0].name
+      const collUUID = json[0].words[0].uuid
       const conflated_words = conflateWords(json)
       dispatch({
         type: FETCH_WORDS_FULFILLED,
         payload: conflated_words
+      });
+      dispatch({
+        type: FETCH_COLLECTION_FULFILLED,
+        payload: { uuid: collUUID, name: collName }
       })
     }
       },
@@ -81,7 +88,6 @@ export const lookUpWord = (word, words, uuid) => dispatch => {
         } else {
           // Status looks good
           const word = json;
-          console.log(word)
           const collUUID = word[0].words[0].uuid
           const collName = word[0].words[0].name
 
