@@ -459,8 +459,15 @@ class FrenchWordManager(WordRefWordMixin, models.Manager):
     return self.create_collocations(collocations=collocs_map, word=word)
 
   def fetch_synonyms(self, orig_word):
-    synonyms = self.fetch_and_parse_synonyms(orig_word, ext='fren')
-    synonyms = list(set(synonyms))
+    r = try_fetch("http://www.cnrtl.fr/synonymie/" + orig_word.word)
+    if not r:
+      return []
+    synonyms = []
+    word_page = r.content
+    word_soup = BeautifulSoup(word_page, features="html.parser")
+    syns = word_soup.findAll('td', {'class': 'syno_format'})
+    for s in syns:
+      synonyms.append(s.get_text())
     return self.create_bare_word(language='french', words=synonyms, original=orig_word)
     
   def fetch_translation(self, orig_word):

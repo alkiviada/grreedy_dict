@@ -46,17 +46,19 @@ export const fetchWords = (uuid) => dispatch => {
           dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed'}})
         } else {
       console.log(json)
-      const collName = json[0].words[0].name
-      const collUUID = json[0].words[0].uuid
+      if (json[0] && json[0].words) {
+        const collName = json[0].words[0].name
+        const collUUID = json[0].words[0].uuid
+      dispatch({
+        type: FETCH_COLLECTION_FULFILLED,
+        payload: { uuid: collUUID, name: collName }
+      })
+      }
       const conflated_words = conflateWords(json)
       dispatch({
         type: FETCH_WORDS_FULFILLED,
         payload: conflated_words
       });
-      dispatch({
-        type: FETCH_COLLECTION_FULFILLED,
-        payload: { uuid: collUUID, name: collName }
-      })
     }
       },
       // Either fetching or parsing failed!
