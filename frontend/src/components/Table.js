@@ -25,7 +25,6 @@ class Table extends Component {
   componentWillMount() {
     console.log('mounting table');
     this.props.requestWords();
-    console.log(this.props.uuid)
     this.props.fetchWords(this.props.uuid);
   }
 
@@ -50,7 +49,6 @@ class Table extends Component {
     const data = this.props.data;
     const allFetching = this.props.allFetching;
     const wordFetching = this.props.newWordFetching;
-    console.log(allFetching)
     if (allFetching && !data.length) {
       return (
         <div className="words-container">
