@@ -70,10 +70,10 @@ class SaveCollection extends Component {
       <div className="control user-tag">
       {auth.user.username} (<a onClick={this.props.logout}>logout</a>)
       </div>
+        { this.props.error ? <p className="clear-notification-warn">Can't save this collection</p> : ''}
         </div>
       </form>  : '' }
-      { saving ? <p className="clear-notification-message">Saving...</p> : 
-        this.props.error ? <p className="clear-notification-warn">Can't save this collection</p> : ''}
+      { saving ? <p className="clear-notification-message">Saving...</p> : '' }
       </div>
       );
     }

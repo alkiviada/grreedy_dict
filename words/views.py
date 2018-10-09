@@ -97,6 +97,9 @@ class CollectionListCreate(generics.ListCreateAPIView):
         next_count = Collection.objects.filter(name__startswith='Untitled', owner=user).count()
         next_count += 1
         new_fields['name'] = 'Untitled: ' + str(next_count);
+        while Collection.objects.filter(name=new_fields['name']).exists():
+          next_count += 1
+          new_fields['name'] = 'Untitled: ' + str(next_count);
       try:
         coll = Collection.objects.get(uuid=uuid) 
         coll.update_fields(new_fields)
