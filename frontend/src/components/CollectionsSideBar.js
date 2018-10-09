@@ -2,12 +2,19 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import key from "weak-key";
 import { connect } from 'react-redux';
-import { fetchCollections, fetchCollection, requestCollections, requestCollection } from '../actions/collectionsActions';
+import { fetchCollections, 
+         fetchCollection, 
+         saveCollection, 
+         requestCollections, 
+         requestCollection } from '../actions/collectionsActions';
 import { loadUser } from '../actions/authActions';
 
 const mapStateToProps = state => ({
   colls: state.collections.items,
   auth: state.auth,
+  origUUId: state.collections.uuid,
+  origName: state.collections.name,
+  allWords: state.words.items,
 });
 
 class CollectionsSideBar extends Component {
@@ -22,7 +29,6 @@ class CollectionsSideBar extends Component {
 
   componentWillMount() {
     console.log('mounting sidebar');
-    console.log(this.props.auth)
     if (this.props.auth.isAuthenticated) {
       this.props.requestCollections();
       this.props.fetchCollections();
@@ -31,6 +37,12 @@ class CollectionsSideBar extends Component {
   onCollectionClick(e, uuid) {
     console.log('collection look up');
     e.preventDefault();
+    console.log(this.props)
+    const origUUId = this.props.origUUId
+    if (origUUId) {
+      console.log(origUUId)
+      this.props.saveCollection(this.props.origName, origUUId, this.props.allWords.map(e => e.word).join(','));
+    }
     this.props.requestCollection();
     this.props.fetchCollection(uuid);
   }
@@ -55,4 +67,9 @@ class CollectionsSideBar extends Component {
  }
 }
 
-export default connect(mapStateToProps, { loadUser, requestCollections, fetchCollections, fetchCollection, requestCollection })(CollectionsSideBar);
+export default connect(mapStateToProps, { loadUser, 
+                                          requestCollections, 
+                                          fetchCollections, 
+                                          fetchCollection, 
+                                          saveCollection, 
+                                          requestCollection })(CollectionsSideBar);

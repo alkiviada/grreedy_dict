@@ -18,7 +18,6 @@ class SaveCollection extends Component {
 
   componentWillMount() {
     console.log('mounting save bar');
-    console.log(this.props.auth)
   }
 
   handleNameChange(n) {
@@ -34,7 +33,6 @@ class SaveCollection extends Component {
     this.props.requestSave();
     const { uuid } = this.props
     const name = this.state.name ? this.state.name : this.props.name
-    console.log(name);
     this.props.saveCollection(name, uuid, this.props.allWords.map(e => e.word).join(','));
     const root = ReactDOM.findDOMNode(this).parentNode;
     window.scrollTo(0, root.offsetTop-35)
@@ -45,9 +43,7 @@ class SaveCollection extends Component {
     const words = this.props.allWords;
     const saving = this.props.saving
     const name = !this.props.fetched ? this.state.name : this.props.name
-    console.log(name);
 
-    console.log(this.props.auth)
     const auth = this.props.auth
 
     const userTagStyle = { bottom: '29px', right: '-34px'}
