@@ -1,3 +1,5 @@
+import { CLEAR_ERROR } from '../actions/types';
+
 const initialState = {
   token: localStorage.getItem("token"),
   isAuthenticated: null,
@@ -31,6 +33,9 @@ export default function auth(state=initialState, action) {
       localStorage.removeItem("uuid");
       return {...state, loginErrors: action.data, token: null, user: null,
         isAuthenticated: false, isLoading: false};
+    case CLEAR_ERROR: return { ...state, 
+                               loginErrors: null
+                             };
 
     default:
       return state;

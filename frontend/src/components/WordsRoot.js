@@ -6,6 +6,7 @@ import Login from "./Login";
 import NotFound from "./NotFound";
 import Register from "./Register";
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
+import { Redirect } from "react-router-dom";
 import Dictionary from "./Dictionary";
 import { loadUser } from '../actions/authActions';
 
@@ -19,8 +20,6 @@ class WordsRoot extends Component {
     return <Route {...rest} render={props => {
       if (this.props.auth.isLoading) {
         return <em>Loading...</em>;
-      } else if (!this.props.auth.isAuthenticated) {
-        return <Redirect to="/login" />;
       } else {
         return <ChildComponent {...props} />
       }
@@ -34,6 +33,7 @@ class WordsRoot extends Component {
         <Switch>
           <PrivateRoute exact path="/" component={Dictionary} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={Register} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
@@ -44,8 +44,5 @@ class WordsRoot extends Component {
 const mapStateToProps = state => ({
   auth: state.auth,
 });
-
-
-
 
 export default connect(mapStateToProps, { loadUser })(WordsRoot);

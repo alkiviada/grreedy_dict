@@ -1,5 +1,6 @@
 import {  
          FETCH_WORDS_FULFILLED, 
+         CLEAR_ERROR, 
          SAVE_COLLECTION_FULFILLED, 
        } from './types';
 
@@ -142,4 +143,11 @@ export const logout = () => {
         }
       })
   }
-}
+};
+
+
+export const clearLoginError = () => dispatch => {
+  dispatch({
+    type: CLEAR_ERROR,
+  })
+};

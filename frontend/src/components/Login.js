@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { login, loadUser } from '../actions/authActions';
+import { login, loadUser, clearLoginError } from '../actions/authActions';
 import { Link, Redirect } from "react-router-dom";
 
 class Login extends Component {
@@ -14,6 +14,13 @@ class Login extends Component {
     this.onSubmit = this.onSubmitLogin.bind(this);
   };
 
+  componentDidMount() {
+    console.log('i am mounting what else?')
+    if (!this.props.isAuthenticated) {
+    this.props.clearLoginError();
+    }
+  }
+
   onSubmitLogin(e) {
     e.preventDefault();
     console.log('login');
@@ -21,7 +28,6 @@ class Login extends Component {
   }
 
   render () {
-    console.log(this.props)
     if (this.props.isAuthenticated) {
       return <Redirect to="/" />
     }
@@ -84,4 +90,4 @@ const mapStateToProps = state => {
   };
 }
 
-export default connect(mapStateToProps, { login, loadUser })(Login);
+export default connect(mapStateToProps, { login, loadUser, clearLoginError })(Login);
