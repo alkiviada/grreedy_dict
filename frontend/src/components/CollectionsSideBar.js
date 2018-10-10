@@ -8,6 +8,7 @@ import { fetchCollections,
          requestCollections, 
          requestCollection } from '../actions/collectionsActions';
 import { loadUser } from '../actions/authActions';
+import { requestWords } from '../actions/wordsActions';
 
 const mapStateToProps = state => ({
   colls: state.collections.items,
@@ -37,13 +38,11 @@ class CollectionsSideBar extends Component {
   onCollectionClick(e, uuid) {
     console.log('collection look up');
     e.preventDefault();
-    console.log(this.props)
+    this.props.requestCollection();
     const origUUId = this.props.origUUId
     if (origUUId) {
-      console.log(origUUId)
       this.props.saveCollection(this.props.origName, origUUId, this.props.allWords.map(e => e.word).join(','));
     }
-    this.props.requestCollection();
     this.props.fetchCollection(uuid);
   }
   
@@ -69,6 +68,7 @@ class CollectionsSideBar extends Component {
 
 export default connect(mapStateToProps, { loadUser, 
                                           requestCollections, 
+                                          requestWords, 
                                           fetchCollections, 
                                           fetchCollection, 
                                           saveCollection, 

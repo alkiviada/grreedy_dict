@@ -39,13 +39,11 @@ export const fetchWords = (uuid) => dispatch => {
   .then(
       // Both fetching and parsing succeeded!
       ({ status, json }) => {
-        console.log(status)
         if (status >= 400) {
           // Status looks bad
           console.log('Server returned error status');
           dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed'}})
         } else {
-      console.log(json)
       if (json[0] && json[0].words) {
         const collName = json[0].words[0].name
         const collUUID = json[0].words[0].uuid
@@ -82,7 +80,6 @@ export const lookUpWord = (word, words, uuid) => dispatch => {
   .then(
       // Both fetching and parsing succeeded!
       ({ status, json }) => {
-        console.log(status)
         if (status >= 400) {
           // Status looks bad
           console.log('Server returned error status');

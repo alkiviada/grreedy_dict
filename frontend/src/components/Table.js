@@ -48,8 +48,11 @@ class Table extends Component {
   render () {
     const data = this.props.data;
     const allFetching = this.props.allFetching;
+    const collFetching = this.props.collFetching;
+    console.log(allFetching);
+
     const wordFetching = this.props.newWordFetching;
-    if (allFetching && !data.length) {
+    if (allFetching || collFetching) {
       return (
         <div className="words-container">
         <div className="clear-notification-message notification">Loading...</div> 
@@ -108,6 +111,7 @@ const mapStateToProps = state => ({
   data: state.words.items,
   allWordsMap: state.words.allWordsMap,
   allFetching: state.words.allWordsFetching,
+  collFetching: state.collections.fetching,
   wordFetching: state.words.newWordFetching,
 });
 

@@ -7,6 +7,7 @@ import { SAVE_COLLECTION,
          FETCH_COLLECTIONS_FULFILLED, 
          FETCH_COLLECTION_FULFILLED, 
          FETCH_COLLECTIONS, 
+         FETCH_COLLECTION, 
          CLEAR_FETCHED
        } from './types';
 
@@ -36,11 +37,10 @@ export const requestCollections = () => dispatch => {
 export const requestCollection = () => dispatch => {
  console.log('requesting collection');
   dispatch({
-    type: FETCH_WORDS_FULFILLED,
-    payload: []
+    type: FETCH_WORDS,
   })
   dispatch({
-    type: FETCH_WORDS,
+    type: FETCH_COLLECTION,
   })
 };
 
