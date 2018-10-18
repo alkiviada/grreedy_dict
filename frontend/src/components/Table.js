@@ -14,6 +14,7 @@ class Table extends Component {
     this.addRow = this.addRow.bind(this) 
     this.myRef = React.createRef();
   }
+
   static propTypes = {
     data: PropTypes.array.isRequired,
     lookUpWord: PropTypes.func.isRequired,
