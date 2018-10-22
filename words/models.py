@@ -216,6 +216,7 @@ class WordRefWordMixin(models.Manager):
 
   def fetch_and_parse_translations(self, orig_word, **args):
     ext = args['ext']
+    print('translations')
 
     r = try_fetch(WORDREF_BASE + ext + "/" + orig_word.word)
     straight_translations = parse_straight_translations(r)
@@ -472,6 +473,8 @@ class FrenchWordManager(WordRefWordMixin, models.Manager):
     
   def fetch_translation(self, orig_word):
     trans = self.fetch_and_parse_translations(orig_word, ext='enfr')
+    print(trans)
+    print(set(trans))
     trans = list(set(trans))
     return self.create_bare_word(language='french', words=trans, original=orig_word)
     

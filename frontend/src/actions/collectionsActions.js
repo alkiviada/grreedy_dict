@@ -1,5 +1,6 @@
 import { SAVE_COLLECTION, 
          SAVE_COLLECTION_FULFILLED, 
+         FETCH_WORDS_REJECTED,
          FETCH_COLLECTION_REJECTED, 
          SAVE_COLLECTION_REJECTED, 
          FETCH_WORDS, 
@@ -85,7 +86,9 @@ export const fetchCollection = (uuid) => (dispatch, getState) => {
         if (status >= 400) {
           // Status looks bad
           console.log('Server returned error status');
+          dispatch({type: 'AUTHENTICATION_ERROR', payload: 'saving words failed', })
           dispatch({type: FETCH_COLLECTION_REJECTED, payload: 'fetching words collection failed', })
+          dispatch({type: FETCH_WORDS_REJECTED, payload: {error: false }})
         } else {
           // Status looks good
           var coll = json;
@@ -141,6 +144,7 @@ export const saveCollection = (name, uuid, words) => (dispatch, getState) => {
         if (status >= 400) {
           // Status looks bad
           console.log('Server returned error status');
+          dispatch({type: 'AUTHENTICATION_ERROR', payload: 'saving words failed', })
           dispatch({type: SAVE_COLLECTION_REJECTED, payload: 'saving words failed', })
         } else {
           // Status looks good

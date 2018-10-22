@@ -11,8 +11,8 @@ def scrape_wordref_words(words_string, split=1):
     return words_string
     
   words_string = re.sub(
-    r'(?<!^)\b(ab(b)?r|inter$|n(m|f|noun|pl)'
-     '|suffix|viintransitiv|v(i|tr)?$|v(i)?( +|rif|refl|past|aux|pron|expr|tr|pres)|Note|'
+    r'(?<!^)\b(ab(b)?r|inter$|n(m|f|noun|pl)|pp|'
+     'prefix|suffix|viintransitiv|v(i|tr)?$|v(i)?( +|rif|refl|past|aux|pron|expr|tr|pres)|Note|'
      'loc |agg|adj|interj|adv|avv$| contraction|expr|n as|prepp|conjc|cong|idiom$|pronpron|prep +|viverbe).*', 
     '', words_string)
   if not split:
@@ -144,11 +144,21 @@ def parse_straight_translations(r):
   if not words_tables:
     return []
   word_trans = []
+  new_trans_arr = []
+  new_trans_arr_map = []
+  
   for wd_table in words_tables:
     for tr_wd in wd_table.findAll("tr", {"class": ["even", "odd"]}):
+      new_word = scrape_wordref_words(tr_wd.find('td', {'class': 'FrWrd'}), 0)
+      if new_word:
+        new_trans_arr_map.append(new_trans_arr)
+        new_trans_arr = []
       new_trans = scrape_wordref_words(tr_wd.find('td', {'class': 'ToWrd'}), 0)
+      new_expl = scrape_wordref_words(tr_wd.find('td', class_=lambda x: x not in ['ToWrd', 'FrEx', 'FrWrd']), 0)
       if new_trans:
-        word_trans.extend(new_trans.split(' ,'))
+        word_trans.extend(new_trans.split(', '))
+        new_trans_arr.append({new_trans: new_expl})
+  [ print(tr) for tr in new_trans_arr_map ]
   return word_trans
 
 def parse_synonyms(r):
@@ -161,19 +171,41 @@ def parse_synonyms(r):
   for syn in synonyms_list.findAll('a'):
     word_synonyms.append(scrape_wordref_words(syn, 0))
   return word_synonyms
-  
+
+
+def conflate_translations(trans_map_arr):
+  new_trans_map = {}
+  for trans_map in trans_map_arr:
+    trans = trans_map.keys()
+    for tr in trans:
+      meanings = trans_map[tr]
+      tr_items = tr.split(', ')    
+      for tr_item in tr_items:
+        if tr_item:
+          print(tr_item, meanings)
+          if new_trans_map.get(tr_item):
+            new_trans_map[tr_item].append(meanings)
+          else:
+            new_trans_map[tr_item] = [ meanings ]
+  print(new_trans_map)
+
 def parse_reverse_translations(r):
   word_page = r.content
   word_soup = BeautifulSoup(word_page, features="html.parser")
   words_tables = word_soup.findAll('table', {'class': 'WRD'}, id=lambda x: x != 'compound_forms');
   
   word_trans = []
+  new_trans_arr = []
   if not words_tables:
    return []
   for wd_table in words_tables:
     for tr_wd in wd_table.findAll("tr", {"class": ["even", "odd"]}):
       new_trans = scrape_wordref_words(tr_wd.find('td', {'class': 'FrWrd'}), 0)
+      new_word = scrape_wordref_words(tr_wd.find('td', {'class': 'ToWrd'}), 0)
+      new_expl = scrape_wordref_words(tr_wd.find('td', class_=lambda x: x not in ['ToWrd', 'FrEx', 'FrWrd']), 0)
       if new_trans:
-        word_trans.extend(new_trans.split(' ,'))
+        word_trans.extend(new_trans.split(', '))
+        new_trans_arr.append({new_trans: new_expl if new_expl else new_word })
+  conflate_translations(new_trans_arr)
   return word_trans
 

@@ -3,6 +3,7 @@ from django.utils import timezone
 from knox.models import AuthToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from words.constants import LANGUAGES
+import datetime
 
 from words.serializers import (WordSerializer, SynonymSerializer, TranslationSerializer, CollectionSerializer, 
                                CollectionDetailSerializer, CollocationSerializer,
@@ -22,9 +23,10 @@ class LoginAPI(generics.GenericAPIView):
     serializer = self.get_serializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     user = serializer.validated_data
+    token = AuthToken.objects.create(user, expires=datetime.timedelta(days=10))
     return Response({
       "user": UserSerializer(user, context=self.get_serializer_context()).data,
-      "token": AuthToken.objects.create(user)
+      "token": token,
     })
 
 class RegistrationAPI(generics.GenericAPIView):

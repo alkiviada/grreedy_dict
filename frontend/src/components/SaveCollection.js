@@ -43,6 +43,7 @@ class SaveCollection extends Component {
     const words = this.props.allWords;
     const saving = this.props.saving
     const name = !this.props.fetched ? this.state.name : this.props.name
+    console.log(this.props.error)
 
     const auth = this.props.auth
 
@@ -66,7 +67,7 @@ class SaveCollection extends Component {
       <div className="control user-tag">
       {auth.user.username} (<a onClick={this.props.logout}>logout</a>)
       </div>
-        { this.props.error ? <p className="clear-notification-warn">Can't save this collection</p> : ''}
+        { this.props.error ?  <p className="clear-notification-warn">Can't save this collection</p> : '' }
         </div>
       </form>  : '' }
       { saving ? <p className="clear-notification-message">Saving...</p> : '' }
@@ -85,7 +86,11 @@ class SaveCollection extends Component {
     }
     else {
       if (words.length) {
-        return (
+        return this.props.error ? (
+        <div className="save-coll notification coll-notification column is-mobile">
+        <div className="login-notif">To work with collections, please, <Link className="is-link" to="/login">login</Link> or <Link className="is-link" to="/register">register</Link></div>
+        </div>
+        ) : (
         <div className="save-coll notification coll-notification column is-mobile">
         <div className="login-notif"><Link className="is-link" to="/login">Login</Link> or <Link className="is-link" to="/register">Register</Link> to save this collection of words</div>
         </div>

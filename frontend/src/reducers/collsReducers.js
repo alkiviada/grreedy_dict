@@ -29,11 +29,12 @@ export default function(state = initialState, action) {
     case SAVE_COLLECTION_FULFILLED: 
       localStorage.removeItem("uuid");
       return { ...state, saving: false, error: null, saved: true, name: '', uuid: '', items: action.payload, };
-    case SAVE_COLLECTION_REJECTED: return { ...state, saving: false, error: action.payload };
-    case FETCH_COLLECTION_REJECTED: return { ...state, error: action.payload };
+    case SAVE_COLLECTION_REJECTED: 
+      return { ...state, saving: false, fetching: false, error: action.payload };
+    case FETCH_COLLECTION_REJECTED: return { ...state, error: action.payload, fetching: false };
     case FETCH_COLLECTION_FULFILLED: 
       localStorage.setItem("uuid", action.payload.uuid);
-      return { ...state, fetching: false, fetched: true, name: action.payload.name, uuid: action.payload.uuid };
+      return { ...state, fetching: false, fetched: true, error: false, name: action.payload.name, uuid: action.payload.uuid };
     case FETCH_COLLECTIONS_FULFILLED: return { ...state, fetching: false, items: action.payload };
     case FETCH_COLLECTIONS: return { ...state, fetching: true };
     case FETCH_COLLECTION: return { ...state, fetching: true };
