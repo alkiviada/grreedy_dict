@@ -20,7 +20,7 @@ export const conflateWords = (words) => {
 export const translationsToMap = (w) => {
   const obj = w.reduce((o, e) => 
     (o[e['language']] = [...o[e['language']] ? 
-      o[e['language']] : '', e['word'] ], o), {}
+      o[e['language']] : '', e.notes ? e.word + ' {' + e.notes + '}' : e.word ], o), {}
   );
   return obj
 }

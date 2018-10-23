@@ -224,15 +224,22 @@ class WordRefWordMixin(models.Manager):
     r = try_fetch(WORDREF_BASE + ext + "/reverse/" + orig_word.word)
     reverse_translations = parse_reverse_translations(r)
 
-    return [ *straight_translations, *reverse_translations ]
+    return { **straight_translations, **reverse_translations }
 
   def create_bare_word(self, **args):
     words, orig_word, language = [ args[i] for i in ['words', 'original', 'language'] ]
+    print(words)
     db_words = []
     for new_w in words:
       w = Word.objects.filter(word=new_w, language=language).first()
+      print(w)
       if not w:
-        w = Word.objects.create(word=new_w, lookup_date=timezone.now(), language=language, from_translation=True) 
+        new_notes = ''
+        if isinstance(words, dict):
+          print(words[new_w])
+          new_notes = ', '.join(words[new_w])
+          print(new_notes)
+        w = Word.objects.create(word=new_w, lookup_date=timezone.now(), language=language, from_translation=True, notes=new_notes) 
       db_words.append(w)
     
     return db_words
@@ -439,7 +446,6 @@ class ItalianWordManager(WordRefWordMixin, models.Manager):
 
   def fetch_translation(self, orig_word):
     trans = self.fetch_and_parse_translations(orig_word, ext='enit')
-    trans = list(set(trans))
     return self.create_bare_word(language='italian', words=trans, original=orig_word)
 
   def fetch_collocations(self, word):
@@ -473,9 +479,8 @@ class FrenchWordManager(WordRefWordMixin, models.Manager):
     
   def fetch_translation(self, orig_word):
     trans = self.fetch_and_parse_translations(orig_word, ext='enfr')
-    print(trans)
-    print(set(trans))
-    trans = list(set(trans))
+    #print(trans)
+    #print(set(trans))
     return self.create_bare_word(language='french', words=trans, original=orig_word)
     
   def fetch_word(self, word):

@@ -152,6 +152,13 @@ table.table {
   color: rgb(164, 173, 202);
 }
 
+.word-meaning {
+  font-style: italic;
+  font-weight: lighter;
+  font-size: 13px;
+  color: var(--field-color);
+}
+
 .word-link {
   text-decoration: none;
   color: black;

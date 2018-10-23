@@ -10,14 +10,24 @@ class DecorateWithLinks extends Component {
   }
   render() {
     const {words, onLinkClick} = this.props;
-    let config = [{
+    let config = [
+     {
+      regex: /(\{)(.*?)(\})/gm,
+      fn: (key, result) => {
+        return <span className="word-meaning">
+        {result[2]}
+          </span>
+      }
+     },
+     {
       regex: /([a-zA-Z\-À-ÿА-Я\ǣāēіїœ]+)/gim,
       fn: (key, result) => 
         <a target="_blank" href={`/api/word/${result[1]}`} 
           onClick={(e) => onLinkClick(e, result[1])} className="word-link">
         {result[1]}
         </a>
-    }];
+    }, 
+    ];
     let processed = processString(config)(this.props.words);
     return (
       <div>{processed}</div>

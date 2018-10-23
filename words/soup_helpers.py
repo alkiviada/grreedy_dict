@@ -11,9 +11,9 @@ def scrape_wordref_words(words_string, split=1):
     return words_string
     
   words_string = re.sub(
-    r'(?<!^)\b(ab(b)?r|inter$|n(m|f|noun|pl)|pp|'
+    r'(?<!^)\b(ab(b)?r|inter$|n(m|f|noun|pl)|pp|pron|prépp|'
      'prefix|suffix|viintransitiv|v(i|tr)?$|v(i)?( +|rif|refl|past|aux|pron|expr|tr|pres)|Note|'
-     'loc |agg|adj|interj|adv|avv$| contraction|expr|n as|prepp|conjc|cong|idiom$|pronpron|prep +|viverbe).*', 
+     'loc |agg|adj|interj|adv|avv$| contraction|expr$|n as|prepp|conjc|cong|idiom$|pronpron|prep +|viverbe).*', 
     '', words_string)
   if not split:
     return words_string.strip().translate(str.maketrans(dict.fromkeys(delchars)))
@@ -137,6 +137,16 @@ def parse_straight_word(r):
     words_map.append(word_trans)
   return words_map 
 
+def conflate_meanings(trans_meanings_arr):
+  new_trans_meanings_arr = []
+  meaning = ''
+  for trans_meanings_map in trans_meanings_arr:
+    trans, this_meaning = list(*trans_meanings_map.items())
+    if this_meaning: 
+      meaning = this_meaning
+    new_trans_meanings_arr.append({ trans: meaning })
+  return new_trans_meanings_arr
+
 def parse_straight_translations(r):
   word_page = r.content
   word_soup = BeautifulSoup(word_page, features="html.parser")
@@ -158,8 +168,12 @@ def parse_straight_translations(r):
       if new_trans:
         word_trans.extend(new_trans.split(', '))
         new_trans_arr.append({new_trans: new_expl})
-  [ print(tr) for tr in new_trans_arr_map ]
-  return word_trans
+  #[ print(tr) for tr in new_trans_arr_map ]
+  trans_meanings_arr = []
+  for tr in new_trans_arr_map:
+    trans_meanings_arr.extend(conflate_meanings(tr))
+  w_t = conflate_translations(trans_meanings_arr)
+  return w_t
 
 def parse_synonyms(r):
   word_page = r.content
@@ -173,21 +187,26 @@ def parse_synonyms(r):
   return word_synonyms
 
 
+    
+
 def conflate_translations(trans_map_arr):
   new_trans_map = {}
   for trans_map in trans_map_arr:
+    if not trans_map:
+      continue
     trans = trans_map.keys()
     for tr in trans:
       meanings = trans_map[tr]
       tr_items = tr.split(', ')    
       for tr_item in tr_items:
         if tr_item:
-          print(tr_item, meanings)
+          #print(tr_item, meanings)
           if new_trans_map.get(tr_item):
             new_trans_map[tr_item].append(meanings)
           else:
             new_trans_map[tr_item] = [ meanings ]
-  print(new_trans_map)
+  #[ print(k, v) for k, v in new_trans_map.items() ]
+  return new_trans_map
 
 def parse_reverse_translations(r):
   word_page = r.content
@@ -206,6 +225,6 @@ def parse_reverse_translations(r):
       if new_trans:
         word_trans.extend(new_trans.split(', '))
         new_trans_arr.append({new_trans: new_expl if new_expl else new_word })
-  conflate_translations(new_trans_arr)
-  return word_trans
+  w_t = conflate_translations(new_trans_arr)
+  return w_t
 
