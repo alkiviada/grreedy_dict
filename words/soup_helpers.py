@@ -13,7 +13,7 @@ def scrape_wordref_words(words_string, split=1):
   words_string = re.sub(
     r'(?<!^)\b(ab(b)?r|inter$|n(m|f|noun|pl)|pp|pron|prépp|'
      'prefix|suffix|viintransitiv|v(i|tr)?$|v(i)?( +|rif|refl|past|aux|pron|expr|tr|pres)|Note|'
-     'loc |agg|adj|interj|adv|avv$| contraction|expr$|n as|prepp|conjc|cong|idiom$|pronpron|prep +|viverbe).*', 
+     'loc |agg|adj(adj.*)?$|interj|adv|avv$| contraction|expr(expr.*)?$|n as|prepp|conjc|cong|idiom$|pronpron|prep +|viverbe).*', 
     '', words_string)
   if not split:
     return words_string.strip().translate(str.maketrans(dict.fromkeys(delchars)))
