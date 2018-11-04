@@ -36,23 +36,12 @@ class NewWordForm extends Component {
     const word = !this.props.error ? this.state.word : this.props.word
     console.log('rendering new word form');
     return (
-      <div className="new-word word-notification column">
-      { !fetching ? 
-      <form onSubmit={(e) => this.onSubmitLookUp(e)}> 
-      <div className="field has-addons has-addons-left">
-        <p className="control">
-        <input className="input" type="text" placeholder="New Word" value={word} onChange={this.handleWordChange} />
-        </p>
-        <p className="control">
-        <a className="button look-up-btn" onClick={(e) => this.onSubmitLookUp(e)}>
-          Look Up
-        </a>
-        </p>
-      { this.props.error ? <div className="clear-notification-warn">Can't load word</div> : '' }
-      </div>
-    </form> : '' }
-    { this.props.fetching ? <p className="clear-notification-message">Loading...</p> : '' }
-    </div>
+      !fetching ? 
+      <form className="new-word" onSubmit={(e) => this.onSubmitLookUp(e)}> 
+        <input className="new-word-input" type="text" placeholder="New Word" value={word} onChange={this.handleWordChange} />
+        <a className="new-word-btn look-up-btn" onClick={(e) => this.onSubmitLookUp(e)}>Look Up</a>
+      { this.props.error ? <div className="grid-warn">Can't load word</div> : '' }
+    </form> : <div className="new-word"><p className="grid-notification"><em>Loading...</em></p></div>
     );
   }
 };

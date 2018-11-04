@@ -6,6 +6,7 @@ import key from "weak-key";
 import { connect } from 'react-redux';
 import { lookUpWord, fetchWords, requestWords, requestWord } from '../actions/wordsActions';
 import { Link } from "react-router-dom";
+import BodyClassName from 'react-body-classname';
 
 
 class Table extends Component {
@@ -55,53 +56,51 @@ class Table extends Component {
     const wordFetching = this.props.newWordFetching;
     if (allFetching || collFetching) {
       return (
+        <BodyClassName className="body-with-image">
         <div className="words-container">
-        <div className="clear-notification-message notification">Loading...</div> 
+        <em>Loading...</em> 
         </div>
+        </BodyClassName>
       )
     } 
     const auth = this.props.auth
     return !data.length ? (
-      <div className="words-container column is-10" ref={this.myRef}>
-      <div className="notification clear-notification-message">
+      <BodyClassName className="body-with-image">
+      <div className="words-container" ref={this.myRef}>
+      <div className="words-invite">
       Start new collection
       { !auth.isAuthenticated ? 
           <span> or <Link className="is-link" to="/login">Login</Link> or <Link className="is-link" to="/register">Register</Link></span> : '' }
       </div>
       </div>
+      </BodyClassName>
     ) : (
-    <div className="words-container column is-9 section words-column is-offset-1" ref={this.myRef}>
-    { wordFetching ? <div className="clear-notification-message">Loading...</div> : '' }
-      <h2 className="subtitle table-subtitle is-6">
+    <BodyClassName className={data.length < 10 ? 'body-with-image' : ''}>
+    <div className="words-container" ref={this.myRef}>
+    { wordFetching ? <em>Loading...</em> : '' }
+      <h2 className="coll-title">
         Showing <strong>{data.length} word{data.length > 1 ? 's' : ''}</strong>
       </h2>
-      <table className="table is-striped is-narrow">
-        <colgroup>
-    <col className="word-col" />
-    <col className="descr-col" />
-  </colgroup>  
-        <thead>
-          <tr>
-            {Object.entries(data[0]).map((el, i) => <th key={key(el)} className={`th-is-${i}`}>{el[0]}</th>)}
-          </tr>
-        </thead>
-        <tbody>
+      <div className="words-table">
+       <div className="words-head">
+            {Object.entries(data[0]).map((el, i) => <p>{el[0]}</p>)}
+        </div>
+        <div className="words-rows">
           {data.map(el => {
             let word = el.word;
             return (
-              <tr key={el.id}>
-                { Object.entries(el).map(el => 
-                <td><div className="word" key={key(el)}>
+                Object.entries(el).map(el => 
+                <div className="word-cell"><div className="word" key={key(el)}>
                 {typeof(el[1]) === 'string' ? 
-                el[1] : 
+                <strong>{el[1]}</strong> : 
                 <WordTabs word={word} element={el[1]} fn={[this.addRow]} />}
-                </div></td>) }
-              </tr>
+                </div></div>)
             )
           })}
-        </tbody>
-      </table>
+        </div>
+      </div>
     </div>
+    </BodyClassName>
     );
   }
 }

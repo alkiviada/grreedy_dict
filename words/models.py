@@ -488,10 +488,10 @@ class FrenchWordManager(WordRefWordMixin, models.Manager):
     return self.create_word(word=word, words_map=words_map, language='french')
 
 class Word(models.Model):
-    word = models.CharField(max_length=200)
+    word = models.CharField(max_length=400)
     language = models.CharField(max_length=33)
     lookup_date = models.DateTimeField('date looked up')
-    notes = models.CharField(max_length=200)
+    notes = models.CharField(max_length=400)
     translations = models.ManyToManyField("self", blank=True, related_name='translations')
     synonyms = models.ManyToManyField("self", blank=True, related_name='synonyms')
     from_translation = models.BooleanField(default=False)

@@ -12,8 +12,8 @@ def scrape_wordref_words(words_string, split=1):
     
   words_string = re.sub(
     r'(?<!^)\b(ab(b)?r|inter$|n(m|f|noun|pl)|pp|pron|prépp|'
-     'prefix|suffix|viintransitiv|v(i|tr)?$|v(i)?( +|rif|refl|past|aux|pron|expr|tr|pres)|Note|'
-     'loc |agg|adj(adj.*)?$|interj|adv|avv$| contraction|expr(expr.*)?$|n as|prepp|conjc|cong|idiom$|pronpron|prep +|viverbe).*', 
+     'préf|prefix|suffix|viintransitiv|v(i|tr)?$|v(i)?( +|rif|refl|past|aux|pron|expr|tr|pres)|Note|'
+     'loc( )?|agg|adj(adj.*)?$|interj|adv|avv$| contraction|expr(expr.*)?$|n as|prep(p)?|conjc|cong|idiom$|pronpron|prep +|viverbe).*', 
     '', words_string)
   if not split:
     return words_string.strip().translate(str.maketrans(dict.fromkeys(delchars)))
@@ -134,6 +134,10 @@ def parse_straight_word(r):
         word_trans['fr_ex'].append(new_fr_exmpl)
       if new_to_exmpl:
         word_trans['to_ex'].append(new_to_exmpl)
+      #print('EXPL: ', new_expl)
+      #print(new_trans)
+      #print(new_fr_exmpl)
+      #print(new_to_exmpl)
     words_map.append(word_trans)
   return words_map 
 
@@ -216,7 +220,7 @@ def parse_reverse_translations(r):
   word_trans = []
   new_trans_arr = []
   if not words_tables:
-   return []
+   return {}
   for wd_table in words_tables:
     for tr_wd in wd_table.findAll("tr", {"class": ["even", "odd"]}):
       new_trans = scrape_wordref_words(tr_wd.find('td', {'class': 'FrWrd'}), 0)

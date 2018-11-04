@@ -7,10 +7,8 @@ import CollectionsSideBar from "./CollectionsSideBar";
 const Dictionary = () => (
   <div className="dict-container">
   <NewWordForm />
-  <section class="main-content columns">
   <Table />
   <CollectionsSideBar />
-  </section>
   <SaveCollection />
   </div>
 )

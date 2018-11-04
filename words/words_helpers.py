@@ -9,7 +9,7 @@ def prep_def_exmpl(defs):
   if fr_word:
     definition = fr_word + ' [' + definition + ']' 
   if expl:
-     definition += ' ' + expl
+     definition += ' ' + expl if expl.startswith('(') else ' [' + expl + ']'
 
   to_exmpl = defs.get('to_ex')
   fr_exmpl = defs.get('fr_ex')

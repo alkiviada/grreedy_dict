@@ -17,9 +17,7 @@ const Synonyms = (props) => {
     const wordSyns = synonyms[word];
     if (fetchingMap[word]) {
       return (
-          <div className="notification" className="clear-notification-message">
-            Loading...
-        </div>
+            <em>Loading...</em>
       )
     }
     return wordSyns['error'] ? ( 

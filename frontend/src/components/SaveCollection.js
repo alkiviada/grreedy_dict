@@ -47,36 +47,31 @@ class SaveCollection extends Component {
 
     const auth = this.props.auth
 
-    const userTagStyle = { bottom: '29px', right: '-34px'}
-
     if (auth.isAuthenticated) { 
       if (words.length) {
         return (
-        <div className="save-coll coll-notification column">
-        { !saving ?
-        <form onSubmit={(e) => this.onSubmitSave(e)}> 
-        <div className="field is-narrow has-addons has-addons-left save-form is-grouped-multiline">
-          <p className="control">
-          <input class="input" type="text" placeholder="Save Collection" value={name} onChange={this.handleNameChange} />
-          </p>
-          <p className="control">
-          <a className="button save-btn" onClick={(e) => this.onSubmitSave(e)}>
-           Save Words 
-          </a>
-          </p>
-      <div className="control user-tag">
+        !saving ?
+        <div className="colls-footer">
+        <form className="save-coll" onSubmit={(e) => this.onSubmitSave(e)}> 
+          <input class="save-coll-input" type="text" placeholder="Save Collection" value={name} onChange={this.handleNameChange} />
+          <a className="save-btn" onClick={(e) => this.onSubmitSave(e)}>Save Words</a>
+        { this.props.error ?  <p className="grid-warn">Can't save this collection</p> : '' }
+      </form>  
+      <div className="user-tag">
       {auth.user.username} (<a onClick={this.props.logout}>logout</a>)
       </div>
-        { this.props.error ?  <p className="clear-notification-warn">Can't save this collection</p> : '' }
-        </div>
-      </form>  : '' }
-      { saving ? <p className="clear-notification-message">Saving...</p> : '' }
       </div>
+      : <div className="colls-footer">
+        <div className="save-coll"><p className="grid-notification"><em>Saving...</em></p></div>
+      <div className="user-tag">
+      {auth.user.username} (<a onClick={this.props.logout}>logout</a>)
+      </div>
+        </div>
       );
     }
     else {
         return (
-        <div className="save-coll notification coll-notification column is-mobile">
+        <div className="colls-footer">
      <div className="user-tag">
       {auth.user.username} (<a onClick={this.props.logout}>logout</a>)
       </div>
@@ -87,12 +82,14 @@ class SaveCollection extends Component {
     else {
       if (words.length) {
         return this.props.error ? (
-        <div className="save-coll notification coll-notification column is-mobile">
-        <div className="login-notif">To work with collections, please, <Link className="is-link" to="/login">login</Link> or <Link className="is-link" to="/register">register</Link></div>
-        </div>
+        <div className="save-coll">
+        <div className="coll-invite">To work with collections, please, <Link className="is-link" to="/login">login</Link> or <Link className="is-link" to="/register">register</Link>
+        </div></div>
         ) : (
-        <div className="save-coll notification coll-notification column is-mobile">
-        <div className="login-notif"><Link className="is-link" to="/login">Login</Link> or <Link className="is-link" to="/register">Register</Link> to save this collection of words</div>
+        <div className="colls-footer">
+        <div className="save-coll">
+        <div className="coll-invite"><Link className="is-link" to="/login">Login</Link> or <Link className="is-link" to="/register">Register</Link> to save this collection of words</div>
+        </div>
         </div>
        )
       }

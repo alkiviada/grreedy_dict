@@ -33,10 +33,7 @@ class Login extends Component {
     }
     console.log('rendering login');
     return (
-      <div className="section">
-      <div className="container">
-      <div className="columns is-mobile is-centered">
-      <div className="column is-narrow">
+      <div className="login-container">
       <form onSubmit={(e) => this.onSubmitLogin(e)}> 
        {this.props.errors.length > 0 && (
             <ul>
@@ -68,9 +65,6 @@ class Login extends Component {
         Do not have an account? <Link className="is-link" to="/register">Register</Link>
         </div>
     </form>
-    </div>
-    </div>
-    </div>
     </div>
     );
   }

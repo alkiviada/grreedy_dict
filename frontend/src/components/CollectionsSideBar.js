@@ -49,20 +49,24 @@ class CollectionsSideBar extends Component {
   render () {
     const { colls, auth } = this.props;
     return auth.isAuthenticated && colls.length ? (
-      <aside class="column is-2 is-narrow-mobile section colls-column">
-      <p className="menu-label">Collections</p>
-      <ul className="menu-list">
+      <div className="colls-sidebar">
+      <input type="checkbox" className="colls-toggle" id="colls-toggle" />
+      <a target="_blank" href="" className="colls-toggle-link" id="colls-toggle-link">Collections</a>
+      <div className="colls-list">
+      <ul className="coll-ul">
        { colls.map(e => 
-        <li className="coll-text">
-          <a target="_blank" href={`/api/collection/${e.uuid}`} 
+          <li><a target="_blank" href={`/api/collection/${e.uuid}`} 
           onClick={(c) => this.onCollectionClick(c, e.uuid)} className="coll-link">
-            {e.name}<br />{e.last_modified_date}
-          </a>
-        </li>
+            {e.name} {e.last_modified_date}
+         </a></li>
        )}
       </ul>
-    </aside>
-   ) : '';
+     </div>
+    <label for="colls-toggle" className="colls-toggle-label">
+    <span>Collections</span>
+    </label>
+    </div>
+   ) : <div className="colls-sidebar"><div className="colls-empty"></div></div>
  }
 }
 

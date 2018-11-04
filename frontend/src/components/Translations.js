@@ -14,13 +14,11 @@ const Translations = (props) => {
     const word_trans = trans[word];
     if (fetchingMap[word]) {
       return (
-          <div className="notification" className="clear-notification-message">
-            Loading...
-        </div>
+            <em>Loading...</em>
       )
     }
     return word_trans['error'] ? ( 
-      <div className="notification" className="clear-notification-trans-warn">
+      <div className="clear-notification-trans-warn">
         No translation
       </div>
     ) : 
