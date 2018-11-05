@@ -74,7 +74,7 @@ body {
 }
 
 .colls-list {
-  overflow:auto;
+  overflow: auto;
   grid-area: colls-list;
 
 
@@ -111,38 +111,22 @@ body {
 
 .colls-toggle-label {
   top: 0px;
-  right: 0px;
+  left: 0px;
   display: flex;
   height: 2px;
-  margin: 1em .8em auto 0;
+  margin: .3em .1em auto .3em;
+  text-transform:uppercase;
+  font-size: .9rem;
+  font-weight: 600;
   position: absolute;
 }
 
-.colls-toggle-label span,
-.colls-toggle-label span::before,
-.colls-toggle-label span::after {
-  display: block;
-  background: var(--field-color);
-  width: 1.5em;
-  border-radius: 2px;
+.colls-toggle-label span {
+  color: var(--field-color);
   position: relative;
-  height: 2px;
   cursor: pointer;
 }
 
-.colls-toggle-label span::before,
-.colls-toggle-label span::after {
-  content: '';
-  position: absolute;
-}
-
-.colls-toggle-label span::before {
-  bottom: 5px;
-}
-
-.colls-toggle-label span::after {
-  top: 5px;
-}
 .colls-toggle:checked ~ .colls-list {
   transform: scale(1,1);
 }
@@ -375,7 +359,7 @@ ul {
 }
 }
 
-@media (max-width: 320px) {
+@media (max-width: 322px) {
   .grid-warn {
     font-size: .2rem !important;
     margin: .3em .1em !important;
@@ -757,7 +741,7 @@ ul {
 }
 }
 
-@media (max-width: 320px) {
+@media (max-width: 322px) {
   .grid-warn {
     font-size: .2rem !important;
     margin: .3em .1em !important;

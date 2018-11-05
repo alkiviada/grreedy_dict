@@ -51,7 +51,6 @@ class CollectionsSideBar extends Component {
     return auth.isAuthenticated && colls.length ? (
       <div className="colls-sidebar">
       <input type="checkbox" className="colls-toggle" id="colls-toggle" />
-      <a target="_blank" href="" className="colls-toggle-link" id="colls-toggle-link">Collections</a>
       <div className="colls-list">
       <ul className="coll-ul">
        { colls.map(e => 
