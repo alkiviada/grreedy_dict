@@ -75,7 +75,7 @@ class Table extends Component {
       </div>
       </BodyClassName>
     ) : (
-    <BodyClassName className={data.length < 10 ? 'body-with-image' : ''}>
+    <BodyClassName className={data.length < 6 ? 'body-with-image' : ''}>
     <div className="words-container" ref={this.myRef}>
     { wordFetching ? <em>Loading...</em> : '' }
       <h2 className="coll-title">

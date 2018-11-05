@@ -49,6 +49,38 @@ body {
     "save-words save-words"
 }
 
+.login-container {
+  max-height: 100%;
+  min-height: 100vh;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-rows: .1fr .2fr auto;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  grid-template-areas: 
+    ". . ."
+    ". login-form ."
+    ". . ."
+}
+
+.login-form {
+  grid-area: login-form;
+  display: grid;
+}
+
+.register-form {
+  grid-area: login-form;
+  display: grid;
+  grid-row-gap: .5em;
+}
+
+.login-label {
+  font-weight: 700; 
+  align-self: end;
+  margin-bottom: .2em;
+  margin-top: .8em;
+}
+
 
 /* collections sidebar starts here */
 
@@ -298,76 +330,6 @@ ul {
   text-decoration: none;
   color: black;
 }
-@media (min-width: 500px) {
-  .dict-container {
-  grid-template-columns: 1fr 7em;
-    grid-template-areas: 
-      "new-word colls"
-      "words words"
-      "save-words save-words";
-  }
-
-  .words-container { 
-    grid-area: words;
-    display: grid;
-    grid-template-areas: 
-      "coll-title coll-title coll-title"
-      ". words-table .";
-    padding: 0.3em 0.3em;
-    grid-template-rows: 2em 1fr;
-    grid-template-columns: .5fr 6fr .5fr;
-  } 
-}
-
-@media (max-width: 460px) {
-   html
-   {
-      font-size:0.9rem !important;
-   }
-.colls-list {
-  height: 100% !important;
-  margin: .2em .2em .2em .2em;
-}
-}
-
-@media (max-width: 414px) {
-   html
-   {
-      font-size:0.8rem !important;
-   }
-  .etym-style {
-    font-size: 1.4rem !important;
-  }
-  .word strong {
-    font-size: 1.4rem !important;
-  }
-.colls-list {
-  /* height: calc(100% - 2em) !important; */
-  height: 100% !important;
-  margin: .2em .2em .2em .2em;
-}
-}
-
-@media (max-width: 367px) {
-   html
-   {
-      font-size:0.7rem !important;
-   }
-.colls-list {
-  height: 100% !important;
-  margin: .2em .2em .2em .2em;
-}
-}
-
-@media (max-width: 322px) {
-  .grid-warn {
-    font-size: .2rem !important;
-    margin: .3em .1em !important;
-  } 
-}
-
-
-
 
 /* new word starts here */
 
@@ -428,7 +390,7 @@ ul {
   grid-template-columns: 10.2em 6.5em 1fr;
 }
 
-.save-coll a:hover, .new-word a:hover {
+.save-coll a:hover, .new-word a:hover, .login-form a:hover {
   color: black;
 }
 
@@ -440,19 +402,36 @@ ul {
   align-items: center;
 }
 
-.grid-warn {
-  grid-area: error;
+.grid-warn, .login-warn, .register-warn {
   font-weight: 600;
-  font-size: .8rem;
-  margin: 1em .1em;
   color: red;
   justify-self: start; 
-  align-items: center;
 } 
 
-.new-word-input, .save-coll-input {
-  grid-area: input-or-load;
-  margin: .5em 0 .5em .5em;
+.register-warn {
+  align-self: end;
+} 
+
+.login-warn {
+  align-self: start;
+  margin-top: .2em;
+} 
+
+.grid-warn, .login-warn {
+  align-items: center;
+}
+
+.login-warn, .register-warn {
+  font-size: 1rem;
+}
+
+.grid-warn {
+  grid-area: error;
+  font-size: .8rem;
+  margin: 1em .1em;
+} 
+
+.new-word-input, .save-coll-input, .login-username-input, .login-pass-input, .register-user, .register-pass {
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
   align-items: center;
@@ -466,21 +445,13 @@ ul {
   box-shadow: inset 0 1px 2px rgba(10,10,10,0.1);
   width: 9.6em;
 }
+
+.login-username-input, .login-pass-input {
+}
+
 .new-word-input, .save-coll-input {
   grid-area: input-or-load;
   margin: .5em 0 .5em .5em;
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-  align-items: center;
-  border: 1px solid transparent;
-  border-radius: .2em;
-  font-size: 1rem;
-  height: 1.8em;
-  background-color: #fff;
-  border-color: #dbdbdb;
-  color: #363636;
-  box-shadow: inset 0 1px 2px rgba(10,10,10,0.1);
-  width: 9.6em;
 }
 
 .new-word-input::placeholder, .save-coll-input::placeholder {
@@ -498,14 +469,12 @@ ul {
   color: var(--sky-color);
 }
 
-.new-word-btn, .save-btn {
+.new-word-btn, .save-btn, .login-btn, .register-btn {
   font-size: .9rem;
-  grid-area: button;
   margin: .5em .1em 1em .1em;
   cursor: pointer;
   padding: .3em;
   border-radius: .2em;
-  justify-self: center;
   align-items: center;
   border-color: transparent;
   color: #fff;
@@ -513,14 +482,23 @@ ul {
   padding-bottom: calc(.375em - 1px);
   padding-top: calc(.375em - 1px);
   -webkit-box-pack: center;
- user-select: none;
+  user-select: none;
 }
 
-.new-word-btn {
+.new-word-btn, .save-btn {
+  grid-area: button;
+  justify-self: center;
+}
+
+.new-word-btn, .login-btn {
   background-color: var(--field-color);
 }
 
-.save-btn {
+.login-btn, .register-btn {
+  justify-self: start;
+}
+
+.save-btn, .register-btn {
   background-color: var(--sky-color);
 }
 
@@ -680,6 +658,7 @@ ul {
   text-decoration: none;
   color: black;
 }
+
 @media (min-width: 500px) {
   .dict-container {
   grid-template-columns: 1fr 7em;

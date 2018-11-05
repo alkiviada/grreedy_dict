@@ -32,6 +32,14 @@ export default function auth(state=initialState, action) {
         isAuthenticated: false, isLoading: false};
 
     case 'LOGIN_FAILED':
+      localStorage.removeItem("token");
+      return {...state, loginErrors: action.data, token: null, user: null,
+        isAuthenticated: false, isLoading: false};
+
+    case 'REGISTRATION_FAILED':
+      localStorage.removeItem("token");
+      return {...state, registerErrors: action.data, token: null, user: null,
+        isAuthenticated: false, isLoading: false};
 
     case 'LOGOUT_SUCCESSFUL':
       localStorage.removeItem("token");
