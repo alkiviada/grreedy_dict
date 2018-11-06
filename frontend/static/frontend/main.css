@@ -444,7 +444,6 @@ ul {
 
 .new-word-btn, .save-btn, .login-btn, .register-btn {
   font-size: .9rem;
-  margin: .5em .1em 1em .1em;
   cursor: pointer;
   padding: .3em;
   border-radius: .2em;
@@ -456,6 +455,9 @@ ul {
   user-select: none;
 }
 
+.new-word-btn {
+}
+
 .new-word-btn, .save-btn {
   grid-area: button;
   justify-self: center;
@@ -463,6 +465,7 @@ ul {
 
 .new-word-btn, .login-btn {
   background-color: var(--field-color);
+  margin: .6em .1em .9em .1em !important;
 }
 
 .login-btn, .register-btn {
@@ -471,6 +474,7 @@ ul {
 
 .save-btn, .register-btn {
   background-color: var(--sky-color);
+  margin: .5em .1em 1em .1em;
 }
 
 /* words panel starts here */
@@ -745,6 +749,9 @@ ul {
 .new-word-btn {
   padding: .2em !important;
 }
+.user-tag {
+  margin-bottom: .1em !important;
+}
 }
 
 @media (max-width: 460px) {
@@ -780,6 +787,6 @@ ul {
 @media (max-width: 322px) {
   .grid-warn {
     font-size: .2rem !important;
-    margin: .3em .1em !important;
+    margin: .325em .1em .1em .1em !important;
   } 
 }

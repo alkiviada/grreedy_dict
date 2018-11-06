@@ -21,7 +21,12 @@ const mapStateToProps = state => ({
 class CollectionsSideBar extends Component {
   constructor(props) { 
     super(props)
+    this.state = {
+      isSidebarOpen: false,
+    };
+
     this.onCollectionClick = this.onCollectionClick.bind(this) 
+    this.handleSidebarOpen = this.handleSidebarOpen.bind(this) 
   }
 
   static propTypes = {
@@ -38,6 +43,7 @@ class CollectionsSideBar extends Component {
   onCollectionClick(e, uuid) {
     console.log('collection look up');
     e.preventDefault();
+    this.setState({isSidebarOpen: false});
     this.props.requestCollection();
     const origUUId = this.props.origUUId
     if (origUUId) {
@@ -46,11 +52,20 @@ class CollectionsSideBar extends Component {
     this.props.fetchCollection(uuid);
   }
   
+  handleSidebarOpen(e) {
+    if (this.state.isSidebarOpen) {
+      this.setState({isSidebarOpen: false});
+    }
+    else {
+      this.setState({isSidebarOpen: true});
+    }
+  }
+
   render () {
     const { colls, auth } = this.props;
     return auth.isAuthenticated && colls.length ? (
       <div className="colls-sidebar">
-      <input type="checkbox" className="colls-toggle" id="colls-toggle" />
+      <input type="checkbox" className="colls-toggle" id="colls-toggle" checked={this.state.isSidebarOpen} onChange={this.handleSidebarOpen} />
       <div className="colls-list">
       <ul className="coll-ul">
        { colls.map(e => 
