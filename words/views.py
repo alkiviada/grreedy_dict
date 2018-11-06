@@ -42,11 +42,11 @@ class RegistrationAPI(generics.GenericAPIView):
     })
 
 class UserAPI(generics.RetrieveAPIView):
-    permission_classes = [ IsAuthenticated, ]
-    serializer_class = UserSerializer
+  permission_classes = [ IsAuthenticated, ]
+  serializer_class = UserSerializer
 
-    def get_object(self):
-      return self.request.user
+  def get_object(self):
+    return self.request.user
 
 class WordList(generics.ListAPIView):
   serializer_class = WordSerializer
@@ -173,7 +173,7 @@ class WordSingleCreate(generics.ListAPIView):
         coll = Collection.objects.get(uuid=uuid)
         coll.update_last_modified()
       except Exception as e:
-# it was a rougue uuid but we will try to use it anew
+# it was a rogue uuid but we will try to use it anew
         print(e)
         coll = Collection.objects.create(uuid=uuid, 
                                          created_date=timezone.now(), 
