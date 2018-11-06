@@ -173,6 +173,9 @@ body {
   transition: opacity 250ms ease-in-out 250ms;
 }
 
+.colls-toggle:checked ~ .colls-list a:hover {
+ color:black;
+}
 
 /* words panel starts here */
 
@@ -187,14 +190,12 @@ body {
   grid-template-rows: 2em 1fr;
 } 
 
-.words-invite {
-  grid-area: coll-title;
-}
-
 .coll-invite {
   padding-left: .5em;
   padding-top: .7em;
+  padding-bottom: .2em;
   grid-column: 1/-1; 
+  letter-spacing: .05em;
 }
 
 .words-table {
@@ -218,8 +219,6 @@ body {
   letter-spacing: .05em;
   word-break: break-all; 
 }
-
-
 
 .words-head {
   padding: .1em .8em .4em;
@@ -349,7 +348,6 @@ ul {
   grid-template-columns: 10.3em 4.5em 1fr;;
 }
 
-
 .user-tag {
   grid-area: user;
   position: sticky;
@@ -360,25 +358,13 @@ ul {
   align-self: center;
   color: white;
   margin-right: .7em;
+  margin-bottom: .2em;
 }
 
 .user-tag a {
   color: var(--sky-color);
   cursor: pointer;
   text-decoration: none;
-}
-
-.colls-footer {
-  grid-area: save-words;
-  display: grid;
-  grid-template-areas: "save user";
-  grid-template-columns: 1fr 9em;
-
-  z-index: 500;
-  bottom: 0px;
-  position: sticky;
-  position: -webkit-sticky;
-  background-color: var(--field-color);
 }
 
 .save-coll {
@@ -446,9 +432,6 @@ ul {
   width: 9.6em;
 }
 
-.login-username-input, .login-pass-input {
-}
-
 .new-word-input, .save-coll-input {
   grid-area: input-or-load;
   margin: .5em 0 .5em .5em;
@@ -479,8 +462,6 @@ ul {
   border-color: transparent;
   color: #fff;
   line-height: 1.5;
-  padding-bottom: calc(.375em - 1px);
-  padding-top: calc(.375em - 1px);
   -webkit-box-pack: center;
   user-select: none;
 }
@@ -519,34 +500,10 @@ ul {
   grid-area: coll-title;
 }
 
-.coll-invite {
-  padding-left: .5em;
-  padding-top: .7em;
-  grid-column: 1/-1; 
-}
-
-.words-table {
-  grid-area: words-table;
-  display: grid;
-  grid-template-rows: 2em 1fr;
-  grid-template-areas: 
-    "words-head"
-    "words-rows";
-}
-
 .coll-title strong {
   color: #363636;
   font-weight: 600;
 }
-
-.word strong {
-  color: #363636;
-  font-weight: 700;
-  font-size: 1.2rem !important;
-  letter-spacing: .05em;
-  word-break: break-all; 
-}
-
 
 
 .words-head {
@@ -659,114 +616,6 @@ ul {
   color: black;
 }
 
-@media (min-width: 500px) {
-  .dict-container {
-  grid-template-columns: 1fr 7em;
-    grid-template-areas: 
-      "new-word colls"
-      "words words"
-      "save-words save-words";
-  }
-
-  .words-container { 
-    grid-area: words;
-    display: grid;
-    grid-template-areas: 
-      "coll-title coll-title coll-title"
-      ". words-table .";
-    padding: 0.3em 0.3em;
-    grid-template-rows: 2em 1fr;
-    grid-template-columns: .5fr 6fr .5fr;
-  } 
-}
-
-@media (max-width: 460px) {
-   html
-   {
-      font-size:0.9rem !important;
-   }
-.colls-list {
-  height: 100% !important;
-  margin: .2em .2em .2em .2em;
-}
-}
-
-@media (max-width: 414px) {
-   html
-   {
-      font-size:0.8rem !important;
-   }
-  .etym-style {
-    font-size: 1.4rem !important;
-  }
-  .word strong {
-    font-size: 1.4rem !important;
-  }
-.colls-list {
-  /* height: calc(100% - 2em) !important; */
-  height: 100% !important;
-  margin: .2em .2em .2em .2em;
-}
-}
-
-@media (max-width: 367px) {
-   html
-   {
-      font-size:0.7rem !important;
-   }
-.colls-list {
-  height: 100% !important;
-  margin: .2em .2em .2em .2em;
-}
-}
-
-@media (max-width: 322px) {
-  .grid-warn {
-    font-size: .2rem !important;
-    margin: .3em .1em !important;
-  } 
-}
-
-
-
-
-/* new word starts here */
-
-.new-word {
-  /* padding: 0.3rem 2.5rem 2.5rem 1.25rem; */
-  grid-area: new-word;
-  position: sticky;
-  position: -webkit-sticky;
-  letter-spacing: .1em;
-  top: 0px;
-  z-index: 11001;
-
-  background-color: var(--sky-color);
-
-  display: grid;
-  grid-template-areas: "input-or-load button error";
-  grid-template-columns: 10.3em 4.5em 1fr;;
-}
-
-
-.user-tag {
-  grid-area: user;
-  position: sticky;
-  position: -webkit-sticky;
-  z-index: 500;
-  bottom: 0px;
-  justify-self: end;
-  align-self: center;
-  color: white;
-  margin-right: .7em;
-}
-
-.user-tag a {
-  color: var(--sky-color);
-  cursor: pointer;
-  text-decoration: none;
-}
-
 .colls-footer {
   grid-area: save-words;
   display: grid;
@@ -780,110 +629,8 @@ ul {
   background-color: var(--field-color);
 }
 
-.save-coll {
-  grid-area: save;
-  letter-spacing: .1em;
 
-  display: grid;
-  grid-template-areas: "input-or-load button error";
-  grid-template-columns: 10.2em 6.5em 1fr;
-}
 
-.save-coll a:hover, .new-word a:hover {
-  color: black;
-}
-
-.grid-notification {
-  grid-area: input-or-load;
-  padding-top: .5em;
-  padding-left: .5em;
-  justify-self: start; 
-  align-items: center;
-}
-
-.grid-warn {
-  grid-area: error;
-  font-weight: 600;
-  font-size: .8rem;
-  margin: 1em .1em;
-  color: red;
-  justify-self: start; 
-  align-items: center;
-} 
-
-.new-word-input, .save-coll-input {
-  grid-area: input-or-load;
-  margin: .5em 0 .5em .5em;
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-  align-items: center;
-  border: 1px solid transparent;
-  border-radius: .2em;
-  font-size: 1rem;
-  height: 1.8em;
-  background-color: #fff;
-  border-color: #dbdbdb;
-  color: #363636;
-  box-shadow: inset 0 1px 2px rgba(10,10,10,0.1);
-  width: 9.6em;
-}
-.new-word-input, .save-coll-input {
-  grid-area: input-or-load;
-  margin: .5em 0 .5em .5em;
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-  align-items: center;
-  border: 1px solid transparent;
-  border-radius: .2em;
-  font-size: 1rem;
-  height: 1.8em;
-  background-color: #fff;
-  border-color: #dbdbdb;
-  color: #363636;
-  box-shadow: inset 0 1px 2px rgba(10,10,10,0.1);
-  width: 9.6em;
-}
-
-.new-word-input::placeholder, .save-coll-input::placeholder {
-  font-weight: 100;
-  font-size: 1rem;
-  padding: 0.2em;
-  line-height: 1;
-}
-
-.new-word-input::placeholder {
-  color: var(--field-color);
-}
-
-.save-coll-input::placeholder {
-  color: var(--sky-color);
-}
-
-.new-word-btn, .save-btn {
-  font-size: .9rem;
-  grid-area: button;
-  margin: .5em .1em 1em .1em;
-  cursor: pointer;
-  padding: .3em;
-  border-radius: .2em;
-  justify-self: center;
-  align-items: center;
-  border-color: transparent;
-  color: #fff;
-  line-height: 1.5;
-  padding-bottom: calc(.375em - 1px);
-  padding-top: calc(.375em - 1px);
-  -webkit-box-pack: center;
- user-select: none;
-}
-
-.new-word-btn {
-  background-color: var(--field-color);
-}
-
-.save-btn {
-  background-color: var(--sky-color);
-}
 
 .coll-link {
   opacity: 0;
@@ -893,10 +640,6 @@ ul {
   border-radius: 2px;
   padding-right: .5em;
   cursor: pointer;
-}
-
-.colls-list a:hover {
-  color: black;
 }
 
 .coll-text {
@@ -913,27 +656,6 @@ ul {
   margin-top:5px;
 }
 
-@media(max-width: 765px) {
-
-.menu-label {
-  color: var(--sky-color) !important;
-   font-weight: 600;
-}
-
-.react-tabs__tab-list {
-    display: block;
-    overflow-y: auto;
-    width: 100%;
-  }
-
- .react-tabs__tab {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 4em;
-    font-size: .8rem;
- }
-}
 
 
 .clear-notification-message {
@@ -946,11 +668,6 @@ ul {
   background-color: inherit;
   color: red;
   font-family: var(--body-font);
-}
-
-.menu-label {
-  color: var(--field-color);
-   font-weight: bold;
 }
 
 .react-tabs__tab-list {
@@ -1004,4 +721,79 @@ ul {
 
 .react-tabs__tab-panel--selected {
   display: block;
+}
+
+@media (min-width: 500px) {
+  .dict-container {
+  grid-template-columns: 1fr 7em;
+    grid-template-areas: 
+      "new-word colls"
+      "words words"
+      "save-words save-words";
+  }
+
+  .words-container { 
+    grid-area: words;
+    display: grid;
+    grid-template-areas: 
+      "coll-title coll-title coll-title"
+      ". words-table .";
+    padding: 0.3em 0.3em;
+    grid-template-rows: 2em 1fr;
+    grid-template-columns: .5fr 6fr .5fr;
+  } 
+}
+
+@media(max-width: 765px) {
+
+  .react-tabs__tab-list {
+    display: block;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  .react-tabs__tab {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 6em;
+    font-size: .8rem;
+  }
+  .word strong {
+    font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 460px) {
+   html
+   {
+      font-size:0.9rem !important;
+   }
+  .word strong {
+    font-size: .9rem !important;
+  }
+}
+
+@media (max-width: 414px) {
+   html
+   {
+      font-size:0.8rem !important;
+   }
+  .etym-style {
+    font-size: 1.4rem !important;
+  }
+}
+
+@media (max-width: 367px) {
+   html
+   {
+      font-size:0.7rem !important;
+   }
+}
+
+@media (max-width: 322px) {
+  .grid-warn {
+    font-size: .2rem !important;
+    margin: .3em .1em !important;
+  } 
 }

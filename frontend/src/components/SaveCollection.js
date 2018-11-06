@@ -82,14 +82,11 @@ class SaveCollection extends Component {
     else {
       if (words.length) {
         return this.props.error ? (
-        <div className="save-coll">
         <div className="coll-invite">To work with collections, please, <Link className="is-link" to="/login">login</Link> or <Link className="is-link" to="/register">register</Link>
-        </div></div>
+        </div>
         ) : (
         <div className="colls-footer">
-        <div className="save-coll">
         <div className="coll-invite"><Link className="is-link" to="/login">Login</Link> or <Link className="is-link" to="/register">Register</Link> to save this collection of words</div>
-        </div>
         </div>
        )
       }
