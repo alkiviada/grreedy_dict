@@ -11,10 +11,10 @@
   margin: 0;
 }
 
-html{
- width:100%;
- position:absolute;
- min-width:100%
+html {
+  width:100%;
+  position:absolute;
+  min-width:100%
 }
 
 body {
@@ -33,7 +33,6 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
 }
-
 
 .dict-container {
   max-height: 100%;
@@ -108,7 +107,6 @@ body {
 .colls-list {
   overflow: auto;
   grid-area: colls-list;
-
 
   background-color: var(--sky-color);
   width: 7em;
@@ -190,14 +188,6 @@ body {
   grid-template-rows: 2em 1fr;
 } 
 
-.coll-invite {
-  padding-left: .5em;
-  padding-top: .7em;
-  padding-bottom: .2em;
-  grid-column: 1/-1; 
-  letter-spacing: .05em;
-}
-
 .words-table {
   grid-area: words-table;
   display: grid;
@@ -237,14 +227,6 @@ body {
   grid-auto-rows: 13em;
 }
 
-.coll-title {
-  grid-area: coll-title;
-  font-size: 1rem;
-  color: #4a4a4a;
-  margin: .3em 0.5em;
-  font-weight: 400;
-  line-height: 1.25;
-}
 
 .word-cell {
   background: white;
@@ -365,6 +347,14 @@ ul {
   color: var(--sky-color);
   cursor: pointer;
   text-decoration: none;
+}
+
+.coll-invite {
+  padding-left: .5em;
+  padding-top: .7em;
+  padding-bottom: .2em;
+  grid-column: 1/-1; 
+  letter-spacing: .05em;
 }
 
 .save-coll {
@@ -505,7 +495,6 @@ ul {
   font-weight: 600;
 }
 
-
 .words-head {
   padding: .1em .8em .4em;
   place-items: start;
@@ -629,9 +618,6 @@ ul {
   background-color: var(--field-color);
 }
 
-
-
-
 .coll-link {
   opacity: 0;
   transition: opacity 150ms ease-in-out;
@@ -642,21 +628,12 @@ ul {
   cursor: pointer;
 }
 
-.coll-text {
-  font-weight: bold;
-  color: var(--field-color);
-  text-shadow: 2px 1px 1px var(--sky-color), 1px 3px 2px var(--field-color);
-  list-style-type: none;
-}
-
 .login-notif {
   background-color: inherit;
   color: white;
   font-family: var(--body-font);
   margin-top:5px;
 }
-
-
 
 .clear-notification-message {
   background-color: inherit;
@@ -742,9 +719,12 @@ ul {
     grid-template-rows: 2em 1fr;
     grid-template-columns: .5fr 6fr .5fr;
   } 
+.new-word-btn {
+  padding: .2em !important;
+}
 }
 
-@media(max-width: 765px) {
+@media(max-width: 768px) {
 
   .react-tabs__tab-list {
     display: block;
@@ -762,6 +742,9 @@ ul {
   .word strong {
     font-size: 1rem !important;
   }
+.new-word-btn {
+  padding: .2em !important;
+}
 }
 
 @media (max-width: 460px) {
@@ -772,6 +755,9 @@ ul {
   .word strong {
     font-size: .9rem !important;
   }
+.new-word-btn {
+  padding: .1em !important;
+}
 }
 
 @media (max-width: 414px) {
