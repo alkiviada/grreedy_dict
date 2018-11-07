@@ -3,7 +3,7 @@ import { translationsToMap } from './helpers';
 
 export const lookUpTranslations = (word, allTranslations, fetchingMap) => dispatch => {
   console.log('fetching word translation');
-  fetch('api/word/translate/' + word)
+  fetch('api/word/translate/' + word + '/italian')
   .then(response =>
       response.json().then(json => ({
         status: response.status,

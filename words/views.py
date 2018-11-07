@@ -260,6 +260,10 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
     if not translated_words:
       translated_words = []
       print("Translations for this Word are not in our DB");
+      languages = self.kwargs['languages']
+      if languages:
+        LANGUAGES = languages.split(',')
+      print(LANGUAGES)
       for language in LANGUAGES:
         print(language)
         if orig_word.language == language:

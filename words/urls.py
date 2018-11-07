@@ -4,7 +4,7 @@ from . import views
 from knox import views as knox_views
 
 urlpatterns = [
-    url(r'^api/word/translate/(?P<word>[-\'\w() ]+)$', views.WordSingleCreateTranslate.as_view(), name='word-translate'),
+    url(r'^api/word/translate/(?P<word>[-\'\w() ]+)/(?P<languages>[\w]+)$', views.WordSingleCreateTranslate.as_view(), name='word-translate'),
     url(r'^api/word/synonyms/(?P<word>[-\'\w() ]+)$', views.WordSingleCreateSynonyms.as_view(), name='word-synonyms'),
     url(r'^api/word/collocations/(?P<word>[-\'\w() ]+)$', views.WordSingleCreateCollocations.as_view(), name='word-collocations'),
     url(r'^api/word/(?P<word>[-\'\w() ]+)/(?P<uuid>[0-9a-f-]+)?$', views.WordSingleCreate.as_view(), name='word-detail'),

@@ -13,7 +13,7 @@ def scrape_wordref_words(words_string, split=1):
   words_string = re.sub(
     r'(?<!^)\b(ab(b)?r|inter$|n(m|f|noun|pl)|pp|pron|prépp|'
      'préf|prefix|suffix|viintransitiv|v(i|tr)?$|v(i)?( +|rif|refl|past|aux|pron|expr|tr|pres)|Note|'
-     'loc( )?|agg|adj(adj.*)?$|interj|adv|avv$| contraction|expr(expr.*)?$|n as|prep(p)?|conjc|cong|idiom$|pronpron|prep +|viverbe).*', 
+     'loc( )?|agg|adj(adj.*)?$|interj|adv|avv$| contraction|expr(expr.*)?$|n as|prep(p)?|conjc|cong$|idiom$|pronpron|prep +|viverbe).*', 
     '', words_string)
   if not split:
     return words_string.strip().translate(str.maketrans(dict.fromkeys(delchars)))
@@ -156,7 +156,7 @@ def parse_straight_translations(r):
   word_soup = BeautifulSoup(word_page, features="html.parser")
   words_tables = word_soup.findAll('table', {'class': 'WRD'}, id=lambda x: x != 'compound_forms');
   if not words_tables:
-    return []
+    return {}
   word_trans = []
   new_trans_arr = []
   new_trans_arr_map = []
