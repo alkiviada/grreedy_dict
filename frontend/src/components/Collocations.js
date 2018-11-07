@@ -16,8 +16,8 @@ const Collocations = (props) => {
     const wordCollocs = collocs[word];
     if (fetchingMap[word]) {
       return (
-          <div className="notification" className="clear-notification-message">
-            Loading...
+          <div className="clear-notification-message">
+            <em>Loading...</em>
         </div>
       )
     }
