@@ -11,6 +11,7 @@ import { switchTab } from '../actions/tabActions';
 import { lookUpTranslations, requestTranslations, } from '../actions/transActions';
 import { lookUpCollocations, requestCollocations, } from '../actions/collocationsActions';
 import { lookUpSynonyms, requestSynonyms, } from '../actions/synonymsActions';
+import { fetchNote, requestNote } from '../actions/notesActions';
 import { renderList, listStyles } from './helpers';
 
 const mapStateToProps = state => ({
@@ -18,7 +19,9 @@ const mapStateToProps = state => ({
   allTranslations: state.translations.allTranslations,
   allSynonyms: state.synonyms.allSynonyms,
   allCollocations: state.collocations.allCollocations,
+  allNotes: state.notes.allNotes,
   transFetchingMap: state.translations.fetchingMap,
+  notesFetchingMap: state.notes.fetchingMap,
   collocsFetchingMap: state.collocations.fetchingMap,
   synonymssFetchingMap: state.synonyms.fetchingMap,
 });
@@ -44,8 +47,8 @@ class WordTabs extends Component {
     this.setState( { tabIndex: index } );
 
     const tabWordMap = {
-                        'english': { 1: 'TRANSLATIONS', 2: 'COLLOCATIONS', 3: 'SYNONYMS' },
-                        'non-english': { 1: 'COLLOCATIONS', 2: 'SYNONYMS' },
+                        'english': { 1: 'TRANSLATIONS', 2: 'COLLOCATIONS', 3: 'SYNONYMS', 4: 'ADD_NOTE' },
+                        'non-english': { 1: 'COLLOCATIONS', 2: 'SYNONYMS', 3: 'ADD_NOTE' },
                        }
     let tabMap = {}
     if (isEnglishWord) {
@@ -58,6 +61,13 @@ class WordTabs extends Component {
     console.log(tabMap[index])
 
     switch (tabMap[index]) {
+      case 'ADD_NOTE':
+        if (!this.props.allNotes[word]) {
+          console.log('looking up notes'); 
+          this.props.requestNote(word, this.props.notesFetchingMap)
+          this.props.fetchNotes(word, this.props.allNotes, this.props.notesFetchingMap)
+        }
+        break
       case 'TRANSLATIONS':
         if (!this.props.allTranslations[word]) {
           console.log('looking up translations'); 
@@ -121,7 +131,6 @@ class WordTabs extends Component {
 }
 
 const mapDispatchToProps = {
-   
           switchTab, 
           lookUpTranslations, 
           requestTranslations, 
@@ -129,6 +138,8 @@ const mapDispatchToProps = {
           requestCollocations,
           lookUpSynonyms, 
           requestSynonyms,
+          fetchNote, 
+          requestNote,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(WordTabs);
