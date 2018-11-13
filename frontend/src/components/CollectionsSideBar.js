@@ -71,7 +71,7 @@ class CollectionsSideBar extends Component {
        { colls.map(e => 
           <li><a target="_blank" href={`/api/collection/${e.uuid}`} 
           onClick={(c) => this.onCollectionClick(c, e.uuid)} className="coll-link">
-            {e.name} {e.last_modified_date}
+            <span className="coll-name">{e.name}</span> <span className="coll-date">{e.last_modified_date}</span>
          </a></li>
        )}
       </ul>

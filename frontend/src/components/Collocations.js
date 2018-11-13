@@ -22,7 +22,7 @@ const Collocations = (props) => {
       )
     }
     return wordCollocs['error'] ? ( 
-      <div className="clear-notification-trans-warn">
+      <div className="notify-warn">
         No collocations
       </div>
     ) : 

@@ -2,6 +2,7 @@ import {combineReducers} from "redux";
 
 import wordsReducer from "./wordsReducers";
 import transReducer from "./transReducers";
+import noteReducer from "./noteReducers";
 import synonymsReducer from "./synonymsReducers";
 import collsReducer from "./collsReducers";
 import collocationsReducer from "./collocationsReducers";
@@ -15,5 +16,6 @@ export default combineReducers({
   tabs: tabReducer,
   collections: collsReducer,
   collocations: collocationsReducer,
-  auth: auth
+  auth: auth,
+  notes: noteReducer 
 });
