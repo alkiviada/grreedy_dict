@@ -8,6 +8,7 @@ import { SAVE_COLLECTION,
          FETCH_NOTE_FULFILLED, 
          FETCH_COLLECTIONS_FULFILLED, 
          FETCH_COLLECTION_FULFILLED, 
+         SWITCH_TAB,
          FETCH_COLLECTIONS, 
          FETCH_COLLECTION, 
          CLEAR_FETCHED
@@ -157,6 +158,10 @@ export const saveCollection = (name, uuid, words) => (dispatch, getState) => {
           dispatch({
             type: FETCH_NOTE_FULFILLED,
             payload: { allNotes: {}, fetchingMap: {} }
+          }),
+          dispatch({
+            type: SWITCH_TAB,
+            payload: { mapTabIndex: {} }
           }),
           dispatch({
             type: FETCH_WORDS_FULFILLED,
