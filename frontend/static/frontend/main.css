@@ -387,7 +387,7 @@ ul {
   grid-template-columns: 10.2em 6.5em 1fr;
 }
 
-.save-coll a:hover, .new-word a:hover, .login-form a:hover {
+.save-coll a:hover, .new-word a:hover, .login-form a:hover, .add-note-form a:hover {
   color: black;
 }
 
@@ -501,12 +501,12 @@ ul {
 .add-note-form {
   width: 100%;
   height: 100%;
-  padding: .2em 1em .5em .2em;
+  padding: .2em 1em .2em .2em;
   display: grid;
   grid-template-areas: "text-area ."
               "button .";
   grid-template-rows: 2.5fr .3fr;
-  grid-template-columns: 1fr 3em;
+  grid-template-columns: 1fr .1fr;
 }
 
 .note-txtarea {

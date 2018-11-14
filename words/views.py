@@ -10,6 +10,7 @@ from words.serializers import (WordSerializer, SynonymSerializer, TranslationSer
                                CreateUserSerializer, UserSerializer, LoginUserSerializer)
 
 from rest_framework import generics
+from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from django.core.exceptions import ObjectDoesNotExist 
@@ -240,8 +241,25 @@ class WordSingleCreateSynonyms(generics.RetrieveAPIView):
     serializer = SynonymSerializer(synonyms, many=True)
     return Response(serializer.data)
 
-class WordNoteSingleCreate(generics.RetrieveAPIView):
+class WordNoteSingleCreate(generics.GenericAPIView):
   permission_classes = [ AllowAny, ]
+
+  serializer_class = WordNoteSerializer
+
+  def post(self, request, format=None):
+    print('ADD NOTE')
+    word = request.data.get('word')
+    word = Word.objects.filter(word=word).first()
+    collection_uuid = request.data.get('uuid')
+    note = request.data.get('note')
+    coll = Collection.objects.get(uuid=collection_uuid)
+    word_note, created = WordNote.objects.update_or_create(collection=coll, word=word, note=note)
+    
+    return Response(WordNoteSerializer(word_note).data)
+
+class WordNoteSingleDetail(APIView):
+  permission_classes = [ AllowAny, ]
+
   def get_queryset(self):
     word = self.kwargs['word']
     collection_uuid = self.kwargs['uuid']
@@ -270,16 +288,6 @@ class WordNoteSingleCreate(generics.RetrieveAPIView):
       print ("No note for word: ", word)
       return Response({'note': ''})
 
-  def post(self, request, *args, **kwargs):
-    print('ADD NOTE')
-    word = request.data.get('word')
-    word = Word.objects.filter(word=word).first()
-    collection_uuid = request.data.get('uuid')
-    note = request.data.get('note')
-    coll = Collection.objects.get(uuid=collection)
-    word_note = WordNote.objects.create(collection=coll, word=word, note=note)
-    
-    return Response(WordNoteSerializer(word_note).data)
 
 
 class WordSingleCreateTranslate(generics.RetrieveAPIView):
