@@ -1,4 +1,4 @@
-from words.models import Word, Definition, Etymology, Example, Collection, Collocation
+from words.models import Word, Definition, Etymology, Example, Collection, Collocation, WordNote
 from django.utils import timezone
 from knox.models import AuthToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -6,10 +6,11 @@ from words.constants import LANGUAGES
 import datetime
 
 from words.serializers import (WordSerializer, SynonymSerializer, TranslationSerializer, CollectionSerializer, 
-                               CollectionDetailSerializer, CollocationSerializer,
+                               CollectionDetailSerializer, CollocationSerializer, WordNoteSerializer,
                                CreateUserSerializer, UserSerializer, LoginUserSerializer)
 
 from rest_framework import generics
+from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from django.core.exceptions import ObjectDoesNotExist 
@@ -239,6 +240,55 @@ class WordSingleCreateSynonyms(generics.RetrieveAPIView):
     print(synonyms)
     serializer = SynonymSerializer(synonyms, many=True)
     return Response(serializer.data)
+
+class WordNoteSingleCreate(generics.GenericAPIView):
+  permission_classes = [ AllowAny, ]
+
+  serializer_class = WordNoteSerializer
+
+  def post(self, request, format=None):
+    print('ADD NOTE')
+    word = request.data.get('word')
+    word = Word.objects.filter(word=word).first()
+    collection_uuid = request.data.get('uuid')
+    note = request.data.get('note')
+    coll = Collection.objects.get(uuid=collection_uuid)
+    word_note, created = WordNote.objects.update_or_create(collection=coll, word=word, note=note)
+    
+    return Response(WordNoteSerializer(word_note).data)
+
+class WordNoteSingleDetail(APIView):
+  permission_classes = [ AllowAny, ]
+
+  def get_queryset(self):
+    word = self.kwargs['word']
+    collection_uuid = self.kwargs['uuid']
+    word = Word.objects.filter(word=word).first()
+    collection = Collection.objects.get(uuid=collection_uuid)
+    note = {}
+    try:
+      note = WordNote.objects.get(word=word, collection=collection)
+    except ObjectDoesNotExist:
+      print ("No note for word: ", word)
+      note = WordNote.objects.none() 
+
+    return note
+
+  serializer_class = WordNoteSerializer
+
+  def get(self, request, word, uuid, *args, **kwargs):
+    word = Word.objects.filter(word=word).first()
+    coll = Collection.objects.get(uuid=uuid)
+    note = {}
+    try:
+      note = WordNote.objects.get(word=word, collection=coll)
+      serializer = WordNoteSerializer(note)
+      return Response(serializer.data)
+    except ObjectDoesNotExist:
+      print ("No note for word: ", word)
+      return Response({'note': ''})
+
+
 
 class WordSingleCreateTranslate(generics.RetrieveAPIView):
   permission_classes = [ AllowAny, ]

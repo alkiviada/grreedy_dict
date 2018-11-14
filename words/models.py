@@ -545,3 +545,8 @@ class CollectionOfWords(models.Model):
     word = models.ForeignKey(Word, on_delete=models.CASCADE)
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
     date_added = models.DateTimeField()
+
+class WordNote(models.Model):
+    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
+    note = models.TextField()

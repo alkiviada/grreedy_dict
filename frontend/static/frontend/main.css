@@ -93,6 +93,27 @@ body {
   position: -webkit-sticky;
 }
 
+.coll-name {
+ color: var(--field-color);
+ text-shadow: 1px 1px 1px #b2b8c4;
+}
+
+.coll-name:hover {
+  color: #b2b8c4;
+  text-shadow: 1px 1px 1px var(--field-color);
+}
+
+.coll-date {
+  font-size: .8rem;
+  color: #dbdbdb;
+  text-shadow: 1px 1px 1px #b2b8c4;
+}
+
+.coll-date:hover {
+  color: #b2b8c4;
+  text-shadow: 1px 1px 1px #dbdbdb;
+}
+
 .colls-sidebar {
   grid-area: colls;
   background-color: var(--sky-color);
@@ -366,7 +387,7 @@ ul {
   grid-template-columns: 10.2em 6.5em 1fr;
 }
 
-.save-coll a:hover, .new-word a:hover, .login-form a:hover {
+.save-coll a:hover, .new-word a:hover, .login-form a:hover, .add-note-form a:hover {
   color: black;
 }
 
@@ -442,7 +463,7 @@ ul {
   color: var(--sky-color);
 }
 
-.new-word-btn, .save-btn, .login-btn, .register-btn {
+.new-word-btn, .save-btn, .login-btn, .register-btn, .add-note-btn {
   font-size: .9rem;
   cursor: pointer;
   padding: .3em;
@@ -472,9 +493,51 @@ ul {
   justify-self: start;
 }
 
-.save-btn, .register-btn {
+.save-btn, .register-btn, .add-note-btn {
   background-color: var(--sky-color);
   margin: .5em .1em 1em .1em;
+}
+
+.add-note-form {
+  width: 100%;
+  height: 100%;
+  padding: .2em 1em .2em .2em;
+  display: grid;
+  grid-template-areas: "text-area ."
+              "button .";
+  grid-template-rows: 2.5fr .3fr;
+  grid-template-columns: 1fr .1fr;
+}
+
+.note-txtarea {
+ grid-area: text-area;
+  height: 100%;
+  resize: vertical;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-size: 1rem;
+  justify-content: flex-start;
+  line-height: 1.5;
+  position: relative;
+  vertical-align: top;
+  background-color: white;
+  border-color: #dbdbdb;
+  color: #363636;
+  -webkit-box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+  box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+  max-width: 100%;
+  width: 100%;
+  padding-bottom: calc(0.375em - 5px);
+  padding-left: calc(0.625em - 5px);
+  padding-right: calc(0.625em - 5px);
+  padding-top: calc(0.375em - 5px);
+}
+
+.add-note-btn {
+ margin: .4em .1em .05em .1em;
+ grid-area: button;
+ justify-self: start;
 }
 
 /* words panel starts here */
@@ -591,7 +654,7 @@ ul {
   text-transform:capitalize;
   font-weight: bold;
   font-size: 1rem;
-  line-height: 0.7;
+  line-height: 0.8;
   padding-top: 0.2em;
   padding-bottom: .5em;
   color: var(--sky-color);
@@ -645,11 +708,10 @@ ul {
   font-family: var(--body-font);
 }
 
-.clear-notification-trans-warn {
-  background-color: inherit;
+.notify-warn {
   color: red;
-  font-family: var(--body-font);
 }
+
 
 .react-tabs__tab-list {
   border-bottom: 1px solid #aaa;
@@ -740,7 +802,7 @@ ul {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 6em;
+    max-width: 5em;
     font-size: .8rem;
   }
   .word strong {

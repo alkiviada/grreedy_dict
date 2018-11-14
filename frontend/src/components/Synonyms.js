@@ -21,7 +21,7 @@ const Synonyms = (props) => {
       )
     }
     return wordSyns['error'] ? ( 
-      <div className="notification" className="clear-notification-trans-warn">
+      <div className="notify-warn">
         No synonyms
       </div>
     ) : 

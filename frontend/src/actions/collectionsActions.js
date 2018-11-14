@@ -5,8 +5,10 @@ import { SAVE_COLLECTION,
          SAVE_COLLECTION_REJECTED, 
          FETCH_WORDS, 
          FETCH_WORDS_FULFILLED, 
+         FETCH_NOTE_FULFILLED, 
          FETCH_COLLECTIONS_FULFILLED, 
          FETCH_COLLECTION_FULFILLED, 
+         SWITCH_TAB,
          FETCH_COLLECTIONS, 
          FETCH_COLLECTION, 
          CLEAR_FETCHED
@@ -22,7 +24,7 @@ export const requestSave = () => dispatch => {
 };
 
 export const clearFetched = () => dispatch => {
- console.log('clearing fetched');
+ console.log('clearing fetched colection name');
   dispatch({
     type: CLEAR_FETCHED,
   })
@@ -152,6 +154,14 @@ export const saveCollection = (name, uuid, words) => (dispatch, getState) => {
           dispatch({
             type: SAVE_COLLECTION_FULFILLED,
             payload: colls
+          }),
+          dispatch({
+            type: FETCH_NOTE_FULFILLED,
+            payload: { allNotes: {}, fetchingMap: {} }
+          }),
+          dispatch({
+            type: SWITCH_TAB,
+            payload: { mapTabIndex: {} }
           }),
           dispatch({
             type: FETCH_WORDS_FULFILLED,

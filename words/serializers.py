@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from words.models import Word, Etymology, Definition, Example, Collection, Collocation
+from words.models import Word, Etymology, Definition, Example, Collection, Collocation, WordNote
 from collections import OrderedDict
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -54,6 +54,12 @@ class CollectionUUIDSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
         fields = [ 'uuid', 'name' ]
+
+class WordNoteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = WordNote
+        fields = ['note' ]
 
 class WordSerializer(serializers.ModelSerializer):
     word_etymologies = EtymologySerializer(many=True)
