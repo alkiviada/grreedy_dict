@@ -44,6 +44,7 @@ class WordNote extends React.Component {
     const note = !this.props.fetched ? this.state.note : notes[word] ? notes[word]['note'] : '';
     console.log(notes)
     console.log(`i have this note: ${note}`)
+    console.log(fetchingMap)
     if (fetchingMap[word]) {
       return (
             <em>Loading...</em>

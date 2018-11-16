@@ -253,7 +253,8 @@ class WordNoteSingleCreate(generics.GenericAPIView):
     collection_uuid = request.data.get('uuid')
     note = request.data.get('note')
     coll = Collection.objects.get(uuid=collection_uuid)
-    word_note, created = WordNote.objects.update_or_create(collection=coll, word=word, note=note)
+    word_note, created = WordNote.objects.update_or_create(collection=coll, word=word, defaults={'note': note} )
+    print(created)
     
     return Response(WordNoteSerializer(word_note).data)
 

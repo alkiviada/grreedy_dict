@@ -145,7 +145,7 @@ body {
   margin-top: 2em;
   padding: 0;
   text-align: start;
-  line-height: 1.25;
+  line-height: 1.5;
 }
 
 .colls-list li {
@@ -218,10 +218,6 @@ body {
     "words-rows";
 }
 
-.coll-title strong {
-  color: #363636;
-  font-weight: 600;
-}
 
 .word strong {
   color: #363636;
@@ -240,13 +236,6 @@ body {
   grid-template-columns: minmax(5em, 15%) 1fr;
 }
 
-.words-rows {
-  grid-area: words-rows;
-  display: grid;
-
-  grid-template-columns: minmax(5em, 15%) 1fr;
-  grid-auto-rows: 13em;
-}
 
 
 .word-cell {
@@ -281,12 +270,22 @@ ul {
   list-style: none;
 }
 
-.word {
+.word-about {
   word-wrap: break-word;
   background: #F5FBFD;
   font-family: var(--word-font);
-  height: 11.5em;
+  max-height: 11.5em;
+  height: auto;
   overflow:auto;
+  padding-left: .3em;
+  padding-right: .3em;
+}
+
+.word {
+  word-wrap: break-word;
+  font-family: var(--word-font);
+  max-height: 11.5em;
+  height: auto;
   padding-left: .3em;
   padding-right: .3em;
 }
@@ -309,16 +308,6 @@ ul {
 
 .lang-italian {
   font-family: Vesper Libre;
-}
-
-.lang-head {
-  text-transform:capitalize;
-  font-weight: bold;
-  font-size: 1rem;
-  line-height: 0.7;
-  padding-top: 0.2em;
-  padding-bottom: .5em;
-  color: var(--sky-color);
 }
 
 .word-meaning {
@@ -576,7 +565,7 @@ ul {
   display: grid;
 
   grid-template-columns: minmax(5em, 15%) 1fr;
-  grid-auto-rows: 13em;
+  grid-auto-rows: auto;
 }
 
 .coll-title {
@@ -585,7 +574,7 @@ ul {
   color: #4a4a4a;
   margin: .3em 0.5em;
   font-weight: 400;
-  line-height: 1.25;
+  line-height: 1.6;
 }
 
 .word-cell {
@@ -620,15 +609,6 @@ ul {
   list-style: none;
 }
 
-.word {
-  word-wrap: break-word;
-  background: #F5FBFD;
-  font-family: var(--word-font);
-  height: 11.5em;
-  overflow:auto;
-  padding-left: .3em;
-  padding-right: .3em;
-}
 
 .lang-english {
   font-family: IM Fell English SC;
@@ -654,7 +634,7 @@ ul {
   text-transform:capitalize;
   font-weight: bold;
   font-size: 1rem;
-  line-height: 0.8;
+  line-height: 1.5;
   padding-top: 0.2em;
   padding-bottom: .5em;
   color: var(--sky-color);
@@ -805,14 +785,26 @@ ul {
     max-width: 5em;
     font-size: .8rem;
   }
-  .word strong {
-    font-size: 1rem !important;
-  }
 .new-word-btn {
   padding: .2em !important;
 }
 .user-tag {
   margin-bottom: .1em !important;
+}
+.words-table {
+  grid-template-areas: 
+    "words-rows";
+    grid-template-rows: 1fr;
+}
+ .words-head {
+ display: none;
+}
+.words-rows {
+  grid-area: words-rows;
+  display: grid;
+
+  grid-template-columns: 1fr;
+  grid-auto-rows: auto;
 }
 }
 
@@ -821,9 +813,6 @@ ul {
    {
       font-size:0.9rem !important;
    }
-  .word strong {
-    font-size: .9rem !important;
-  }
 .new-word-btn {
   padding: .1em !important;
 }

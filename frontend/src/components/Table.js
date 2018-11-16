@@ -90,11 +90,13 @@ class Table extends Component {
             let word = el.word;
             return (
                 Object.entries(el).map(el => 
-                <div className="word-cell"><div className="word" key={key(el)}>
+                <div className="word-cell">
                 {typeof(el[1]) === 'string' ? 
-                <strong>{el[1]}</strong> : 
-                <WordTabs word={word} element={el[1]} fn={[this.addRow]} />}
-                </div></div>)
+                <div className="word" key={key(el)}>
+                <strong>{el[1]}</strong></div> : 
+                <div className="word-about" key={key(el)}>
+                <WordTabs word={word} element={el[1]} fn={[this.addRow]} /></div>}
+                </div>)
             )
           })}
         </div>
