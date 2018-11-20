@@ -97,7 +97,7 @@ export const fetchNote = (word, allNotes, fetchingMap) => dispatch => {
       err => {
         console.log('problems');
         dispatch({type: FETCH_NOTE_REJECTED, payload: { error: 'fetching note failed', 
-                      allNotes: { ...allNotes, ...{ [word]: json } },
+                      allNotes: { ...allNotes, ...{ [word]: {error: true} } },
                       fetchingMap: { ...fetchingMap, ...{[word]: false} } }
         })
       }

@@ -36,8 +36,7 @@ class Table extends Component {
     console.log('checking map');
     if (!this.props.allWordsMap[word]) {
       this.props.requestWord();
-      const uuid = this.props.uuid
-      this.props.lookUpWord(word, this.props.data, uuid);
+      this.props.lookUpWord(word);
     }
     this.scrollToDomRef()
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { lookUpWord, requestWord, clearError } from '../actions/wordsActions';
+import { lookUpWord, requestWord, clearNewWordError } from '../actions/wordsActions';
 
 class NewWordForm extends Component {
   constructor(props) { 
@@ -15,7 +15,7 @@ class NewWordForm extends Component {
 
   handleWordChange(w) {
    if (this.props.error) {
-     this.props.clearError();
+     this.props.clearNewWordError();
    }
    this.setState({word: w.target.value});
   }
@@ -61,4 +61,4 @@ NewWordForm.propTypes = {
   requestWord: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, { lookUpWord, requestWord, clearError })(NewWordForm);
+export default connect(mapStateToProps, { lookUpWord, requestWord, clearNewWordError })(NewWordForm);

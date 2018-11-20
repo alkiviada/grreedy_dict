@@ -1,4 +1,10 @@
-import { CLEAR_ERROR, FETCH_WORDS, FETCH_WORDS_FULFILLED, FETCH_WORDS_REJECTED, FETCH_WORD, FETCH_WORD_FULFILLED } from '../actions/types';
+import { CLEAR_NEW_WORD_ERROR, 
+         FETCH_WORDS, 
+         FETCH_WORDS_FULFILLED, 
+         FETCH_WORDS_REJECTED, 
+         FETCH_WORD, 
+         FETCH_WORD_FULFILLED 
+       } from '../actions/types';
 
 const initialState = {
   items: [],
@@ -16,9 +22,9 @@ export default function(state = initialState, action) {
     case FETCH_WORDS: return { ...state, 
                                allWordsFetching: true, 
                              };
-    case CLEAR_ERROR: return { ...state, 
-                               error: null
-                             };
+    case CLEAR_NEW_WORD_ERROR: return { ...state, 
+                                         error: null
+                                      };
     case FETCH_WORD: return { ...state, 
                                newWordFetching: true, 
                              };

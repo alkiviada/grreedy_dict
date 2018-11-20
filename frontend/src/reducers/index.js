@@ -1,4 +1,4 @@
-import {combineReducers} from "redux";
+import { combineReducers } from "redux";
 
 import wordsReducer from "./wordsReducers";
 import transReducer from "./transReducers";
@@ -19,3 +19,4 @@ export default combineReducers({
   auth: auth,
   notes: noteReducer 
 });
+

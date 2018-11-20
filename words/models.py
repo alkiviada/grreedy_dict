@@ -18,7 +18,7 @@ from words.words_helpers import prep_def_exmpl
 from words.constants import WORDREF_BASE
 
 class Etymology(models.Model):
-    etymology = models.CharField(max_length=500, null=True)
+    etymology = models.CharField(max_length=800, null=True)
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_etymologies', null=True)
     def __str__(self):
         return self.etymology
@@ -27,16 +27,16 @@ class Etymology(models.Model):
         return self.etymology
 
 class Collocation(models.Model):
-    expression = models.CharField(max_length=600, null=True)
-    translation = models.CharField(max_length=600, null=True)
+    expression = models.CharField(max_length=800, null=True)
+    translation = models.CharField(max_length=800, null=True)
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_collocations')
-    example = models.CharField(max_length=600, null=True)
+    example = models.CharField(max_length=800, null=True)
 
     def __str__(self):
         return self.expression
 
 class Definition(models.Model):
-    definition = models.CharField(max_length=500, null=True)
+    definition = models.CharField(max_length=800, null=True)
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_definitions')
     etymology = models.ForeignKey(Etymology, on_delete=models.CASCADE, related_name='definitions', null=True)
 
@@ -44,7 +44,7 @@ class Definition(models.Model):
         return self.definition
 
 class Example(models.Model):
-    example = models.CharField(max_length=600)
+    example = models.CharField(max_length=800)
     definition = models.ForeignKey(Definition, on_delete=models.CASCADE, related_name='examples', blank=True, null=True)
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_examples')
 

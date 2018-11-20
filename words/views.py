@@ -55,16 +55,35 @@ class WordList(generics.ListAPIView):
   def get_queryset(self):
     return Word.free_words.all()
 
-  def get(self, request, uuid, *args, **kwargs):
+  def get(self, request, uuid, time, *args, **kwargs):
     words = []
     if uuid:
       print('I have UUID: ' + uuid)
+      print(time)
       coll = Collection.objects.get(uuid=uuid) 
-      words = coll.words
-      
-    serializer = WordSerializer(words, many=True)
-    return Response(serializer.data)
+      print(int(coll.last_modified_date.timestamp()))
+      if coll and (not time or int(coll.last_modified_date.timestamp()) > int(time)):
+        words = coll.words
+        serializer = WordSerializer(words, many=True)
+        print('i will return here');
+        return Response(serializer.data)
+      else:
+        return Response([])
+    else:
+      return Response([])
 
+class CollectionModified(generics.RetrieveAPIView):
+  permission_classes = [ AllowAny ]
+  def get_queryset(self):
+    uuid = self.kwargs['uuid']
+    return Collection.objects.get(uuid=uuid)
+
+  lookup_field = 'uuid'
+  serializer_class = CollectionDetailSerializer
+
+  def get(self, request, uuid, time, *args, **kwargs):
+    pass
+    
 
 class CollectionDetail(generics.RetrieveUpdateAPIView):
   permission_classes = [ IsAuthenticated, ]
@@ -74,6 +93,20 @@ class CollectionDetail(generics.RetrieveUpdateAPIView):
 
   lookup_field = 'uuid'
   serializer_class = CollectionDetailSerializer
+
+  def get(self, request, uuid, time, *args, **kwargs):
+    print('I have UUID: ' + uuid)
+    print(time)
+
+    coll = Collection.objects.get(uuid=uuid) 
+    print(int(int(coll.last_modified_date.timestamp())))
+
+    if coll and (not time or int(coll.last_modified_date.timestamp()) > int(time)):
+      serializer = CollectionDetailSerializer(coll)
+      print('i will return here');
+      return Response(serializer.data)
+    else:
+      return Response({})
 
 
 class CollectionListCreate(generics.ListCreateAPIView):

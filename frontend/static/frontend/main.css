@@ -25,13 +25,16 @@ body {
   min-height: 100vh;
   height: 100%;
   width: 100%;
+  background-attachment: fixed;
 }
 
 .body-with-image {
+  display:block;
   background-image: url("img/36655700945_bc3f665a44_b.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: fixed;
 }
 
 .dict-container {
@@ -126,13 +129,13 @@ body {
 }
 
 .colls-list {
-  overflow: auto;
+  position: absolute;
+  overflow-y: auto;
   grid-area: colls-list;
 
   background-color: var(--sky-color);
   width: 7em;
   max-height: 90vh;
-  height: 100%;
 
   width: 100%;
   transform: scale(1, 0);
@@ -441,7 +444,6 @@ ul {
   font-weight: 100;
   font-size: 1rem;
   padding: 0.2em;
-  line-height: 1;
 }
 
 .new-word-input::placeholder {
@@ -565,7 +567,8 @@ ul {
   display: grid;
 
   grid-template-columns: minmax(5em, 15%) 1fr;
-  grid-auto-rows: auto;
+  grid-auto-rows: minmax(auto, max-content);
+  grid-auto-rows: minmax(auto, -webkit-max-content);
 }
 
 .coll-title {
@@ -804,7 +807,8 @@ ul {
   display: grid;
 
   grid-template-columns: 1fr;
-  grid-auto-rows: auto;
+  grid-auto-rows: minmax(auto, max-content);
+  grid-auto-rows: minmax(auto, -webkit-max-content);
 }
 }
 
