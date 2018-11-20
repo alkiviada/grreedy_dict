@@ -33,7 +33,7 @@ class SaveCollection extends Component {
     this.props.requestSave();
     const { uuid } = this.props
     const name = this.state.name ? this.state.name : this.props.name
-    this.props.saveCollection(this.props.allWords.map(e => e.word).join(','));
+    this.props.saveCollection(name, this.props.allWords.map(e => e.word).join(','));
     const root = ReactDOM.findDOMNode(this).parentNode;
     window.scrollTo(0, root.offsetTop-35)
     this.setState({name: ''})

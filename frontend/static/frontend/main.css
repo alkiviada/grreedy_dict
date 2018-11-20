@@ -223,6 +223,7 @@ body {
 
 
 .word strong {
+  text-transform: uppercase;
   color: #363636;
   font-weight: 700;
   font-size: 1.2rem !important;

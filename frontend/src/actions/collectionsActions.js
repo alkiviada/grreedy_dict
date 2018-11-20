@@ -134,10 +134,13 @@ export const fetchCollection = (uuid) => (dispatch, getState) => {
     ); 
 };
 
-export const saveCollection = (wordsString) => (dispatch, getState) => {
+export const saveCollection = (name, wordsString) => (dispatch, getState) => {
   console.log('saving words');
 
-  const { uuid, name } = getState().collections
+  const { uuid } = getState().collections
+  
+  console.log(name);
+
   console.log(uuid);
 
   const {token} = getState().auth;

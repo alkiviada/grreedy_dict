@@ -22,8 +22,7 @@ const initialState = {
   fetching: false,
   fetched: false,
   items: [],
-  lastModifiedMap: {},
-  test: ''
+  lastModifiedMap: {}
 };
 
 export default function(state = initialState, action) {
