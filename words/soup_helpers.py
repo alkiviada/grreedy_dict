@@ -162,16 +162,21 @@ def parse_straight_translations(r):
   new_trans_arr_map = []
   
   for wd_table in words_tables:
+    #print('I have this table')
     for tr_wd in wd_table.findAll("tr", {"class": ["even", "odd"]}):
       new_word = scrape_wordref_words(tr_wd.find('td', {'class': 'FrWrd'}), 0)
       if new_word:
         new_trans_arr_map.append(new_trans_arr)
         new_trans_arr = []
       new_trans = scrape_wordref_words(tr_wd.find('td', {'class': 'ToWrd'}), 0)
+      #print(new_trans)
       new_expl = scrape_wordref_words(tr_wd.find('td', class_=lambda x: x not in ['ToWrd', 'FrEx', 'FrWrd']), 0)
       if new_trans:
+        #print(new_trans.split(', '))
         word_trans.extend(new_trans.split(', '))
         new_trans_arr.append({new_trans: new_expl})
+    if new_trans_arr:
+      new_trans_arr_map.append(new_trans_arr)
   #[ print(tr) for tr in new_trans_arr_map ]
   trans_meanings_arr = []
   for tr in new_trans_arr_map:

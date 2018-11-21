@@ -241,7 +241,7 @@ class WordSingleCreateSynonyms(generics.RetrieveAPIView):
     print(word);
 
     synonyms = self.get_queryset()
-    print(synonyms)
+    #print(synonyms)
 
     if not synonyms:
       print("Synonyms for this Word are not in our DB");
@@ -288,7 +288,7 @@ class WordNoteSingleCreate(generics.GenericAPIView):
     note = request.data.get('note')
     coll = Collection.objects.get(uuid=collection_uuid)
     word_note, created = WordNote.objects.update_or_create(collection=coll, word=word, defaults={'note': note} )
-    print(created)
+    #print(created)
     
     return Response(WordNoteSerializer(word_note).data)
 
