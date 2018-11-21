@@ -78,7 +78,7 @@ export const fetchCollection = (uuid) => (dispatch, getState) => {
   }
 
 
-  const { lastModifiedMap } = getState().collections;
+  const lastModifiedMap = getState().collections.lastModifiedMap || {};
   const time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : '';
   console.log(lastModifiedMap[uuid])
   console.log(uuid)

@@ -7,10 +7,11 @@ import {
        } from './types';
 
 
-export const postNote = (word, note, allNotes, fetchingMap) => (dispatch) => {
+export const postNote = (word, note) => (dispatch, getState) => {
   console.log('posting note');
+  const { uuid } = getState().collections
+
   let headers = {"Content-Type": "application/json"};
-  const uuid = localStorage.getItem("uuid")
   let body = JSON.stringify({word, note, uuid});
 
   fetch('api/word/note/post/', {headers, body, method: "POST"})
@@ -23,6 +24,7 @@ export const postNote = (word, note, allNotes, fetchingMap) => (dispatch) => {
   .then(
       // Both fetching and parsing succeeded!
       ({ status, json }) => {
+        const { allNotes, fetchingMap } = getState().notes
         if (status >= 400) {
           // Status looks bad
           console.log(status);
@@ -59,9 +61,9 @@ export const postNote = (word, note, allNotes, fetchingMap) => (dispatch) => {
     ); 
 };
 
-export const fetchNote = (word, allNotes, fetchingMap) => dispatch => {
+export const fetchNote = (word) => (dispatch, getState) => {
   console.log('fetching word notes');
-  const uuid = localStorage.getItem("uuid")
+  const { uuid } = getState().collections
   fetch('api/word/note/' + word + '/' + uuid)
   .then(response =>
       response.json().then(json => ({
@@ -72,6 +74,7 @@ export const fetchNote = (word, allNotes, fetchingMap) => dispatch => {
   .then(
       // Both fetching and parsing succeeded!
       ({ status, json }) => {
+        const { allNotes, fetchingMap } = getState().notes
         if (status >= 400) {
           // Status looks bad
           console.log('Server returned error status when fetching notes');
@@ -112,8 +115,9 @@ export const clearFetchedNote = () => dispatch => {
 };
 
 
-export const requestNote = (word, fetchingMap) => dispatch => {
+export const requestNote = (word) => (dispatch, getState) => {
   console.log('requesting word note')
+  const { fetchingMap } = getState().notes
   dispatch({
     type: FETCH_NOTE,
     payload: { ...fetchingMap, ...{[word]: true} }

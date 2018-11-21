@@ -31,17 +31,17 @@ export const fetchWords = (uuid) => (dispatch, getState) => {
   console.log(uuid)
   console.log(`fetching words for ${uuid}`)
 
-  const { items } = getState().words;
+  const items = getState().words.items || [];
   console.log(getState().collections);
 
-  let { lastModifiedMap } = getState().collections;
+  let lastModifiedMap = getState().collections.lastModifiedMap || {};
+  let time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : ''
+  console.log(time)
 
   console.log('last modified map')
   console.log(lastModifiedMap)
 
-  let time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : ''
   
-  console.log(time)
   console.log(uuid);
 
   if (!uuid) {
@@ -133,7 +133,7 @@ export const lookUpWord = (word) => (dispatch, getState) => {
           dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed', word: word}})
         } else {
           // Status looks good
-          const words = getState().words.items
+          const words = getState().words.items || []
           const word = json;
           const collUUID = word[0].words[0].uuid
           const collName = word[0].words[0].name

@@ -4,7 +4,6 @@ import { loadState, saveState } from '../reducers/localStorage'
 import thunk from "redux-thunk";
 
 import reducer from "../reducers";
-const initialState = {};
 
 const middleware = [thunk];
 

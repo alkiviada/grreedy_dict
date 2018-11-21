@@ -65,8 +65,8 @@ class WordTabs extends Component {
       case 'ADD_NOTE':
         if (!this.props.allNotes[word]) {
           console.log('looking up notes'); 
-          this.props.requestNote(word, this.props.notesFetchingMap)
-          this.props.fetchNote(word, this.props.allNotes, this.props.notesFetchingMap)
+          this.props.requestNote(word)
+          this.props.fetchNote(word)
         }
         break
       case 'TRANSLATIONS':

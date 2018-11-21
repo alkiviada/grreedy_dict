@@ -21,8 +21,8 @@ const initialState = {
   uuid: '',
   fetching: false,
   fetched: false,
-  items: [],
-  lastModifiedMap: {}
+  lastModifiedMap: {},
+  items: []
 };
 
 export default function(state = initialState, action) {

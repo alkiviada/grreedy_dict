@@ -129,15 +129,15 @@ class CollectionListCreate(generics.ListCreateAPIView):
                   'last_modified_date': timezone.now(),
                  }
     if uuid:
-      if not name:
-        next_count = Collection.objects.filter(name__startswith='Untitled', owner=user).count()
-        next_count += 1
-        new_fields['name'] = 'Untitled: ' + str(next_count);
-        while Collection.objects.filter(name=new_fields['name']).exists():
-          next_count += 1
-          new_fields['name'] = 'Untitled: ' + str(next_count);
       try:
         coll = Collection.objects.get(uuid=uuid) 
+        if not name and not coll.name:
+          next_count = Collection.objects.filter(name__startswith='Untitled', owner=user).count()
+          next_count += 1
+          new_fields['name'] = 'Untitled: ' + str(next_count);
+          while Collection.objects.filter(name=new_fields['name']).exists():
+            next_count += 1
+            new_fields['name'] = 'Untitled: ' + str(next_count);
         coll.update_fields(new_fields)
       except ObjectDoesNotExist:
         print ("Something Wrong with UUID: ", uuid)
@@ -162,11 +162,12 @@ class WordSingleCreate(generics.ListAPIView):
   lookup_field = 'word'
   serializer_class = WordSerializer
   def get_queryset(self):
-    word = self.kwargs['word']
+    word = self.kwargs['word'].lower()
     return Word.single_object.filter(word=word)
 
   def get(self, request, word, uuid, *args, **kwargs):
     print('GET ' + word);
+    word = word.lower()
     db_words = Word.single_object.filter(word=word, from_translation=False);
    
     if not db_words:

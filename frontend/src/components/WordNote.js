@@ -34,8 +34,8 @@ class WordNote extends React.Component {
     const { word, notes, fetchingMap } = this.props;
     const note = this.state.note ? this.state.note : notes[word] ? notes[word]['note'] : ''
     if (note) {
-      this.props.requestNote(word, fetchingMap)
-      this.props.postNote(word, note, notes, fetchingMap);
+      this.props.requestNote(word)
+      this.props.postNote(word, note);
     }
   }
 

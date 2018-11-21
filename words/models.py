@@ -6,6 +6,7 @@ from django.db.models import Case, When, Value, IntegerField
 from django.db.models import Q
 from words.api_call_helpers import try_fetch
 import os
+import re
 from django.utils import timezone
 from bs4 import BeautifulSoup
 from words.soup_helpers import (scrape_wordref_words, 
@@ -179,7 +180,11 @@ class WordRefWordMixin(models.Manager):
       fr_exmpl = specs.get('fr_exmpl')
       example = specs.get('exmpl', '')
       if expl:
-        expr = expr + ' ' + expl
+        if not re.match('\(', expl):
+          expl = ' (' + expl + ')'
+        else:
+          expl = ' ' + expl
+        expr = expr + expl
       if fr_exmpl:
          example = ', '.join(fr_exmpl)
       if to_exmpl:
