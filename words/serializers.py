@@ -74,6 +74,11 @@ class TranslationSerializer(serializers.ModelSerializer):
         model = Word
         fields = ['word', 'language', 'notes']
 
+class PronounceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Word
+        fields = ['pronounce', 'language']
+
 class SynonymSerializer(serializers.ModelSerializer):
     class Meta:
         model = Word

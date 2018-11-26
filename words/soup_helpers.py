@@ -10,7 +10,7 @@ def scrape_wordref_words(words_string, split=1):
   if re.match('Note', words_string):
     return words_string
   words_string = re.sub(
-    r'(?<!^)(?<!\[)\b(ab(b)?r$|inter$|(proper )?n(m|f|noun|pl)|pp|prépp|'
+    r'(?<!^)(?<!\[)(?<!\:\ )\b(ab(b)?r$|inter$|(proper )?n(m|f|noun|pl)|pp|prépp|'
      'préf$|prefix|suffix|v(i)?$|v(i|tr)?( ?(rif|refl|past|aux|pron|(in)?tr(.+)?|pres|phras|expr).*?)$|Note|'
      'loc (.+)|loc$|agg$|adj(( inv)?adj.+| inv| n).+?$|interj|advadv|avv$| contraction|expr((expr|verb).*)?$|n as|prep(p)?|conjc|cong$|idiom$|pronpron|prep +|viverbe).*', 
     '', words_string)
@@ -114,9 +114,11 @@ def parse_reverse_word(r):
 def parse_straight_word(r):
   word_page = r.content
   word_soup = BeautifulSoup(word_page, features="html.parser")
+  pronounce = word_soup.find('span', {'id': 'pronWR'})
+
   words_tables = word_soup.findAll('table', {'class': 'WRD'}, id=lambda x: x != 'compound_forms');
   if not words_tables:
-    return []
+    return ([], '')
   words_map = []
   for wd_table in words_tables:
     fr_word = ''
@@ -145,7 +147,9 @@ def parse_straight_word(r):
       #print(new_fr_exmpl)
       #print(new_to_exmpl)
     words_map.append(word_trans)
-  return words_map 
+
+  pronounce = pronounce.get_text() if pronounce else ''
+  return (words_map, pronounce) 
 
 def conflate_meanings(trans_meanings_arr):
   new_trans_meanings_arr = []

@@ -225,18 +225,18 @@ class WordRefWordMixin(models.Manager):
 
     r = try_fetch(WORDREF_BASE + ext + "/" + orig_word.word)
     straight_translations = parse_straight_translations(r)
-    print(straight_translations)
+    #print(straight_translations)
 
     r = try_fetch(WORDREF_BASE + ext + "/reverse/" + orig_word.word)
     reverse_translations = parse_reverse_translations(r)
-    print(reverse_translations)
-    print({ **straight_translations, **reverse_translations })
+    #print(reverse_translations)
+    #print({ **straight_translations, **reverse_translations })
 
     return { **straight_translations, **reverse_translations }
 
   def create_bare_word(self, **args):
     words, orig_word, language = [ args[i] for i in ['words', 'original', 'language'] ]
-    print(words)
+    #print(words)
     db_words = []
     for new_w in words:
       w = Word.objects.filter(word=new_w, language=language).first()
@@ -256,20 +256,22 @@ class WordRefWordMixin(models.Manager):
     word = args['word']
     ext = args['ext']
     r = try_fetch(WORDREF_BASE + ext + "/" + word)
-    straight_words_map = parse_straight_word(r)
+    straight_words_map, pronounce = parse_straight_word(r)
+    print(pronounce)
     r = try_fetch(WORDREF_BASE + ext + "/reverse/" + word)
     reverse_words_map = parse_reverse_word(r)
-    return [ *straight_words_map, *reverse_words_map ]
+    return ([ *straight_words_map, *reverse_words_map ], pronounce)
 
   def create_word(self, **args):
     word = args['word']
     language = args['language']
     words_map = args['words_map']
+    pronounce = args['pronounce']
     if not words_map:
       return ()
     w = Word.objects.filter(word=word, language=language).first()
     if not w:
-      w = Word.objects.create(word=word, lookup_date=timezone.now(), language=language)
+      w = Word.objects.create(word=word, lookup_date=timezone.now(), language=language, pronounce=pronounce)
     else:
       w.from_translation = False
       w.save(update_fields=['from_translation'])
@@ -366,10 +368,13 @@ class EnglishWordManager(models.Manager):
     if not r:
       print('no r')
     if r:
+      pronounce = ''
       oxford_word = r.json()
       word_entries = []
       for r in oxford_word["results"]:
         for l in r["lexicalEntries"]:
+          if l.get('pronunciations'):
+            pronounce = l.get('pronunciations')[0].get('phoneticSpelling')
           if l.get('derivativeOf'):
             definition = 'Derivative of ' + l.get('derivativeOf')[0].get('text')
             entry = {'etymology': '', 'definitions': [{'definition': definition}]}
@@ -392,7 +397,7 @@ class EnglishWordManager(models.Manager):
         w = Word.english_objects.get(word=word)
         w.from_translation = False
       except:
-        w = Word.objects.create(word=word, lookup_date=timezone.now(), language='english')
+        w = Word.objects.create(word=word, lookup_date=timezone.now(), language='english', pronounce=pronounce)
 
       for e in word_entries:
         ety = Etymology.objects.create(word=w, etymology=e['etymology']);
@@ -461,8 +466,9 @@ class ItalianWordManager(WordRefWordMixin, models.Manager):
     return self.create_collocations(collocations=collocs_map, word=word)
 
   def fetch_word(self, word):
-    words_map = self.fetch_and_parse_word(ext='iten', word=word)
-    return self.create_word(word=word, words_map=words_map, language='italian')
+    words_map, pronounce = self.fetch_and_parse_word(ext='iten', word=word)
+    print(pronounce)
+    return self.create_word(word=word, words_map=words_map, language='italian', pronounce=pronounce)
     
 
 class FrenchWordManager(WordRefWordMixin, models.Manager):
@@ -492,12 +498,13 @@ class FrenchWordManager(WordRefWordMixin, models.Manager):
     return self.create_bare_word(language='french', words=trans, original=orig_word)
     
   def fetch_word(self, word):
-    words_map = self.fetch_and_parse_word(ext='fren', word=word)
-    return self.create_word(word=word, words_map=words_map, language='french')
+    words_map, pronounce = self.fetch_and_parse_word(ext='fren', word=word)
+    return self.create_word(word=word, words_map=words_map, language='french', pronounce=pronounce)
 
 class Word(models.Model):
     word = models.CharField(max_length=400)
     language = models.CharField(max_length=33)
+    pronounce = models.CharField(max_length=100)
     lookup_date = models.DateTimeField('date looked up')
     notes = models.CharField(max_length=400)
     translations = models.ManyToManyField("self", blank=True, related_name='translations')
