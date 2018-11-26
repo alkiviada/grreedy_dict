@@ -58,8 +58,6 @@ class WordTabs extends Component {
     else {
       tabMap = tabWordMap['non-english']
     }
-    console.log(tabMap)
-    console.log(tabMap[index])
 
     switch (tabMap[index]) {
       case 'ADD_NOTE':
@@ -84,7 +82,6 @@ class WordTabs extends Component {
         }
         break
       case 'SYNONYMS':
-        console.log(this.props.allSynonyms)
         if (!this.props.allSynonyms[word]) {
           console.log('looking up synonyms'); 
           this.props.requestSynonyms(word, this.props.synonymsFetchingMap)

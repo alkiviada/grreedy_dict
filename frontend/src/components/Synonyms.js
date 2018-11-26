@@ -11,13 +11,12 @@ const mapStateToProps = state => ({
 
 const Synonyms = (props) => {
     const { word, synonyms, fn, fetchingMap } = props;
-    console.log(synonyms)
-    console.log(word)
-    console.log(fetchingMap)
     const wordSyns = synonyms[word];
     if (fetchingMap[word]) {
       return (
+          <div className="clear-notification-message">
             <em>Loading...</em>
+          </div>
       )
     }
     return wordSyns['error'] ? ( 

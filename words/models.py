@@ -225,9 +225,12 @@ class WordRefWordMixin(models.Manager):
 
     r = try_fetch(WORDREF_BASE + ext + "/" + orig_word.word)
     straight_translations = parse_straight_translations(r)
+    print(straight_translations)
 
     r = try_fetch(WORDREF_BASE + ext + "/reverse/" + orig_word.word)
     reverse_translations = parse_reverse_translations(r)
+    print(reverse_translations)
+    print({ **straight_translations, **reverse_translations })
 
     return { **straight_translations, **reverse_translations }
 

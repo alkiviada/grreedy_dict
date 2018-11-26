@@ -23,7 +23,6 @@ class NewWordForm extends Component {
   onSubmitLookUp(e) {
     e.preventDefault();
     console.log('looking up');
-    console.log(this.props.allWordsMap);
     if (!this.props.allWordsMap[this.state.word]) {
       this.props.requestWord();
       this.props.lookUpWord(this.state.word, this.props.allWords, this.props.uuid);

@@ -94,7 +94,6 @@ export const fetchCollection = (uuid) => (dispatch, getState) => {
   .then(
       // Both fetching and parsing succeeded!
       ({ status, json }) => {
-        console.log(status)
         console.log(json)
         if (status >= 400) {
           // Status looks bad
@@ -106,7 +105,6 @@ export const fetchCollection = (uuid) => (dispatch, getState) => {
           // Status looks good
           let coll = json;
           let words = []
-          console.log(coll)
           if (!coll.words) {
            words = lastModifiedMap[uuid]['words']
            name = lastModifiedMap[uuid]['name']
@@ -139,7 +137,6 @@ export const saveCollection = (name, wordsString) => (dispatch, getState) => {
 
   const { uuid } = getState().collections
   
-  console.log(name);
 
   console.log(uuid);
 
@@ -182,8 +179,8 @@ export const saveCollection = (name, wordsString) => (dispatch, getState) => {
           let time = Date.now();
           time = Math.floor(time/1000);
           
-          const { lastModifiedMap } = getState().collections
-          const words = getState().words.items 
+          const lastModifiedMap = getState().collections.lastModifiedMap || {}
+          const words = getState().words.items || []
           dispatch({
             type: SAVE_COLLECTION_FULFILLED,
             payload: { items: colls, lastModifiedMap: {...lastModifiedMap, [uuid]: { time, words, name }} }

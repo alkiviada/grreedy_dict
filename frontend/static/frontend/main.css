@@ -97,13 +97,13 @@ body {
 }
 
 .coll-name {
- color: var(--field-color);
- text-shadow: 1px 1px 1px #b2b8c4;
+ color: #483C32;
+ text-shadow: .4px .4px .4px var(--field-color), .2px .2px .2px #fff;
 }
 
 .coll-name:hover {
   color: #b2b8c4;
-  text-shadow: 1px 1px 1px var(--field-color);
+  text-shadow: 1px 1px 1px var(--field-color), .2px .2px .2px #000;
 }
 
 .coll-date {
@@ -498,7 +498,7 @@ ul {
   grid-template-areas: "text-area ."
               "button .";
   grid-template-rows: 2.5fr .3fr;
-  grid-template-columns: 1fr .1fr;
+  grid-template-columns: 3fr .1fr;
 }
 
 .note-txtarea {
@@ -602,9 +602,9 @@ ul {
 .etym-style {
   background: #FFFCF9;
   font-family: var(--body-font);
-  padding-left: .3em;
-  padding-right: .3em;
-  padding-bottom: .3em;
+  padding-left: .1em;
+  padding-right: .1em;
+  padding-bottom: .1em;
   margin-left: 0.5em;
   font-size: 1.2rem !important;
 }
@@ -690,10 +690,14 @@ ul {
   background-color: inherit;
   color: black;
   font-family: var(--body-font);
+  padding: .1em .5em .5em; 
 }
 
 .notify-warn {
+  background-color: inherit;
   color: red;
+  padding: .1em .5em .5em; 
+  font-family: var(--body-font);
 }
 
 
@@ -701,6 +705,9 @@ ul {
   border-bottom: 1px solid #aaa;
   margin: 0 0 1em;
   padding: 0;
+  position: absolute;
+  background: #F5FBFD;
+  width: 70%;
 }
 
 .react-tabs__tab {
@@ -748,6 +755,7 @@ ul {
 
 .react-tabs__tab-panel--selected {
   display: block;
+  padding-top: 2em;
 }
 
 @media (min-width: 500px) {
@@ -774,12 +782,12 @@ ul {
 }
 }
 
-@media(max-width: 768px) {
+@media(max-width: 767px) {
 
   .react-tabs__tab-list {
     display: block;
     overflow-y: auto;
-    width: 100%;
+    width: 90%;
   }
 
   .react-tabs__tab {

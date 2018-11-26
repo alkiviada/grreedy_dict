@@ -42,12 +42,11 @@ class WordNote extends React.Component {
   render() {
     const { word, notes, fetchingMap } = this.props;
     const note = !this.props.fetched ? this.state.note : notes[word] ? notes[word]['note'] : '';
-    console.log(notes)
-    console.log(`i have this note: ${note}`)
-    console.log(fetchingMap)
     if (fetchingMap[word]) {
       return (
+          <div className="clear-notification-message">
             <em>Loading...</em>
+          </div>
       )
     }
     return (

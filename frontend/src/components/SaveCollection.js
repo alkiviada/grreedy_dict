@@ -43,7 +43,6 @@ class SaveCollection extends Component {
     const words = this.props.allWords;
     const saving = this.props.saving
     const name = !this.props.fetched ? this.state.name : this.props.name
-    console.log(this.props.error)
 
     const auth = this.props.auth
 

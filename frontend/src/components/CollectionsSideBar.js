@@ -63,6 +63,7 @@ class CollectionsSideBar extends Component {
 
   render () {
     const { colls, auth } = this.props;
+    console.log('collections')
     return auth.isAuthenticated && colls.length ? (
       <div className="colls-sidebar">
       <input type="checkbox" className="colls-toggle" id="colls-toggle" checked={this.state.isSidebarOpen} onChange={this.handleSidebarOpen} />

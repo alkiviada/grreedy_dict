@@ -134,7 +134,7 @@ export const logout = () => {
   });
           dispatch({
             type: SAVE_COLLECTION_FULFILLED,
-            payload:[] 
+            payload: { items: [], lastModifiedMap: {} }
           });
           return res.data;
         } else if (res.status === 403 || res.status === 401) {

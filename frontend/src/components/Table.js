@@ -33,7 +33,6 @@ class Table extends Component {
   addRow (e, word) {
     console.log('look up');
     e.preventDefault();
-    console.log('checking map');
     if (!this.props.allWordsMap[word]) {
       this.props.requestWord();
       this.props.lookUpWord(word);
@@ -50,7 +49,6 @@ class Table extends Component {
     const data = this.props.data;
     const allFetching = this.props.allFetching;
     const collFetching = this.props.collFetching;
-    console.log(allFetching);
 
     const wordFetching = this.props.newWordFetching;
     if (allFetching || collFetching) {
