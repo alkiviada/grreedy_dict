@@ -181,6 +181,8 @@ export const saveCollection = (name, wordsString) => (dispatch, getState) => {
           
           const lastModifiedMap = getState().collections.lastModifiedMap || {}
           const words = getState().words.items || []
+          console.log(`i have name ${name}`)
+
           dispatch({
             type: SAVE_COLLECTION_FULFILLED,
             payload: { items: colls, lastModifiedMap: {...lastModifiedMap, [uuid]: { time, words, name }} }

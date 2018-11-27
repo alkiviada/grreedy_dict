@@ -111,6 +111,13 @@ def parse_reverse_word(r):
     words_map.append(word_trans)
   return words_map 
 
+def parse_pronounce(r):
+  word_page = r.content
+  word_soup = BeautifulSoup(word_page, features="html.parser")
+  pronounce = word_soup.find('span', {'id': 'pronWR'})
+  pronounce = pronounce.get_text() if pronounce else ''
+  return pronounce 
+
 def parse_straight_word(r):
   word_page = r.content
   word_soup = BeautifulSoup(word_page, features="html.parser")

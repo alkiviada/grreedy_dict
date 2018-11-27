@@ -28,21 +28,17 @@ export const requestWord = () => dispatch => {
 };
 
 export const fetchWords = (uuid) => (dispatch, getState) => {
-  console.log(uuid)
   console.log(`fetching words for ${uuid}`)
 
   const items = getState().words.items || [];
   console.log(getState().collections);
 
-  let lastModifiedMap = getState().collections.lastModifiedMap || {};
+  let { lastModifiedMap, name } = getState().collections;
   let time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : ''
   console.log(time)
 
-  console.log('last modified map')
+  console.log('last modified map in fetch words')
   console.log(lastModifiedMap)
-
-  
-  console.log(uuid);
 
   if (!uuid) {
     dispatch({
@@ -55,9 +51,10 @@ export const fetchWords = (uuid) => (dispatch, getState) => {
 // we have a collection but we never saved it 
 // - let's load it from the storage of words' reducer  
 
+    console.log('i am dispatching here')
     dispatch({
       type: FETCH_COLLECTION_FULFILLED,
-      payload: { uuid: uuid, name: '' }
+      payload: { uuid: uuid, name: name }
     });
     dispatch({
       type: FETCH_WORDS_FULFILLED,

@@ -6,7 +6,7 @@ from words.constants import LANGUAGES
 import datetime
 
 from words.serializers import (WordSerializer, SynonymSerializer, TranslationSerializer, CollectionSerializer, 
-                               CollectionDetailSerializer, CollocationSerializer, WordNoteSerializer,
+                               CollectionDetailSerializer, CollocationSerializer, WordNoteSerializer, PronounceSerializer,
                                CreateUserSerializer, UserSerializer, LoginUserSerializer)
 
 from rest_framework import generics
@@ -324,13 +324,47 @@ class WordNoteSingleDetail(APIView):
       return Response({'note': ''})
 
 
+class WordSingleCreatePronounce(generics.RetrieveAPIView):
+  permission_classes = [ AllowAny, ]
+  def get_queryset(self):
+    word = self.kwargs['word']
+    words = Word.objects.filter(word=word)
+    return word 
+
+  lookup_field = 'word'
+  serializer_class = PronounceSerializer
+
+  def get(self, request, word, *args, **kwargs):
+    orig_word = ''
+    print(word);
+
+    words = Word.single_object.filter(word=word)
+    for w in words:
+      pronounce = w.pronounce
+      if not pronounce:
+        try:
+          objects_manager = getattr(Word, w.language + '_objects')
+          print(objects_manager)
+          try:
+            pronounce_method = getattr(objects_manager, 'fetch_pronounce')
+            pronounce_method(w)
+          except Exception as e: 
+            print(e)
+            print('No method to get pronounce')
+            raise Http404("No Pronunciation API for the word: ", word)
+        except Exception as e: 
+          print(e)
+          print('No method to get pronunciations')
+          raise Http404("No Pronunciation API for the word: ", word)
+    serializer = PronounceSerializer(words, many=True)
+    return Response(serializer.data)
 
 class WordSingleCreateTranslate(generics.RetrieveAPIView):
   permission_classes = [ AllowAny, ]
   def get_queryset(self):
     word = self.kwargs['word']
     word = Word.english_objects.get(word=word)
-    return w.translations.all() 
+    return word.translations.all() 
 
   lookup_field = 'word'
   serializer_class = TranslationSerializer

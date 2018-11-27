@@ -11,6 +11,7 @@ from django.utils import timezone
 from bs4 import BeautifulSoup
 from words.soup_helpers import (scrape_wordref_words, 
                                 parse_synonyms,
+                                parse_pronounce,
                                 parse_straight_word, 
                                 parse_reverse_word, 
                                 parse_straight_translations, parse_reverse_translations,
@@ -359,6 +360,26 @@ class EnglishWordManager(models.Manager):
 
     return synonyms 
 
+  def fetch_pronounce(self, word):
+    print('Fetching')
+    base_url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/en/' + word.word
+    r = try_fetch(base_url, 
+                  headers={ 'app_key': os.environ.get('OXFORD_API_KEY'), 
+                            'app_id': os.environ.get('OXFORD_API_ID')})
+    if not r:
+      print('no r')
+    if r:
+      pronounce = ''
+      oxford_word = r.json()
+      for r in oxford_word["results"]:
+        for l in r["lexicalEntries"]:
+          if l.get('pronunciations'):
+            pronounce = l.get('pronunciations')[0].get('phoneticSpelling')
+    if pronounce:
+      word.pronounce = pronounce
+      word.save(update_fields=['pronounce'])
+
+
   def fetch_word(self, word):
     print('Fetching')
     base_url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/en/' + word
@@ -470,6 +491,14 @@ class ItalianWordManager(WordRefWordMixin, models.Manager):
     print(pronounce)
     return self.create_word(word=word, words_map=words_map, language='italian', pronounce=pronounce)
     
+  def fetch_pronounce(self, word):
+    r = try_fetch(WORDREF_BASE + "iten/" + word.word)
+    if r:
+      pronounce = parse_pronounce(r)
+      print(pronounce)
+      if pronounce:
+        word.pronounce = pronounce
+        word.save(update_fields=['pronounce'])
 
 class FrenchWordManager(WordRefWordMixin, models.Manager):
   def get_queryset(self):
@@ -478,6 +507,15 @@ class FrenchWordManager(WordRefWordMixin, models.Manager):
   def fetch_collocations(self, word):
     collocs_map = self.fetch_and_parse_collocations(word, ext='fren')
     return self.create_collocations(collocations=collocs_map, word=word)
+
+  def fetch_pronounce(self, word):
+    r = try_fetch(WORDREF_BASE + "fren/" + word.word)
+    if r:
+      pronounce = parse_pronounce(r)
+      print(pronounce)
+      if pronounce:
+        word.pronounce = pronounce
+        word.save(update_fields=['pronounce'])
 
   def fetch_synonyms(self, orig_word):
     r = try_fetch("http://www.cnrtl.fr/synonymie/" + orig_word.word)

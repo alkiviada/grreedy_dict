@@ -6,10 +6,12 @@ import Translations from "./Translations";
 import Collocations from "./Collocations";
 import Synonyms from "./Synonyms";
 import WordNote from "./WordNote";
+import Pronunciation from "./Pronunciation";
 import key from "weak-key";
 import { connect } from 'react-redux';
 import { switchTab } from '../actions/tabActions';
 import { lookUpTranslations, requestTranslations, } from '../actions/transActions';
+import { fetchPronunciation, requestPronunciation, } from '../actions/pronounceActions';
 import { lookUpCollocations, requestCollocations, } from '../actions/collocationsActions';
 import { lookUpSynonyms, requestSynonyms, } from '../actions/synonymsActions';
 import { fetchNote, requestNote } from '../actions/notesActions';
@@ -19,6 +21,7 @@ const mapStateToProps = state => ({
   mapTabIndex: state.tabs.mapTabIndex,
   allTranslations: state.translations.allTranslations,
   allSynonyms: state.synonyms.allSynonyms,
+  allPronunciations: state.pronounce.allPronunciations,
   allCollocations: state.collocations.allCollocations,
   allNotes: state.notes.allNotes,
   transFetchingMap: state.translations.fetchingMap,
@@ -48,8 +51,8 @@ class WordTabs extends Component {
     this.setState( { tabIndex: index } );
 
     const tabWordMap = {
-                        'english': { 1: 'TRANSLATIONS', 2: 'COLLOCATIONS', 3: 'SYNONYMS', 4: 'ADD_NOTE' },
-                        'non-english': { 1: 'COLLOCATIONS', 2: 'SYNONYMS', 3: 'ADD_NOTE' },
+                        'english': { 1: 'TRANSLATIONS', 2: 'COLLOCATIONS', 3: 'SYNONYMS', 4: 'PRONUNCIATION', 5: 'ADD_NOTE' },
+                        'non-english': { 1: 'COLLOCATIONS', 2: 'SYNONYMS', 3: 'PRONUNCIATION', 4: 'ADD_NOTE' },
                        }
     let tabMap = {}
     if (isEnglishWord) {
@@ -89,6 +92,15 @@ class WordTabs extends Component {
           this.props.lookUpSynonyms(word, this.props.allSynonyms, this.props.synonymsFetchingMap)
         }
         break
+      case 'PRONUNCIATION':
+        console.log('PRONUN')
+        if (!this.props.allPronunciations[word]) {
+          console.log('looking up pronuciation'); 
+          this.props.requestPronunciation(word)
+          console.log('after request up pronunciation'); 
+          this.props.fetchPronunciation(word)
+        }
+        break
       default:
         Function.prototype()
     }
@@ -105,7 +117,8 @@ class WordTabs extends Component {
           <Tab>Original Word</Tab>
           { isEnglishWord ? <Tab>Translations</Tab> : <Tab>Collocations</Tab> }
           { isEnglishWord ? <Tab>Collocations</Tab> : <Tab>Synonyms</Tab> }
-          { isEnglishWord ? <Tab>Synonyms</Tab> : <Tab>Add Note</Tab> }
+          { isEnglishWord ? <Tab>Synonyms</Tab> : <Tab>Pronunciation</Tab> }
+          { isEnglishWord ? <Tab>Pronunciation</Tab> : <Tab>Add Note</Tab> }
           { isEnglishWord ? <Tab>Add Note</Tab> : '' }
         </TabList>
         <TabPanel>
@@ -123,8 +136,8 @@ class WordTabs extends Component {
         <TabPanel>
           { isEnglishWord ? <Collocations word={word} fn={fn[0]}/> : <Synonyms word={word} fn={fn[0]} />}
         </TabPanel>
-        { isEnglishWord ? <TabPanel><Synonyms word={word} fn={fn[0]} /></TabPanel> :  
-           <TabPanel><WordNote word={word} /></TabPanel>}
+        { isEnglishWord ? <TabPanel><Synonyms word={word} fn={fn[0]} /></TabPanel> : <TabPanel><Pronunciation word={word} /></TabPanel>}
+        { isEnglishWord ? <TabPanel><Pronunciation word={word} fn={fn[0]} /></TabPanel> : <TabPanel><WordNote word={word} /></TabPanel>}
         { isEnglishWord ? <TabPanel><WordNote word={word} /></TabPanel> : '' }
      </Tabs>
     );
@@ -139,6 +152,8 @@ const mapDispatchToProps = {
           requestCollocations,
           lookUpSynonyms, 
           requestSynonyms,
+          fetchPronunciation, 
+          requestPronunciation,
           fetchNote, 
           requestNote,
 }

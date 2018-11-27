@@ -4,6 +4,7 @@ import wordsReducer from "./wordsReducers";
 import transReducer from "./transReducers";
 import noteReducer from "./noteReducers";
 import synonymsReducer from "./synonymsReducers";
+import pronounceReducer from "./pronounceReducers";
 import collsReducer from "./collsReducers";
 import collocationsReducer from "./collocationsReducers";
 import auth from "./authReducers";
@@ -17,6 +18,7 @@ export default combineReducers({
   collections: collsReducer,
   collocations: collocationsReducer,
   auth: auth,
-  notes: noteReducer 
+  notes: noteReducer,
+  pronounce: pronounceReducer
 });
 
