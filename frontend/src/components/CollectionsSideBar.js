@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { fetchCollections, 
          fetchCollection, 
          saveCollection, 
+         saveCollectionAndLoadNew, 
          requestCollections, 
          requestCollection } from '../actions/collectionsActions';
 import { loadUser } from '../actions/authActions';
@@ -40,6 +41,7 @@ class CollectionsSideBar extends Component {
       this.props.fetchCollections();
     }
   }
+
   onCollectionClick(e, uuid) {
     console.log('collection look up');
     e.preventDefault();
@@ -47,9 +49,12 @@ class CollectionsSideBar extends Component {
     this.props.requestCollection();
     const origUUId = this.props.origUUId
     if (origUUId) {
-      this.props.saveCollection(this.props.origName, origUUId, this.props.allWords.map(e => e.word).join(','));
+      this.props.saveCollectionAndLoadNew(this.props.origName, uuid);
     }
+    else {
+    console.log(`i am here continuing with ${uuid}`)
     this.props.fetchCollection(uuid);
+    }
   }
   
   handleSidebarOpen(e) {
@@ -91,4 +96,5 @@ export default connect(mapStateToProps, { loadUser,
                                           fetchCollections, 
                                           fetchCollection, 
                                           saveCollection, 
+                                          saveCollectionAndLoadNew, 
                                           requestCollection })(CollectionsSideBar);

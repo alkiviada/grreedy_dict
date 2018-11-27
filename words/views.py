@@ -115,7 +115,6 @@ class CollectionListCreate(generics.ListCreateAPIView):
   serializer_class = CollectionSerializer
 
   def post(self, request):
-    words = request.data.get('collection').split(',')
 
     name = request.data.get('name')
     uuid = request.data.get('uuid')

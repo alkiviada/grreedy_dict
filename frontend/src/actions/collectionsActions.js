@@ -52,7 +52,6 @@ export const fetchCollections = () => (dispatch, getState) => {
   let headers = {"Content-Type": "application/json"};
   let {token} = getState().auth;
 
-  console.log(token)
   if (token) {
       headers["Authorization"] = `Token ${token}`;
   }
@@ -66,25 +65,24 @@ export const fetchCollections = () => (dispatch, getState) => {
     })
 };
 
-export const fetchCollection = (uuid) => (dispatch, getState) => {
+export const fetchCollection = (uuid) => { return (dispatch, getState) => {
   console.log('fetching words for collection');
   let headers = {"Content-Type": "application/json"};
 
 
   const {token} = getState().auth;
-  console.log(token)
   if (token) {
       headers["Authorization"] = `Token ${token}`;
   }
 
 
-  const lastModifiedMap = getState().collections.lastModifiedMap || {};
+  const { lastModifiedMap } = getState().collections;
   const time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : '';
   console.log(lastModifiedMap[uuid])
   console.log(uuid)
   console.log(time);
 
-  fetch('api/collection/' + uuid + (time ? '/' + time : ''), {headers, })
+  return fetch('api/collection/' + uuid + (time ? '/' + time : ''), {headers, })
   .then(response =>
       response.json().then(json => ({
         status: response.status,
@@ -114,6 +112,7 @@ export const fetchCollection = (uuid) => (dispatch, getState) => {
            uuid = coll.uuid
            name = coll.name
           }
+          console.log(words)
           dispatch({
             type: FETCH_WORDS_FULFILLED,
             payload: words 
@@ -121,7 +120,8 @@ export const fetchCollection = (uuid) => (dispatch, getState) => {
           dispatch({
             type: FETCH_COLLECTION_FULFILLED,
             payload: { uuid: uuid, name: name }
-          })
+          });
+         return json;
         }
       },
       // Either fetching or parsing failed!
@@ -131,8 +131,9 @@ export const fetchCollection = (uuid) => (dispatch, getState) => {
       }
     ); 
 };
+};
 
-export const saveCollection = (name, wordsString) => (dispatch, getState) => {
+export const saveCollection = (name, wordsString) => { return (dispatch, getState) => {
   console.log('saving words');
 
   const { uuid } = getState().collections
@@ -146,16 +147,14 @@ export const saveCollection = (name, wordsString) => (dispatch, getState) => {
                  Accept: 'application/json',
                  "Content-Type": "application/json"
                 };
-  console.log(token)
 
   if (token) {
       headers["Authorization"] = `Token ${token}`;
   }
-  fetch('api/collection/', {
+  return fetch('api/collection/', {
     method: 'POST',
     headers: headers,
     body: JSON.stringify({
-     collection: wordsString,
      name: name,
      uuid: uuid,
     }),})
@@ -179,7 +178,7 @@ export const saveCollection = (name, wordsString) => (dispatch, getState) => {
           let time = Date.now();
           time = Math.floor(time/1000);
           
-          const lastModifiedMap = getState().collections.lastModifiedMap || {}
+          const { lastModifiedMap } = getState().collections
           const words = getState().words.items || []
           console.log(`i have name ${name}`)
 
@@ -198,7 +197,8 @@ export const saveCollection = (name, wordsString) => (dispatch, getState) => {
           dispatch({
             type: FETCH_WORDS_FULFILLED,
             payload: []
-          })
+          });
+          return json;
         }
       },
       // Either fetching or parsing failed!
@@ -207,4 +207,82 @@ export const saveCollection = (name, wordsString) => (dispatch, getState) => {
         dispatch({type: SAVE_COLLECTION_REJECTED, payload: 'saving words failed', })
       }
     ); 
+};
+};
+
+export const saveCollectionAndLoadNew = (name, newUuid) => { return (dispatch, getState) => {
+  console.log('saving words');
+
+  const { uuid } = getState().collections
+  
+
+  console.log(uuid);
+
+  const {token} = getState().auth;
+
+  let headers = {
+                 Accept: 'application/json',
+                 "Content-Type": "application/json"
+                };
+
+  if (token) {
+      headers["Authorization"] = `Token ${token}`;
+  }
+  return fetch('api/collection/', {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify({
+     name: name,
+     uuid: uuid,
+    }),})
+  .then(response =>
+      response.json().then(json => ({
+        status: response.status,
+        json
+      })
+    ))
+  .then(
+      // Both fetching and parsing succeeded!
+      ({ status, json }) => {
+        if (status >= 400) {
+          // Status looks bad
+          console.log('Server returned error status');
+          dispatch({type: 'AUTHENTICATION_ERROR', payload: 'saving words failed', })
+          dispatch({type: SAVE_COLLECTION_REJECTED, payload: 'saving words failed', })
+        } else {
+          // Status looks good
+          var colls = json;
+          let time = Date.now();
+          time = Math.floor(time/1000);
+          
+          const { lastModifiedMap } = getState().collections
+          const words = getState().words.items || []
+          console.log(`i have name ${name}`)
+
+          dispatch({
+            type: SAVE_COLLECTION_FULFILLED,
+            payload: { items: colls, lastModifiedMap: {...lastModifiedMap, [uuid]: { time, words, name }} }
+          }),
+          dispatch({
+            type: FETCH_NOTE_FULFILLED,
+            payload: { allNotes: {}, fetchingMap: {} }
+          }),
+          dispatch({
+            type: SWITCH_TAB,
+            payload: { mapTabIndex: {} }
+          }),
+          dispatch({
+            type: FETCH_WORDS_FULFILLED,
+            payload: []
+          });
+         return dispatch(fetchCollection(newUuid))
+        }
+      },
+      // Either fetching or parsing failed!
+      err => {
+        console.log('problems');
+        dispatch({type: SAVE_COLLECTION_REJECTED, payload: 'saving words failed', })
+      }
+    ); 
+};
 };
