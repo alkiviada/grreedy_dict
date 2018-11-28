@@ -36,7 +36,9 @@ export const loadUser = () => {
           dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
           throw res.data;
         }
-      })
+      }).catch(function (err) {
+        return err;
+      }); 
   }
 }
 
@@ -67,7 +69,9 @@ export const login = (username, password) => {
           dispatch({type: "LOGIN_FAILED", data: res.data});
           throw res.data;
         }
-      })
+      }).catch(function (err) {
+        return err;
+      });
   }
 }
 
@@ -141,7 +145,9 @@ export const logout = () => {
           dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
           throw res.data;
         }
-      })
+      }).catch(function (err) {
+        return err;
+      });
   }
 };
 
