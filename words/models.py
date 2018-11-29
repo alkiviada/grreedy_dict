@@ -257,22 +257,27 @@ class WordRefWordMixin(models.Manager):
     word = args['word']
     ext = args['ext']
     r = try_fetch(WORDREF_BASE + ext + "/" + word)
-    straight_words_map, pronounce = parse_straight_word(r)
+    parse_return = parse_straight_word(r)
+    straight_words_map, pronounce, is_verb = [ parse_return.get(e) for e in ['words_map', 'pronounce', 'is_verb'] ]
     print(pronounce)
     r = try_fetch(WORDREF_BASE + ext + "/reverse/" + word)
     reverse_words_map = parse_reverse_word(r)
-    return ([ *straight_words_map, *reverse_words_map ], pronounce)
+    return { 'words_map': [ *straight_words_map, *reverse_words_map ], 
+             'pronounce': pronounce, 
+             'is_verb': 1 if is_verb else 0 }
 
   def create_word(self, **args):
     word = args['word']
     language = args['language']
     words_map = args['words_map']
     pronounce = args['pronounce']
+    is_verb = args['is_verb']
+    print(is_verb);
     if not words_map:
       return ()
     w = Word.objects.filter(word=word, language=language).first()
     if not w:
-      w = Word.objects.create(word=word, lookup_date=timezone.now(), language=language, pronounce=pronounce)
+      w = Word.objects.create(word=word, lookup_date=timezone.now(), language=language, pronounce=pronounce, is_verb=is_verb)
     else:
       w.from_translation = False
       w.save(update_fields=['from_translation'])
@@ -288,6 +293,7 @@ class WordRefWordMixin(models.Manager):
         d = Definition.objects.create(word=w, definition=definition, etymology=ety);
       if example:
         Example.objects.create(definition=d, example=example, word=w)
+    print('all is well')
     return (w,)
 
 
@@ -487,9 +493,11 @@ class ItalianWordManager(WordRefWordMixin, models.Manager):
     return self.create_collocations(collocations=collocs_map, word=word)
 
   def fetch_word(self, word):
-    words_map, pronounce = self.fetch_and_parse_word(ext='iten', word=word)
+    fetch_return = self.fetch_and_parse_word(ext='iten', word=word)
+    print(fetch_return)
+    words_map, pronounce, is_verb = [ fetch_return.get(e) for e in ('words_map', 'pronounce', 'is_verb') ]
     print(pronounce)
-    return self.create_word(word=word, words_map=words_map, language='italian', pronounce=pronounce)
+    return self.create_word(word=word, words_map=words_map, language='italian', pronounce=pronounce, is_verb=is_verb)
     
   def fetch_pronounce(self, word):
     r = try_fetch(WORDREF_BASE + "iten/" + word.word)
@@ -536,8 +544,9 @@ class FrenchWordManager(WordRefWordMixin, models.Manager):
     return self.create_bare_word(language='french', words=trans, original=orig_word)
     
   def fetch_word(self, word):
-    words_map, pronounce = self.fetch_and_parse_word(ext='fren', word=word)
-    return self.create_word(word=word, words_map=words_map, language='french', pronounce=pronounce)
+    fetch_return = self.fetch_and_parse_word(ext='fren', word=word)
+    words_map, pronounce, is_verb = [ fetch_return.get(e) for e in ('words_map', 'pronounce', 'is_verb') ]
+    return self.create_word(word=word, words_map=words_map, language='french', pronounce=pronounce, is_verb=is_verb)
 
 class Word(models.Model):
     word = models.CharField(max_length=400)
@@ -548,6 +557,7 @@ class Word(models.Model):
     translations = models.ManyToManyField("self", blank=True, related_name='translations')
     synonyms = models.ManyToManyField("self", blank=True, related_name='synonyms')
     from_translation = models.BooleanField(default=False)
+    is_verb = models.BooleanField(default=False)
     
     objects = models.Manager()
     single_object = SingleWordManager()

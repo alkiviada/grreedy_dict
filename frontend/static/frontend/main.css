@@ -707,7 +707,7 @@ ul {
   padding: 0;
   position: absolute;
   background: #F5FBFD;
-  width: 70%;
+  width: 71%;
 }
 
 .react-tabs__tab {
@@ -719,6 +719,7 @@ ul {
   list-style: none;
   padding: .2em .3em;
   cursor: pointer;
+  position: relative;
 }
 
 .react-tabs__tab--selected {
@@ -782,12 +783,17 @@ ul {
 }
 }
 
-@media(max-width: 767px) {
+@media(max-width: 1040px) {
 
   .react-tabs__tab-list {
-    display: block;
-    overflow-y: auto;
-    width: 90%;
+    width: 69%;
+  }
+}
+
+@media(max-width: 768px) {
+
+  .react-tabs__tab-list {
+    width: 81%;
   }
 
   .react-tabs__tab {
@@ -796,6 +802,7 @@ ul {
     text-overflow: ellipsis;
     max-width: 5em;
     font-size: .8rem;
+    font-weight: 700;
   }
 .new-word-btn {
   padding: .2em !important;
@@ -821,6 +828,19 @@ ul {
 }
 }
 
+@media(max-width: 650px) {
+
+  .react-tabs__tab-list {
+    width: 80%;
+  }
+}
+
+@media (max-width: 499px) {
+  .react-tabs__tab-list {
+    width: 92%;
+  }
+}
+
 @media (max-width: 460px) {
    html
    {
@@ -829,6 +849,9 @@ ul {
 .new-word-btn {
   padding: .1em !important;
 }
+  .react-tabs__tab-list {
+    width: 92%;
+  }
 }
 
 @media (max-width: 414px) {
@@ -838,6 +861,9 @@ ul {
    }
   .etym-style {
     font-size: 1.4rem !important;
+  }
+  .react-tabs__tab-list {
+    width: 93%;
   }
 }
 
