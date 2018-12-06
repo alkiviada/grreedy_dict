@@ -78,9 +78,6 @@ export const fetchCollection = (uuid) => { return (dispatch, getState) => {
 
   const { lastModifiedMap } = getState().collections;
   const time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : '';
-  console.log(lastModifiedMap[uuid])
-  console.log(uuid)
-  console.log(time);
 
   return fetch('api/collection/' + uuid + (time ? '/' + time : ''), {headers, })
   .then(response =>
@@ -92,7 +89,6 @@ export const fetchCollection = (uuid) => { return (dispatch, getState) => {
   .then(
       // Both fetching and parsing succeeded!
       ({ status, json }) => {
-        console.log(json)
         if (status >= 400) {
           // Status looks bad
           console.log('Server returned error status');
@@ -112,7 +108,6 @@ export const fetchCollection = (uuid) => { return (dispatch, getState) => {
            uuid = coll.uuid
            name = coll.name
           }
-          console.log(words)
           dispatch({
             type: FETCH_WORDS_FULFILLED,
             payload: words 
@@ -139,7 +134,6 @@ export const saveCollection = (name, wordsString) => { return (dispatch, getStat
   const { uuid } = getState().collections
   
 
-  console.log(uuid);
 
   const {token} = getState().auth;
 
@@ -216,7 +210,6 @@ export const saveCollectionAndLoadNew = (name, newUuid) => { return (dispatch, g
   const { uuid } = getState().collections
   
 
-  console.log(uuid);
 
   const {token} = getState().auth;
 

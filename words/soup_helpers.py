@@ -129,7 +129,7 @@ def parse_straight_word(r):
 
   words_tables = word_soup.findAll('table', {'class': 'WRD'}, id=lambda x: x != 'compound_forms');
   if not words_tables:
-    return { 'words_map': [], 'is_verb': '', 'pronounce': '' }
+    return { 'words_map': [], 'is_verb': 0, 'pronounce': '' }
   words_map = []
   for wd_table in words_tables:
     fr_word = ''
@@ -160,6 +160,7 @@ def parse_straight_word(r):
     words_map.append(word_trans)
 
   pronounce = pronounce.get_text() if pronounce else ''
+  print(is_verb)
   return { 'words_map': words_map, 'pronounce': pronounce, 'is_verb': is_verb }
 
 def conflate_meanings(trans_meanings_arr):

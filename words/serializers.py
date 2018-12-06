@@ -67,7 +67,7 @@ class WordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Word
-        fields = ['word', 'word_etymologies', 'language', 'words']
+        fields = [ 'word', 'word_etymologies', 'language', 'words', 'is_verb' ]
 
 class TranslationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -78,6 +78,11 @@ class PronounceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Word
         fields = ['pronounce', 'language']
+
+class ConjugateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Word
+        fields = ['conjugations', 'language']
 
 class SynonymSerializer(serializers.ModelSerializer):
     class Meta:

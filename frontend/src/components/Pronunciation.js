@@ -11,7 +11,6 @@ const mapStateToProps = state => ({
 const Pronunciation = (props) => {
     const { word, pronunciations, fetchingMap } = props;
     const wordPronounce = pronunciations[word];
-    console.log(pronunciations)
     if (fetchingMap[word]) {
       return (
           <div className="clear-notification-message">

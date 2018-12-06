@@ -31,14 +31,11 @@ export const fetchWords = (uuid) => (dispatch, getState) => {
   console.log(`fetching words for ${uuid}`)
 
   const items = getState().words.items || [];
-  console.log(getState().collections);
 
   let { lastModifiedMap, name } = getState().collections;
   let time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : ''
-  console.log(time)
 
   console.log('last modified map in fetch words')
-  console.log(lastModifiedMap)
 
   if (!uuid) {
     dispatch({
@@ -62,6 +59,7 @@ export const fetchWords = (uuid) => (dispatch, getState) => {
     });
   }
   else {
+    console.log('i am here and will try to fetch')
     const url = 'api/words/' + (uuid ? uuid + '/' + time : '')
     fetch(url)
       .then(response =>
@@ -78,7 +76,6 @@ export const fetchWords = (uuid) => (dispatch, getState) => {
           console.log('Server returned error status');
           dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed'}})
         } else {
-          console.log(json)
           let words = []
           let name = ''
           if (json[0] && json[0].words) {
@@ -139,6 +136,7 @@ export const lookUpWord = (word) => (dispatch, getState) => {
                                (o['word'] = e['word'], 
                                 o['description'] = [ ...o['description'] ? o['description'] : '', 
                                                      {'language' : e['language'], 
+                                                     'is_verb' : e['is_verb'], 
                                                       'etymology': e['word_etymologies']} ], o), {}
                               );
           dispatch({

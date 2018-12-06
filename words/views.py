@@ -7,7 +7,7 @@ import datetime
 
 from words.serializers import (WordSerializer, SynonymSerializer, TranslationSerializer, CollectionSerializer, 
                                CollectionDetailSerializer, CollocationSerializer, WordNoteSerializer, PronounceSerializer,
-                               CreateUserSerializer, UserSerializer, LoginUserSerializer)
+                               CreateUserSerializer, UserSerializer, LoginUserSerializer, ConjugateSerializer)
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -192,7 +192,7 @@ class WordSingleCreate(generics.ListAPIView):
           raise Http404("No Fetch API for the word:", word)
 
     if not db_words:
-      print("Could not fetch word:" + word);
+      print("Could not fetch word: " + word);
       raise Http404("No API for the word:", word)
 
 # now that i have words in the db 
@@ -322,6 +322,53 @@ class WordNoteSingleDetail(APIView):
       print ("No note for word: ", word)
       return Response({'note': ''})
 
+class WordSingleCreateConjugate(generics.RetrieveAPIView):
+  permission_classes = [ AllowAny, ]
+  def get_queryset(self):
+    word = self.kwargs['word']
+    words = Word.objects.filter(word=word)
+    return word 
+
+  lookup_field = 'word'
+
+  def get(self, request, word, *args, **kwargs):
+    orig_word = ''
+    print(word);
+    conjs = []
+    word = word.lower()
+    words = Word.romance_words.filter(word=word, is_verb=True)
+    print(words)
+    for w in words:
+      print('conjugate: ', w, ' ', w.language) 
+      origin_verb = ''
+      if w.conjugations:
+        origin_verb = w 
+        print('i am the original verb')
+      else:
+        origin_verb = w.origin_verb 
+      print(origin_verb)
+      if origin_verb:
+        print('i have original verb')
+        conjs.append(origin_verb)
+      else: 
+        try:
+          objects_manager = getattr(Word, w.language + '_objects')
+          print(objects_manager)
+          try:
+            conjugate_method = getattr(objects_manager, 'fetch_conjugate')
+            conj = conjugate_method(w)
+            if conj:
+              conjs.append(conj)
+          except Exception as e: 
+            print(e)
+            print('No method to get conjugations')
+            raise Http404("No Conjugate API for the word: ", word)
+        except Exception as e: 
+          print(e)
+          print('No method to get conjugations')
+          raise Http404("No Conjugate API for the word: ", word)
+    serializer = ConjugateSerializer(conjs, many=True)
+    return Response(serializer.data)
 
 class WordSingleCreatePronounce(generics.RetrieveAPIView):
   permission_classes = [ AllowAny, ]

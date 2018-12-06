@@ -42,7 +42,7 @@ export const fetchPronunciation = (word) => (dispatch, getState) => {
       // Either fetching or parsing failed!
       err => {
         console.log('problems');
-        dispatch({type: FETCH_NOTE_REJECTED, payload: { error: 'fetching pronunciation failed', 
+        dispatch({type: FETCH_PRONOUNCE_REJECTED, payload: { error: 'fetching pronunciation failed', 
                       allPronunciations: { ...allPronunciations, ...{ [word]: {error: true} } },
                       fetchingMap: { ...fetchingMap, ...{[word]: false} } }
         })

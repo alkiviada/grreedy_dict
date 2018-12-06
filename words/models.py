@@ -8,6 +8,7 @@ from words.api_call_helpers import try_fetch
 import os
 import re
 from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist 
 from bs4 import BeautifulSoup
 from words.soup_helpers import (scrape_wordref_words, 
                                 parse_synonyms,
@@ -170,7 +171,7 @@ class YandexWordMixin(models.Manager):
     return (w,)
 
 class WordRefWordMixin(models.Manager):
-
+  
   def create_collocations(self, **args):
     collocs_map = args['collocations']
     word = args['word']
@@ -245,23 +246,27 @@ class WordRefWordMixin(models.Manager):
       if not w:
         new_notes = ''
         if isinstance(words, dict):
-          print(words[new_w])
+          #print(words[new_w])
           new_notes = ', '.join(words[new_w])
-          print(new_notes)
+          #print(new_notes)
         w = Word.objects.create(word=new_w, lookup_date=timezone.now(), language=language, from_translation=True, notes=new_notes) 
       db_words.append(w)
     
     return db_words
 
   def fetch_and_parse_word(self, **args):
+    print('in fetch')
     word = args['word']
     ext = args['ext']
     r = try_fetch(WORDREF_BASE + ext + "/" + word)
     parse_return = parse_straight_word(r)
+    #print(parse_return)
     straight_words_map, pronounce, is_verb = [ parse_return.get(e) for e in ['words_map', 'pronounce', 'is_verb'] ]
-    print(pronounce)
+    #print(is_verb)
+    #print(pronounce)
     r = try_fetch(WORDREF_BASE + ext + "/reverse/" + word)
     reverse_words_map = parse_reverse_word(r)
+    #print(1 if is_verb else 0)
     return { 'words_map': [ *straight_words_map, *reverse_words_map ], 
              'pronounce': pronounce, 
              'is_verb': 1 if is_verb else 0 }
@@ -272,7 +277,7 @@ class WordRefWordMixin(models.Manager):
     words_map = args['words_map']
     pronounce = args['pronounce']
     is_verb = args['is_verb']
-    print(is_verb);
+    #print(is_verb);
     if not words_map:
       return ()
     w = Word.objects.filter(word=word, language=language).first()
@@ -474,9 +479,63 @@ class RussianWordManager(YandexWordMixin, models.Manager):
   def fetch_word(self, word):
     return self.create_or_get_word(ya_lang='ru-en', word=word, language='russian')
 
-class ItalianWordManager(WordRefWordMixin, models.Manager):
+class RomanceWordManager(WordRefWordMixin, models.Manager):
+  def get_queryset(self):
+    return super().get_queryset().filter(language__in=['italian', 'french'])
+
+  def fetch_and_parse_conjugations(self, word):
+    lang_wref_map = { 'french': 'Fr', 'italian': 'It'} 
+    r = try_fetch(WORDREF_BASE + "conj/" + lang_wref_map.get(word.language) + "Verbs.aspx?v=" + word.word)
+    word_page = r.content
+    word_soup = BeautifulSoup(word_page, features="html.parser")
+    original = word_soup.find('h3')
+    if not original:
+      return ''
+    original = original.get_text()
+    if original == word.word and word.conjugations:
+      return word
+    try:
+      orig_verb = Word.objects.get(language=word.language, word=original)
+      print('i have original verb: ', orig_verb.word)
+    except ObjectDoesNotExist:
+      orig_verb = Word.objects.create(language=word.language, 
+                                      from_translation=True, 
+                                      lookup_date=timezone.now(), is_verb=True)
+    if orig_verb.conjugations:
+      word.origin_verb = orig_verb 
+      word.save()
+      return orig_verb
+    else:
+      conjs = word_soup.findAll('div', { 'class': 'aa' })
+      for conj_idx, conj in enumerate(conjs):
+       tense_tables = conj.findAll('table')
+       for table_idx, table in enumerate(tense_tables):
+         checkbox_id = word.word + '-' + word.language + '-' + "colls-toggle-" + str(conj_idx) + '-' + str(table_idx)
+         attrs = {'class': "conj-toggle", 'id': checkbox_id, 'type':"checkbox"}
+         if conj_idx == 0 and table_idx == 0:
+           attrs['checked'] = 1 
+         new_checkbox = word_soup.new_tag('input',  attrs=attrs)
+         table.insert(0, new_checkbox)
+         arrows = table.findAll('span', class_="arrow")
+         for arr_idx, arrow in enumerate(arrows): 
+           class_suffix = 'right' if arr_idx == 0 else 'left'
+           new_label = word_soup.new_tag('label', attrs={'for':checkbox_id, 'class': "conj-toggle-label-" + class_suffix})           
+           arrow.wrap(new_label)
+
+      conjs = ('').join([str(conj) for conj in conjs])
+      orig_verb.conjugations = conjs 
+      orig_verb.save(update_fields=['conjugations'])
+      if not (orig_verb.word == word.word): 
+        word.origin_verb = orig_verb 
+        word.save()
+      return orig_verb
+
+class ItalianWordManager(RomanceWordManager, models.Manager):
   def get_queryset(self):
     return super().get_queryset().filter(language='italian')
+
+  def fetch_conjugate(self, word):
+    return self.fetch_and_parse_conjugations(word)
  
   def fetch_synonyms(self, orig_word):
     print('doing the fetch')
@@ -494,24 +553,27 @@ class ItalianWordManager(WordRefWordMixin, models.Manager):
 
   def fetch_word(self, word):
     fetch_return = self.fetch_and_parse_word(ext='iten', word=word)
-    print(fetch_return)
+    #print(fetch_return)
     words_map, pronounce, is_verb = [ fetch_return.get(e) for e in ('words_map', 'pronounce', 'is_verb') ]
-    print(pronounce)
+    #print(pronounce)
     return self.create_word(word=word, words_map=words_map, language='italian', pronounce=pronounce, is_verb=is_verb)
     
   def fetch_pronounce(self, word):
     r = try_fetch(WORDREF_BASE + "iten/" + word.word)
     if r:
       pronounce = parse_pronounce(r)
-      print(pronounce)
+      #print(pronounce)
       if pronounce:
         word.pronounce = pronounce
         word.save(update_fields=['pronounce'])
 
-class FrenchWordManager(WordRefWordMixin, models.Manager):
+class FrenchWordManager(RomanceWordManager, models.Manager):
   def get_queryset(self):
     return super().get_queryset().filter(language='french')
  
+  def fetch_conjugate(self, word):
+    return self.fetch_and_parse_conjugations(word)
+
   def fetch_collocations(self, word):
     collocs_map = self.fetch_and_parse_collocations(word, ext='fren')
     return self.create_collocations(collocations=collocs_map, word=word)
@@ -520,7 +582,7 @@ class FrenchWordManager(WordRefWordMixin, models.Manager):
     r = try_fetch(WORDREF_BASE + "fren/" + word.word)
     if r:
       pronounce = parse_pronounce(r)
-      print(pronounce)
+      #print(pronounce)
       if pronounce:
         word.pronounce = pronounce
         word.save(update_fields=['pronounce'])
@@ -551,13 +613,18 @@ class FrenchWordManager(WordRefWordMixin, models.Manager):
 class Word(models.Model):
     word = models.CharField(max_length=400)
     language = models.CharField(max_length=33)
-    pronounce = models.CharField(max_length=100)
     lookup_date = models.DateTimeField('date looked up')
     notes = models.CharField(max_length=400)
+
+    pronounce = models.CharField(max_length=100)
     translations = models.ManyToManyField("self", blank=True, related_name='translations')
     synonyms = models.ManyToManyField("self", blank=True, related_name='synonyms')
+
     from_translation = models.BooleanField(default=False)
+
     is_verb = models.BooleanField(default=False)
+    conjugations = models.TextField(blank=True, null=True)
+    origin_verb = models.ForeignKey("self", blank=True, related_name='verb', null=True, on_delete=models.CASCADE)
     
     objects = models.Manager()
     single_object = SingleWordManager()
@@ -567,6 +634,7 @@ class Word(models.Model):
     french_objects = FrenchWordManager()
     italian_objects = ItalianWordManager()
     free_words = FreeWordsManager()
+    romance_words = RomanceWordManager()
     
     def __str__(self):
         return self.word
