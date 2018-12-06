@@ -107,5 +107,5 @@ def fetch_conjugations():
   #[ print(w.word, w.language, w.origin_verb) for w in w ]
 
 
-#update_verb_words()
+update_verb_words()
 fetch_conjugations()

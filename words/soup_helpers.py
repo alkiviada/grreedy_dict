@@ -11,7 +11,7 @@ def scrape_wordref_words(words_string, split=1):
     return words_string
   words_string = re.sub(
     r'(?<!^)(?<!\[)(?<!\:\ )\b(ab(b)?r$|inter$|(proper )?n(m|f|noun|pl)|pp|prépp|'
-     'préf$|prefix|suffix|v(i)?$|v(i|tr)?( ?(rif|refl|past|aux|pron|(in)?tr(.+)?|pres|phras|expr).*?)$|Note|'
+     'préf$|prefix|suffix|v(i|tr)?$|v(i|tr(verbe)?)?( ?(rif|refl|past|aux|pron|pres|phras|expr|(in)?trans).*?)$|Note|'
      'loc (.+)|loc$|agg$|adj(( inv)?adj.+| inv| n).+?$|interj|advadv|avv$| contraction|expr((expr|verb).*)?$|n as|prep(p)?$|conjc|cong$|idiom$|pronpron|prep +|viverbe).*', 
     '', words_string)
   if not split:

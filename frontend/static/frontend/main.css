@@ -87,6 +87,9 @@ h4 {
     .aa .neoConj:nth-child(2) th[scope="col"] {
         text-align: center;
     }
+    .aa .neoConj:nth-child(3) th[scope="col"] {
+        text-align: center;
+    }
 
 .aa .neoConj td,.aa .neoConj th {
   text-align: left;

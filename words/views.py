@@ -367,6 +367,11 @@ class WordSingleCreateConjugate(generics.RetrieveAPIView):
           print(e)
           print('No method to get conjugations')
           raise Http404("No Conjugate API for the word: ", word)
+    print(conjs)
+    if not conjs:
+      print("Could not fetch conjugations:" + word);
+      raise Http404("No Conjugation API for the word: ", word)
+
     serializer = ConjugateSerializer(conjs, many=True)
     return Response(serializer.data)
 
