@@ -26,9 +26,11 @@ class Table extends Component {
 
   componentWillMount() {
     console.log('mounting table');
-    this.props.requestWords();
-    console.log(this.props.uuid)
-    this.props.fetchWords(this.props.uuid);
+    if (!this.props.data) {
+      this.props.requestWords();
+      console.log(this.props.uuid)
+      this.props.fetchWords(this.props.uuid);
+    }
   }
 
   addRow (e, word) {
