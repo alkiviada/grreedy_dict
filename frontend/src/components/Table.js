@@ -26,18 +26,16 @@ class Table extends Component {
 
   componentWillMount() {
     console.log('mounting table');
-    if (!this.props.data) {
-      this.props.requestWords();
-      this.props.fetchWords(this.props.uuid);
-    }
+    this.props.requestWords();
+    console.log(this.props.uuid)
+    this.props.fetchWords(this.props.uuid);
   }
 
   addRow (e, word) {
     console.log('look up');
     e.preventDefault();
     if (!this.props.allWordsMap[word]) {
-      this.props.requestWord();
-      this.props.lookUpWord(word);
+      this.props.lookUpWord(word, this.props.uuid);
     }
     this.scrollToDomRef()
   }
@@ -51,6 +49,7 @@ class Table extends Component {
     const data = this.props.data;
     const allFetching = this.props.allFetching;
     const collFetching = this.props.collFetching;
+    console.log(`i am fetchinh? ${allFetching}`)
 
     const wordFetching = this.props.newWordFetching;
     if (allFetching || collFetching) {

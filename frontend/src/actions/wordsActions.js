@@ -1,5 +1,6 @@
 import { 
   FETCH_COLLECTION_FULFILLED, 
+  SAVE_COLLECTION_FULFILLED, 
   CLEAR_NEW_WORD_ERROR, FETCH_WORDS, 
   FETCH_WORDS_FULFILLED, 
   FETCH_WORDS_REJECTED, 
@@ -27,7 +28,7 @@ export const requestWord = () => dispatch => {
   })
 };
 
-export const fetchWords = (uuid) => (dispatch, getState) => {
+export const fetchWords = (uuid) => { return (dispatch, getState) => {
   console.log(`fetching words for ${uuid}`)
 
   const items = getState().words.items || [];
@@ -38,7 +39,7 @@ export const fetchWords = (uuid) => (dispatch, getState) => {
   console.log('last modified map in fetch words')
 
   if (!uuid) {
-    dispatch({
+  return dispatch({
       type: FETCH_WORDS_FULFILLED,
       payload: [],
     });
@@ -48,20 +49,18 @@ export const fetchWords = (uuid) => (dispatch, getState) => {
 // we have a collection but we never saved it 
 // - let's load it from the storage of words' reducer  
 
-    console.log('i am dispatching here')
     dispatch({
       type: FETCH_COLLECTION_FULFILLED,
       payload: { uuid: uuid, name: name }
     });
-    dispatch({
+    return dispatch({
       type: FETCH_WORDS_FULFILLED,
       payload: items
     });
   }
   else {
-    console.log('i am here and will try to fetch')
     const url = 'api/words/' + (uuid ? uuid + '/' + time : '')
-    fetch(url)
+    return fetch(url)
       .then(response =>
       response.json().then(json => ({
         status: response.status,
@@ -105,13 +104,15 @@ export const fetchWords = (uuid) => (dispatch, getState) => {
     ); 
   }
 };
+};
 
-export const lookUpWord = (word) => (dispatch, getState) => {
+export const fetchWord = (word) => { return (dispatch, getState) => {
   console.log('fetching word');
-  const { uuid } = getState().collections
+  const { uuid, items, lastModifiedMap } = getState().collections
+  console.log(lastModifiedMap)
 
   const url = 'api/word/' + word + '/' + (uuid ? uuid : '')
-  fetch(url)
+  return fetch(url)
   .then(response =>
       response.json().then(json => ({
         status: response.status,
@@ -137,7 +138,7 @@ export const lookUpWord = (word) => (dispatch, getState) => {
                                 o['description'] = [ ...o['description'] ? o['description'] : '', 
                                                      {'language' : e['language'], 
                                                      'is_verb' : e['is_verb'], 
-                                                      'etymology': e['word_etymologies']} ], o), {}
+                                                     'etymology': e['word_etymologies']} ], o), {}
                               );
           dispatch({
             type: FETCH_WORD_FULFILLED,
@@ -146,6 +147,14 @@ export const lookUpWord = (word) => (dispatch, getState) => {
           dispatch({
             type: FETCH_COLLECTION_FULFILLED,
             payload: { uuid: collUUID, name: collName }
+          });
+          let time = Date.now();
+          time = Math.floor(time/1000);
+          console.log(collName)
+          console.log(collUUID)
+          dispatch({
+            type: SAVE_COLLECTION_FULFILLED,
+            payload: { uuid: collUUID, name: collName, items: items, lastModifiedMap: {...lastModifiedMap, [collUUID]: { time, words, name: collName }} }
           })
         }
       },
@@ -155,4 +164,42 @@ export const lookUpWord = (word) => (dispatch, getState) => {
         dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed', word: word}})
       }
     ); 
+};
+};
+
+export const lookUpWord = (word, uuid) => { 
+return (dispatch, getState) => {
+  console.log(`fetching words for ${uuid}`)
+
+  const items = getState().words.items || [];
+
+  let { lastModifiedMap, name } = getState().collections;
+  let time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : ''
+
+
+  if (!uuid) {
+    return dispatch(fetchWord(word))
+  }
+  else if (!lastModifiedMap[uuid]) {
+
+// we have a collection but we never saved it 
+// - let's load it from the storage of words' reducer  
+
+    console.log('i am dispatching here')
+    dispatch({
+      type: FETCH_COLLECTION_FULFILLED,
+      payload: { uuid: uuid, name: name }
+    });
+     dispatch({
+      type: FETCH_WORDS_FULFILLED,
+      payload: items
+    });
+    return dispatch(fetchWord(word))
+  }
+  else {
+    return dispatch(fetchWords(uuid)).then(() => {
+      return dispatch(fetchWord(word))
+    })
+  }
+  }
 };

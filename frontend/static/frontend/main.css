@@ -264,10 +264,12 @@ i.defect {color: var(--field-color);font-style:normal;}
 
 .conj-toggle-label-right {
   position: absolute;
-  right: 1.5em;
+  right: 1.4em;
+  cursor: pointer;
 }
 
 .conj-toggle-label-left {
+  cursor: pointer;
   position: absolute;
   left: .1em;
 }
@@ -589,7 +591,7 @@ ul {
 
 .new-word-btn, .login-btn {
   background-color: var(--field-color);
-  margin: .7em .3em .9em .1em !important;
+  margin: .7em .1em .9em .1em !important;
 }
 
 .login-btn, .register-btn {
@@ -855,7 +857,7 @@ ul {
     grid-template-columns: .5fr 6fr .5fr;
   } 
 .new-word-btn {
-  padding: .2em !important;
+  padding: .1em .07em .1em .2em !important;
 }
 }
 
@@ -893,7 +895,7 @@ ul {
     }
 
     .aa .neoConj th[scope="col"]:active {
-        background-color: #CCAC00;
+        background-color: var(--field-color);
     }
 
     .neoConj tr:nth-child(n+2) {
@@ -909,14 +911,31 @@ ul {
     }
 
     .neoConj:not(.active) th .arrow:before {
-        content: '\25B2';
+        /*content: '\25B2';*/
+        content: "\f063";
+font-family: FontAwesome;
+    font-style: normal;
+    font-size: 1.1rem;
+    font-weight: normal;
+    text-decoration: inherit;
+        color: var(--field-color);
     }
 
     .neoConj.active th .arrow:before {
-        content: '\25B2';
+        /*content: '\25B2';*/
+        content: "\f063";
+    font-size: 1.1rem;
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
+        color: var(--field-color);
     }
     .conj-toggle:checked + .neoConj th .arrow:before {
-        content: '\25BC';
+        /*content: '\25BC';*/
+    font-size: 1.1rem;
+        content:"\f062"; 
+        color: var(--field-color);
     }
 
     .neoConj tr:first-child th {
@@ -927,7 +946,8 @@ ul {
     }
 
     .neoConj:not(.active) th .arrow2:before {
-        content: '\25BC';
+        content:"\f062"; 
+        /*content: '\25BC';*/
     }
 
     .neoConj th .arrow {
@@ -1019,7 +1039,7 @@ ul {
     font-weight: 700;
   }
 .new-word-btn {
-  padding: .2em !important;
+  padding: .1em .07em .1em .2em !important;
 }
 .user-tag {
   margin-bottom: .1em !important;
@@ -1088,11 +1108,25 @@ ul {
     }
 
     .neoConj:not(.active) th .arrow:before {
-        content: '\25BC';
+        /*content: '\25BC';*/
+        content: "\f063";
+font-family: FontAwesome;
+    font-style: normal;
+    font-size: 1.1rem;
+    font-weight: normal;
+    text-decoration: inherit;
+        color: var(--field-color);
     }
 
     .neoConj.active th .arrow:before {
-        content: '\25B2';
+        /*content: '\25BC';*/
+        content: "\f063";
+font-family: FontAwesome;
+    font-style: normal;
+    font-size: 1.1rem;
+    font-weight: normal;
+    text-decoration: inherit;
+        color: var(--field-color);
     }
 
     .neoConj tr:first-child th {
@@ -1102,7 +1136,10 @@ ul {
     }
 
     .neoConj:not(.active) th .arrow2:before {
-        content: '\25BC';
+    /*    content: '\25BC';*/
+    font-size: 1.1rem;
+        content:"\f062"; 
+        color: var(--field-color);
     }
 
     .neoConj th .arrow {
@@ -1191,7 +1228,7 @@ ul {
       font-size:0.9rem !important;
    }
 .new-word-btn {
-  padding: .1em !important;
+  padding: .1em .07em .1em .2em !important;
 }
   .react-tabs__tab-list {
     width: 92%;

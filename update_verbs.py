@@ -18,32 +18,36 @@ from bs4 import BeautifulSoup, NavigableString
 from django.core.paginator import Paginator
 from words.constants import WORDREF_BASE
 from words.api_call_helpers import try_fetch
+import time
+
 
 
 def update_verb_words():
+  lang_wref_map = { 'french': 'fren', 'italian': 'iten'} 
   p = Paginator(Word.romance_words.exclude(is_verb=True).exclude(from_translation=True), 10)
   count = p.num_pages 
   while count:
     #print(count)
     words = p.page(count).object_list
     for word in words:
-      for ext in [ 'iten', 'fren' ]:
-        r = try_fetch(WORDREF_BASE + ext + "/" + word.word)
-        word_page = r.content
-        word_soup = BeautifulSoup(word_page, features="html.parser")
-        is_verb = word_soup.find('a', href=lambda x: x and re.search('conj.+(It|Fr)Verbs.+v=', x))
-        #print(is_verb)
-        if is_verb:
-          word.is_verb = 1;
-          word.save(update_fields=['is_verb'])
-      
+      print(word.word)
+      r = try_fetch(WORDREF_BASE + lang_wref_map.get(word.language) + "/" + word.word)
+      word_page = r.content
+      word_soup = BeautifulSoup(word_page, features="html.parser")
+      is_verb = word_soup.find('a', href=lambda x: x and re.search('conj.+(It|Fr)Verbs.+v=', x))
+      print(is_verb)
+      if is_verb:
+        word.is_verb = 1;
+        word.save(update_fields=['is_verb'])
+      time.sleep(60)
+    
 
     count -= 1
   
 def fetch_conjugations():
   lang_wref_map = { 'french': 'Fr', 'italian': 'It'} 
-  #p = Paginator(Word.objects.filter(language__in=['french', 'italian']).filter(is_verb=True).filter(origin_verb__isnull=True), 10)
-  p = Paginator(Word.objects.filter(language__in=['french', 'italian']).filter(is_verb=True), 10)
+  p = Paginator(Word.objects.filter(language__in=['french', 'italian']).filter(is_verb=True).filter(origin_verb__isnull=True), 10)
+  #p = Paginator(Word.objects.filter(language__in=['french', 'italian']).filter(is_verb=True), 10)
   count = p.num_pages 
   while count:
     #print(count)
@@ -108,4 +112,4 @@ def fetch_conjugations():
 
 
 update_verb_words()
-fetch_conjugations()
+#fetch_conjugations()

@@ -25,7 +25,7 @@ class NewWordForm extends Component {
     console.log('looking up');
     if (!this.props.allWordsMap[this.state.word]) {
       this.props.requestWord();
-      this.props.lookUpWord(this.state.word, this.props.allWords, this.props.uuid);
+      this.props.lookUpWord(this.state.word, this.props.uuid);
     }
     this.setState({word: ''})
   }

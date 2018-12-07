@@ -36,8 +36,8 @@ export default function(state = initialState, action) {
                saving: false, 
                error: null, 
                saved: true, 
-               name: '', 
-               uuid: '', 
+               name: action.payload.name ? action.payload.name : '', 
+               uuid: action.payload.uuid ? action.payload.uuid : '', 
                items: action.payload.items,
                lastModifiedMap: action.payload.lastModifiedMap
              };

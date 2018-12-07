@@ -36,7 +36,7 @@ class CollectionsSideBar extends Component {
 
   componentWillMount() {
     console.log('mounting sidebar');
-    if (this.props.auth.isAuthenticated && !this.props.colls.length) {
+    if (this.props.auth.isAuthenticated) {
       this.props.requestCollections();
       this.props.fetchCollections();
     }

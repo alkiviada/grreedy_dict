@@ -484,12 +484,15 @@ class RomanceWordManager(WordRefWordMixin, models.Manager):
     return super().get_queryset().filter(language__in=['italian', 'french'])
 
   def fetch_and_parse_conjugations(self, word):
+    print('ok, master, will ftech')
+
     lang_wref_map = { 'french': 'Fr', 'italian': 'It'} 
     r = try_fetch(WORDREF_BASE + "conj/" + lang_wref_map.get(word.language) + "Verbs.aspx?v=" + word.word)
     word_page = r.content
     word_soup = BeautifulSoup(word_page, features="html.parser")
     original = word_soup.find('h3')
     if not original:
+      print('problems with wordref content')
       return ''
     original = original.get_text()
     if original == word.word and word.conjugations:
