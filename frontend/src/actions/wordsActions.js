@@ -154,7 +154,7 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
           console.log(collUUID)
           dispatch({
             type: SAVE_COLLECTION_FULFILLED,
-            payload: { uuid: collUUID, name: collName, items: items, lastModifiedMap: {...lastModifiedMap, [collUUID]: { time, words, name: collName }} }
+            payload: { uuid: collUUID, name: collName, items: items, lastModifiedMap: {...lastModifiedMap, [collUUID]: { time, words: [obj, ...words], name: collName }} }
           })
         }
       },
