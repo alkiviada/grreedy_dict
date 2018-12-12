@@ -516,7 +516,7 @@ class RomanceWordManager(WordRefWordMixin, models.Manager):
          checkbox_id = word.word + '-' + word.language + '-' + "colls-toggle-" + str(conj_idx) + '-' + str(table_idx)
          attrs = {'class': "conj-toggle", 'id': checkbox_id, 'type':"checkbox"}
          if conj_idx == 0 and table_idx == 0:
-           attrs['checked'] = 1 
+           attrs['checked'] = 'checked'
          new_checkbox = word_soup.new_tag('input',  attrs=attrs)
          table.insert(0, new_checkbox)
          arrows = table.findAll('span', class_="arrow")
