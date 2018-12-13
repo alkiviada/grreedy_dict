@@ -394,7 +394,7 @@ ul {
   word-wrap: break-word;
   background: #F5FBFD;
   font-family: var(--word-font);
-  max-height: 16.5em;
+  max-height: 19.5em;
   height: auto;
   overflow:auto;
   padding-left: .3em;
@@ -837,7 +837,7 @@ ul {
   padding-top: 2em;
 }
 
-@media (min-width: 500px) {
+@media (min-width: 550px) {
   .dict-container {
   grid-template-columns: 1fr 7em;
     grid-template-areas: 
@@ -963,79 +963,29 @@ font-family: FontAwesome;
 
 
 
-    /****Rest of the page hidden for mobile******/
-    #header, #noteImport2 {
-        display: none;
-    }
-    #container {
-        width: 100% !important;
-    }
-    .content {
-        padding-right: 5px;
-        padding-left: 5px;
-    }
-
-    #search input{width:40% !important;}
-
-    #fSelect {
-        width: 138px !important;
-        padding: 9px 0px 8px 0px !important;
-        font-size: 11px !important;
-    }
-
-    #contenttable table td:first-child {
-        display: none;
-    }
-
-    #contenttable table td:nth-child(2) > span:not(.antiquated) {
-        /*display: none;*/
-    }
-
-    #conjtable {
-        margin-left:  0px;
-    }
-    #conjtable td {
-        text-align: left !important;
-    }
-    #conjtable td:nth-child(3) {
-         padding-left: 1.5em !important;
-    }
-
-    #conjtable td:nth-child(4) {
-        padding-left: 0.5em !important;
-    }
-    #conjtable td:nth-child(n+5) {
-        display: none;
-    }
-    #ad1 {
-        display:  none;
-    }
-
-    #openAll {
-        display: block !important;
-        margin:  1em;
-        width: 90%;
-        border-style: none;
-        padding: 5px;
-    }
-
   .react-tabs__tab-list {
     width: 69%;
   }
+  .react-tabs__tab {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 7.5em;
+  }
 }
 
-@media(max-width: 768px) {
+@media(max-width: 800px) {
 
   .react-tabs__tab-list {
-    width: 81%;
+    width: 80%;
   }
 
   .react-tabs__tab {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 5em;
-    font-size: .8rem;
+    max-width: 8em;
+    font-size: .9rem;
     font-weight: 700;
   }
 .new-word-btn {
@@ -1060,6 +1010,13 @@ font-family: FontAwesome;
   grid-auto-rows: minmax(auto, max-content);
   grid-auto-rows: minmax(auto, -webkit-max-content);
 }
+}
+@media(max-width: 684px) {
+
+  .react-tabs__tab {
+    font-size: .8rem;
+    font-weight: 700;
+  }
 }
 
 @media screen and (max-width:640px), handheld and (max-width:640px), projection and (max-width:640px), tv and (max-width:640px), tty and (max-width:640px) {
@@ -1153,66 +1110,36 @@ font-family: FontAwesome;
         right: .3em;
     }
 
-    /****Rest of the page hidden for mobile******/
-    #header, #noteImport2 {
-        display: none;
-    }
-    #container {
-        width: 100% !important;
-    }
-    .content {
-        padding-right: 5px;
-        padding-left: 5px;
-    }
-
-    #search input{width:40% !important;}
-
-    #fSelect {
-        width: 138px !important;
-        padding: 9px 0px 8px 0px !important;
-        font-size: 11px !important;
-    }
-
-    #contenttable table td:first-child {
-        display: none;
-    }
-
-    #contenttable table td:nth-child(2) > span:not(.antiquated) {
-        /*display: none;*/
-    }
-
-    #conjtable {
-        margin-left:  0px;
-    }
-    #conjtable td {
-        text-align: left !important;
-    }
-    #conjtable td:nth-child(3) {
-         padding-left: 1.5em !important;
-    }
-
-    #conjtable td:nth-child(4) {
-        padding-left: 0.5em !important;
-    }
-    #conjtable td:nth-child(n+5) {
-        display: none;
-    }
-    #ad1 {
-        display:  none;
-    }
-
-    #openAll {
-        display: block !important;
-        margin:  1em;
-        width: 90%;
-        border-style: none;
-        padding: 5px;
-    }
 }
-@media(max-width: 650px) {
 
+@media(max-width: 650px) {
+.word-about {
+  max-height: 20.5em;
+  padding-left: .1em;
+  padding-right: .1em;
+}
+}
+
+@media(max-width: 610px) {
+  .react-tabs__tab {
+    max-width: 7.5em;
+  }
+}
+
+@media (max-width: 550px) {
   .react-tabs__tab-list {
-    width: 80%;
+    width: 94%;
+  }
+  .react-tabs__tab {
+    max-width: 6em;
+  }
+}
+@media (max-width: 512px) {
+  .react-tabs__tab {
+    font-size: .8rem;
+  }
+  .react-tabs__tab {
+    max-width: 5.5em;
   }
 }
 
@@ -1220,22 +1147,36 @@ font-family: FontAwesome;
   .react-tabs__tab-list {
     width: 92%;
   }
+  .react-tabs__tab {
+    max-width: 5em;
+  }
 }
 
-@media (max-width: 460px) {
+@media (max-width: 480px) {
    html
    {
       font-size:0.9rem !important;
    }
+.word-about {
+  max-height: 22.5em;
+  padding-left: .1em;
+  padding-right: .1em;
+}
 .new-word-btn {
   padding: .1em .07em .1em .2em !important;
 }
   .react-tabs__tab-list {
     width: 92%;
   }
+  .react-tabs__tab {
+    font-size: .8rem;
+  }
 }
 
-@media (max-width: 414px) {
+@media (max-width: 430px) {
+.word-about {
+  max-height: 25.5em;
+}
    html
    {
       font-size:0.8rem !important;
@@ -1248,16 +1189,22 @@ font-family: FontAwesome;
   }
 }
 
-@media (max-width: 367px) {
+@media (max-width: 380px) {
+.word-about {
+  max-height: 27.5em;
+}
    html
    {
       font-size:0.7rem !important;
    }
 }
 
-@media (max-width: 322px) {
+@media (max-width: 334px) {
   .grid-warn {
     font-size: .2rem !important;
     margin: .325em .1em .1em .1em !important;
   } 
+  .react-tabs__tab {
+    max-width: 4.7em;
+  }
 }

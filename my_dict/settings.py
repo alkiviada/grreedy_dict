@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG') == 'True'
 
-ALLOWED_HOSTS = [ 'grreedy-dict.appspot.com', '127.0.0.1',]
+ALLOWED_HOSTS = [ 'grreedy-dict.appspot.com', '127.0.0.1', '209.177.145.192']
 
 # Application definition
 
@@ -139,13 +139,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'grreedy-dict-static')
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'grreedy-dict-static/static')
+print(STATIC_ROOT)
 
 STATIC_URL = os.environ.get('STATIC_URL')
+#STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+print(STATIC_URL)
 
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
