@@ -285,7 +285,14 @@ class WordRefWordMixin(models.Manager):
       w = Word.objects.create(word=word, lookup_date=timezone.now(), language=language, pronounce=pronounce, is_verb=is_verb)
     else:
       w.from_translation = False
-      w.save(update_fields=['from_translation'])
+      update_fields = ['from_translation']
+      if pronounce:
+        w.pronounce = pronounce
+        update_fields.append('pronounce')
+      if is_verb:
+        w.is_verb = is_verb 
+        update_fields.append('is_verb')
+      w.save(update_fields=update_fields)
     ety = Etymology.objects.create(word=w, etymology='');
 
     for defs in words_map:
