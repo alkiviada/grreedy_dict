@@ -37,6 +37,19 @@ body {
   background-attachment: fixed;
 }
 
+.word-hide, .word-show {
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: var(--field-color);
+  grid-area: show-hide;
+}
+
+@media(min-width: 800px) {
+  .word-hide, .word-show {
+    display: none;
+  }
+}
+
 h4 {
    background-color: #b2b8c4;
     font-weight: bold;
@@ -343,7 +356,7 @@ i.defect {color: var(--field-color);font-style:normal;}
   text-transform: uppercase;
   color: #363636;
   font-weight: 700;
-  font-size: .9rem !important;
+  font-size: 1.4vw;
   letter-spacing: .05em;
   word-break: break-all; 
 }
@@ -354,7 +367,7 @@ i.defect {color: var(--field-color);font-style:normal;}
 
   grid-area: words-head;
   display: grid;
-  grid-template-columns: minmax(5em, 15%) 1fr;
+  grid-template-columns: minmax(5vw, 15%) 1fr;
 }
 
 .word-cell {
@@ -408,6 +421,10 @@ ul {
   height: auto;
   padding-left: .3em;
   padding-right: .3em;
+}
+
+.just-word {
+  grid-area: word;
 }
 
 .lang-english {
@@ -600,7 +617,7 @@ ul {
 
 .save-btn, .register-btn, .add-note-btn {
   background-color: var(--sky-color);
-  margin: .5em .1em 1em .1em;
+  margin: .7em .1em .9em .1em !important
 }
 
 .add-note-form {
@@ -856,7 +873,7 @@ ul {
     grid-template-rows: 2em 1fr;
     grid-template-columns: .5fr 6fr .5fr;
   } 
-.new-word-btn {
+.new-word-btn, .save-btn {
   padding: .1em .07em .1em .2em !important;
 }
 }
@@ -913,7 +930,7 @@ ul {
     .neoConj:not(.active) th .arrow:before {
         /*content: '\25B2';*/
         content: "\f063";
-font-family: FontAwesome;
+    font-family: FontAwesome;
     font-style: normal;
     font-size: 1.1rem;
     font-weight: normal;
@@ -975,9 +992,12 @@ font-family: FontAwesome;
 }
 
 @media(max-width: 800px) {
+.hide-me {
+    display: none;
+}
 
   .react-tabs__tab-list {
-    width: 80%;
+    width: 81%;
   }
 
   .react-tabs__tab {
@@ -988,7 +1008,7 @@ font-family: FontAwesome;
     font-size: .9rem;
     font-weight: 700;
   }
-.new-word-btn {
+.new-word-btn, .save-btn {
   padding: .1em .07em .1em .2em !important;
 }
 .user-tag {
@@ -998,6 +1018,11 @@ font-family: FontAwesome;
   grid-template-areas: 
     "words-rows";
     grid-template-rows: 1fr;
+}
+.word {
+  display: grid;
+  grid-template-areas: "show-hide word delete";
+  grid-template-columns: 1.5em 1fr 3em;
 }
  .words-head {
  display: none;
@@ -1010,7 +1035,11 @@ font-family: FontAwesome;
   grid-auto-rows: minmax(auto, max-content);
   grid-auto-rows: minmax(auto, -webkit-max-content);
 }
+.word strong {
+  font-size: 2.4vh;
 }
+}
+
 @media(max-width: 684px) {
 
   .react-tabs__tab {
@@ -1145,7 +1174,7 @@ font-family: FontAwesome;
 
 @media (max-width: 499px) {
   .react-tabs__tab-list {
-    width: 92%;
+    width: 93%;
   }
   .react-tabs__tab {
     max-width: 5em;
@@ -1162,11 +1191,11 @@ font-family: FontAwesome;
   padding-left: .1em;
   padding-right: .1em;
 }
-.new-word-btn {
+.new-word-btn, .save-btn {
   padding: .1em .07em .1em .2em !important;
 }
   .react-tabs__tab-list {
-    width: 92%;
+    width: 93%;
   }
   .react-tabs__tab {
     font-size: .8rem;

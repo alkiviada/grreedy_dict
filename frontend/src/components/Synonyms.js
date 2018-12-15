@@ -10,7 +10,7 @@ const mapStateToProps = state => ({
 });
 
 const Synonyms = (props) => {
-    const { word, synonyms, fn, fetchingMap } = props;
+    const { word, synonyms, addRow, fetchingMap } = props;
     const wordSyns = synonyms[word];
     if (fetchingMap[word]) {
       return (
@@ -27,7 +27,7 @@ const Synonyms = (props) => {
     ( Object.keys(wordSyns).map(e =>  
         <div className="etym-style">
         <p className={`heading lang-head lang-${e}`}>{e}</p>
-        <DecorateWithLinks words={wordSyns[e].join(', ')} onLinkClick={fn}/>
+        <DecorateWithLinks words={wordSyns[e].join(', ')} onLinkClick={addRow}/>
         </div>)
       
     );
@@ -37,7 +37,7 @@ Synonyms.propTypes = {
   word: PropTypes.string.isRequired,
   synonyms: PropTypes.object.isRequired,
   fetchingMap: PropTypes.object.isRequired,
-  fn: PropTypes.func.isRequired,
+  addRow: PropTypes.func.isRequired,
 };  
     
 export default connect(mapStateToProps)(Synonyms);

@@ -9,6 +9,7 @@ import { SAVE_COLLECTION,
          FETCH_COLLECTIONS_FULFILLED, 
          FETCH_COLLECTION_FULFILLED, 
          SWITCH_TAB,
+         SWITCH_VISIBILITY,
          FETCH_COLLECTIONS, 
          FETCH_COLLECTION, 
          CLEAR_FETCHED
@@ -99,6 +100,7 @@ export const fetchCollection = (uuid) => { return (dispatch, getState) => {
           // Status looks good
           let coll = json;
           let words = []
+// i have this collection in my cache with its words' content and visibilityMap
           if (!coll.words) {
            words = lastModifiedMap[uuid]['words']
            name = lastModifiedMap[uuid]['name']
@@ -115,6 +117,10 @@ export const fetchCollection = (uuid) => { return (dispatch, getState) => {
           dispatch({
             type: FETCH_COLLECTION_FULFILLED,
             payload: { uuid: uuid, name: name }
+          });
+          dispatch({
+            type: SWITCH_VISIBILITY,
+            payload: { ...words.reduce((visibilityMap, e) => (visibilityMap[e.word] = 'show', visibilityMap), {}) }
           });
          return json;
         }

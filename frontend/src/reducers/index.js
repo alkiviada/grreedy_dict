@@ -10,12 +10,14 @@ import collsReducer from "./collsReducers";
 import collocationsReducer from "./collocationsReducers";
 import auth from "./authReducers";
 import tabReducer from "./tabReducers";
+import visibilityReducer from "./visibilityReducers";
 
 export default combineReducers({
   words: wordsReducer,
   synonyms: synonymsReducer,
   translations: transReducer,
   tabs: tabReducer,
+  visibility: visibilityReducer,
   collections: collsReducer,
   collocations: collocationsReducer,
   auth: auth,

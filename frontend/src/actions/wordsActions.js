@@ -5,7 +5,8 @@ import {
   FETCH_WORDS_FULFILLED, 
   FETCH_WORDS_REJECTED, 
   FETCH_WORD, 
-  FETCH_WORD_FULFILLED 
+  FETCH_WORD_FULFILLED,
+  SWITCH_VISIBILITY
 } from './types';
 
 import { conflateWords } from './helpers';
@@ -31,15 +32,13 @@ export const requestWord = () => dispatch => {
 export const fetchWords = (uuid) => { return (dispatch, getState) => {
   console.log(`fetching words for ${uuid}`)
 
-  const items = getState().words.items || [];
+  const { items } = getState().words;
 
   let { lastModifiedMap, name } = getState().collections;
   let time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : ''
 
-  console.log('last modified map in fetch words')
-
   if (!uuid) {
-  return dispatch({
+    return dispatch({
       type: FETCH_WORDS_FULFILLED,
       payload: [],
     });
@@ -48,6 +47,7 @@ export const fetchWords = (uuid) => { return (dispatch, getState) => {
 
 // we have a collection but we never saved it 
 // - let's load it from the storage of words' reducer  
+    console.log(`my words: ${items}`)
 
     dispatch({
       type: FETCH_COLLECTION_FULFILLED,
@@ -86,6 +86,7 @@ export const fetchWords = (uuid) => { return (dispatch, getState) => {
             words = lastModifiedMap[uuid]['words']
             name = lastModifiedMap[uuid]['name']
           }
+          console.log(`my words: ${words}`)
           dispatch({
             type: FETCH_COLLECTION_FULFILLED,
             payload: { uuid: uuid, name: name }
@@ -109,7 +110,7 @@ export const fetchWords = (uuid) => { return (dispatch, getState) => {
 export const fetchWord = (word) => { return (dispatch, getState) => {
   console.log('fetching word');
   const { uuid, items, lastModifiedMap } = getState().collections
-  console.log(lastModifiedMap)
+  const { visibilityMap } = getState().visibility
 
   const url = 'api/word/' + word + '/' + (uuid ? uuid : '')
   return fetch(url)
@@ -145,16 +146,28 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
             payload: [ obj, ...words ]
           });
           dispatch({
+            type: SWITCH_VISIBILITY,
+            payload: { ...visibilityMap, ...{ [obj.word]: 'show' } }
+          });
+
+          dispatch({
             type: FETCH_COLLECTION_FULFILLED,
             payload: { uuid: collUUID, name: collName }
           });
+
           let time = Date.now();
           time = Math.floor(time/1000);
           console.log(collName)
           console.log(collUUID)
           dispatch({
             type: SAVE_COLLECTION_FULFILLED,
-            payload: { uuid: collUUID, name: collName, items: items, lastModifiedMap: {...lastModifiedMap, [collUUID]: { time, words: [obj, ...words], name: collName }} }
+            payload: { items, 
+                       uuid: collUUID, 
+                       name: collName, 
+                       lastModifiedMap: { ...lastModifiedMap, 
+                                          [collUUID]: { time, words: [obj, ...words], name: collName }
+                       } 
+            }
           })
         }
       },
@@ -171,9 +184,9 @@ export const lookUpWord = (word, uuid) => {
 return (dispatch, getState) => {
   console.log(`fetching words for ${uuid}`)
 
-  const items = getState().words.items || [];
+  const { items } = getState().words;
+  const { lastModifiedMap, name } = getState().collections;
 
-  let { lastModifiedMap, name } = getState().collections;
   let time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : ''
 
 

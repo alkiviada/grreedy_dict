@@ -22,7 +22,8 @@ store.subscribe(throttle(() => {
   saveState({
     collections: store.getState().collections,
     auth: store.getState().auth,
-    words: store.getState().words
+    words: store.getState().words,
+    visibility: store.getState().visibility
   });
 }, 1000));
 

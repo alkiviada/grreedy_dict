@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
-import WordTabs from "./WordTabs";
+import WordCell from "./WordCell";
 import key from "weak-key";
 import { connect } from 'react-redux';
 import { lookUpWord, fetchWords, requestWords, requestWord } from '../actions/wordsActions';
+import { switchVisibility } from '../actions/visibilityActions';
 import { Link } from "react-router-dom";
 import BodyClassName from 'react-body-classname';
 
@@ -19,6 +20,7 @@ class Table extends Component {
   static propTypes = {
     data: PropTypes.array.isRequired,
     lookUpWord: PropTypes.func.isRequired,
+    switchVisibility: PropTypes.func.isRequired,
     fetchWords: PropTypes.func.isRequired,
     requestWords: PropTypes.func.isRequired,
     requestWord: PropTypes.func.isRequired,
@@ -28,7 +30,6 @@ class Table extends Component {
     console.log('mounting table');
     if (!this.props.data) {
       this.props.requestWords();
-      console.log(this.props.uuid)
       this.props.fetchWords(this.props.uuid);
     }
   }
@@ -49,9 +50,9 @@ class Table extends Component {
 
   render () {
     const data = this.props.data;
+
     const allFetching = this.props.allFetching;
     const collFetching = this.props.collFetching;
-    console.log(`i am fetchinh? ${allFetching}`)
 
     const wordFetching = this.props.newWordFetching;
     if (allFetching || collFetching) {
@@ -89,14 +90,7 @@ class Table extends Component {
           {data.map(el => {
             let word = el.word;
             return (
-                Object.entries(el).map(el => 
-                <div className="word-cell">
-                {typeof(el[1]) === 'string' ? 
-                <div className="word" key={key(el)}>
-                <strong>{el[1]}</strong></div> : 
-                <div className="word-about" key={key(el)}>
-                <WordTabs word={word} element={el[1]} fn={[this.addRow]} /></div>}
-                </div>)
+              Object.entries(el).map(el => <WordCell word={word} element={el} addRow={this.addRow} />)
             )
           })}
         </div>
@@ -117,4 +111,4 @@ const mapStateToProps = state => ({
   wordFetching: state.words.newWordFetching,
 });
 
-export default connect(mapStateToProps, { lookUpWord, fetchWords, requestWords, requestWord })(Table);
+export default connect(mapStateToProps, { lookUpWord, fetchWords, requestWords, requestWord, switchVisibility })(Table);

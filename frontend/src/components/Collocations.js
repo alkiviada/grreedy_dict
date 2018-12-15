@@ -12,7 +12,7 @@ const mapStateToProps = state => ({
 });
 
 const Collocations = (props) => {
-    const { word, collocs, fn, fetchingMap } = props;
+    const { word, collocs, addRow, fetchingMap } = props;
     const wordCollocs = collocs[word];
     if (fetchingMap[word]) {
       return (
@@ -37,10 +37,10 @@ const Collocations = (props) => {
            new_el['trans'][0]['exmpl'] = [{'exmpl': e['example']}]
          }
          return isEnglishWord ? (<div className="etym-style"><a target="_blank" href={`/api/word/${e['expression']}`}
-                                 onClick={(i) => fn(i, e['expression'])} className="word-link">
+                                 onClick={(i) => addRow(i, e['expression'])} className="word-link">
                                  {e['expression']}</a></div>) : (
            <ul className="etym-style">
-           { renderList([new_el], fn, listStyles, 0) }
+           { renderList([new_el], addRow, listStyles, 0) }
            </ul>)})
     );
 }
@@ -49,7 +49,7 @@ Collocations.propTypes = {
   word: PropTypes.string.isRequired,
   collocs: PropTypes.object.isRequired,
   fetchingMap: PropTypes.object.isRequired,
-  fn: PropTypes.func.isRequired,
+  addRow: PropTypes.func.isRequired,
 };  
     
 export default connect(mapStateToProps)(Collocations);
