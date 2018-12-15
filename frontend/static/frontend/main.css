@@ -988,6 +988,8 @@ ul {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 7.5em;
+    font-size: .9rem;
+    font-weight: bolder;
   }
 }
 
@@ -1151,7 +1153,7 @@ font-family: FontAwesome;
 
 @media(max-width: 610px) {
   .react-tabs__tab {
-    max-width: 7.5em;
+    max-width: 6em;
   }
 }
 
