@@ -42,6 +42,8 @@ body {
   font-size: 1.1rem;
   color: var(--field-color);
   grid-area: show-hide;
+  align-self: center;
+  justify-self: left;
 }
 
 @media(min-width: 800px) {
@@ -356,7 +358,8 @@ i.defect {color: var(--field-color);font-style:normal;}
   text-transform: uppercase;
   color: #363636;
   font-weight: 700;
-  font-size: 1.4vw;
+  font-size: 1.6vw;
+  align-self: center;
   letter-spacing: .05em;
   word-break: break-all; 
 }
@@ -419,8 +422,8 @@ ul {
   font-family: var(--word-font);
   max-height: 11.5em;
   height: auto;
-  padding-left: .3em;
-  padding-right: .3em;
+  padding-left: .1em;
+  padding-right: .1em;
 }
 
 .just-word {
@@ -929,12 +932,10 @@ ul {
 
     .neoConj:not(.active) th .arrow:before {
         /*content: '\25B2';*/
-        content: "\f063";
-    font-family: FontAwesome;
-    font-style: normal;
-    font-size: 1.1rem;
-    font-weight: normal;
+        content: '\f063';
+    font-family: "FontAwesome 5 Solid";
     text-decoration: inherit;
+    font-weight: 900;
         color: var(--field-color);
     }
 
