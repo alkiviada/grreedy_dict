@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import WordCell from "./WordCell";
 import key from "weak-key";
 import { connect } from 'react-redux';
-import { lookUpWord, fetchWords, requestWords, requestWord } from '../actions/wordsActions';
+import { deleteWord, lookUpWord, fetchWords, requestWords, requestWord } from '../actions/wordsActions';
 import { switchVisibility } from '../actions/visibilityActions';
 import { Link } from "react-router-dom";
 import BodyClassName from 'react-body-classname';
@@ -14,12 +14,14 @@ class Table extends Component {
   constructor(props) { 
     super(props)
     this.addRow = this.addRow.bind(this) 
+    this.deleteWord = this.deleteWord.bind(this) 
     this.myRef = React.createRef();
   }
 
   static propTypes = {
     data: PropTypes.array.isRequired,
     lookUpWord: PropTypes.func.isRequired,
+    deleteWord: PropTypes.func.isRequired,
     switchVisibility: PropTypes.func.isRequired,
     fetchWords: PropTypes.func.isRequired,
     requestWords: PropTypes.func.isRequired,
@@ -41,6 +43,12 @@ class Table extends Component {
       this.props.lookUpWord(word, this.props.uuid);
     }
     this.scrollToDomRef()
+  }
+
+  deleteWord(e, word) {
+    console.log('deleting');
+    e.preventDefault();
+    this.props.deleteWord(word);
   }
 
   scrollToDomRef = () => {
@@ -90,7 +98,7 @@ class Table extends Component {
           {data.map(el => {
             let word = el.word;
             return (
-              Object.entries(el).map(el => <WordCell word={word} element={el} addRow={this.addRow} />)
+              Object.entries(el).map(el => <WordCell word={word} element={el} addRow={this.addRow} deleteWord={this.deleteWord} />)
             )
           })}
         </div>
@@ -111,4 +119,4 @@ const mapStateToProps = state => ({
   wordFetching: state.words.newWordFetching,
 });
 
-export default connect(mapStateToProps, { lookUpWord, fetchWords, requestWords, requestWord, switchVisibility })(Table);
+export default connect(mapStateToProps, { deleteWord, lookUpWord, fetchWords, requestWords, requestWord, switchVisibility })(Table);

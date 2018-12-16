@@ -12,6 +12,7 @@ from words.serializers import (WordSerializer, SynonymSerializer, TranslationSer
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 
 from django.core.exceptions import ObjectDoesNotExist 
 from django.http import Http404
@@ -155,6 +156,32 @@ class CollectionListCreate(generics.ListCreateAPIView):
     print('retrieving collections for user');
     queryset = self.request.user.collections.all()
     return queryset
+
+class WordSingleDelete(generics.RetrieveAPIView):
+  permission_classes = [ AllowAny, ]
+  lookup_field = 'word'
+  serializer_class = WordSerializer
+  def get_queryset(self):
+    word = self.kwargs['word'].lower()
+    return Word.single_object.filter(word=word)
+
+  def get(self, request, word, uuid, *args, **kwargs):
+    print('DELETE: ' + word);
+    word = word.lower()
+    db_words = Word.single_object.filter(word=word, from_translation=False);
+    coll = Collection.objects.get(uuid=uuid)
+
+    is_empty = 0
+    for w in db_words:
+      coll.remove_from_collection(w)
+      if not coll.words.count():
+        coll.delete()
+        is_empty = 1;
+      if not w.words.count():
+        w.delete()
+      
+    coll.update_last_modified()
+    return Response({'empty': is_empty})
 
 class WordSingleCreate(generics.ListAPIView):
   permission_classes = [ AllowAny, ]

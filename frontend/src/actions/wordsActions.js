@@ -9,7 +9,7 @@ import {
   SWITCH_VISIBILITY
 } from './types';
 
-import { conflateWords } from './helpers';
+import { conflateWords, filterMap } from './helpers';
 
 export const requestWords = () => dispatch => {
   dispatch({
@@ -104,6 +104,65 @@ export const fetchWords = (uuid) => { return (dispatch, getState) => {
       }
     ); 
   }
+};
+};
+
+export const deleteWord = (word) => { return (dispatch, getState) => {
+  console.log('deleting word');
+  const { uuid, name, items, lastModifiedMap } = getState().collections
+  const { visibilityMap } = getState().visibility
+
+  const url = 'api/word/delete/' + word + '/' + (uuid ? uuid : '')
+  return fetch(url)
+  .then(response =>
+      response.json().then(json => ({
+        status: response.status,
+        json
+      })
+    ))
+  .then(
+      // Both fetching and parsing succeeded!
+      ({ status, json }) => {
+        console.log(status, json)
+        if (status >= 400) {
+          // Status looks bad
+          console.log('Server returned error status');
+          dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed', word: word}})
+        } else {
+          // Status looks good
+         const words = json.empty ? [] : getState().words.items.filter(e => e.word != word) 
+
+         dispatch({
+            type: FETCH_WORD_FULFILLED,
+            payload: words
+          });
+          console.log(filterMap(visibilityMap, word))
+          dispatch({
+            type: SWITCH_VISIBILITY,
+            payload: filterMap(visibilityMap, word)
+          });
+
+          let time = Date.now();
+          time = Math.floor(time/1000);
+          const collections = json.empty ? items.filter(e => e.name != name) : items
+          dispatch({
+            type: SAVE_COLLECTION_FULFILLED,
+            payload: { items: collections,
+                       uuid: uuid, 
+                       name: name, 
+                       lastModifiedMap: { ...lastModifiedMap, 
+                                          [uuid]: { time, words, name }
+                       } 
+            }
+          })
+        }
+      },
+      // Either fetching or parsing failed!
+      err => {
+        console.log('problems');
+        dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed', word: word}})
+      }
+    ); 
 };
 };
 

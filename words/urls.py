@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^api/word/note/(?P<word>[-\'\w() ]+)/(?P<uuid>[0-9a-f-]+)$', views.WordNoteSingleDetail.as_view(), name='word-note'),
 
     url(r'^api/word/(?P<word>[-\'\w() ]+)/(?P<uuid>[0-9a-f-]+)?$', views.WordSingleCreate.as_view(), name='word-detail'),
+    url(r'^api/word/delete/(?P<word>[-\'\w() ]+)/(?P<uuid>[0-9a-f-]+)?$', views.WordSingleDelete.as_view(), name='word-delete'),
     url(r'^api/words/(?:(?P<uuid>[0-9a-f-]+)/(?P<time>[0-9]+)?)?$', views.WordList.as_view(), name='words'),
 
     url(r'^api/collection/$', views.CollectionListCreate.as_view(), name='save-collection'),

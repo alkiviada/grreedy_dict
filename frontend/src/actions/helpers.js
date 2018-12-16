@@ -24,3 +24,9 @@ export const translationsToMap = (w) => {
   );
   return obj
 }
+
+export const filterMap = (map, w) => {
+    return Object.keys(map).filter(k => k != w)
+      .map(k => Object.assign({}, {[k]: map[k]}))
+      .reduce((res, o) => Object.assign(res, o), {});
+}

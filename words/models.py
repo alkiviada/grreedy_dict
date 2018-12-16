@@ -661,8 +661,12 @@ class CollectionMixin(object):
     self.save(update_fields=['last_modified_date'])
   
   def add_to_collection(self, word):
-      cw = CollectionOfWords(word=word, collection=self, date_added=timezone.now())
-      cw.save()
+    cw = CollectionOfWords(word=word, collection=self, date_added=timezone.now())
+    cw.save()
+
+  def remove_from_collection(self, word):
+    cw = CollectionOfWords.objects.filter(word=word, collection=self)
+    cw.delete()
 
   def update_fields(self, new_fields):
     for k, v in new_fields.items():
