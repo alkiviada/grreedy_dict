@@ -47,13 +47,16 @@ class CollectionsSideBar extends Component {
     e.preventDefault();
     this.setState({isSidebarOpen: false});
     this.props.requestCollection();
-    const origUUId = this.props.origUUId
-    if (origUUId) {
+    const { origUUId, allWords } = this.props
+    console.log(allWords)
+    
+    if (origUUId && allWords.length) {
+      console.log('i will save and load') 
       this.props.saveCollectionAndLoadNew(this.props.origName, uuid);
     }
     else {
-    console.log(`i am here continuing with ${uuid}`)
-    this.props.fetchCollection(uuid);
+      console.log(`i am here continuing with ${uuid}`)
+      this.props.fetchCollection(uuid);
     }
   }
   
