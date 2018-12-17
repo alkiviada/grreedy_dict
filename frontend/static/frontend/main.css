@@ -954,7 +954,7 @@ ul {
     .neoConj:not(.active) th .arrow:before {
         /*content: '\25B2';*/
         content: '\f063';
-    font-family: "FontAwesome 5 Solid";
+font-family: FontAwesome;
     text-decoration: inherit;
     font-weight: 900;
         color: var(--field-color);
