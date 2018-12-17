@@ -180,7 +180,8 @@ class WordSingleDelete(generics.RetrieveAPIView):
       if not w.words.count():
         w.delete()
       
-    coll.update_last_modified()
+    if not is_empty:
+      coll.update_last_modified()
     return Response({'empty': is_empty})
 
 class WordSingleCreate(generics.ListAPIView):
