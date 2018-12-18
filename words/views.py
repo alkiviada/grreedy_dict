@@ -168,18 +168,21 @@ class WordSingleDelete(generics.RetrieveAPIView):
   def get(self, request, word, uuid, *args, **kwargs):
     print('DELETE: ' + word);
     word = word.lower()
-    db_words = Word.single_object.filter(word=word, from_translation=False);
+    db_words = Word.single_object.filter(word=word);
     coll = Collection.objects.get(uuid=uuid)
 
     is_empty = 0
     for w in db_words:
       coll.remove_from_collection(w)
-      if not coll.words.count():
-        coll.delete()
-        is_empty = 1;
+      
+    if not coll.words.count():
+      coll.delete()
+      is_empty = 1;
+
+    for w in db_words:
       if not w.words.count():
         w.delete()
-      
+
     if not is_empty:
       coll.update_last_modified()
     return Response({'empty': is_empty})
