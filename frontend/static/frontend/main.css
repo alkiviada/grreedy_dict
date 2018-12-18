@@ -1183,7 +1183,7 @@ font-family: FontAwesome;
 
 @media (max-width: 550px) {
   .react-tabs__tab-list {
-    width: 94%;
+    width: 97%;
   }
   .react-tabs__tab {
     max-width: 6em;
@@ -1199,9 +1199,6 @@ font-family: FontAwesome;
 }
 
 @media (max-width: 499px) {
-  .react-tabs__tab-list {
-    width: 93%;
-  }
   .react-tabs__tab {
     max-width: 5em;
   }
@@ -1220,9 +1217,6 @@ font-family: FontAwesome;
 .new-word-btn, .save-btn {
   padding: .1em .07em .1em .2em !important;
 }
-  .react-tabs__tab-list {
-    width: 93%;
-  }
   .react-tabs__tab {
     font-size: .8rem;
   }
@@ -1238,9 +1232,6 @@ font-family: FontAwesome;
    }
   .etym-style {
     font-size: 1.4rem !important;
-  }
-  .react-tabs__tab-list {
-    width: 93%;
   }
 }
 
