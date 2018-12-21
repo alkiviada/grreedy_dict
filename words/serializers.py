@@ -105,10 +105,15 @@ class CollectionSerializer(serializers.ModelSerializer):
 
 
 class CollectionDetailSerializer(serializers.ModelSerializer):
-    words = WordSerializer(many=True)
-    class Meta:
-        model = Collection
-        fields = ['name', 'uuid', 'words']
+  words = serializers.SerializerMethodField('get_words_list')
+
+  def get_words_list(self, instance):
+    words = Word.objects.filter(words=instance).order_by('collectionofwords')
+    return WordSerializer(words, many=True).data
+
+  class Meta:
+    model = Collection
+    fields = ['name', 'uuid', 'words']
 
 
 class CreateUserSerializer(serializers.ModelSerializer):

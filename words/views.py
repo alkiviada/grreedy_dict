@@ -90,7 +90,7 @@ class CollectionDetail(generics.RetrieveUpdateAPIView):
   permission_classes = [ IsAuthenticated, ]
   def get_queryset(self):
     print(self.request.user)
-    return Collection.objects.all()
+    return Collection.objects.filter(owner=user)
 
   lookup_field = 'uuid'
   serializer_class = CollectionDetailSerializer
@@ -101,10 +101,16 @@ class CollectionDetail(generics.RetrieveUpdateAPIView):
 
     coll = Collection.objects.get(uuid=uuid) 
     print(int(int(coll.last_modified_date.timestamp())))
+    print(self.request.user)
+    if not self.request.user == coll.owner:
+      coll.update_fields( {'user': self.request.user, 'last_modified_date': timezone.now()} )
 
     if coll and (not time or int(coll.last_modified_date.timestamp()) > int(time)):
       serializer = CollectionDetailSerializer(coll)
       print('i will return here');
+
+      print(coll.words.all().order_by('collectionofwords'))
+
       return Response(serializer.data)
     else:
       return Response({})
@@ -146,7 +152,7 @@ class CollectionListCreate(generics.ListCreateAPIView):
       print ("Something Wrong with UUID: ", uuid)
       raise Http404("No Fetch API for the word:", word)
 
-    colls = Collection.objects.filter(owner=user)
+    colls = Collection.frontend_objects.filter(owner=user)
 
     serializer = CollectionSerializer(colls, many=True)
     return Response(serializer.data)
@@ -184,11 +190,11 @@ class WordSingleDelete(generics.RetrieveAPIView):
         w.delete()
 
     if not is_empty:
-      coll.update_last_modified()
+      coll.update_fields({ 'last_modified_date': timezone.now() })
     return Response({'empty': is_empty})
 
 class WordSingleCreate(generics.ListAPIView):
-  permission_classes = [ AllowAny, ]
+  permission_classes = [ AllowAny ]
   lookup_field = 'word'
   serializer_class = WordSerializer
   def get_queryset(self):
@@ -229,21 +235,37 @@ class WordSingleCreate(generics.ListAPIView):
 # now that i have words in the db 
 # it is time to collect them in a collection
 
+    print(self.request.user)
+
     if not uuid:
-      coll = Collection.objects.create(created_date=timezone.now(), 
-                                       last_modified_date=timezone.now())
+      new_coll = { 'created_date': timezone.now(),
+                   'last_modified_date': timezone.now()
+      }
+
+      if not self.request.user.is_anonymous:
+        new_coll['owner'] = self.request.user; 
+
+      coll = Collection.objects.create(new_coll)
     else: 
       print('I have an UUID: ' + uuid)
       try:
         coll = Collection.objects.get(uuid=uuid)
-        coll.update_last_modified()
+        new_fields = { 'last_modified_date': timezone.now() }
+        if not coll.owner and not self.request.user.is_anonymous:
+          new_fields['owner'] = self.request.user
+        coll.update_fields(new_fields)
       except Exception as e:
 # it was a rogue uuid but we will try to use it anew
         print(e)
-        coll = Collection.objects.create(uuid=uuid, 
-                                         created_date=timezone.now(), 
-                                         last_modified_date=timezone.now())
-        
+        new_coll = { 'created_date': timezone.now(),
+                      'uuid': uuid,
+                     'last_modified_date': timezone.now()
+        }
+
+        if not self.request.user.is_anonymous:
+          new_coll['owner'] = self.request.user; 
+
+        coll = Collection.objects.create(new_coll)
 
 # now that we have our collection - new or current
 # let's add newly looked up words to it
@@ -313,13 +335,34 @@ class WordNoteSingleCreate(generics.GenericAPIView):
   def post(self, request, format=None):
     print('ADD NOTE')
     word = request.data.get('word')
-    word = Word.objects.filter(word=word).first()
+    words = Word.objects.filter(word=word)
     collection_uuid = request.data.get('uuid')
     note = request.data.get('note')
     coll = Collection.objects.get(uuid=collection_uuid)
-    word_note, created = WordNote.objects.update_or_create(collection=coll, word=word, defaults={'note': note} )
-    #print(created)
-    
+
+    defaults = { 'note': note }
+
+    user = self.request.user
+
+    word_note, created = WordNote.objects.update_or_create(collection=coll, word=words.first(), defaults=defaults )
+
+
+    print(user)
+    if not user.is_anonymous:
+      print('i am here')
+      try:
+        notes_coll = Collection.objects.get(name='Words with Notes', owner=user)
+      except Exception as e:
+        print(e) 
+        notes_coll = Collection.objects.create(name='Words with Notes', owner=user, 
+                                               created_date=timezone.now(), last_modified_date=timezone.now())
+      print(notes_coll)
+      for word in words:
+        notes_coll.add_to_collection(word)
+
+      notes_coll.update_fields({ 'last_modified_date': timezone.now() })
+      notes_word_note, created = WordNote.objects.update_or_create(collection=notes_coll, word=words.first(), defaults=defaults )
+      
     return Response(WordNoteSerializer(word_note).data)
 
 class WordNoteSingleDetail(APIView):

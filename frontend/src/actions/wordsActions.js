@@ -171,8 +171,14 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
   const { uuid, items, lastModifiedMap } = getState().collections
   const { visibilityMap } = getState().visibility
 
+  let headers = {"Content-Type": "application/json"};
+  const {token} = getState().auth;
+  if (token) {
+      headers["Authorization"] = `Token ${token}`;
+  }
+
   const url = 'api/word/' + word + '/' + (uuid ? uuid : '')
-  return fetch(url)
+  return fetch(url, {headers})
   .then(response =>
       response.json().then(json => ({
         status: response.status,

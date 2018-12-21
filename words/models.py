@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from sortedm2m.fields import SortedManyToManyField
 import uuid as uuid_lib
-from django.db.models import Case, When, Value, IntegerField
+from django.db.models import Case, When, Value, IntegerField, CharField
 from django.db.models import Q
 from words.api_call_helpers import try_fetch
 import os
@@ -308,6 +308,10 @@ class WordRefWordMixin(models.Manager):
     print('all is well')
     return (w,)
 
+class FrontendOrderCollectionManager(models.Manager):
+  def get_queryset(self):
+    return super().get_queryset().annotate(frontend_order=Case(When(name='Words with Notes', then=Value(0)), 
+      output_field=CharField())).order_by('frontend_order')
 
 class SingleWordManager(models.Manager):
   def get_queryset(self):
@@ -623,10 +627,10 @@ class FrenchWordManager(RomanceWordManager, models.Manager):
     return self.create_word(word=word, words_map=words_map, language='french', pronounce=pronounce, is_verb=is_verb)
 
 class Word(models.Model):
-    word = models.CharField(max_length=400)
+    word = models.CharField(max_length=600)
     language = models.CharField(max_length=33)
     lookup_date = models.DateTimeField('date looked up')
-    notes = models.CharField(max_length=400)
+    notes = models.CharField(max_length=700)
 
     pronounce = models.CharField(max_length=100)
     translations = models.ManyToManyField("self", blank=True, related_name='translations')
@@ -682,6 +686,9 @@ class Collection(CollectionMixin, models.Model):
     uuid = models.UUIDField(db_index=True, default=uuid_lib.uuid4, editable=False)
     owner = models.ForeignKey(User, related_name="collections", on_delete=models.CASCADE, null=True)
 
+    objects = models.Manager()
+    frontend_objects = FrontendOrderCollectionManager()
+
     def __str__(self):
         return self.name
 
@@ -693,7 +700,10 @@ class CollectionOfWords(models.Model):
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
     date_added = models.DateTimeField()
 
+    class Meta:
+        ordering = ('-date_added',)
+
 class WordNote(models.Model):
-    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    word = models.ForeignKey(Word, on_delete=models.CASCADE, related_name="word_notes")
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
     note = models.TextField()

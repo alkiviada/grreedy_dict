@@ -14,6 +14,11 @@ export const postNote = (word, note) => (dispatch, getState) => {
   let headers = {"Content-Type": "application/json"};
   let body = JSON.stringify({word, note, uuid});
 
+  const {token} = getState().auth;
+  if (token) {
+      headers["Authorization"] = `Token ${token}`;
+  }
+
   fetch('api/word/note/post/', {headers, body, method: "POST"})
   .then(response =>
       response.json().then(json => ({
@@ -64,6 +69,8 @@ export const postNote = (word, note) => (dispatch, getState) => {
 export const fetchNote = (word) => (dispatch, getState) => {
   console.log('fetching word notes');
   const { uuid } = getState().collections
+
+
   fetch('api/word/note/' + word + '/' + uuid)
   .then(response =>
       response.json().then(json => ({
