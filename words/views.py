@@ -245,7 +245,7 @@ class WordSingleCreate(generics.ListAPIView):
       if not self.request.user.is_anonymous:
         new_coll['owner'] = self.request.user; 
 
-      coll = Collection.objects.create(new_coll)
+      coll = Collection.objects.create(**new_coll)
     else: 
       print('I have an UUID: ' + uuid)
       try:

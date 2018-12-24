@@ -730,7 +730,7 @@ ul {
   grid-area: coll-title;
   font-size: 1rem;
   color: #4a4a4a;
-  margin: .1em 0.5em;
+  margin: .1em .5em .7em .5em;
   font-weight: 400;
   line-height: 1.6;
 }
