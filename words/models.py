@@ -310,8 +310,7 @@ class WordRefWordMixin(models.Manager):
 
 class FrontendOrderCollectionManager(models.Manager):
   def get_queryset(self):
-    return super().get_queryset().annotate(frontend_order=Case(When(name='Words with Notes', then=Value(0)), 
-      output_field=CharField())).order_by('frontend_order')
+    return super().get_queryset().order_by('-last_modifeid_date').annotate(frontend_order=Case(When(name='Words with Notes', then=Value(0)), default=Value(1), output_field=CharField())).order_by('frontend_order', '-last_modified_date')
 
 class SingleWordManager(models.Manager):
   def get_queryset(self):

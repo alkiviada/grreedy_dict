@@ -160,7 +160,7 @@ class CollectionListCreate(generics.ListCreateAPIView):
   def get_queryset(self):
     print(self.request.user)
     print('retrieving collections for user');
-    queryset = self.request.user.collections.all()
+    queryset = Collection.frontend_objects.filter(owner=self.request.user)
     return queryset
 
 class WordSingleDelete(generics.RetrieveAPIView):
