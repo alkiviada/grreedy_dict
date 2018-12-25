@@ -827,6 +827,11 @@ ul {
   background: #F5FBFD;
   width: 71%;
   z-index: 10000;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(4em, auto));
+  justify-content: start;
+  align-content: start;
+  grid-row: 1;   
 }
 
 .react-tabs__tab {
@@ -1009,8 +1014,6 @@ font-family: FontAwesome;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 7.5em;
-    font-size: .9rem;
     font-weight: bolder;
   }
 }
@@ -1028,8 +1031,6 @@ font-family: FontAwesome;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 8em;
-    font-size: .9rem;
     font-weight: 700;
   }
 .new-word-btn, .save-btn {
@@ -1061,6 +1062,7 @@ font-family: FontAwesome;
   grid-auto-rows: minmax(auto, max-content);
   grid-auto-rows: minmax(auto, -webkit-max-content);
 }
+
 .word strong {
   font-size: 2.4vh;
 }
@@ -1069,7 +1071,6 @@ font-family: FontAwesome;
 @media(max-width: 684px) {
 
   .react-tabs__tab {
-    font-size: .8rem;
     font-weight: 700;
   }
 }
@@ -1175,32 +1176,9 @@ font-family: FontAwesome;
 }
 }
 
-@media(max-width: 610px) {
-  .react-tabs__tab {
-    max-width: 6em;
-  }
-}
-
-@media (max-width: 550px) {
+@media (max-width: 549px) {
   .react-tabs__tab-list {
     width: 97%;
-  }
-  .react-tabs__tab {
-    max-width: 6em;
-  }
-}
-@media (max-width: 512px) {
-  .react-tabs__tab {
-    font-size: .8rem;
-  }
-  .react-tabs__tab {
-    max-width: 5.5em;
-  }
-}
-
-@media (max-width: 499px) {
-  .react-tabs__tab {
-    max-width: 5em;
   }
 }
 
@@ -1217,9 +1195,6 @@ font-family: FontAwesome;
 .new-word-btn, .save-btn {
   padding: .1em .07em .1em .2em !important;
 }
-  .react-tabs__tab {
-    font-size: .8rem;
-  }
 }
 
 @media (max-width: 430px) {
@@ -1250,7 +1225,4 @@ font-family: FontAwesome;
     font-size: .2rem !important;
     margin: .325em .1em .1em .1em !important;
   } 
-  .react-tabs__tab {
-    max-width: 4.7em;
-  }
 }
