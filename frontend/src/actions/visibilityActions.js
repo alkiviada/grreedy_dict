@@ -2,7 +2,6 @@ import { SWITCH_VISIBILITY } from './types';
 
 export const switchVisibility = (word) => (dispatch, getState) => {
   const { visibilityMap } = getState().visibility
-  console.log(visibilityMap[word])
 
   console.log('switching visibility');
   dispatch({

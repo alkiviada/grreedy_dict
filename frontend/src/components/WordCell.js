@@ -21,15 +21,15 @@ class WordCell extends Component {
   };
 
   componentDidUpdate() {
-    const { word, offsetMap } = this.props
-    if (offsetMap[word] && this.wordRef.current) {
+    const { word, offsetMap, tabIndexMap } = this.props
+    if (offsetMap[word] && this.wordRef.current && [0,1,2].filter(i => i == tabIndexMap[word])) {
       console.log(this.wordRef) 
       this.wordRef.current.scrollTop = offsetMap[word]
     }
   }
 
   componentDidMount() {
-    const { word, offsetMap } = this.props
+    const { word } = this.props
     if (!this.props.refMap[word]) {
       this.props.wordRefToMap(word, this.wordRef);
     }
@@ -64,7 +64,8 @@ class WordCell extends Component {
 const mapStateToProps = state => ({
   visibilityMap: state.visibility.visibilityMap,
   refMap: state.refs.refMap,
-  offsetMap: state.refs.offsetMap
+  offsetMap: state.refs.offsetMap,
+  tabIndexMap: state.tabs.mapTabIndex,
 });
 
 export default connect(mapStateToProps, { switchVisibility, wordRefToMap })(WordCell);

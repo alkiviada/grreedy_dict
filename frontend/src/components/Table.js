@@ -40,7 +40,6 @@ class Table extends Component {
   addRow (e, word, original, parentRef) {
     console.log('look up');
     e.preventDefault();
-    console.log(parentRef)
     const parentOffset = parentRef.current.scrollTop
     if (parentOffset) {
       this.props.logWordDivOffset(original, parentOffset);
@@ -51,6 +50,7 @@ class Table extends Component {
       this.scrollToDomRef(this.myRef, 35)
     }
     else if (this.props.refMap[word] && this.props.refMap[word].current) {
+      console.log('i am here will scroll to exisitng')
       this.scrollToDomRef(this.props.refMap[word], 80)
     }
   }

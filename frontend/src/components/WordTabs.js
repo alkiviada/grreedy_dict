@@ -18,6 +18,7 @@ import { lookUpCollocations, requestCollocations, } from '../actions/collocation
 import { lookUpSynonyms, requestSynonyms, } from '../actions/synonymsActions';
 import { fetchNote, requestNote } from '../actions/notesActions';
 import { renderList, listStyles } from './helpers';
+import { logWordDivOffset } from '../actions/refActions';
 
 const mapStateToProps = state => ({
   mapTabIndex: state.tabs.mapTabIndex,
@@ -49,7 +50,13 @@ class WordTabs extends Component {
     element: PropTypes.array.isRequired,
   };
 
-  handleSelect(prev, index, word, isEnglishWord) {
+  handleSelect(prev, index, word, isEnglishWord, parentRef) {
+    const parentOffset = parentRef.current.scrollTop
+    console.log(parentOffset)
+    if (parentOffset && [0,1,2].filter(i => i == prev)) {
+      this.props.logWordDivOffset(word, parentOffset);
+    }
+     
     this.props.switchTab(index, word, this.props.mapTabIndex);
     this.setState( { tabIndex: index } );
 
@@ -128,7 +135,7 @@ class WordTabs extends Component {
 
     return ( 
       <Tabs selectedIndex={this.state.tabIndex} 
-        onSelect={(prev, index) => this.handleSelect(index, prev, word, isEnglishWord)}>
+        onSelect={(prev, index) => this.handleSelect(index, prev, word, isEnglishWord, parentRef)}>
         <TabList>
           <Tab>Original Word</Tab>
           { isEnglishWord ? <Tab>Translations</Tab> : <Tab>Collocations</Tab> }
@@ -176,6 +183,7 @@ const mapDispatchToProps = {
           requestConjugations,
           fetchNote, 
           requestNote,
+          logWordDivOffset
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(WordTabs);
