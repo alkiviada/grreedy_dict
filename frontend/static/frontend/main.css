@@ -419,7 +419,7 @@ ul {
   font-family: var(--word-font);
   max-height: 19.5em;
   height: auto;
-  overflow:auto;
+  overflow: auto;
   padding-left: .3em;
   padding-right: .3em;
 }

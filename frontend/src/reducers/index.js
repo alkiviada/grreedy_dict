@@ -11,6 +11,7 @@ import collocationsReducer from "./collocationsReducers";
 import auth from "./authReducers";
 import tabReducer from "./tabReducers";
 import visibilityReducer from "./visibilityReducers";
+import refReducer from "./refReducers";
 
 export default combineReducers({
   words: wordsReducer,
@@ -18,6 +19,7 @@ export default combineReducers({
   translations: transReducer,
   tabs: tabReducer,
   visibility: visibilityReducer,
+  refs: refReducer,
   collections: collsReducer,
   collocations: collocationsReducer,
   auth: auth,

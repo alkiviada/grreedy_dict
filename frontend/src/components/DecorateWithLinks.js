@@ -9,7 +9,7 @@ class DecorateWithLinks extends Component {
     onLinkClick: PropTypes.func.isRequired,
   }
   render() {
-    const {words, onLinkClick} = this.props;
+    const { words, onLinkClick, original, parentRef } = this.props;
     let config = [
      {
       regex: /(\{)(.*?)(\})/gm,
@@ -23,7 +23,7 @@ class DecorateWithLinks extends Component {
       regex: /([a-zA-Z\-À-ÿА-Я\ǣāēіїœ]+)/gim,
       fn: (key, result) => 
         <a target="_blank" href={`/api/word/${result[1]}`} 
-          onClick={(e) => onLinkClick(e, result[1])} className="word-link">
+          onClick={(e) => onLinkClick(e, result[1], original, parentRef)} className="word-link">
         {result[1]}
         </a>
     }, 

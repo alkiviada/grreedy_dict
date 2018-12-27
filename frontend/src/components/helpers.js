@@ -3,7 +3,7 @@ import DecorateWithLinks from "./DecorateWithLinks";
 
 export const listStyles = {1: 'etym-style', 2: 'def-style', 3: 'exmpl-style'};
 
-export const renderList = (el, fn, styles, styleCount) => {
+export const renderList = (el, fn, ref, orig, styles, styleCount) => {
   styleCount += 1;
   let listClass = styles[styleCount];
   if (!el.length) { 
@@ -13,8 +13,8 @@ export const renderList = (el, fn, styles, styleCount) => {
     <ul className={listClass} key={el.id}>
     <li>
       {Object.entries(el).map(el => typeof(el[1]) === 'string' ? 
-      <DecorateWithLinks words={el[1]} onLinkClick={fn}/> : 
-      renderList(el[1], fn, styles, styleCount))}
+      <DecorateWithLinks words={el[1]} onLinkClick={fn} original={orig} parentRef={ref} /> : 
+      renderList(el[1], fn, ref, orig, styles, styleCount))}
     </li>
     </ul> 
    )

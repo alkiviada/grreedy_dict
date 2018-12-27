@@ -118,7 +118,7 @@ class WordTabs extends Component {
   }
 
   render() {
-    const { word, element, addRow } = this.props;
+    const { word, element, addRow, parentRef } = this.props;
 
     const isEnglishWord = element.reduce((englishFlag, e) => 
       {return e['language'] === 'english' ?  ++englishFlag : englishFlag}, 0)
@@ -142,18 +142,18 @@ class WordTabs extends Component {
           { element.map(e => 
                 <div>
                 <p className={`heading lang-head lang-${e['language']}`}>{e['language']}</p>
-                { renderList(e['etymology'], addRow, listStyles, 0) }
+                { renderList(e['etymology'], addRow, parentRef, word, listStyles, 0) }
                 </div>
                )
           }
         </TabPanel>
         <TabPanel>
-          { isEnglishWord ? <Translations word={word} addRow={addRow}/> : <Collocations word={word} addRow={addRow} />}
+          { isEnglishWord ? <Translations word={word} addRow={addRow} parentRef={parentRef} /> : <Collocations word={word} addRow={addRow} parentRef={parentRef} />}
         </TabPanel>
         <TabPanel>
-          { isEnglishWord ? <Collocations word={word} addRow={addRow}/> : <Synonyms word={word} addRow={addRow} />}
+          { isEnglishWord ? <Collocations word={word} addRow={addRow} parentRef={parentRef} /> : <Synonyms word={word} addRow={addRow} parentRef={parentRef} />}
         </TabPanel>
-        { isEnglishWord ? <TabPanel><Synonyms word={word} addRow={addRow} /></TabPanel> : <TabPanel><Pronunciation word={word} /></TabPanel>}
+        { isEnglishWord ? <TabPanel><Synonyms word={word} addRow={addRow} parentRef={parentRef} /></TabPanel> : <TabPanel><Pronunciation word={word} /></TabPanel>}
         { isEnglishWord ? <TabPanel><Pronunciation word={word} /></TabPanel> : <TabPanel><WordNote word={word} /></TabPanel>}
         { isEnglishWord ? <TabPanel><WordNote word={word} /></TabPanel> : isVerb ? <TabPanel><Conjugate word={word} /></TabPanel> : '' }
         { isVerb ? <TabPanel><Conjugate word={word} /></TabPanel> : '' }

@@ -47,7 +47,6 @@ export const fetchWords = (uuid) => { return (dispatch, getState) => {
 
 // we have a collection but we never saved it 
 // - let's load it from the storage of words' reducer  
-    console.log(`my words: ${items}`)
 
     dispatch({
       type: FETCH_COLLECTION_FULFILLED,
@@ -86,7 +85,6 @@ export const fetchWords = (uuid) => { return (dispatch, getState) => {
             words = lastModifiedMap[uuid]['words']
             name = lastModifiedMap[uuid]['name']
           }
-          console.log(`my words: ${words}`)
           dispatch({
             type: FETCH_COLLECTION_FULFILLED,
             payload: { uuid: uuid, name: name }
@@ -123,7 +121,6 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
   .then(
       // Both fetching and parsing succeeded!
       ({ status, json }) => {
-        console.log(status, json)
         if (status >= 400) {
           // Status looks bad
           console.log('Server returned error status');
@@ -136,7 +133,6 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
             type: FETCH_WORD_FULFILLED,
             payload: words
           });
-          console.log(filterMap(visibilityMap, word))
           dispatch({
             type: SWITCH_VISIBILITY,
             payload: filterMap(visibilityMap, word)

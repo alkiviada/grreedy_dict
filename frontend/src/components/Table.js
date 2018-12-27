@@ -6,6 +6,7 @@ import key from "weak-key";
 import { connect } from 'react-redux';
 import { deleteWord, lookUpWord, fetchWords, requestWords, requestWord } from '../actions/wordsActions';
 import { switchVisibility } from '../actions/visibilityActions';
+import { logWordDivOffset } from '../actions/refActions';
 import { Link } from "react-router-dom";
 import BodyClassName from 'react-body-classname';
 
@@ -28,7 +29,7 @@ class Table extends Component {
     requestWord: PropTypes.func.isRequired,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     console.log('mounting table');
     if (!this.props.data) {
       this.props.requestWords();
@@ -36,13 +37,22 @@ class Table extends Component {
     }
   }
 
-  addRow (e, word) {
+  addRow (e, word, original, parentRef) {
     console.log('look up');
     e.preventDefault();
+    console.log(parentRef)
+    const parentOffset = parentRef.current.scrollTop
+    if (parentOffset) {
+      this.props.logWordDivOffset(original, parentOffset);
+    }
+     
     if (!this.props.allWordsMap[word]) {
       this.props.lookUpWord(word, this.props.uuid);
+      this.scrollToDomRef(this.myRef, 35)
     }
-    this.scrollToDomRef()
+    else if (this.props.refMap[word] && this.props.refMap[word].current) {
+      this.scrollToDomRef(this.props.refMap[word], 80)
+    }
   }
 
   deleteWord(e, word) {
@@ -51,9 +61,9 @@ class Table extends Component {
     this.props.deleteWord(word);
   }
 
-  scrollToDomRef = () => {
-    const domNode = ReactDOM.findDOMNode(this.myRef.current)
-    window.scrollTo(0, domNode.offsetTop-35)
+  scrollToDomRef = (ref, offset) => {
+    const domNode = ReactDOM.findDOMNode(ref.current)
+    window.scrollTo(0, domNode.offsetTop-offset)
   }
 
   render () {
@@ -111,6 +121,7 @@ class Table extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
+  refMap: state.refs.refMap,
   uuid: state.collections.uuid,
   data: state.words.items,
   allWordsMap: state.words.allWordsMap,
@@ -119,4 +130,4 @@ const mapStateToProps = state => ({
   wordFetching: state.words.newWordFetching,
 });
 
-export default connect(mapStateToProps, { deleteWord, lookUpWord, fetchWords, requestWords, requestWord, switchVisibility })(Table);
+export default connect(mapStateToProps, { deleteWord, lookUpWord, fetchWords, requestWords, requestWord, switchVisibility, logWordDivOffset  })(Table);
