@@ -30,9 +30,7 @@ class WordCell extends Component {
 
   componentDidMount() {
     const { word } = this.props
-    if (!this.props.refMap[word]) {
-      this.props.wordRefToMap(word, this.wordRef);
-    }
+    this.props.wordRefToMap(word, this.wordRef);
   }
 
   showHide(e, word) {
