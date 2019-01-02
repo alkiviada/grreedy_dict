@@ -1,11 +1,11 @@
-from words.models import Word, Definition, Etymology, Example, Collection, Collocation, WordNote
+from .models import Word, Definition, Etymology, Example, Collection, Collocation, WordNote
 from django.utils import timezone
 from knox.models import AuthToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from words.constants import LANGUAGES
+from .constants import LANGUAGES
 import datetime
 
-from words.serializers import (WordSerializer, SynonymSerializer, TranslationSerializer, CollectionSerializer, 
+from .serializers import (WordSerializer, SynonymSerializer, TranslationSerializer, CollectionSerializer, 
                                CollectionDetailSerializer, CollocationSerializer, WordNoteSerializer, PronounceSerializer,
                                CreateUserSerializer, UserSerializer, LoginUserSerializer, ConjugateSerializer)
 
@@ -265,7 +265,7 @@ class WordSingleCreate(generics.ListAPIView):
         if not self.request.user.is_anonymous:
           new_coll['owner'] = self.request.user; 
 
-        coll = Collection.objects.create(new_coll)
+        coll = Collection.objects.create(**new_coll)
 
 # now that we have our collection - new or current
 # let's add newly looked up words to it
@@ -350,18 +350,35 @@ class WordNoteSingleCreate(generics.GenericAPIView):
     print(user)
     if not user.is_anonymous:
       print('i am here')
-      try:
-        notes_coll = Collection.objects.get(name='Words with Notes', owner=user)
-      except Exception as e:
-        print(e) 
+      notes_coll = ''
+      word_note_colls = Collection.objects.filter(name__startswith='Words with Notes', owner=user)
+      if len(word_note_colls):
+        wn = WordNote.objects.filter(word=words.first(), collection__in=word_note_colls).first()
+        if wn:
+          wn.note += '\n' + note
+          wn.save()
+          notes_coll = wn.collection
+        else:
+          if word_note_colls.latest('name').words.count() > 5:
+            name = 'Words with Notes ' + str(word_note_colls.count() + 1);
+            notes_coll = Collection.objects.create(name=name, owner=user, 
+                                                   created_date=timezone.now(),  
+                                                   last_modified_date=timezone.now())
+            print(notes_coll)
+          else:
+            notes_coll = word_note_colls.latest('name')
+          for word in words:
+            notes_coll.add_to_collection(word)
+          notes_word_note = WordNote.objects.create(collection=notes_coll, word=words.first(), note=note)
+      else:
         notes_coll = Collection.objects.create(name='Words with Notes', owner=user, 
-                                               created_date=timezone.now(), last_modified_date=timezone.now())
-      print(notes_coll)
-      for word in words:
-        notes_coll.add_to_collection(word)
-
+                                               created_date=timezone.now(),  
+                                               last_modified_date=timezone.now())
+        for word in words:
+          notes_coll.add_to_collection(word)
+        notes_word_note = WordNote.objects.create(collection=notes_coll, word=words.first(), note=note)
+        
       notes_coll.update_fields({ 'last_modified_date': timezone.now() })
-      notes_word_note, created = WordNote.objects.update_or_create(collection=notes_coll, word=words.first(), defaults=defaults )
       
     return Response(WordNoteSerializer(word_note).data)
 

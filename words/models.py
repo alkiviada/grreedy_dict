@@ -4,21 +4,21 @@ from sortedm2m.fields import SortedManyToManyField
 import uuid as uuid_lib
 from django.db.models import Case, When, Value, IntegerField, CharField
 from django.db.models import Q
-from words.api_call_helpers import try_fetch
+from .api_call_helpers import try_fetch
 import os
 import re
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist 
 from bs4 import BeautifulSoup
-from words.soup_helpers import (scrape_wordref_words, 
-                                parse_synonyms,
-                                parse_pronounce,
-                                parse_straight_word, 
-                                parse_reverse_word, 
-                                parse_straight_translations, parse_reverse_translations,
-                                parse_straight_collocations, parse_reverse_collocations)
-from words.words_helpers import prep_def_exmpl
-from words.constants import WORDREF_BASE
+from .soup_helpers import (scrape_wordref_words, 
+                           parse_synonyms,
+                           parse_pronounce,
+                           parse_straight_word, 
+                           parse_reverse_word, 
+                           parse_straight_translations, parse_reverse_translations,
+                           parse_straight_collocations, parse_reverse_collocations)
+from .words_helpers import prep_def_exmpl
+from .constants import WORDREF_BASE
 
 class Etymology(models.Model):
     etymology = models.CharField(max_length=800, null=True)
@@ -262,11 +262,13 @@ class WordRefWordMixin(models.Manager):
     parse_return = parse_straight_word(r)
     #print(parse_return)
     straight_words_map, pronounce, is_verb = [ parse_return.get(e) for e in ['words_map', 'pronounce', 'is_verb'] ]
-    #print(is_verb)
-    #print(pronounce)
+    print(is_verb)
+    print(pronounce)
     r = try_fetch(WORDREF_BASE + ext + "/reverse/" + word)
     reverse_words_map = parse_reverse_word(r)
     #print(1 if is_verb else 0)
+    #print(straight_words_map)
+    #print(reverse_words_map)
     return { 'words_map': [ *straight_words_map, *reverse_words_map ], 
              'pronounce': pronounce, 
              'is_verb': 1 if is_verb else 0 }
@@ -310,7 +312,7 @@ class WordRefWordMixin(models.Manager):
 
 class FrontendOrderCollectionManager(models.Manager):
   def get_queryset(self):
-    return super().get_queryset().order_by('-last_modifeid_date').annotate(frontend_order=Case(When(name='Words with Notes', then=Value(0)), default=Value(1), output_field=CharField())).order_by('frontend_order', '-last_modified_date')
+    return super().get_queryset().exclude(words=None).order_by('-last_modified_date').annotate(frontend_order=Case(When(name__startswith='Words with Notes', then=Value(0)), default=Value(1), output_field=CharField())).order_by('frontend_order', '-last_modified_date')
 
 class SingleWordManager(models.Manager):
   def get_queryset(self):
@@ -489,6 +491,10 @@ class RussianWordManager(YandexWordMixin, models.Manager):
   def fetch_word(self, word):
     return self.create_or_get_word(ya_lang='ru-en', word=word, language='russian')
 
+class VerbManager(WordRefWordMixin, models.Manager):
+  def get_queryset(self):
+    return super().get_queryset().exclude(word='').filter(is_verb=True).filter(origin_verb=None).exclude(conjugations=None)
+
 class RomanceWordManager(WordRefWordMixin, models.Manager):
   def get_queryset(self):
     return super().get_queryset().filter(language__in=['italian', 'french'])
@@ -650,6 +656,7 @@ class Word(models.Model):
     italian_objects = ItalianWordManager()
     free_words = FreeWordsManager()
     romance_words = RomanceWordManager()
+    true_verb_objects = VerbManager()
     
     def __str__(self):
         return self.word

@@ -119,17 +119,19 @@ def parse_pronounce(r):
   return pronounce 
 
 def parse_straight_word(r):
+  print(10000000)
   word_page = r.content
   word_soup = BeautifulSoup(word_page, features="html.parser")
   pronounce = word_soup.find('span', {'id': 'pronWR'})
 
   
   is_verb = word_soup.find('a', href=lambda x: x and re.search('conj.+(It|Fr)Verbs.+v=', x))
-  print(is_verb)
+  #print(is_verb)
+  pronounce = pronounce.get_text() if pronounce else ''
 
   words_tables = word_soup.findAll('table', {'class': 'WRD'}, id=lambda x: x != 'compound_forms');
   if not words_tables:
-    return { 'words_map': [], 'is_verb': 0, 'pronounce': '' }
+    return { 'words_map': [], 'is_verb': is_verb, 'pronounce': pronounce }
   words_map = []
   for wd_table in words_tables:
     fr_word = ''
@@ -159,8 +161,8 @@ def parse_straight_word(r):
       #print(new_to_exmpl)
     words_map.append(word_trans)
 
-  pronounce = pronounce.get_text() if pronounce else ''
-  print(is_verb)
+  #print('i have verb ', is_verb)
+  #print(words_map)
   return { 'words_map': words_map, 'pronounce': pronounce, 'is_verb': is_verb }
 
 def conflate_meanings(trans_meanings_arr):
