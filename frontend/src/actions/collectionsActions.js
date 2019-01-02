@@ -18,28 +18,24 @@ import { SAVE_COLLECTION,
 import { conflateWords } from './helpers';
 
 export const requestSave = () => dispatch => {
- console.log('requesting save');
   dispatch({
     type: SAVE_COLLECTION,
   })
 };
 
 export const clearFetched = () => dispatch => {
- console.log('clearing fetched colection name');
   dispatch({
     type: CLEAR_FETCHED,
   })
 };
 
 export const requestCollections = () => dispatch => {
- console.log('requesting collections');
   dispatch({
     type: FETCH_COLLECTIONS,
   })
 };
 
 export const requestCollection = () => dispatch => {
- console.log('requesting collection');
   dispatch({
     type: FETCH_WORDS,
   })
@@ -49,7 +45,6 @@ export const requestCollection = () => dispatch => {
 };
 
 export const fetchCollections = () => (dispatch, getState) => {
-  console.log('fetching collections');
   let headers = {"Content-Type": "application/json"};
   let {token} = getState().auth;
 
@@ -67,7 +62,6 @@ export const fetchCollections = () => (dispatch, getState) => {
 };
 
 export const fetchCollection = (uuid) => { return (dispatch, getState) => {
-  console.log('fetching words for collection');
   let headers = {"Content-Type": "application/json"};
 
 
@@ -135,7 +129,6 @@ export const fetchCollection = (uuid) => { return (dispatch, getState) => {
 };
 
 export const saveCollection = (name, wordsString) => { return (dispatch, getState) => {
-  console.log('saving words');
 
   const { uuid } = getState().collections
   
@@ -180,7 +173,6 @@ export const saveCollection = (name, wordsString) => { return (dispatch, getStat
           
           const { lastModifiedMap } = getState().collections
           const words = getState().words.items || []
-          console.log(`i have name ${name}`)
 
           dispatch({
             type: SAVE_COLLECTION_FULFILLED,
@@ -211,7 +203,6 @@ export const saveCollection = (name, wordsString) => { return (dispatch, getStat
 };
 
 export const saveCollectionAndLoadNew = (name, newUuid) => { return (dispatch, getState) => {
-  console.log('saving words');
 
   const { uuid } = getState().collections
   
@@ -256,7 +247,6 @@ export const saveCollectionAndLoadNew = (name, newUuid) => { return (dispatch, g
           
           const { lastModifiedMap } = getState().collections
           const words = getState().words.items || []
-          console.log(`i have name ${name}`)
 
           dispatch({
             type: SAVE_COLLECTION_FULFILLED,

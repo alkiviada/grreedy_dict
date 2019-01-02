@@ -35,7 +35,6 @@ class CollectionsSideBar extends Component {
   }
 
   componentWillMount() {
-    console.log('mounting sidebar');
     if (this.props.auth.isAuthenticated && !this.props.colls.length) {
       this.props.requestCollections();
       this.props.fetchCollections();
@@ -43,19 +42,15 @@ class CollectionsSideBar extends Component {
   }
 
   onCollectionClick(e, uuid) {
-    console.log('collection look up');
     e.preventDefault();
     this.setState({isSidebarOpen: false});
     this.props.requestCollection();
     const { origUUId, allWords } = this.props
-    console.log(allWords)
     
     if (origUUId && allWords.length) {
-      console.log('i will save and load') 
       this.props.saveCollectionAndLoadNew(this.props.origName, uuid);
     }
     else {
-      console.log(`i am here continuing with ${uuid}`)
       this.props.fetchCollection(uuid);
     }
   }
@@ -71,7 +66,6 @@ class CollectionsSideBar extends Component {
 
   render () {
     const { colls, auth } = this.props;
-    console.log('collections')
     return auth.isAuthenticated && colls.length ? (
       <div className="colls-sidebar">
       <input type="checkbox" className="colls-toggle" id="colls-toggle" checked={this.state.isSidebarOpen} onChange={this.handleSidebarOpen} />

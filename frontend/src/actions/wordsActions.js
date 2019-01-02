@@ -30,7 +30,6 @@ export const requestWord = () => dispatch => {
 };
 
 export const fetchWords = (uuid) => { return (dispatch, getState) => {
-  console.log(`fetching words for ${uuid}`)
 
   const { items } = getState().words;
 
@@ -106,7 +105,6 @@ export const fetchWords = (uuid) => { return (dispatch, getState) => {
 };
 
 export const deleteWord = (word) => { return (dispatch, getState) => {
-  console.log('deleting word');
   const { uuid, name, items, lastModifiedMap } = getState().collections
   const { visibilityMap } = getState().visibility
 
@@ -163,7 +161,6 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
 };
 
 export const fetchWord = (word) => { return (dispatch, getState) => {
-  console.log('fetching word');
   const { uuid, items, lastModifiedMap } = getState().collections
   const { visibilityMap } = getState().visibility
 
@@ -218,8 +215,6 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
 
           let time = Date.now();
           time = Math.floor(time/1000);
-          console.log(collName)
-          console.log(collUUID)
           dispatch({
             type: SAVE_COLLECTION_FULFILLED,
             payload: { items, 
@@ -243,7 +238,6 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
 
 export const lookUpWord = (word, uuid) => { 
 return (dispatch, getState) => {
-  console.log(`fetching words for ${uuid}`)
 
   const { items } = getState().words;
   const { lastModifiedMap, name } = getState().collections;
@@ -259,7 +253,6 @@ return (dispatch, getState) => {
 // we have a collection but we never saved it 
 // - let's load it from the storage of words' reducer  
 
-    console.log('i am dispatching here')
     dispatch({
       type: FETCH_COLLECTION_FULFILLED,
       payload: { uuid: uuid, name: name }

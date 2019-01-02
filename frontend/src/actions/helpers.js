@@ -1,5 +1,4 @@
 export const conflateWords = (words) => {
-  console.log('conflating')
   let conflated_words = [];
   let word_map = {}
   for (let w of words) {
@@ -26,7 +25,7 @@ export const translationsToMap = (w) => {
 }
 
 export const filterMap = (map, w) => {
-    return Object.keys(map).filter(k => k != w)
-      .map(k => Object.assign({}, {[k]: map[k]}))
-      .reduce((res, o) => Object.assign(res, o), {});
+  return Object.keys(map).filter(k => k != w)
+    .map(k => Object.assign({}, {[k]: map[k]}))
+    .reduce((res, o) => Object.assign(res, o), {});
 }

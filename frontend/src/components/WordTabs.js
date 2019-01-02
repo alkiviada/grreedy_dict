@@ -52,7 +52,6 @@ class WordTabs extends Component {
 
   handleSelect(prev, index, word, isEnglishWord, parentRef) {
     const parentOffset = parentRef.current.scrollTop
-    console.log(parentOffset)
     if (parentOffset && [0,1,2].filter(i => i == prev)) {
       this.props.logWordDivOffset(word, parentOffset);
     }
@@ -82,7 +81,6 @@ class WordTabs extends Component {
         break
       case 'TRANSLATIONS':
         if (!this.props.allTranslations[word]) {
-          console.log('looking up translations'); 
           this.props.requestTranslations(word, this.props.transFetchingMap)
           this.props.lookUpTranslations(word, this.props.allTranslations, this.props.transFetchingMap)
         }

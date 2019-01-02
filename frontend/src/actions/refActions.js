@@ -1,7 +1,6 @@
 import { MAP_REF, MAP_OFFSET } from './types';
 
 export const wordRefToMap = (word, wref) => (dispatch, getState) => {
-  console.log('logging ref');
   const { refMap } = getState().refs
   dispatch({
     type: MAP_REF,
@@ -10,7 +9,6 @@ export const wordRefToMap = (word, wref) => (dispatch, getState) => {
 };
 
 export const logWordDivOffset = (word, offset) => (dispatch, getState) => {
-  console.log('logging offset');
   const { offsetMap } = getState().refs
   dispatch({
     type: MAP_OFFSET,
