@@ -31,7 +31,6 @@ export default function(state = initialState, action) {
                                    saving: true, 
                                  };
     case SAVE_COLLECTION_FULFILLED: 
-      console.log(action.payload)
       return { ...state, 
                saving: false, 
                error: null, 

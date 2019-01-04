@@ -16,11 +16,11 @@ urlpatterns = [
 
     url(r'^api/word/(?P<word>[-\'\w() ]+)/(?P<uuid>[0-9a-f-]+)?$', views.WordSingleCreate.as_view(), name='word-detail'),
     url(r'^api/word/delete/(?P<word>[-\'\w() ]+)/(?P<uuid>[0-9a-f-]+)?$', views.WordSingleDelete.as_view(), name='word-delete'),
-    url(r'^api/words/(?:(?P<uuid>[0-9a-f-]+)/(?P<time>[0-9]+)?)?$', views.WordList.as_view(), name='words'),
+    url(r'^api/words/(?:(?P<uuid>[0-9a-f-]+)/(?P<page>[0-9]+)/(?P<time>[0-9]+)?)?$', views.WordList.as_view(), name='words'),
 
 
     url(r'^api/collection/$', views.CollectionListCreate.as_view(), name='save-collection'),
-    url(r'^api/collection/(?P<uuid>[0-9a-f-]+)(?:/(?P<time>[0-9]+))?$', views.CollectionDetail.as_view(), name='collection-detail'),
+    url(r'^api/collection/(?P<uuid>[0-9a-f-]+)/(?:/(?P<time>[0-9]+))?$', views.CollectionDetail.as_view(), name='collection-detail'),
     url(r'^api/collection/lastmodified/(?P<uuid>[0-9a-f-]+)/(?P<time>[0-9]+)/$', views.CollectionModified.as_view(), name='collection-last-modified'),
 
     url("^api/auth/register/$", views.RegistrationAPI.as_view()),

@@ -21,7 +21,6 @@ from words.api_call_helpers import try_fetch
 import time
 
 
-
 def update_verb_words():
   lang_wref_map = { 'french': 'fren', 'italian': 'iten'} 
   p = Paginator(Word.romance_words.exclude(is_verb=True).exclude(from_translation=True), 10)
@@ -110,6 +109,21 @@ def fetch_conjugations():
   #print(w.count())
   #[ print(w.word, w.language, w.origin_verb) for w in w ]
 
+def pull_conjugations():
 
-update_verb_words()
+  verbs = Word.true_verb_objects.all()
+  for v in verbs:
+    c = v.conjugations
+    c_soup = BeautifulSoup(c, features="html.parser")
+    conjs = c_soup.findAll('table')[0].findAll('tr')
+    for c in conjs:
+      tds = c.findAll('td')
+      if len(tds) and tds[0]:
+        print(tds[0].get_text())
+
+
+#update_verb_words()
 #fetch_conjugations()
+
+pull_conjugations()
+

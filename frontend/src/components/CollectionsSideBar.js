@@ -9,7 +9,7 @@ import { fetchCollections,
          requestCollections, 
          requestCollection } from '../actions/collectionsActions';
 import { loadUser } from '../actions/authActions';
-import { requestWords } from '../actions/wordsActions';
+import { requestWords, fetchWords } from '../actions/wordsActions';
 
 const mapStateToProps = state => ({
   colls: state.collections.items,
@@ -51,7 +51,8 @@ class CollectionsSideBar extends Component {
       this.props.saveCollectionAndLoadNew(this.props.origName, uuid);
     }
     else {
-      this.props.fetchCollection(uuid);
+      console.log('fetch words')
+      this.props.fetchWords(uuid);
     }
   }
   
@@ -90,6 +91,7 @@ class CollectionsSideBar extends Component {
 export default connect(mapStateToProps, { loadUser, 
                                           requestCollections, 
                                           requestWords, 
+                                          fetchWords, 
                                           fetchCollections, 
                                           fetchCollection, 
                                           saveCollection, 

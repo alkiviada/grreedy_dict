@@ -63,11 +63,10 @@ class WordNoteSerializer(serializers.ModelSerializer):
 
 class WordSerializer(serializers.ModelSerializer):
     word_etymologies = EtymologySerializer(many=True)
-    words = CollectionUUIDSerializer(many=True)
 
     class Meta:
         model = Word
-        fields = [ 'word', 'word_etymologies', 'language', 'words', 'is_verb' ]
+        fields = [ 'word', 'word_etymologies', 'language', 'is_verb' ]
 
 class TranslationSerializer(serializers.ModelSerializer):
     class Meta:

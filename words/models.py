@@ -662,7 +662,7 @@ class Word(models.Model):
         return self.word
 
     class Meta:
-        ordering = ('-lookup_date',)
+        ordering = ('collectionofwords', '-lookup_date',)
 
 class CollectionMixin(object):
   def update_last_modified(self):

@@ -16,6 +16,7 @@ from rest_framework import status
 
 from django.core.exceptions import ObjectDoesNotExist 
 from django.http import Http404
+from django.core.paginator import Paginator
 
 class LoginAPI(generics.GenericAPIView):
   serializer_class = LoginUserSerializer
@@ -56,22 +57,50 @@ class WordList(generics.ListAPIView):
   def get_queryset(self):
     return Word.free_words.all()
 
-  def get(self, request, uuid, time, *args, **kwargs):
+  def get(self, request, uuid, time, page, *args, **kwargs):
     words = []
+    page_count = 0
+    print(page)
     if uuid:
       print('I have UUID: ' + uuid)
       print(time)
       coll = Collection.objects.get(uuid=uuid) 
       print(int(coll.last_modified_date.timestamp()))
       if coll and (not time or int(coll.last_modified_date.timestamp()) > int(time)):
-        words = coll.words
+        all_words = coll.words.all()
+        distinct_words = set()
+        words = [w for w in all_words if w.word not in distinct_words and (distinct_words.add(w.word) or True)]
+        print(len(words))
+        if len(words) > 20:
+          p = Paginator(words, 20)
+          page_count = p.num_pages 
+          print(page)
+          words = p.page(page).object_list
+          print(words)
+        else:
+          words = coll.words.all()
         serializer = WordSerializer(words, many=True)
         print('i will return here');
-        return Response(serializer.data)
+        if page_count > 1:
+          print(999999999)
+          print(page)
+          print(len(serializer.data))
+          return Response({ 
+                            'words': serializer.data, 
+                            'pages': [ *list(filter(lambda x: x != int(page), range(1, page_count + 1))) ],
+                            'name': coll.name,
+                            'uuid': coll.uuid
+                         })
+        else:
+          return Response({
+                            'words': serializer.data, 
+                            'name': coll.name,
+                            'uuid': coll.uuid
+                         })
       else:
-        return Response([])
+        return Response({})
     else:
-      return Response([])
+      return Response({})
 
 class CollectionModified(generics.RetrieveAPIView):
   permission_classes = [ AllowAny ]
@@ -107,10 +136,8 @@ class CollectionDetail(generics.RetrieveUpdateAPIView):
 
     if coll and (not time or int(coll.last_modified_date.timestamp()) > int(time)):
       serializer = CollectionDetailSerializer(coll)
-      print('i will return here');
 
       print(coll.words.all().order_by('collectionofwords'))
-
       return Response(serializer.data)
     else:
       return Response({})
@@ -273,7 +300,7 @@ class WordSingleCreate(generics.ListAPIView):
       coll.add_to_collection(w)
       
     serializer = WordSerializer(db_words, many=True)
-    return Response(serializer.data)
+    return Response({ 'word': serializer.data, 'uuid': coll.uuid, 'name': coll.name })
 
 class WordSingleCreateSynonyms(generics.RetrieveAPIView):
   permission_classes = [ AllowAny, ]

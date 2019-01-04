@@ -30,19 +30,19 @@ export const requestWord = () => dispatch => {
 };
 
 export const fetchWords = (uuid) => { return (dispatch, getState) => {
-
   const { items } = getState().words;
 
   let { lastModifiedMap, name } = getState().collections;
   let time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : ''
 
   if (!uuid) {
+    console.log('i am here no uuid')
     return dispatch({
       type: FETCH_WORDS_FULFILLED,
       payload: [],
     });
   }
-  else if (!lastModifiedMap[uuid]) {
+  else if (!lastModifiedMap[uuid] && items.length) {
 
 // we have a collection but we never saved it 
 // - let's load it from the storage of words' reducer  
@@ -57,7 +57,8 @@ export const fetchWords = (uuid) => { return (dispatch, getState) => {
     });
   }
   else {
-    const url = 'api/words/' + (uuid ? uuid + '/' + time : '')
+    const page = page || 1
+    const url = 'api/words/' + (uuid ? uuid + `/${page}/` + time : '')
     return fetch(url)
       .then(response =>
       response.json().then(json => ({
@@ -73,12 +74,13 @@ export const fetchWords = (uuid) => { return (dispatch, getState) => {
           console.log('Server returned error status');
           dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed'}})
         } else {
+          console.log(json)
           let words = []
           let name = ''
-          if (json[0] && json[0].words) {
-            name = json[0].words[0].name
-            uuid = json[0].words[0].uuid
-            words = conflateWords(json)
+          if (json.words) {
+            name = json.name
+            uuid = json.uuid
+            words = conflateWords(json.words)
           }
           else {
             words = lastModifiedMap[uuid]['words']
@@ -188,9 +190,9 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
         } else {
           // Status looks good
           const words = getState().words.items || []
-          const word = json;
-          const collUUID = word[0].words[0].uuid
-          const collName = word[0].words[0].name
+          const word = json.word;
+          const collUUID = json.uuid
+          const collName = json.name
 
           const obj = word.reduce((o, e) =>
                                (o['word'] = e['word'], 
@@ -264,6 +266,7 @@ return (dispatch, getState) => {
     return dispatch(fetchWord(word))
   }
   else {
+    console.log('i am here')
     return dispatch(fetchWords(uuid)).then(() => {
       return dispatch(fetchWord(word))
     })

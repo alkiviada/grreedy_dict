@@ -46,8 +46,9 @@ class Table extends Component {
     }
      
     if (!this.props.allWordsMap[word]) {
-      this.props.lookUpWord(word, this.props.uuid);
-      this.scrollToDomRef(this.myRef, 35)
+      this.props.lookUpWord(word, this.props.uuid).then(() => {
+        this.scrollToDomRef(this.myRef, 35)
+      })
     }
     else if (this.props.refMap[word] && this.props.refMap[word].current) {
       console.log('i am here will scroll to exisitng')
@@ -94,7 +95,7 @@ class Table extends Component {
       </div>
       </BodyClassName>
     ) : (
-    <BodyClassName className={data.length < 6 ? 'body-with-image' : ''}>
+    <BodyClassName className={data.length < 21 ? 'body-with-image' : ''}>
     <div className="words-container" ref={this.myRef}>
     { wordFetching ? <em>Loading...</em> : '' }
       <h2 className="coll-title">

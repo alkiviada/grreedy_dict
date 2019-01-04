@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'knox',
     'rest_framework',
     'frontend',
+    'homework',
     'words.apps.WordsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -149,6 +150,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 print(STATIC_URL)
+print(STATICFILES_DIRS)
 
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',

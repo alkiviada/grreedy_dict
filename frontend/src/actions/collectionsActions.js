@@ -16,6 +16,7 @@ import { SAVE_COLLECTION,
        } from './types';
 
 import { conflateWords } from './helpers';
+import { fetchWords } from './wordsActions';
 
 export const requestSave = () => dispatch => {
   dispatch({
@@ -61,15 +62,14 @@ export const fetchCollections = () => (dispatch, getState) => {
     })
 };
 
-export const fetchCollection = (uuid) => { return (dispatch, getState) => {
+export const fetchCollection = (uuid, page) => { return (dispatch, getState) => {
   let headers = {"Content-Type": "application/json"};
 
-
   const {token} = getState().auth;
+
   if (token) {
       headers["Authorization"] = `Token ${token}`;
   }
-
 
   const { lastModifiedMap } = getState().collections;
   const time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : '';
@@ -93,16 +93,17 @@ export const fetchCollection = (uuid) => { return (dispatch, getState) => {
         } else {
           // Status looks good
           let coll = json;
+          console.log(json)
           let words = []
 // i have this collection in my cache with its words' content and visibilityMap
           if (!coll.words) {
-           words = lastModifiedMap[uuid]['words']
-           name = lastModifiedMap[uuid]['name']
+            words = lastModifiedMap[uuid]['words']
+            name = lastModifiedMap[uuid]['name']
           }
           else {
-           words = conflateWords(coll.words)
-           uuid = coll.uuid
-           name = coll.name
+            words = conflateWords(coll.words)
+            uuid = coll.uuid
+            name = coll.name
           }
           dispatch({
             type: FETCH_WORDS_FULFILLED,
@@ -131,9 +132,6 @@ export const fetchCollection = (uuid) => { return (dispatch, getState) => {
 export const saveCollection = (name, wordsString) => { return (dispatch, getState) => {
 
   const { uuid } = getState().collections
-  
-
-
   const {token} = getState().auth;
 
   let headers = {
@@ -205,8 +203,6 @@ export const saveCollection = (name, wordsString) => { return (dispatch, getStat
 export const saveCollectionAndLoadNew = (name, newUuid) => { return (dispatch, getState) => {
 
   const { uuid } = getState().collections
-  
-
 
   const {token} = getState().auth;
 
@@ -264,7 +260,7 @@ export const saveCollectionAndLoadNew = (name, newUuid) => { return (dispatch, g
             type: FETCH_WORDS_FULFILLED,
             payload: []
           });
-         return dispatch(fetchCollection(newUuid))
+         return dispatch(fetchWords(newUuid))
         }
       },
       // Either fetching or parsing failed!
