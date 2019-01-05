@@ -41,6 +41,7 @@ class Table extends Component {
   navigateToPage(e, uuid, page) {
     console.log('new page');
     e.preventDefault();
+    console.log(page)
     this.props.fetchWords(uuid, page)
   }
 
@@ -76,6 +77,9 @@ class Table extends Component {
 
   render () {
     const { data, pagePrev, pageNext, uuid } = this.props;
+    console.log(uuid)
+    console.log(pagePrev)
+    console.log(pageNext)
 
     const allFetching = this.props.allFetching;
     const collFetching = this.props.collFetching;
@@ -110,8 +114,8 @@ class Table extends Component {
                  <a className="pagination-bottom fas fa-chevron-right" onClick={(e) => this.navigateToPage(e, uuid, pageNext)}></a>
                  </div> : ''}
     { pagePrev ? <div className="pagination-left">
-                 <a className="pagination-top fas fa-chevron-left"></a>
-                 <a className="pagination-bottom fas fa-chevron-left"></a>
+                 <a className="pagination-top fas fa-chevron-left" onClick={(e) => this.navigateToPage(e, uuid, pagePrev)}></a>
+                 <a className="pagination-bottom fas fa-chevron-left" onClick={(e) => this.navigateToPage(e, uuid, pagePrev)}></a>
                  </div> : ''}
       <h2 className="coll-title">
         Showing <strong>{data.length} word{data.length > 1 ? 's' : ''}</strong>

@@ -687,7 +687,7 @@ ul {
     "words-table";
   padding: 0.1em 0.1em;
   grid-template-rows: 2em 1fr;
-  grid-row-gap: .5em;
+  grid-row-gap: .4em;
 } 
 
 .words-invite {
@@ -898,6 +898,13 @@ ul {
 
 .pagination-right {
   grid-area: pagination-right;
+}
+
+.pagination-left {
+  grid-area: pagination-left;
+}
+
+.pagination-right, .pagination-left {
   display: grid;
   position: relative;
   grid-template-areas: 
@@ -905,13 +912,11 @@ ul {
   "."
   "bottom";
   grid-template-rows: 1em 1fr 1em;
- 
-  
 }
 
 .pagination-top {
   grid-area: top;
-  top: 3em;
+  top: 3.5em;
   color: var(--field-color);
 }
 
@@ -928,12 +933,6 @@ ul {
   align-self: center;
   font-weight: 900;
   justify-self: center;
-}
-
-.pagination-left {
-  grid-area: pagination-left;
-  display: grid;
-  
 }
 
 }

@@ -44,10 +44,12 @@ export default function(state = initialState, action) {
                                          newWordFetching: false, 
                                          error: null, 
                                          newWordFetched: true,
-                                         items: action.payload, 
-                                         allWordsMap: { ...action.payload.map(e => e.word).reduce((o, e) => (o[e] = 1, o), {}) } 
+                                         items: action.payload.words, 
+                                         pageNext: action.payload.pageNext,
+                                         allWordsMap: { ...action.payload.words.map(e => e.word).reduce((o, e) => (o[e] = 1, o), {}) } 
                                        };
-    case FETCH_WORDS_REJECTED: return { ...state, allWordsFetching: false, 
+    case FETCH_WORDS_REJECTED: return { ...state, 
+                                        allWordsFetching: false, 
                                         newWordFetching: false, 
                                         error: action.payload.error, 
                                         word: action.payload.word 

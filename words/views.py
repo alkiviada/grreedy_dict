@@ -2,7 +2,7 @@ from .models import Word, Definition, Etymology, Example, Collection, Collocatio
 from django.utils import timezone
 from knox.models import AuthToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .constants import LANGUAGES
+from .constants import LANGUAGES, WORDS_ON_PAGE
 import datetime
 
 from .serializers import (WordSerializer, SynonymSerializer, TranslationSerializer, CollectionSerializer, 
@@ -66,17 +66,23 @@ class WordList(generics.ListAPIView):
       print(time)
       coll = Collection.objects.get(uuid=uuid) 
       print(int(coll.last_modified_date.timestamp()))
-      if coll and (not time or int(coll.last_modified_date.timestamp()) > int(time)):
+      if coll and ((not time or int(coll.last_modified_date.timestamp()) > int(time)) or (page and page != 1)):
         all_words = coll.words.all()
         distinct_words = set()
         words = [w for w in all_words if w.word not in distinct_words and (distinct_words.add(w.word) or True)]
         print(len(words))
         if len(words) > 20:
-          p = Paginator(words, 20)
+          p = Paginator(words, WORDS_ON_PAGE)
           page_count = p.num_pages 
           print(page)
-          words = p.page(page).object_list
-          print(words)
+          all_words_for_page = []
+          for w in p.page(page).object_list:
+            all_words_for_page.append(w)
+            omonyms = Word.single_object.filter(words=coll, word=w.word).exclude(language=w.language)
+            all_words_for_page.extend(omonyms)
+            
+          print(all_words_for_page)
+          words = all_words_for_page
         else:
           words = coll.words.all()
         serializer = WordSerializer(words, many=True)
@@ -300,8 +306,16 @@ class WordSingleCreate(generics.ListAPIView):
     for w in db_words:
       coll.add_to_collection(w)
       
+    all_words = coll.words.all()
+    distinct_words = set()
+    words = [w for w in all_words if w.word not in distinct_words and (distinct_words.add(w.word) or True)]
+    print(len(words))
+
     serializer = WordSerializer(db_words, many=True)
-    return Response({ 'word': serializer.data, 'uuid': coll.uuid, 'name': coll.name })
+    return Response({ 'word': serializer.data, 
+                      'uuid': coll.uuid, 
+                      'name': coll.name, 
+                      'page_next': 2 if len(words) > 20 else 0 })
 
 class WordSingleCreateSynonyms(generics.RetrieveAPIView):
   permission_classes = [ AllowAny, ]
@@ -387,7 +401,7 @@ class WordNoteSingleCreate(generics.GenericAPIView):
           wn.save()
           notes_coll = wn.collection
         else:
-          if word_note_colls.latest('name').words.count() > 5:
+          if word_note_colls.latest('name').words.count() > 100:
             name = 'Words with Notes ' + str(word_note_colls.count() + 1);
             notes_coll = Collection.objects.create(name=name, owner=user, 
                                                    created_date=timezone.now(),  
