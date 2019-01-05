@@ -93,7 +93,6 @@ export const fetchCollection = (uuid, page) => { return (dispatch, getState) => 
         } else {
           // Status looks good
           let coll = json;
-          console.log(json)
           let words = []
 // i have this collection in my cache with its words' content and visibilityMap
           if (!coll.words) {
@@ -186,7 +185,7 @@ export const saveCollection = (name, wordsString) => { return (dispatch, getStat
           }),
           dispatch({
             type: FETCH_WORDS_FULFILLED,
-            payload: []
+            payload: { 'words': [] }
           });
           return json;
         }
@@ -258,7 +257,7 @@ export const saveCollectionAndLoadNew = (name, newUuid) => { return (dispatch, g
           }),
           dispatch({
             type: FETCH_WORDS_FULFILLED,
-            payload: []
+            payload: { 'words': [] }
           });
          return dispatch(fetchWords(newUuid))
         }

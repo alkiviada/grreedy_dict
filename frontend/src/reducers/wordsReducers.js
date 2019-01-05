@@ -14,7 +14,10 @@ const initialState = {
   allWordsFetching: false,
   newWordFetched: false,
   allWordsFetched: false,
-  error: null
+  error: null,
+  page: 1,
+  pageNext: 0,
+  pagePrev: 0,
 };
 
 export default function(state = initialState, action) {
@@ -32,8 +35,10 @@ export default function(state = initialState, action) {
                                          allWordsFetching: false, 
                                          error: null, 
                                          allWordsFetched: true,
-                                         items: action.payload, 
-                                         allWordsMap: { ...action.payload.map(e => e.word).reduce((o, e) => (o[e] = 1, o), {}) } 
+                                         items: action.payload.words, 
+                                         pagePrev: action.payload.pagePrev, 
+                                         pageNext: action.payload.pageNext, 
+                                         allWordsMap: { ...action.payload.words.map(e => e.word).reduce((o, e) => (o[e] = 1, o), {}) } 
                                        };
     case FETCH_WORD_FULFILLED: return { ...state, 
                                          newWordFetching: false, 

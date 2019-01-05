@@ -16,6 +16,7 @@ class Table extends Component {
     super(props)
     this.addRow = this.addRow.bind(this) 
     this.deleteWord = this.deleteWord.bind(this) 
+    this.navigateToPage = this.navigateToPage.bind(this) 
     this.myRef = React.createRef();
   }
 
@@ -35,6 +36,12 @@ class Table extends Component {
       this.props.requestWords();
       this.props.fetchWords(this.props.uuid);
     }
+  }
+
+  navigateToPage(e, uuid, page) {
+    console.log('new page');
+    e.preventDefault();
+    this.props.fetchWords(uuid, page)
   }
 
   addRow (e, word, original, parentRef) {
@@ -68,7 +75,7 @@ class Table extends Component {
   }
 
   render () {
-    const data = this.props.data;
+    const { data, pagePrev, pageNext, uuid } = this.props;
 
     const allFetching = this.props.allFetching;
     const collFetching = this.props.collFetching;
@@ -98,6 +105,14 @@ class Table extends Component {
     <BodyClassName className={data.length < 21 ? 'body-with-image' : ''}>
     <div className="words-container" ref={this.myRef}>
     { wordFetching ? <em>Loading...</em> : '' }
+    { pageNext ? <div className="pagination-right">
+                 <a className="pagination-top fas fa-chevron-right" onClick={(e) => this.navigateToPage(e, uuid, pageNext)}></a>
+                 <a className="pagination-bottom fas fa-chevron-right" onClick={(e) => this.navigateToPage(e, uuid, pageNext)}></a>
+                 </div> : ''}
+    { pagePrev ? <div className="pagination-left">
+                 <a className="pagination-top fas fa-chevron-left"></a>
+                 <a className="pagination-bottom fas fa-chevron-left"></a>
+                 </div> : ''}
       <h2 className="coll-title">
         Showing <strong>{data.length} word{data.length > 1 ? 's' : ''}</strong>
       </h2>
@@ -129,6 +144,9 @@ const mapStateToProps = state => ({
   allFetching: state.words.allWordsFetching,
   collFetching: state.collections.fetching,
   wordFetching: state.words.newWordFetching,
+  pageNext: state.words.pageNext,
+  pagePrev: state.words.pagePrev,
+  page: state.words.page,
 });
 
 export default connect(mapStateToProps, { deleteWord, lookUpWord, fetchWords, requestWords, requestWord, switchVisibility, logWordDivOffset  })(Table);

@@ -77,10 +77,15 @@ export const fetchWords = (uuid) => { return (dispatch, getState) => {
           console.log(json)
           let words = []
           let name = ''
+          let pagePrev = 0
+          let pageNext = 0
           if (json.words) {
             name = json.name
             uuid = json.uuid
             words = conflateWords(json.words)
+            pagePrev = json.page_prev
+            pageNext = json.page_next
+            console.log(pageNext)
           }
           else {
             words = lastModifiedMap[uuid]['words']
@@ -92,7 +97,7 @@ export const fetchWords = (uuid) => { return (dispatch, getState) => {
           });
           dispatch({
             type: FETCH_WORDS_FULFILLED,
-            payload: words
+            payload: { words, pageNext, pagePrev }
           });
         }
       },
@@ -223,7 +228,10 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
                        uuid: collUUID, 
                        name: collName, 
                        lastModifiedMap: { ...lastModifiedMap, 
-                                          [collUUID]: { time, words: [obj, ...words], name: collName }
+                                          [collUUID]: { time, 
+                                                        words: [obj, ...words], 
+                                                        name: collName 
+                                                      }
                        } 
             }
           })

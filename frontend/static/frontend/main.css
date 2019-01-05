@@ -340,16 +340,6 @@ i.defect {color: var(--field-color);font-style:normal;}
 
 /* words panel starts here */
 
-.words-container { 
-  grid-area: words;
-  grid-column: 1/-1;
-  display: grid;
-  grid-template-areas: 
-    "coll-title"
-    "words-table";
-  padding: 0.3em 0.3em;
-  grid-template-rows: 2em 1fr;
-} 
 
 .words-table {
   grid-area: words-table;
@@ -697,7 +687,7 @@ ul {
     "words-table";
   padding: 0.1em 0.1em;
   grid-template-rows: 2em 1fr;
-  grid-row-gap: 1em;
+  grid-row-gap: .5em;
 } 
 
 .words-invite {
@@ -892,20 +882,60 @@ ul {
       "words words"
       "save-words save-words";
   }
-
   .words-container { 
     grid-area: words;
     display: grid;
     grid-template-areas: 
       "coll-title coll-title coll-title"
-      ". words-table .";
+      "pagination-left words-table pagination-right";
     padding: 0.3em 0.3em;
     grid-template-rows: 2em 1fr;
     grid-template-columns: .5fr 6fr .5fr;
   } 
-.new-word-btn, .save-btn {
-  padding: .1em .07em .1em .2em !important;
+  .new-word-btn, .save-btn {
+    padding: .1em .07em .1em .2em !important;
+  }
+
+.pagination-right {
+  grid-area: pagination-right;
+  display: grid;
+  position: relative;
+  grid-template-areas: 
+  "top"
+  "."
+  "bottom";
+  grid-template-rows: 1em 1fr 1em;
+ 
+  
 }
+
+.pagination-top {
+  grid-area: top;
+  top: 3em;
+  color: var(--field-color);
+}
+
+.pagination-bottom {
+  grid-area: bottom;
+  bottom: 3.5em;
+  color: var(--sky-color);
+}
+
+.pagination-top, .pagination-bottom {
+  position: sticky;
+  cursor: pointer;
+  font-size: .9rem;
+  align-self: center;
+  font-weight: 900;
+  justify-self: center;
+}
+
+.pagination-left {
+  grid-area: pagination-left;
+  display: grid;
+  
+}
+
 }
 
 @media(max-width: 1040px) {

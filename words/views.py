@@ -87,7 +87,8 @@ class WordList(generics.ListAPIView):
           print(len(serializer.data))
           return Response({ 
                             'words': serializer.data, 
-                            'pages': [ *list(filter(lambda x: x != int(page), range(1, page_count + 1))) ],
+                            'page_next': int(page) + 1 if int(page) + 1 <= page_count else 0,
+                            'page_prev': int(page) - 1 if int(page) - 1 > 0 else 0,
                             'name': coll.name,
                             'uuid': coll.uuid
                          })
