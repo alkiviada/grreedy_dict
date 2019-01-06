@@ -64,6 +64,18 @@ class Table extends Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    const newData = nextProps.data
+    const oldData = this.props.data 
+    if (oldData.length !== newData.length)
+      return true;
+    for (var i = oldData.length; i--;) {
+      if (oldData[i] !== newData[i])
+        return true;
+    }
+    return false 
+  }
+
   deleteWord(e, word) {
     console.log('deleting');
     e.preventDefault();
@@ -76,7 +88,7 @@ class Table extends Component {
   }
 
   render () {
-    const { data, pagePrev, pageNext, uuid } = this.props;
+    const { data, pagePrev, pageNext, allWordCount, uuid } = this.props;
     console.log(uuid)
     console.log(pagePrev)
     console.log(pageNext)
@@ -106,7 +118,7 @@ class Table extends Component {
       </div>
       </BodyClassName>
     ) : (
-    <BodyClassName className={data.length < 21 ? 'body-with-image' : ''}>
+    <BodyClassName className={data.length < 11 ? 'body-with-image' : ''}>
     <div className="words-container" ref={this.myRef}>
     { wordFetching ? <em>Loading...</em> : '' }
     { pageNext ? <div className="pagination-right">
@@ -118,7 +130,9 @@ class Table extends Component {
                  <a className="pagination-bottom fas fa-chevron-left" onClick={(e) => this.navigateToPage(e, uuid, pagePrev)}></a>
                  </div> : ''}
       <h2 className="coll-title">
-        Showing <strong>{data.length} word{data.length > 1 ? 's' : ''}</strong>
+        Showing <strong>{data.length}</strong> 
+        { allWordCount ? ` out of ${allWordCount} ` : ' ' } 
+        <strong>word{data.length > 1 ? 's' : ''}</strong>
       </h2>
       <div className="words-table">
        <div className="words-head">
@@ -151,6 +165,7 @@ const mapStateToProps = state => ({
   pageNext: state.words.pageNext,
   pagePrev: state.words.pagePrev,
   page: state.words.page,
+  allWordCount: state.words.allWordCount,
 });
 
 export default connect(mapStateToProps, { deleteWord, lookUpWord, fetchWords, requestWords, requestWord, switchVisibility, logWordDivOffset  })(Table);

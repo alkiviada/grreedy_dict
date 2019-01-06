@@ -71,7 +71,7 @@ class WordList(generics.ListAPIView):
         distinct_words = set()
         words = [w for w in all_words if w.word not in distinct_words and (distinct_words.add(w.word) or True)]
         print(len(words))
-        if len(words) > 20:
+        if len(words) > WORDS_ON_PAGE:
           p = Paginator(words, WORDS_ON_PAGE)
           page_count = p.num_pages 
           print(page)
@@ -96,7 +96,8 @@ class WordList(generics.ListAPIView):
                             'page_next': int(page) + 1 if int(page) + 1 <= page_count else 0,
                             'page_prev': int(page) - 1 if int(page) - 1 > 0 else 0,
                             'name': coll.name,
-                            'uuid': coll.uuid
+                            'uuid': coll.uuid,
+                            'all_word_count': len(distinct_words) if len(distinct_words) > 20 else 0
                          })
         else:
           return Response({
@@ -315,7 +316,9 @@ class WordSingleCreate(generics.ListAPIView):
     return Response({ 'word': serializer.data, 
                       'uuid': coll.uuid, 
                       'name': coll.name, 
-                      'page_next': 2 if len(words) > 20 else 0 })
+                      'page_next': 2 if len(words) > 20 else 0, 
+                      'all_word_count': len(words) if len(words) > 20 else 0
+                    })
 
 class WordSingleCreateSynonyms(generics.RetrieveAPIView):
   permission_classes = [ AllowAny, ]

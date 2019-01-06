@@ -43,6 +43,16 @@ class WordTabs extends Component {
     this.state = { tabIndex: i ? i : 0 };
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    const { word } = nextProps
+    if (nextProps.mapTabIndex[word] == this.props.mapTabIndex[word]) {
+      return 0
+    }
+    else {
+      return 1
+    }
+  }
+
   static propTypes = {
     switchTab: PropTypes.func.isRequired,
     lookUpTranslations: PropTypes.func.isRequired,

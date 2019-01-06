@@ -30,7 +30,7 @@ export const requestWord = () => dispatch => {
 };
 
 export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
-  const { items, pagePrev, pageNext } = getState().words;
+  const { items, pagePrev, pageNext, allWordCount } = getState().words;
 
   let { lastModifiedMap, name } = getState().collections;
   let time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : ''
@@ -54,7 +54,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
     });
     return dispatch({
       type: FETCH_WORDS_FULFILLED,
-      payload: { 'words': items, pagePrev, pageNext }
+      payload: { 'words': items, pagePrev, pageNext, allWordCount }
     });
   }
   else {
@@ -81,13 +81,14 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
           let name = ''
           let pagePrev = 0
           let pageNext = 0
+          let allWordCount = 0
           if (json.words) {
-            name = json.name
+            name = json.name;
             uuid = json.uuid
             words = conflateWords(json.words)
             pagePrev = json.page_prev
             pageNext = json.page_next
-            console.log(pageNext)
+            allWordCount = json.all_word_count
           }
           else {
             words = lastModifiedMap[uuid]['words']
@@ -99,7 +100,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
           });
           dispatch({
             type: FETCH_WORDS_FULFILLED,
-            payload: { words, pageNext, pagePrev }
+            payload: { words, pageNext, pagePrev, allWordCount }
           });
         }
       },
@@ -199,7 +200,8 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
           const { page } = getState().words
           let words = page == 1 ? getState().words.items : lastModifiedMap[uuid]['words'] 
           const { word, name, uuid } = json
-          let { pageNext } = json
+          let pageNext = json.next_page
+          let allWordCount = json.all_word_count
 
           const obj = word.reduce((o, e) =>
                                   (o['word'] = e['word'], 
@@ -215,7 +217,7 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
           }
           dispatch({
             type: FETCH_WORD_FULFILLED,
-            payload: { 'words': [ obj, ...words ], 'pageNext': pageNext }
+            payload: { 'words': [ obj, ...words ], pageNext, allWordCount }
           });
           dispatch({
             type: SWITCH_VISIBILITY,

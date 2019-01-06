@@ -32,6 +32,16 @@ class WordCell extends Component {
     this.props.wordRefToMap(word, this.wordRef);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    const { word } = nextProps 
+    if (nextProps.word == this.props.word && (nextProps.visibilityMap[word] == this.props.visibilityMap[word])) {
+      return 0
+    }
+    else {
+      return 1
+    }
+  }
+
   showHide(e, word) {
     console.log('changing visibility');
     e.preventDefault();

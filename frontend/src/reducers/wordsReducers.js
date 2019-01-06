@@ -18,6 +18,7 @@ const initialState = {
   page: 1,
   pageNext: 0,
   pagePrev: 0,
+  allWordCount: 0,
 };
 
 export default function(state = initialState, action) {
@@ -38,6 +39,7 @@ export default function(state = initialState, action) {
                                          items: action.payload.words, 
                                          pagePrev: action.payload.pagePrev, 
                                          pageNext: action.payload.pageNext, 
+                                         allWordCount: action.payload.allWordCount,
                                          allWordsMap: { ...action.payload.words.map(e => e.word).reduce((o, e) => (o[e] = 1, o), {}) } 
                                        };
     case FETCH_WORD_FULFILLED: return { ...state, 
@@ -46,6 +48,7 @@ export default function(state = initialState, action) {
                                          newWordFetched: true,
                                          items: action.payload.words, 
                                          pageNext: action.payload.pageNext,
+                                         allWordCount: action.payload.allWordCount,
                                          allWordsMap: { ...action.payload.words.map(e => e.word).reduce((o, e) => (o[e] = 1, o), {}) } 
                                        };
     case FETCH_WORDS_REJECTED: return { ...state, 
