@@ -40,16 +40,17 @@ export default function(state = initialState, action) {
                                          pagePrev: action.payload.pagePrev, 
                                          pageNext: action.payload.pageNext, 
                                          allWordCount: action.payload.allWordCount,
+                                         page: action.payload.page ? action.payload.page : state.page,
                                          allWordsMap: { ...action.payload.words.map(e => e.word).reduce((o, e) => (o[e] = 1, o), {}) } 
                                        };
     case FETCH_WORD_FULFILLED: return { ...state, 
-                                         newWordFetching: false, 
-                                         error: null, 
-                                         newWordFetched: true,
-                                         items: action.payload.words, 
-                                         pageNext: action.payload.pageNext,
-                                         allWordCount: action.payload.allWordCount,
-                                         allWordsMap: { ...action.payload.words.map(e => e.word).reduce((o, e) => (o[e] = 1, o), {}) } 
+                                        newWordFetching: false, 
+                                        error: null, 
+                                        newWordFetched: true,
+                                        items: action.payload.words, 
+                                        pageNext: action.payload.pageNext,
+                                        allWordCount: action.payload.allWordCount,
+                                        allWordsMap: { ...action.payload.words.map(e => e.word).reduce((o, e) => (o[e] = 1, o), {}) } 
                                        };
     case FETCH_WORDS_REJECTED: return { ...state, 
                                         allWordsFetching: false, 

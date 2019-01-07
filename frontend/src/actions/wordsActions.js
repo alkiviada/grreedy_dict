@@ -100,7 +100,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
           });
           dispatch({
             type: FETCH_WORDS_FULFILLED,
-            payload: { words, pageNext, pagePrev, allWordCount }
+            payload: { words, pageNext, pagePrev, allWordCount, page }
           });
         }
       },
@@ -116,9 +116,10 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
 
 export const deleteWord = (word) => { return (dispatch, getState) => {
   const { uuid, name, items, lastModifiedMap } = getState().collections
+  let { page } = getState().words
   const { visibilityMap } = getState().visibility
 
-  const url = 'api/word/delete/' + word + '/' + (uuid ? uuid : '')
+  const url = 'api/word/delete/' + word + '/' + (uuid ? uuid + '/' + page : '')
   return fetch(url)
   .then(response =>
       response.json().then(json => ({
@@ -135,32 +136,35 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
           dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed', word: word}})
         } else {
           // Status looks good
-         const words = json.empty ? [] : getState().words.items.filter(e => e.word != word) 
+         const words = json.empty ? [] : conflateWords(json.words) 
+         const pagePrev = json.page_prev
+         const pageNext = json.page_next
+         const allWordCount = json.all_word_count
+         page = json.page
 
          dispatch({
-            type: FETCH_WORD_FULFILLED,
-            payload: words
+            type: FETCH_WORDS_FULFILLED,
+            payload: { words, pagePrev, pageNext, allWordCount, page }
           });
-          dispatch({
-            type: SWITCH_VISIBILITY,
-            payload: filterMap(visibilityMap, word)
-          });
+        dispatch({
+          type: SWITCH_VISIBILITY,
+          payload: filterMap(visibilityMap, word)
+        });
 
-          let time = Date.now();
-          time = Math.floor(time/1000);
-          const collections = json.empty ? items.filter(e => e.name != name) : items
-          dispatch({
-            type: SAVE_COLLECTION_FULFILLED,
-            payload: { items: collections,
-                       uuid: uuid, 
-                       name: name, 
-                       lastModifiedMap: { ...lastModifiedMap, 
-                                          [uuid]: { time, words, name }
-                       } 
-            }
-          })
-        }
-      },
+        let time = Date.now();
+        time = Math.floor(time/1000);
+        const collections = json.empty ? items.filter(e => e.name != name) : items
+        dispatch({
+          type: SAVE_COLLECTION_FULFILLED,
+          payload: { items: collections,
+                     uuid: uuid, 
+                     name: name, 
+                     lastModifiedMap: page == 1 ? 
+                       { ...lastModifiedMap, [uuid]: { time, words, name } } : { ...lastModifiedMap }
+                   }
+        })
+      }
+    },
       // Either fetching or parsing failed!
       err => {
         console.log('problems');
