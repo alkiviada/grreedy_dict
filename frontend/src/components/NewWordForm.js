@@ -14,6 +14,23 @@ class NewWordForm extends Component {
     this.onSubmit = this.onSubmitLookUp.bind(this);
   };
 
+  componentDidUpdate() {
+    const { word, page, allWordsMap, refMap } = this.props
+    console.log(word)
+    console.log('i updated')
+    console.log(refMap[word])
+    if (refMap[word] && refMap[word].current)
+      scrollToDomRef(refMap[word], 80)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { newWord, fetching } = nextProps
+    const word = this.props.word
+    if (word && word == newWord && fetching)
+      return false
+    return true
+  }
+
   handleWordChange(w) {
    if (this.props.error) {
      this.props.clearNewWordError();
@@ -25,15 +42,28 @@ class NewWordForm extends Component {
     e.preventDefault();
     console.log('looking up');
     const { word } = this.state
+    const { page, allWordsMap, refMap } = this.props
+    console.log(refMap[word])
+    if (refMap[word]) 
+      console.log(this.props.refMap[word].current)
     if (!this.props.allWordsMap[this.state.word]) {
-      this.props.requestWord();
+      this.props.requestWord(word);
       this.props.lookUpWord(this.state.word, this.props.uuid).then(() => {
-        scrollToDomRef(this.props.allDataRef, 35)
+        console.log(refMap[word])
+        if (refMap[word] && refMap[word].current)
+          scrollToDomRef(refMap[word], 80)
       })
     }
-    else if (this.props.refMap[word] && this.props.refMap[word].current) {
+    else if (this.props.refMap[word]) {
       console.log('i am here will scroll to exisitng')
-      scrollToDomRef(this.props.refMap[word], 80)
+      if (allWordsMap[word] != page) {
+        this.props.fetchWords(allWordsMap[word]).then(() => {
+          scrollToDomRef(refMap[word], 80)
+        })
+      }
+      else {
+        scrollToDomRef(this.props.refMap[word], 80)
+      }
     }
     this.setState({word: ''})
   }
@@ -57,6 +87,7 @@ const mapStateToProps = state => ({
   uuid: state.collections.uuid,
   allWordsMap: state.words.allWordsMap,
   allWords: state.words.items,
+  page: state.words.page,
   fetching: state.words.newWordFetching,
   error: state.words.error,
   word: state.words.word,

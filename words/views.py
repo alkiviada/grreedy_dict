@@ -352,18 +352,59 @@ class WordSingleCreate(generics.ListAPIView):
 
 # now that we have our collection - new or current
 # let's add newly looked up words to it
+    w_in_coll = 0
     for w in db_words:
-      coll.add_to_collection(w)
-      
+      w_in_coll = w.words.filter(uuid=coll.uuid).distinct().first()
+      if not w_in_coll:
+        coll.add_to_collection(w)
+
     all_words = coll.words.all()
     distinct_words = set()
     words = [w for w in all_words if w.word not in distinct_words and (distinct_words.add(w.word) or True)]
     print(len(words))
+   
+    if w_in_coll: 
+      if len(words) > WORDS_ON_PAGE:
+        p = Paginator(words, WORDS_ON_PAGE)
+        page_count = p.num_pages 
+        while page_count:
+          print(word)
+          words = p.page(page_count).object_list
+          word_on_page = list(filter(lambda w: w.word == word, words))
+          if len(word_on_page):
+            break
+          page_count -= 1
+
+        page = page_count 
+        print(page)
+        all_words_for_page = []
+        words_on_page = []
+        words_on_page = p.page(page).object_list
+
+        for w in words_on_page:
+          all_words_for_page.append(w)
+          omonyms = Word.single_object.filter(words=coll, word=w.word).exclude(language=w.language)
+          all_words_for_page.extend(omonyms)
+            
+        print(all_words_for_page)
+        words = all_words_for_page
+        serializer = WordSerializer(words, many=True)
+        return Response({ 
+                          'words': serializer.data, 
+                          'page_next': int(page) + 1 if int(page) + 1 <= p.num_pages else 0,
+                          'page_prev': int(page) - 1 if int(page) - 1 > 0 else 0,
+                          'name': coll.name,
+                          'page': page,
+                          'uuid': coll.uuid,
+                          'all_word_count': len(distinct_words) if len(distinct_words) > 20 else 0
+                       })
+      
 
     serializer = WordSerializer(db_words, many=True)
     return Response({ 'word': serializer.data, 
                       'uuid': coll.uuid, 
                       'name': coll.name, 
+                      'page': 1,
                       'page_next': 2 if len(words) > 20 else 0, 
                       'all_word_count': len(words) if len(words) > 20 else 0
                     })

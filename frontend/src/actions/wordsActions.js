@@ -24,9 +24,10 @@ export const clearNewWordError = () => dispatch => {
   })
 };
 
-export const requestWord = () => dispatch => {
+export const requestWord = (word) => dispatch => {
   dispatch({
     type: FETCH_WORD,
+    payload: word,
   })
 };
 
@@ -39,7 +40,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
   if (!uuid) {
     return dispatch({
       type: FETCH_WORDS_FULFILLED,
-      payload: [],
+      payload: { 'words': [], page } 
     });
   }
   else if (!lastModifiedMap[uuid] && items.length && !page) {
@@ -53,7 +54,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
     });
     return dispatch({
       type: FETCH_WORDS_FULFILLED,
-      payload: { 'words': items, pagePrev, pageNext, allWordCount }
+      payload: { 'words': items, page, pagePrev, pageNext, allWordCount }
     });
   }
   else {
@@ -214,12 +215,18 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
           dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed', word: word}})
         } else {
           // Status looks good
-          const { word, name, uuid } = json
-          const page = 1
+          const { word, name, uuid, page } = json
           console.log(lastModifiedMap[uuid])
           let words = lastModifiedMap[uuid]['words'][page] 
-          let pageNext = json.next_page
+          let pageNext = json.page_next
+          let pagePrev = json.page_prev ? json.page_prev : 0
           let allWordCount = json.all_word_count
+          console.log(pagePrev)
+          console.log(pageNext)
+          if (json.words) {
+            words = conflateWords(json.words)
+          }
+          else {
 
           const obj = word.reduce((o, e) =>
                                   (o['word'] = e['word'], 
@@ -236,13 +243,15 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
               lastModifiedMap = reshuffleWordsOnPages(popped, lastModifiedMap[uuid]['words'], pageNext)
             }
           }
+            words = [ obj, ...words ]
+          }
           dispatch({
             type: FETCH_WORD_FULFILLED,
-            payload: { 'words': [ obj, ...words ], pageNext, allWordCount }
+            payload: { 'words': words, pageNext, pagePrev, allWordCount }
           });
           dispatch({
             type: SWITCH_VISIBILITY,
-            payload: { ...visibilityMap, ...{ [obj.word]: 'show' } }
+            payload: { ...visibilityMap, ...{ [word]: 'show' } }
           });
           dispatch({
             type: MAP_REF,
@@ -301,7 +310,7 @@ export const lookUpWord = (word, uuid) => {
       });
       dispatch({
         type: FETCH_WORDS_FULFILLED,
-        payload: { 'words': items } 
+        payload: { 'words': items, page } 
       });
       return dispatch(fetchWord(word))
   }

@@ -31,6 +31,7 @@ export default function(state = initialState, action) {
                                       };
     case FETCH_WORD: return { ...state, 
                                newWordFetching: true, 
+                               word: action.payload
                              };
     case FETCH_WORDS_FULFILLED: return { ...state, 
                                          allWordsFetching: false, 
@@ -41,7 +42,7 @@ export default function(state = initialState, action) {
                                          pageNext: action.payload.pageNext, 
                                          allWordCount: action.payload.allWordCount,
                                          page: action.payload.page ? action.payload.page : state.page,
-                                         allWordsMap: { ...action.payload.words.map(e => e.word).reduce((o, e) => (o[e] = 1, o), {}) } 
+                                         allWordsMap: { ...action.payload.words.map(e => e.word).reduce((o, e) => (o[e] = action.payload.page, o), {}) } 
                                        };
     case FETCH_WORD_FULFILLED: return { ...state, 
                                         newWordFetching: false, 
@@ -49,8 +50,10 @@ export default function(state = initialState, action) {
                                         newWordFetched: true,
                                         items: action.payload.words, 
                                         pageNext: action.payload.pageNext,
+                                        pagePrev: action.payload.pagePrev ? action.payload.pagePrev: state.pagePrev,
                                         allWordCount: action.payload.allWordCount,
-                                        allWordsMap: { ...action.payload.words.map(e => e.word).reduce((o, e) => (o[e] = 1, o), {}) } 
+                                        page: action.payload.page ? action.payload.page : state.page,
+                                        allWordsMap: { ...action.payload.words.map(e => e.word).reduce((o, e) => (o[e] = action.payload.page, o), {}) } 
                                        };
     case FETCH_WORDS_REJECTED: return { ...state, 
                                         allWordsFetching: false, 
