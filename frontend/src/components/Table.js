@@ -6,7 +6,8 @@ import key from "weak-key";
 import { connect } from 'react-redux';
 import { deleteWord, lookUpWord, fetchWords, requestWords, requestWord } from '../actions/wordsActions';
 import { switchVisibility } from '../actions/visibilityActions';
-import { logWordDivOffset } from '../actions/refActions';
+import { logWordDivOffset, setAllDataRef } from '../actions/refActions';
+import { scrollToDomRef } from './helpers';
 import { Link } from "react-router-dom";
 import BodyClassName from 'react-body-classname';
 
@@ -36,6 +37,7 @@ class Table extends Component {
       this.props.requestWords();
       this.props.fetchWords(this.props.uuid);
     }
+    this.props.setAllDataRef(this.myRef)
   }
 
   navigateToPage(e, uuid, page) {
@@ -43,6 +45,9 @@ class Table extends Component {
     e.preventDefault();
     console.log(page)
     this.props.fetchWords(uuid, page)
+      .then(() => {
+        scrollToDomRef(this.myRef, 35)
+      })
   }
 
   addRow (e, word, original, parentRef) {
@@ -52,21 +57,29 @@ class Table extends Component {
     if (parentOffset) {
       this.props.logWordDivOffset(original, parentOffset);
     }
+    console.log(this.props.refMap[word])
      
     if (!this.props.allWordsMap[word]) {
+      this.props.requestWord();
       this.props.lookUpWord(word, this.props.uuid).then(() => {
-        this.scrollToDomRef(this.myRef, 35)
+        scrollToDomRef(this.myRef, 35)
       })
     }
     else if (this.props.refMap[word] && this.props.refMap[word].current) {
       console.log('i am here will scroll to exisitng')
-      this.scrollToDomRef(this.props.refMap[word], 80)
+      scrollToDomRef(this.props.refMap[word], 80)
     }
+  }
+
+  componentDidUpdate() {
+    this.props.setAllDataRef(this.myRef)
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     const newData = nextProps.data
     const oldData = this.props.data 
+    if (nextProps.allFetching !== this.props.allFetching && !oldData.length)
+      return true 
     if (oldData.length !== newData.length)
       return true;
     for (var i = oldData.length; i--;) {
@@ -82,22 +95,16 @@ class Table extends Component {
     this.props.deleteWord(word);
   }
 
-  scrollToDomRef = (ref, offset) => {
-    const domNode = ReactDOM.findDOMNode(ref.current)
-    window.scrollTo(0, domNode.offsetTop-offset)
-  }
-
   render () {
     const { data, pagePrev, pageNext, allWordCount, uuid } = this.props;
-    console.log(uuid)
-    console.log(pagePrev)
-    console.log(pageNext)
 
     const allFetching = this.props.allFetching;
+    console.log('i am rendering table')
     const collFetching = this.props.collFetching;
 
     const wordFetching = this.props.newWordFetching;
     if (allFetching || collFetching) {
+      console.log('i am fetching words')
       return (
         <BodyClassName className="body-with-image">
         <div className="words-container">
@@ -168,4 +175,11 @@ const mapStateToProps = state => ({
   allWordCount: state.words.allWordCount,
 });
 
-export default connect(mapStateToProps, { deleteWord, lookUpWord, fetchWords, requestWords, requestWord, switchVisibility, logWordDivOffset  })(Table);
+export default connect(mapStateToProps, { setAllDataRef, 
+                                          deleteWord, 
+                                          lookUpWord, 
+                                          fetchWords, 
+                                          requestWords, 
+                                          requestWord, 
+                                          switchVisibility, 
+                                          logWordDivOffset  })(Table);

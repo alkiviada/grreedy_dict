@@ -25,6 +25,7 @@ class WordCell extends Component {
     if (offsetMap[word] && this.wordRef.current && [0,1,2].filter(i => i == tabIndexMap[word])) {
       this.wordRef.current.scrollTop = offsetMap[word]
     }
+    this.props.wordRefToMap(word, this.wordRef);
   }
 
   componentDidMount() {
@@ -34,7 +35,7 @@ class WordCell extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { word } = nextProps 
-    if (nextProps.word == this.props.word && (nextProps.visibilityMap[word] == this.props.visibilityMap[word])) {
+    if (nextProps.word == this.props.word && (nextProps.visibilityMap[word] == this.props.visibilityMap[word]) && (nextProps.refMap[word] && (nextProps.refMap[word] == this.props.refMap[word]))) {
       return 0
     }
     else {

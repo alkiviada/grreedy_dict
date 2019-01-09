@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 import DecorateWithLinks from "./DecorateWithLinks";
 
 export const listStyles = {1: 'etym-style', 2: 'def-style', 3: 'exmpl-style'};
@@ -19,4 +20,9 @@ export const renderList = (el, fn, ref, orig, styles, styleCount) => {
     </ul> 
    )
   );
+}
+
+export const scrollToDomRef = (ref, offset = 35) => {
+  const domNode = ReactDOM.findDOMNode(ref.current)
+  window.scrollTo(0, domNode.offsetTop-offset)
 }

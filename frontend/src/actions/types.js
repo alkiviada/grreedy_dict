@@ -44,6 +44,7 @@ export const CLEAR_FETCHED_NOTE = 'CLEAR_FETCHED_NOTE';
 
 export const SWITCH_TAB = 'SWITCH_TAB';
 export const MAP_REF = 'MAP_REF';
+export const SET_ALL_DATA_REF = 'SET_ALL_DATA_REF';
 export const MAP_OFFSET  = 'MAP_OFFSET';
 
 export const SWITCH_VISIBILITY = 'SWITCH_VISIBILITY';

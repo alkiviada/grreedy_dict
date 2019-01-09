@@ -6,10 +6,11 @@ import {
   FETCH_WORDS_REJECTED, 
   FETCH_WORD, 
   FETCH_WORD_FULFILLED,
+  MAP_REF,
   SWITCH_VISIBILITY
 } from './types';
 
-import { conflateWords, filterMap } from './helpers';
+import { conflateWords, filterMap, reshuffleWordsOnPages } from './helpers';
 
 export const requestWords = () => dispatch => {
   dispatch({
@@ -36,7 +37,6 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
   let time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : ''
 
   if (!uuid) {
-    console.log('i am here no uuid')
     return dispatch({
       type: FETCH_WORDS_FULFILLED,
       payload: [],
@@ -46,7 +46,6 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
 
 // we have a collection but we never saved it 
 // - let's load it from the storage of words' reducer  
-    console.log('am i here?')
 
     dispatch({
       type: FETCH_COLLECTION_FULFILLED,
@@ -59,7 +58,6 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
   }
   else {
     page = page || 1
-    console.log(page)
     const url = 'api/words/' + (uuid ? uuid + `/${page}/` + time : '')
     return fetch(url)
       .then(response =>
@@ -91,7 +89,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
             allWordCount = json.all_word_count
           }
           else {
-            words = lastModifiedMap[uuid]['words']
+            words = lastModifiedMap[uuid]['words'][page]
             name = lastModifiedMap[uuid]['name']
           }
           dispatch({
@@ -102,6 +100,20 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
             type: FETCH_WORDS_FULFILLED,
             payload: { words, pageNext, pagePrev, allWordCount, page }
           });
+        let time = Date.now();
+        time = Math.floor(time/1000);
+        lastModifiedMap[uuid] = {'words': {}, 'time': 0, 'name': ''}
+        lastModifiedMap[uuid]['words'][page] = words
+        lastModifiedMap[uuid]['name'] = name 
+        lastModifiedMap[uuid]['time'] = time 
+        dispatch({
+          type: SAVE_COLLECTION_FULFILLED,
+          payload: { items: getState().collections.items,
+                     uuid, 
+                     name, 
+                     lastModifiedMap 
+                   }
+        })
         }
       },
       // Either fetching or parsing failed!
@@ -159,8 +171,7 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
           payload: { items: collections,
                      uuid: uuid, 
                      name: name, 
-                     lastModifiedMap: page == 1 ? 
-                       { ...lastModifiedMap, [uuid]: { time, words, name } } : { ...lastModifiedMap }
+                     lastModifiedMap: { ...lastModifiedMap, [uuid]: { time, 'words': { page: words }, name } } 
                    }
         })
       }
@@ -175,8 +186,10 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
 };
 
 export const fetchWord = (word) => { return (dispatch, getState) => {
-  const { uuid, items, lastModifiedMap } = getState().collections
+  const { uuid, items } = getState().collections
+  let { lastModifiedMap } = getState().collections
   const { visibilityMap } = getState().visibility
+  const { refMap } = getState().refs
 
   let headers = {"Content-Type": "application/json"};
   const {token} = getState().auth;
@@ -201,9 +214,10 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
           dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed', word: word}})
         } else {
           // Status looks good
-          const { page } = getState().words
-          let words = page == 1 ? getState().words.items : lastModifiedMap[uuid]['words'] 
           const { word, name, uuid } = json
+          const page = 1
+          console.log(lastModifiedMap[uuid])
+          let words = lastModifiedMap[uuid]['words'][page] 
           let pageNext = json.next_page
           let allWordCount = json.all_word_count
 
@@ -216,8 +230,11 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
                                  );
           if (words.length >= 20) {
             console.log('popping')
-            words.pop();
+            const popped = words.pop();
             pageNext = 2;            
+            if (lastModifiedMap[uuid]['words'][pageNext]) {
+              lastModifiedMap = reshuffleWordsOnPages(popped, lastModifiedMap[uuid]['words'], pageNext)
+            }
           }
           dispatch({
             type: FETCH_WORD_FULFILLED,
@@ -226,6 +243,10 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
           dispatch({
             type: SWITCH_VISIBILITY,
             payload: { ...visibilityMap, ...{ [obj.word]: 'show' } }
+          });
+          dispatch({
+            type: MAP_REF,
+            payload: { }
           });
 
           dispatch({
@@ -242,7 +263,7 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
                        name, 
                        lastModifiedMap: { ...lastModifiedMap, 
                                           [uuid]: { time, name,
-                                                    words: [obj, ...words], 
+                                                    'words': { ...lastModifiedMap[uuid]['words'], ...{ page: words } }, 
                                                   }
                        } 
             }
@@ -273,7 +294,6 @@ export const lookUpWord = (word, uuid) => {
 
 // we have a collection but we never saved it 
 // - let's load it from the storage of words' reducer  
-      console.log('here i am on the road again')
 
       dispatch({
         type: FETCH_COLLECTION_FULFILLED,
@@ -286,7 +306,6 @@ export const lookUpWord = (word, uuid) => {
       return dispatch(fetchWord(word))
   }
   else {
-    console.log('i am here')
     return dispatch(fetchWords(uuid)).then(() => {
       return dispatch(fetchWord(word))
     })

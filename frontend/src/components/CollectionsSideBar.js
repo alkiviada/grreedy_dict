@@ -52,6 +52,7 @@ class CollectionsSideBar extends Component {
     }
     else {
       console.log('fetch words')
+      this.props.requestWords();
       this.props.fetchWords(uuid);
     }
   }

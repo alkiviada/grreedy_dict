@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { lookUpWord, requestWord, clearNewWordError } from '../actions/wordsActions';
+import { scrollToDomRef } from './helpers';
 
 class NewWordForm extends Component {
   constructor(props) { 
@@ -23,9 +24,16 @@ class NewWordForm extends Component {
   onSubmitLookUp(e) {
     e.preventDefault();
     console.log('looking up');
+    const { word } = this.state
     if (!this.props.allWordsMap[this.state.word]) {
       this.props.requestWord();
-      this.props.lookUpWord(this.state.word, this.props.uuid);
+      this.props.lookUpWord(this.state.word, this.props.uuid).then(() => {
+        scrollToDomRef(this.props.allDataRef, 35)
+      })
+    }
+    else if (this.props.refMap[word] && this.props.refMap[word].current) {
+      console.log('i am here will scroll to exisitng')
+      scrollToDomRef(this.props.refMap[word], 80)
     }
     this.setState({word: ''})
   }
@@ -53,6 +61,8 @@ const mapStateToProps = state => ({
   error: state.words.error,
   word: state.words.word,
   user: state.auth.user,
+  allDataRef: state.refs.allDataRef,
+  refMap: state.refs.refMap,
 });
 
 NewWordForm.propTypes = {

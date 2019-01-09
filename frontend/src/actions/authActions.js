@@ -134,7 +134,7 @@ export const logout = () => {
           dispatch({type: 'LOGOUT_SUCCESSFUL'});
   dispatch({
     type: FETCH_WORDS_FULFILLED,
-    payload: []
+    payload: { 'words': [], 'page': 1 } 
   });
           dispatch({
             type: SAVE_COLLECTION_FULFILLED,

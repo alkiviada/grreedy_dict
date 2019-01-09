@@ -16,6 +16,22 @@ export const conflateWords = (words) => {
   return conflated_words.map(w => ({'word': w, 'description': word_map[w]}))
 }
 
+export const reshuffleWordsOnPages = (newEl, wordsToPagesMap, page, maxWords = 20) => {
+  console.log(wordsToPagesMap)
+  let wordsOnPage = wordsToPagesMap[page]
+  wordsOnPage = [ newEl, ...wordsOnPage ]
+  if (wordsOnPage > maxWords) {
+    newEl = wordsOnPage.pop()
+    wordsToPagesMap[page] = wordsOnPage
+    page = page + 1
+    reshuffleWordsOnPages(newEl, wordsToPagesMap, page)
+  }
+  else {
+    wordsToPagesMap[page] = wordsOnPage
+  }
+  return wordsToPagesMap
+}
+
 export const translationsToMap = (w) => {
   const obj = w.reduce((o, e) => 
     (o[e['language']] = [...o[e['language']] ? 
