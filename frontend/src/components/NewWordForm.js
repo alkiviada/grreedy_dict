@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { lookUpWord, requestWord, clearNewWordError } from '../actions/wordsActions';
+import { lookUpWord, requestWord, clearNewWordError, fetchWords } from '../actions/wordsActions';
 import { scrollToDomRef } from './helpers';
 
 class NewWordForm extends Component {
@@ -23,14 +24,6 @@ class NewWordForm extends Component {
       scrollToDomRef(refMap[word], 80)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const { newWord, fetching } = nextProps
-    const word = this.props.word
-    if (word && word == newWord && fetching)
-      return false
-    return true
-  }
-
   handleWordChange(w) {
    if (this.props.error) {
      this.props.clearNewWordError();
@@ -42,27 +35,38 @@ class NewWordForm extends Component {
     e.preventDefault();
     console.log('looking up');
     const { word } = this.state
-    const { page, allWordsMap, refMap } = this.props
+    console.log(word)
+    console.log(page)
+    const { page, allWordsMap, refMap, uuid } = this.props
+    console.log(allWordsMap)
     console.log(refMap[word])
-    if (refMap[word]) 
+    if (refMap[word]) {
+      console.log('i have ref')
       console.log(this.props.refMap[word].current)
-    if (!this.props.allWordsMap[this.state.word]) {
+    }
+    if (!allWordsMap[word]) {
+      console.log('ive never seen this word')
       this.props.requestWord(word);
-      this.props.lookUpWord(this.state.word, this.props.uuid).then(() => {
+      this.props.lookUpWord(word, uuid).then(() => {
         console.log(refMap[word])
+        console.log('strange')
         if (refMap[word] && refMap[word].current)
           scrollToDomRef(refMap[word], 80)
       })
     }
-    else if (this.props.refMap[word]) {
+    else {
       console.log('i am here will scroll to exisitng')
       if (allWordsMap[word] != page) {
-        this.props.fetchWords(allWordsMap[word]).then(() => {
-          scrollToDomRef(refMap[word], 80)
+        console.log('i used to see this word but elsewhere')
+        this.props.requestWord(word);
+        this.props.fetchWords(uuid, allWordsMap[word]).then(() => {
+          if (refMap[word] && refMap[word].current)
+            scrollToDomRef(refMap[word], 80)
         })
       }
-      else {
-        scrollToDomRef(this.props.refMap[word], 80)
+      else if (refMap[word]) {
+        this.props.requestWord(word);
+        scrollToDomRef(refMap[word], 80)
       }
     }
     this.setState({word: ''})
@@ -87,10 +91,10 @@ const mapStateToProps = state => ({
   uuid: state.collections.uuid,
   allWordsMap: state.words.allWordsMap,
   allWords: state.words.items,
-  page: state.words.page,
   fetching: state.words.newWordFetching,
   error: state.words.error,
   word: state.words.word,
+  page: state.words.page,
   user: state.auth.user,
   allDataRef: state.refs.allDataRef,
   refMap: state.refs.refMap,
@@ -101,4 +105,4 @@ NewWordForm.propTypes = {
   requestWord: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, { lookUpWord, requestWord, clearNewWordError })(NewWordForm);
+export default connect(mapStateToProps, { lookUpWord, requestWord, clearNewWordError, fetchWords })(NewWordForm);

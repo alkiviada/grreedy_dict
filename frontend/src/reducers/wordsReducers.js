@@ -34,6 +34,7 @@ export default function(state = initialState, action) {
                                word: action.payload
                              };
     case FETCH_WORDS_FULFILLED: return { ...state, 
+                                        newWordFetching: false, 
                                          allWordsFetching: false, 
                                          error: null, 
                                          allWordsFetched: true,
@@ -42,7 +43,7 @@ export default function(state = initialState, action) {
                                          pageNext: action.payload.pageNext, 
                                          allWordCount: action.payload.allWordCount,
                                          page: action.payload.page ? action.payload.page : state.page,
-                                         allWordsMap: { ...action.payload.words.map(e => e.word).reduce((o, e) => (o[e] = action.payload.page, o), {}) } 
+                                         allWordsMap: action.payload.allWordsMap
                                        };
     case FETCH_WORD_FULFILLED: return { ...state, 
                                         newWordFetching: false, 
@@ -53,7 +54,7 @@ export default function(state = initialState, action) {
                                         pagePrev: action.payload.pagePrev ? action.payload.pagePrev: state.pagePrev,
                                         allWordCount: action.payload.allWordCount,
                                         page: action.payload.page ? action.payload.page : state.page,
-                                        allWordsMap: { ...action.payload.words.map(e => e.word).reduce((o, e) => (o[e] = action.payload.page, o), {}) } 
+                                        allWordsMap: { ...state.allWordsMap, ...action.payload.words.map(e => e.word).reduce((o, e) => (o[e] = action.payload.page, o), {}) } 
                                        };
     case FETCH_WORDS_REJECTED: return { ...state, 
                                         allWordsFetching: false, 

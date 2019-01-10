@@ -32,15 +32,17 @@ export const requestWord = (word) => dispatch => {
 };
 
 export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
-  const { items, pagePrev, pageNext, allWordCount } = getState().words;
+  const { items, pagePrev, pageNext, allWordCount, allWordsMap } = getState().words;
 
   let { lastModifiedMap, name } = getState().collections;
+  console.log('last modified')
+  console.log(lastModifiedMap)
   let time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : ''
 
   if (!uuid) {
     return dispatch({
       type: FETCH_WORDS_FULFILLED,
-      payload: { 'words': [], page } 
+      payload: { 'words': [], page, 'allWordsMap': {} } 
     });
   }
   else if (!lastModifiedMap[uuid] && items.length && !page) {
@@ -54,7 +56,11 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
     });
     return dispatch({
       type: FETCH_WORDS_FULFILLED,
-      payload: { 'words': items, page, pagePrev, pageNext, allWordCount }
+      payload: { 'words': items, 
+                 'allWordsMap': { ...items.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) },
+                 page, pagePrev, pageNext, 
+                 allWordCount 
+               }
     });
   }
   else {
@@ -99,7 +105,11 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
           });
           dispatch({
             type: FETCH_WORDS_FULFILLED,
-            payload: { words, pageNext, pagePrev, allWordCount, page }
+            payload: { words, 
+                       'allWordsMap': { ...allWordsMap, ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) },
+                       pageNext, pagePrev, 
+                       allWordCount, page 
+                     }
           });
         let time = Date.now();
         time = Math.floor(time/1000);
@@ -128,9 +138,11 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
 };
 
 export const deleteWord = (word) => { return (dispatch, getState) => {
-  const { uuid, name, items, lastModifiedMap } = getState().collections
-  let { page } = getState().words
+  const { uuid, name, items } = getState().collections
+  let { lastModifiedMap } = getState().collections
+  let { page, allWordsMap } = getState().words
   const { visibilityMap } = getState().visibility
+  const { refMap } = getState().refs
 
   const url = 'api/word/delete/' + word + '/' + (uuid ? uuid + '/' + page : '')
   return fetch(url)
@@ -153,11 +165,24 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
          const pagePrev = json.page_prev
          const pageNext = json.page_next
          const allWordCount = json.all_word_count
-         page = json.page
+         page = json.page ? json.page : page
+         let w
+         for (w in allWordsMap) {
+           console.log(w)
+           console.log(allWordsMap[w])
+           console.log(page)
+           if (allWordsMap[w] == page) {
+             delete allWordsMap[w]
+           }
+         }
+         console.log('after delete')
+         console.log(allWordsMap)
 
          dispatch({
             type: FETCH_WORDS_FULFILLED,
-            payload: { words, pagePrev, pageNext, allWordCount, page }
+            payload: { words, 
+                       'allWordsMap': { ...allWordsMap, ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) },
+                       pagePrev, pageNext, allWordCount, page }
           });
         dispatch({
           type: SWITCH_VISIBILITY,
@@ -167,12 +192,17 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
         let time = Date.now();
         time = Math.floor(time/1000);
         const collections = json.empty ? items.filter(e => e.name != name) : items
+        if (json.empty)
+          delete lastModifiedMap[uuid]
+        else {
+          lastModifiedMap = { ...lastModifiedMap, [uuid]: { time, 'words': { [page]: words }, name } } 
+        }
         dispatch({
           type: SAVE_COLLECTION_FULFILLED,
           payload: { items: collections,
-                     uuid: uuid, 
-                     name: name, 
-                     lastModifiedMap: { ...lastModifiedMap, [uuid]: { time, 'words': { page: words }, name } } 
+                     lastModifiedMap,
+                     uuid: json.empty ? false: uuid, 
+                     name: json.empty ? false : name, 
                    }
         })
       }
@@ -189,6 +219,7 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
 export const fetchWord = (word) => { return (dispatch, getState) => {
   const { uuid, items } = getState().collections
   let { lastModifiedMap } = getState().collections
+  let { allWordsMap } = getState().words
   const { visibilityMap } = getState().visibility
   const { refMap } = getState().refs
 
@@ -217,12 +248,13 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
           // Status looks good
           const { word, name, uuid, page } = json
           console.log(lastModifiedMap[uuid])
-          let words = lastModifiedMap[uuid]['words'][page] 
+          let words = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['words'][page] : []
           let pageNext = json.page_next
           let pagePrev = json.page_prev ? json.page_prev : 0
           let allWordCount = json.all_word_count
           console.log(pagePrev)
           console.log(pageNext)
+          console.log(json)
           if (json.words) {
             words = conflateWords(json.words)
           }
@@ -245,9 +277,14 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
           }
             words = [ obj, ...words ]
           }
+          
           dispatch({
             type: FETCH_WORD_FULFILLED,
-            payload: { 'words': words, pageNext, pagePrev, allWordCount }
+            payload: { 'words': words, 
+                       'allWordsMap': { ...allWordsMap, ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) },
+                       pageNext, page, pagePrev, 
+                       allWordCount 
+                     }
           });
           dispatch({
             type: SWITCH_VISIBILITY,
@@ -272,7 +309,8 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
                        name, 
                        lastModifiedMap: { ...lastModifiedMap, 
                                           [uuid]: { time, name,
-                                                    'words': { ...lastModifiedMap[uuid]['words'], ...{ page: words } }, 
+                                                    'words': { ...lastModifiedMap[uuid] ? lastModifiedMap[uuid]['words'] : {}, 
+                                                               ...{ [page]: words } }, 
                                                   }
                        } 
             }
@@ -310,7 +348,7 @@ export const lookUpWord = (word, uuid) => {
       });
       dispatch({
         type: FETCH_WORDS_FULFILLED,
-        payload: { 'words': items, page } 
+        payload: { 'words': items, page, 'allWordsMap': {} } 
       });
       return dispatch(fetchWord(word))
   }
