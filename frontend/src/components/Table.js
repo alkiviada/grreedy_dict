@@ -128,13 +128,13 @@ class Table extends Component {
     <BodyClassName className={data.length < 11 ? 'body-with-image' : ''}>
     <div className="words-container" ref={this.myRef}>
     { wordFetching ? <em>Loading...</em> : '' }
-    { pageNext ? <div className="pagination-right">
-                 <a className="pagination-top fas fa-chevron-right" onClick={(e) => this.navigateToPage(e, uuid, pageNext)}></a>
-                 <a className="pagination-bottom fas fa-chevron-right" onClick={(e) => this.navigateToPage(e, uuid, pageNext)}></a>
+    { pageNext ? <div className="pagination-1">
+                 <a className="pagination-a fas fa-chevron-right" onClick={(e) => this.navigateToPage(e, uuid, pageNext)}></a>
+                 <a className="pagination-b fas fa-chevron-right" onClick={(e) => this.navigateToPage(e, uuid, pageNext)}></a>
                  </div> : ''}
-    { pagePrev ? <div className="pagination-left">
-                 <a className="pagination-top fas fa-chevron-left" onClick={(e) => this.navigateToPage(e, uuid, pagePrev)}></a>
-                 <a className="pagination-bottom fas fa-chevron-left" onClick={(e) => this.navigateToPage(e, uuid, pagePrev)}></a>
+    { pagePrev ? <div className="pagination-2">
+                 <a className="pagination-a fas fa-chevron-left" onClick={(e) => this.navigateToPage(e, uuid, pagePrev)}></a>
+                 <a className="pagination-b fas fa-chevron-left" onClick={(e) => this.navigateToPage(e, uuid, pagePrev)}></a>
                  </div> : ''}
       <h2 className="coll-title">
         Showing <strong>{data.length}</strong> 

@@ -684,11 +684,49 @@ ul {
   display: grid;
   grid-template-areas: 
     "coll-title"
-    "words-table";
+    "pagination-top"
+    "words-table"
+    "pagination-bottom";
   padding: 0.1em 0.1em;
-  grid-template-rows: 2em 1fr;
+  grid-template-rows: 1.5em 1.5em 1fr 1.5em;
   grid-row-gap: .3em;
 } 
+
+.pagination-1 {
+  grid-area: pagination-top;
+}
+
+.pagination-2 {
+  grid-area: pagination-bottom;
+}
+
+.pagination-1, .pagination-2 {
+  display: grid;
+  position: relative;
+  grid-template-areas: 
+  "left . right";
+  grid-template-columns: 1em 1fr 1em;
+}
+
+.pagination-a {
+  grid-area: right;
+  right: .8em;
+}
+
+.pagination-b {
+  grid-area: left;
+  left: 3.5em;
+}
+
+.pagination-a, .pagination-b {
+  color: var(--field-color);
+  position: sticky;
+  cursor: pointer;
+  font-size: .9rem;
+  align-self: center;
+  font-weight: 900;
+  justify-self: center;
+}
 
 .words-invite {
   grid-area: coll-title;
@@ -896,15 +934,15 @@ ul {
     padding: .1em .07em .1em .2em !important;
   }
 
-.pagination-right {
+.pagination-1 {
   grid-area: pagination-right;
 }
 
-.pagination-left {
+.pagination-2 {
   grid-area: pagination-left;
 }
 
-.pagination-right, .pagination-left {
+.pagination-1, .pagination-2 {
   display: grid;
   position: relative;
   grid-template-areas: 
@@ -914,19 +952,19 @@ ul {
   grid-template-rows: 1em 1fr 1em;
 }
 
-.pagination-top {
+.pagination-a {
   grid-area: top;
   top: 3.5em;
   color: var(--field-color);
 }
 
-.pagination-bottom {
+.pagination-b {
   grid-area: bottom;
   bottom: 3.5em;
   color: var(--sky-color);
 }
 
-.pagination-top, .pagination-bottom {
+.pagination-a, .pagination-b {
   position: sticky;
   cursor: pointer;
   font-size: .9rem;

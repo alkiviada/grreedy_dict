@@ -3,6 +3,7 @@ import {
   SAVE_COLLECTION_FULFILLED, 
   CLEAR_NEW_WORD_ERROR, FETCH_WORDS, 
   CLEAR_FETCHED, 
+  CLEAR_FETCHING, 
   FETCH_WORDS_FULFILLED, 
   FETCH_WORDS_REJECTED, 
   FETCH_WORD, 
@@ -28,6 +29,12 @@ export const clearNewWordError = () => dispatch => {
 export const clearFetched = () => dispatch => {
   dispatch({
     type: CLEAR_FETCHED,
+  })
+};
+
+export const clearFetching = () => dispatch => {
+  dispatch({
+    type: CLEAR_FETCHING,
   })
 };
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { lookUpWord, requestWord, clearNewWordError, fetchWords, clearFetched } from '../actions/wordsActions';
+import { lookUpWord, requestWord, clearNewWordError, fetchWords, clearFetched, clearFetching } from '../actions/wordsActions';
 import { scrollToDomRef } from './helpers';
 
 class NewWordForm extends Component {
@@ -24,9 +24,12 @@ class NewWordForm extends Component {
   }
 
   componentDidUpdate() {
-    const { word, page, allWordsMap, refMap } = this.props
-    if (refMap[word] && refMap[word].current)
+    const { word, page, fetched, allWordsMap, refMap } = this.props
+    console.log(fetched)
+    if (refMap[word] && refMap[word].current && fetched) {
       scrollToDomRef(refMap[word], 80)
+      this.props.clearFetched()
+    }
   }
 
   handleWordChange(w) {
@@ -68,7 +71,7 @@ class NewWordForm extends Component {
       else if (refMap[word]) {
         this.props.requestWord(word);
         scrollToDomRef(refMap[word], 80)
-        this.props.clearFetched()
+        this.props.clearFetching()
       }
     }
     this.setState({word: ''})
@@ -94,6 +97,7 @@ const mapStateToProps = state => ({
   allWordsMap: state.words.allWordsMap,
   allWords: state.words.items,
   fetching: state.words.newWordFetching,
+  fetched: state.words.newWordFetched,
   error: state.words.error,
   word: state.words.word,
   page: state.words.page,
@@ -107,4 +111,4 @@ NewWordForm.propTypes = {
   requestWord: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, { lookUpWord, requestWord, clearNewWordError, fetchWords, clearFetched })(NewWordForm);
+export default connect(mapStateToProps, { lookUpWord, requestWord, clearNewWordError, fetchWords, clearFetched, clearFetching })(NewWordForm);
