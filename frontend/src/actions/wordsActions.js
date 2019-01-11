@@ -178,16 +178,10 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
          page = json.page ? json.page : page
          let w
          for (w in allWordsMap) {
-           console.log(w)
-           console.log(allWordsMap[w])
-           console.log(page)
            if (allWordsMap[w] == page) {
              delete allWordsMap[w]
            }
          }
-         console.log('after delete')
-         console.log(allWordsMap)
-
          dispatch({
             type: FETCH_WORDS_FULFILLED,
             payload: { words, 
