@@ -66,7 +66,7 @@ class WordList(generics.ListAPIView):
       print(time)
       coll = Collection.objects.get(uuid=uuid) 
       print(int(coll.last_modified_date.timestamp()))
-      if coll and ((not time or int(coll.last_modified_date.timestamp()) > int(time)) or (page and page != 1)):
+      if coll and ((not time or int(coll.last_modified_date.timestamp()) > int(time))):
         all_words = coll.words.all()
         distinct_words = set()
         words = [w for w in all_words if w.word not in distinct_words and (distinct_words.add(w.word) or True)]

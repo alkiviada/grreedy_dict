@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { lookUpWord, requestWord, clearNewWordError, fetchWords } from '../actions/wordsActions';
+import { lookUpWord, requestWord, clearNewWordError, fetchWords, clearFetched } from '../actions/wordsActions';
 import { scrollToDomRef } from './helpers';
 
 class NewWordForm extends Component {
@@ -68,6 +68,7 @@ class NewWordForm extends Component {
       else if (refMap[word]) {
         this.props.requestWord(word);
         scrollToDomRef(refMap[word], 80)
+        this.props.clearFetched()
       }
     }
     this.setState({word: ''})
@@ -106,4 +107,4 @@ NewWordForm.propTypes = {
   requestWord: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, { lookUpWord, requestWord, clearNewWordError, fetchWords })(NewWordForm);
+export default connect(mapStateToProps, { lookUpWord, requestWord, clearNewWordError, fetchWords, clearFetched })(NewWordForm);

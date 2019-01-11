@@ -2,6 +2,7 @@ import {
   FETCH_COLLECTION_FULFILLED, 
   SAVE_COLLECTION_FULFILLED, 
   CLEAR_NEW_WORD_ERROR, FETCH_WORDS, 
+  CLEAR_FETCHED, 
   FETCH_WORDS_FULFILLED, 
   FETCH_WORDS_REJECTED, 
   FETCH_WORD, 
@@ -24,6 +25,12 @@ export const clearNewWordError = () => dispatch => {
   })
 };
 
+export const clearFetched = () => dispatch => {
+  dispatch({
+    type: CLEAR_FETCHED,
+  })
+};
+
 export const requestWord = (word) => dispatch => {
   dispatch({
     type: FETCH_WORD,
@@ -32,7 +39,9 @@ export const requestWord = (word) => dispatch => {
 };
 
 export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
-  const { items, pagePrev, pageNext, allWordCount, allWordsMap } = getState().words;
+  const { items, allWordsMap } = getState().words;
+  let { pagePrev, pageNext, allWordCount } = getState().words;
+  console.log(pagePrev, pageNext, allWordCount)
 
   let { lastModifiedMap, name } = getState().collections;
 
@@ -64,6 +73,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
   }
   else {
     page = page || 1
+    time = (lastModifiedMap[uuid] && lastModifiedMap[uuid]['words'][page]) ? time : ''
     const url = 'api/words/' + (uuid ? uuid + `/${page}/` + time : '')
     return fetch(url)
       .then(response =>
@@ -82,10 +92,6 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
         } else {
           console.log('i have some fresh json')
           let words = []
-          let name = ''
-          let pagePrev = 0
-          let pageNext = 0
-          let allWordCount = 0
           if (json.words) {
             name = json.name;
             uuid = json.uuid
@@ -114,6 +120,8 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
             console.log('i fetched from local')
             words = lastModifiedMap[uuid]['words'][page]
             name = lastModifiedMap[uuid]['name']
+            pagePrev = page > 1 ? page - 1 : 0
+            pageNext = (page*20) < allWordCount ? page + 1 : 0
           }
           dispatch({
             type: FETCH_COLLECTION_FULFILLED,

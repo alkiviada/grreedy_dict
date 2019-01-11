@@ -1,4 +1,5 @@
 import { CLEAR_NEW_WORD_ERROR, 
+         CLEAR_FETCHED, 
          FETCH_WORDS, 
          FETCH_WORDS_FULFILLED, 
          FETCH_WORDS_REJECTED, 
@@ -29,6 +30,10 @@ export default function(state = initialState, action) {
     case CLEAR_NEW_WORD_ERROR: return { ...state, 
                                          error: null
                                       };
+    case CLEAR_FETCHED: return { ...state, 
+                                newWordFetched: true, 
+                                newWordFetching: false,
+                               };
     case FETCH_WORD: return { ...state, 
                                newWordFetching: true, 
                                word: action.payload
