@@ -35,8 +35,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
   const { items, pagePrev, pageNext, allWordCount, allWordsMap } = getState().words;
 
   let { lastModifiedMap, name } = getState().collections;
-  console.log('last modified')
-  console.log(lastModifiedMap)
+
   let time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : ''
 
   if (!uuid) {
@@ -94,8 +93,25 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
             pagePrev = json.page_prev
             pageNext = json.page_next
             allWordCount = json.all_word_count
+
+           let time = Date.now();
+           time = Math.floor(time/1000);
+           lastModifiedMap[uuid] = lastModifiedMap[uuid] ? lastModifiedMap[uuid] : {'words': {}, 'time': 0, 'name': ''}
+           lastModifiedMap[uuid]['words'][page] = words
+           lastModifiedMap[uuid]['name'] = name 
+           lastModifiedMap[uuid]['time'] = time 
+           console.log(lastModifiedMap)
+           dispatch({
+             type: SAVE_COLLECTION_FULFILLED,
+             payload: { items: getState().collections.items,
+                        uuid, 
+                        name, 
+                        lastModifiedMap 
+                      }
+           })
           }
           else {
+            console.log('i fetched from local')
             words = lastModifiedMap[uuid]['words'][page]
             name = lastModifiedMap[uuid]['name']
           }
@@ -111,20 +127,6 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
                        allWordCount, page 
                      }
           });
-        let time = Date.now();
-        time = Math.floor(time/1000);
-        lastModifiedMap[uuid] = {'words': {}, 'time': 0, 'name': ''}
-        lastModifiedMap[uuid]['words'][page] = words
-        lastModifiedMap[uuid]['name'] = name 
-        lastModifiedMap[uuid]['time'] = time 
-        dispatch({
-          type: SAVE_COLLECTION_FULFILLED,
-          payload: { items: getState().collections.items,
-                     uuid, 
-                     name, 
-                     lastModifiedMap 
-                   }
-        })
         }
       },
       // Either fetching or parsing failed!

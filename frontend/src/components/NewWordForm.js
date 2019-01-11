@@ -15,11 +15,16 @@ class NewWordForm extends Component {
     this.onSubmit = this.onSubmitLookUp.bind(this);
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    const n_fetching = nextProps.fetching
+    const o_fetching = this.props.fetching
+    if (o_fetching)
+      return false
+    return true;
+  }
+
   componentDidUpdate() {
     const { word, page, allWordsMap, refMap } = this.props
-    console.log(word)
-    console.log('i updated')
-    console.log(refMap[word])
     if (refMap[word] && refMap[word].current)
       scrollToDomRef(refMap[word], 80)
   }
@@ -35,11 +40,7 @@ class NewWordForm extends Component {
     e.preventDefault();
     console.log('looking up');
     const { word } = this.state
-    console.log(word)
-    console.log(page)
     const { page, allWordsMap, refMap, uuid } = this.props
-    console.log(allWordsMap)
-    console.log(refMap[word])
     if (refMap[word]) {
       console.log('i have ref')
       console.log(this.props.refMap[word].current)
