@@ -113,6 +113,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
            lastModifiedMap[uuid]['words'][page] = words
            lastModifiedMap[uuid]['name'] = name 
            lastModifiedMap[uuid]['time'] = time 
+           lastModifiedMap[uuid]['allWordCount'] = allWordCount
            console.log(lastModifiedMap)
            dispatch({
              type: SAVE_COLLECTION_FULFILLED,
@@ -127,12 +128,14 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
             console.log('i fetched from local')
             words = lastModifiedMap[uuid]['words'][page]
             name = lastModifiedMap[uuid]['name']
+            allWordCount = lastModifiedMap[uuid]['allWordCount']
+            console.log(allWordCount)
             pagePrev = page > 1 ? page - 1 : 0
             pageNext = (page*20) < allWordCount ? page + 1 : 0
           }
           dispatch({
             type: FETCH_COLLECTION_FULFILLED,
-            payload: { uuid: uuid, name: name }
+            payload: { uuid, name }
           });
           dispatch({
             type: FETCH_WORDS_FULFILLED,
@@ -206,7 +209,7 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
         if (json.empty)
           delete lastModifiedMap[uuid]
         else {
-          lastModifiedMap = { ...lastModifiedMap, [uuid]: { time, 'words': { [page]: words }, name } } 
+          lastModifiedMap = { ...lastModifiedMap, [uuid]: { time, 'words': { [page]: words }, name, allWordCount } } 
         }
         dispatch({
           type: SAVE_COLLECTION_FULFILLED,
@@ -319,7 +322,7 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
                        uuid, 
                        name, 
                        lastModifiedMap: { ...lastModifiedMap, 
-                                          [uuid]: { time, name,
+                                          [uuid]: { time, name, allWordCount,
                                                     'words': { ...lastModifiedMap[uuid] ? lastModifiedMap[uuid]['words'] : {}, 
                                                                ...{ [page]: words } }, 
                                                   }

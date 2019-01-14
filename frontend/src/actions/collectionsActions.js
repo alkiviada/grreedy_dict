@@ -170,10 +170,16 @@ export const saveCollection = (name, wordsString) => { return (dispatch, getStat
           
           const { lastModifiedMap } = getState().collections
           const words = getState().words.items || []
+          const { page, allWordCount } = getState().words 
 
           dispatch({
             type: SAVE_COLLECTION_FULFILLED,
-            payload: { items: colls, lastModifiedMap: {...lastModifiedMap, [uuid]: { time, words, name }} }
+            payload: { items: colls, lastModifiedMap: {...lastModifiedMap, 
+                                                       [uuid]: { time, allWordCount,
+                                                                'words': {...lastModifiedMap[uuid]['words'], ...{[page]: words} }, 
+                                                                 name }
+                                                      } 
+            }
           }),
           dispatch({
             type: FETCH_NOTE_FULFILLED,

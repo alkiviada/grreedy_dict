@@ -687,35 +687,49 @@ ul {
     "pagination-top"
     "words-table"
     "pagination-bottom";
-  padding: 0.1em 0.1em;
-  grid-template-rows: 1.5em 1.5em 1fr 1.5em;
-  grid-row-gap: .3em;
+  padding: .1em .1em;
+  grid-template-rows: 1.5em 1.3em 1fr;
+  grid-row-gap: .1em;
 } 
 
 .pagination-1 {
   grid-area: pagination-top;
 }
 
-.pagination-2 {
-  grid-area: pagination-bottom;
-}
 
 .pagination-1, .pagination-2 {
   display: grid;
-  position: relative;
   grid-template-areas: 
   "left . right";
-  grid-template-columns: 1em 1fr 1em;
+  position: sticky;
+}
+
+.pagination-1 > .pagination-b:before {
+  content: "\f053";
+}
+
+.pagination-2 {
+  display: none;
+  grid-area: pagination-bottom;
+}
+
+.pagination-1 {
+  top: 2.8em;
+  background-color: var(--sky-color);
+  z-index: 99999999;
+  opacity: .7;
 }
 
 .pagination-a {
   grid-area: right;
-  right: .8em;
+  justify-self: right;
+  margin-right: 1em;
 }
 
 .pagination-b {
   grid-area: left;
-  left: 3.5em;
+  justify-self: left;
+  margin-left: 1em;
 }
 
 .pagination-a, .pagination-b {
@@ -725,7 +739,7 @@ ul {
   font-size: .9rem;
   align-self: center;
   font-weight: 900;
-  justify-self: center;
+  text-shadow: 1px 1px 2px pink;
 }
 
 .words-invite {
@@ -936,15 +950,19 @@ ul {
 
 .pagination-1 {
   grid-area: pagination-right;
+  background-color: inherit;
 }
 
 .pagination-2 {
   grid-area: pagination-left;
 }
 
+.pagination-1 > .pagination-b:before {
+  content: "\f054";
+}
+
 .pagination-1, .pagination-2 {
   display: grid;
-  position: relative;
   grid-template-areas: 
   "top"
   "."
@@ -956,12 +974,14 @@ ul {
   grid-area: top;
   top: 3.5em;
   color: var(--field-color);
+  margin-right: 0;
 }
 
 .pagination-b {
   grid-area: bottom;
   bottom: 3.5em;
   color: var(--sky-color);
+  margin-left: 0;
 }
 
 .pagination-a, .pagination-b {
@@ -971,6 +991,7 @@ ul {
   align-self: center;
   font-weight: 900;
   justify-self: center;
+  text-shadow: none;
 }
 
 }
