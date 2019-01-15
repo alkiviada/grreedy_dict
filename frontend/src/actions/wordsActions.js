@@ -127,6 +127,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
           else {
             console.log('i fetched from local')
             words = lastModifiedMap[uuid]['words'][page]
+            console.log(words)
             name = lastModifiedMap[uuid]['name']
             allWordCount = lastModifiedMap[uuid]['allWordCount']
             console.log(allWordCount)
