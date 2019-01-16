@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import WordCell from "./WordCell";
+import WordLabel from "./WordLabel";
 import key from "weak-key";
 import { connect } from 'react-redux';
 import { deleteWord, lookUpWord, fetchWords, requestWords, requestWord } from '../actions/wordsActions';
@@ -96,7 +97,7 @@ class Table extends Component {
   }
 
   render () {
-    const { data, pagePrev, pageNext, allWordCount, uuid } = this.props;
+    const { data, pagePrev, pageNext, allWordCount, uuid, page } = this.props;
 
     const allFetching = this.props.allFetching;
     console.log('i am rendering table')
@@ -137,7 +138,7 @@ class Table extends Component {
                  <a className="pagination-b fas fa-chevron-left" onClick={(e) => this.navigateToPage(e, uuid, pagePrev)}></a>
                  </div> : <div className="pagination-2-placeholder"></div> }
       <h2 className="coll-title">
-        Showing <strong>{data.length}</strong> 
+        Showing <WordLabel count={data.length} page={page} allCount={allWordCount} /> 
         { allWordCount ? ` out of ${allWordCount} ` : ' ' } 
         <strong>word{data.length > 1 ? 's' : ''}</strong>
       </h2>
