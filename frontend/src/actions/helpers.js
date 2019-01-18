@@ -18,13 +18,14 @@ export const conflateWords = (words) => {
 
 export const reshuffleWordsOnPages = (newEl, wordsToPagesMap, allWordsMap, page, maxWords = 20) => {
   let wordsOnPage = wordsToPagesMap[page]
+
   wordsOnPage = [ newEl, ...wordsOnPage ]
-  if (wordsOnPage > maxWords) {
+  if (wordsOnPage.length > maxWords) {
     newEl = wordsOnPage.pop()
     wordsToPagesMap[page] = wordsOnPage
     allWordsMap = { ...allWordsMap, ...wordsOnPage.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) }
     page = page + 1
-    reshuffleWordsOnPages(newEl, wordsToPagesMap, allWordsMap, page)
+    return wordsToPagesMap[page] ? reshuffleWordsOnPages(newEl, wordsToPagesMap, allWordsMap, page) : wordsToPagesMap, allWordsMap
   }
   else {
     wordsToPagesMap[page] = wordsOnPage

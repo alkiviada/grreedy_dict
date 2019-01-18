@@ -18,7 +18,6 @@ class NewWordForm extends Component {
 
   componentDidUpdate() {
     const { word, page, fetched, allWordsMap, refMap } = this.props
-    console.log(fetched)
     if (refMap[word] && refMap[word].current && fetched) {
       scrollToDomRef(refMap[word], 80)
       this.props.clearFetched()
@@ -41,7 +40,6 @@ class NewWordForm extends Component {
       console.log('ive never seen this word')
       this.props.requestWord(word);
       this.props.lookUpWord(word, uuid).then(() => {
-        console.log(refMap[word])
         console.log('strange')
       })
     }

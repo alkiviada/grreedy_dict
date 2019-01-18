@@ -1111,7 +1111,9 @@ font-family: FontAwesome;
 
 @media(max-width: 800px) {
 .hide-me {
-    display: none;
+    visibility: hidden;
+    height: 0;
+    padding: 0;
 }
 
   .react-tabs__tab-list {

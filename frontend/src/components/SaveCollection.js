@@ -42,7 +42,7 @@ class SaveCollection extends Component {
   render () {
     const words = this.props.allWords;
     const saving = this.props.saving
-    const name = !this.props.fetched ? this.state.name : this.props.name
+    const name = !this.props.fetched ? (this.state.name ? this.state.name : this.props.name) : this.props.name
 
     const auth = this.props.auth
 

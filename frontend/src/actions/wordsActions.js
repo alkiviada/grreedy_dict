@@ -68,7 +68,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
 
     dispatch({
       type: FETCH_COLLECTION_FULFILLED,
-      payload: { uuid: uuid, name: name }
+      payload: { uuid, name }
     });
     return dispatch({
       type: FETCH_WORDS_FULFILLED,
@@ -116,16 +116,10 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
            lastModifiedMap[uuid]['time'] = time 
            lastModifiedMap[uuid]['allWordCount'] = allWordCount
            dispatch({
-             type: SAVE_COLLECTION_FULFILLED,
-             payload: { items: getState().collections.items,
-                        uuid, 
-                        name, 
-                        lastModifiedMap 
-                      }
-           });
-           dispatch({
              type: SWITCH_VISIBILITY,
-             payload: { ...getState().visibility.visibilityMap, ...words.reduce((v, w) => (v[w.word] = 'show',v), {}) }
+             payload: { ...getState().visibility.visibilityMap, 
+                        ...words.reduce((v, w) => (v[w.word] = 'show',v), {}) 
+                      }
            });
           }
           else {
@@ -136,6 +130,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
             pagePrev = page > 1 ? page - 1 : 0
             pageNext = (page*20) < allWordCount ? page + 1 : 0
           }
+          console.log(name)
           dispatch({
             type: FETCH_COLLECTION_FULFILLED,
             payload: { uuid, name }
@@ -143,11 +138,20 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
           dispatch({
             type: FETCH_WORDS_FULFILLED,
             payload: { words, 
-                       'allWordsMap': { ...allWordsMap, ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) },
+                       'allWordsMap': { ...allWordsMap, 
+                                        ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) },
                        pageNext, pagePrev, 
                        allWordCount, page 
                      }
           });
+          dispatch({
+            type: SAVE_COLLECTION_FULFILLED,
+            payload: { items: getState().collections.items,
+                       uuid, 
+                       name, 
+                       lastModifiedMap 
+                     }
+           });
         }
       },
       // Either fetching or parsing failed!
@@ -181,7 +185,8 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
         if (status >= 400) {
           // Status looks bad
           console.log('Server returned error status');
-          dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed', word: word}})
+          dispatch({ type: FETCH_WORDS_REJECTED, 
+                     payload: {error: 'fetching words failed', word: word}})
         } else {
           // Status looks good
          const words = json.empty ? [] : conflateWords(json.words) 
@@ -290,6 +295,10 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
                                       'is_verb' : e['is_verb'], 
                                       'etymology': e['word_etymologies'] } ], o), {}
                                  );
+          dispatch({
+            type: SWITCH_VISIBILITY,
+            payload: { ...visibilityMap, ...{ [obj.word]: 'show' } }
+          });
           if (words.length >= 20) {
             console.log('popping')
             const popped = words.pop();
@@ -303,6 +312,7 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
             allWordsMap = { ...allWordsMap, ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) }
           }
           console.log(allWordsMap)
+          console.log(lastModifiedMap)
           
           dispatch({
             type: FETCH_WORD_FULFILLED,
@@ -313,18 +323,10 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
                      }
           });
           dispatch({
-            type: SWITCH_VISIBILITY,
-            payload: { ...visibilityMap, ...{ [word]: 'show' } }
-          });
-          dispatch({
             type: MAP_REF,
             payload: { }
           });
 
-          dispatch({
-            type: FETCH_COLLECTION_FULFILLED,
-            payload: { uuid, name }
-          });
 
           let time = Date.now();
           time = Math.floor(time/1000);
@@ -340,7 +342,11 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
                                                   }
                        } 
             }
-          })
+          });
+          dispatch({
+            type: FETCH_COLLECTION_FULFILLED,
+            payload: { uuid, name }
+          });
         }
       },
       // Either fetching or parsing failed!
@@ -370,7 +376,7 @@ export const lookUpWord = (word, uuid) => {
 
       dispatch({
         type: FETCH_COLLECTION_FULFILLED,
-        payload: { uuid: uuid, name: name }
+        payload: { uuid, name }
       });
       dispatch({
         type: FETCH_WORDS_FULFILLED,
