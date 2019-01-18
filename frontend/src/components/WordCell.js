@@ -35,6 +35,7 @@ class WordCell extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { word } = nextProps 
+
     if (nextProps.word == this.props.word && (nextProps.visibilityMap[word] == this.props.visibilityMap[word]) && (nextProps.refMap[word] && (nextProps.refMap[word] == this.props.refMap[word]))) {
       return 0
     }

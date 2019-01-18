@@ -24,6 +24,5 @@ export const renderList = (el, fn, ref, orig, styles, styleCount) => {
 
 export const scrollToDomRef = (ref, offset = 35) => {
   const domNode = ReactDOM.findDOMNode(ref.current)
-  console.log(domNode)
   window.scrollTo(0, domNode.offsetTop-offset)
 }

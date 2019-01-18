@@ -48,7 +48,8 @@ export const requestWord = (word) => dispatch => {
 export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
   const { items, allWordsMap } = getState().words;
   let { pagePrev, pageNext, allWordCount } = getState().words;
-  console.log(pagePrev, pageNext, allWordCount)
+  const { visibilityMap } = getState().visibility
+  console.log(visibilityMap)
 
   let { lastModifiedMap, name } = getState().collections;
 
@@ -114,7 +115,6 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
            lastModifiedMap[uuid]['name'] = name 
            lastModifiedMap[uuid]['time'] = time 
            lastModifiedMap[uuid]['allWordCount'] = allWordCount
-           console.log(lastModifiedMap)
            dispatch({
              type: SAVE_COLLECTION_FULFILLED,
              payload: { items: getState().collections.items,
@@ -122,15 +122,17 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
                         name, 
                         lastModifiedMap 
                       }
-           })
+           });
+           dispatch({
+             type: SWITCH_VISIBILITY,
+             payload: { ...getState().visibility.visibilityMap, ...words.reduce((v, w) => (v[w.word] = 'show',v), {}) }
+           });
           }
           else {
             console.log('i fetched from local')
             words = lastModifiedMap[uuid]['words'][page]
-            console.log(words)
             name = lastModifiedMap[uuid]['name']
             allWordCount = lastModifiedMap[uuid]['allWordCount']
-            console.log(allWordCount)
             pagePrev = page > 1 ? page - 1 : 0
             pageNext = (page*20) < allWordCount ? page + 1 : 0
           }
@@ -262,16 +264,22 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
         } else {
           // Status looks good
           const { word, name, uuid, page } = json
+
           console.log(lastModifiedMap[uuid])
+
           let words = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['words'][page] : []
+
           let pageNext = json.page_next
           let pagePrev = json.page_prev ? json.page_prev : 0
           let allWordCount = json.all_word_count
+
           console.log(pagePrev)
           console.log(pageNext)
           console.log(json)
+
           if (json.words) {
             words = conflateWords(json.words)
+            allWordsMap = { ...allWordsMap, ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) }
           }
           else {
 
@@ -286,17 +294,20 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
             console.log('popping')
             const popped = words.pop();
             pageNext = 2;            
+            allWordsMap = filterMap(allWordsMap, popped.word)
             if (lastModifiedMap[uuid]['words'][pageNext]) {
-              lastModifiedMap = reshuffleWordsOnPages(popped, lastModifiedMap[uuid]['words'], pageNext)
+              lastModifiedMap, allWordsMap = reshuffleWordsOnPages(popped, lastModifiedMap[uuid]['words'], allWordsMap, pageNext)
             }
           }
             words = [ obj, ...words ]
+            allWordsMap = { ...allWordsMap, ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) }
           }
+          console.log(allWordsMap)
           
           dispatch({
             type: FETCH_WORD_FULFILLED,
-            payload: { 'words': words, 
-                       'allWordsMap': { ...allWordsMap, ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) },
+            payload: { words, 
+                       allWordsMap,
                        pageNext, page, pagePrev, 
                        allWordCount 
                      }

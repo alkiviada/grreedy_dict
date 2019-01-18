@@ -15,13 +15,6 @@ class NewWordForm extends Component {
     this.onSubmit = this.onSubmitLookUp.bind(this);
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const n_fetching = nextProps.fetching
-    const o_fetching = this.props.fetching
-    if (o_fetching)
-      return false
-    return true;
-  }
 
   componentDidUpdate() {
     const { word, page, fetched, allWordsMap, refMap } = this.props
@@ -44,18 +37,12 @@ class NewWordForm extends Component {
     console.log('looking up');
     const { word } = this.state
     const { page, allWordsMap, refMap, uuid } = this.props
-    if (refMap[word]) {
-      console.log('i have ref')
-      console.log(this.props.refMap[word].current)
-    }
     if (!allWordsMap[word]) {
       console.log('ive never seen this word')
       this.props.requestWord(word);
       this.props.lookUpWord(word, uuid).then(() => {
         console.log(refMap[word])
         console.log('strange')
-        if (refMap[word] && refMap[word].current)
-          scrollToDomRef(refMap[word], 80)
       })
     }
     else {
@@ -64,8 +51,7 @@ class NewWordForm extends Component {
         console.log('i used to see this word but elsewhere')
         this.props.requestWord(word);
         this.props.fetchWords(uuid, allWordsMap[word]).then(() => {
-          if (refMap[word] && refMap[word].current)
-            scrollToDomRef(refMap[word], 80)
+          this.props.clearFetching()
         })
       }
       else if (refMap[word]) {
