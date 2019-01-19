@@ -947,6 +947,7 @@ ul {
   .pagination-1, .pagination-2 {
     background-color: inherit;
     top: 0;
+    z-index: 0;
     grid-template-columns: 1fr;
   }
 
@@ -1132,6 +1133,7 @@ font-family: FontAwesome;
 .user-tag {
   margin-bottom: .1em !important;
 }
+
 .words-table {
   grid-template-areas: 
     "words-rows";
