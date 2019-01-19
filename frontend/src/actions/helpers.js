@@ -17,19 +17,19 @@ export const conflateWords = (words) => {
 }
 
 export const reshuffleWordsOnPages = (newEl, wordsToPagesMap, allWordsMap, page, maxWords = 20) => {
-  let wordsOnPage = wordsToPagesMap[page]
+  let wordsOnPage = wordsToPagesMap[page] ? wordsToPagesMap[page] : []
 
   wordsOnPage = [ newEl, ...wordsOnPage ]
+  allWordsMap = { ...allWordsMap, ...{ [newEl.word]: page } }
+  console.log(allWordsMap)
   if (wordsOnPage.length > maxWords) {
     newEl = wordsOnPage.pop()
     wordsToPagesMap[page] = wordsOnPage
-    allWordsMap = { ...allWordsMap, ...wordsOnPage.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) }
     page = page + 1
-    return wordsToPagesMap[page] ? reshuffleWordsOnPages(newEl, wordsToPagesMap, allWordsMap, page) : wordsToPagesMap, allWordsMap
+    return reshuffleWordsOnPages(newEl, wordsToPagesMap, allWordsMap, page)
   }
   else {
     wordsToPagesMap[page] = wordsOnPage
-    allWordsMap = { ...allWordsMap, ...wordsOnPage.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) }
   }
   return wordsToPagesMap, allWordsMap
 }
@@ -46,4 +46,19 @@ export const filterMap = (map, w) => {
   return Object.keys(map).filter(k => k != w)
     .map(k => Object.assign({}, {[k]: map[k]}))
     .reduce((res, o) => Object.assign(res, o), {});
+}
+
+export const shiftWordsOnPages = (newEl, wordsToPagesMap, allWordsMap, page, maxWords = 20) => {
+  let wordsOnPage = wordsToPagesMap[page-1]
+  console.log(wordsOnPage)
+
+  wordsOnPage = [ ...wordsOnPage, newEl ]
+  wordsToPagesMap[page-1] = wordsOnPage
+  allWordsMap = { ...allWordsMap, ...{ [newEl.word]: page-1 } }
+  page = page + 1
+  if (wordsToPagesMap[page]) {
+    newEl = wordsToPagesMap[page].shift()
+    return shiftWordsOnPages(newEl, wordsToPagesMap, allWordsMap, page)
+  }
+  return wordsToPagesMap, allWordsMap
 }

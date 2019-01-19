@@ -206,7 +206,7 @@ class WordSingleDelete(generics.RetrieveAPIView):
     word = self.kwargs['word'].lower()
     return Word.single_object.filter(word=word)
 
-  def get(self, request, word, uuid, page, *args, **kwargs):
+  def get(self, request, word, uuid, page, time, *args, **kwargs):
     print('DELETE: ' + word);
     word = word.lower()
     db_words = Word.single_object.filter(word=word);
@@ -225,40 +225,39 @@ class WordSingleDelete(generics.RetrieveAPIView):
         w.delete()
 
     if not is_empty:
-      coll.update_fields({ 'last_modified_date': timezone.now() })
-      page_count = 0
-      all_words = coll.words.all()
-      distinct_words = set()
-      words = [w for w in all_words if w.word not in distinct_words and (distinct_words.add(w.word) or True)]
-      print(len(words))
-      if len(words) > WORDS_ON_PAGE:
-        p = Paginator(words, WORDS_ON_PAGE)
-        page_count = p.num_pages 
-        print(page)
-        all_words_for_page = []
-        words_on_page = []
-        try:
-          words_on_page = p.page(page).object_list
-        except EmptyPage:
-          page = int(page) - 1
-          words_on_page = p.page(page).object_list
+      if (not time or int(coll.last_modified_date.timestamp()) > int(time)):
+        page_count = 0
+# something changed meanwhile - let's deal with changes
+        all_words = coll.words.all()
+        distinct_words = set()
+        words = [w for w in all_words if w.word not in distinct_words and (distinct_words.add(w.word) or True)]
+        if len(words) > WORDS_ON_PAGE:
+          p = Paginator(words, WORDS_ON_PAGE)
+          page_count = p.num_pages 
+          all_words_for_page = []
+          words_on_page = []
+          try:
+            words_on_page = p.page(page).object_list
+          except EmptyPage:
+            page = int(page) - 1
+            words_on_page = p.page(page).object_list
 
-        for w in words_on_page:
-          all_words_for_page.append(w)
-          omonyms = Word.single_object.filter(words=coll, word=w.word).exclude(language=w.language)
-          all_words_for_page.extend(omonyms)
+          for w in words_on_page:
+            all_words_for_page.append(w)
+            omonyms = Word.single_object.filter(words=coll, word=w.word).exclude(language=w.language)
+            all_words_for_page.extend(omonyms)
             
-        print(all_words_for_page)
-        words = all_words_for_page
-      else:
-        words = coll.words.all()
-      serializer = WordSerializer(words, many=True)
-      print('i will return here');
-      if page_count > 1:
-        print(999999999)
-        print(page)
-        print(len(serializer.data))
-        return Response({ 
+          words = all_words_for_page
+        else:
+          words = coll.words.all()
+        serializer = WordSerializer(words, many=True)
+        print('i will return here');
+        coll.update_fields({ 'last_modified_date': timezone.now() })
+        if page_count > 1:
+          print(999999999)
+          print(page)
+          print(len(serializer.data))
+          return Response({ 
                           'words': serializer.data, 
                           'page_next': int(page) + 1 if int(page) + 1 <= page_count else 0,
                           'page_prev': int(page) - 1 if int(page) - 1 > 0 else 0,
@@ -267,13 +266,17 @@ class WordSingleDelete(generics.RetrieveAPIView):
                           'uuid': coll.uuid,
                           'all_word_count': len(distinct_words) if len(distinct_words) > 20 else 0
                        })
-      else:
-        return Response({
+        else:
+          return Response({
                           'words': serializer.data, 
                           'name': coll.name,
                           'uuid': coll.uuid,
                           'page': page
                        })
+      else:
+        print('nothing changed')
+        return Response({ })
+        
     return Response({'empty': is_empty})
 
 class WordSingleCreate(generics.ListAPIView):

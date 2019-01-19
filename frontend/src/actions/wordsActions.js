@@ -12,7 +12,7 @@ import {
   SWITCH_VISIBILITY
 } from './types';
 
-import { conflateWords, filterMap, reshuffleWordsOnPages } from './helpers';
+import { conflateWords, filterMap, reshuffleWordsOnPages, shiftWordsOnPages } from './helpers';
 
 export const requestWords = () => dispatch => {
   dispatch({
@@ -46,8 +46,8 @@ export const requestWord = (word) => dispatch => {
 };
 
 export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
-  const { items, allWordsMap } = getState().words;
-  let { pagePrev, pageNext, allWordCount } = getState().words;
+  const { items } = getState().words;
+  let { pagePrev, pageNext, allWordCount, allWordsMap } = getState().words;
   const { visibilityMap } = getState().visibility
   console.log(visibilityMap)
 
@@ -111,10 +111,24 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
            let time = Date.now();
            time = Math.floor(time/1000);
            lastModifiedMap[uuid] = lastModifiedMap[uuid] ? lastModifiedMap[uuid] : {'words': {}, 'time': 0, 'name': ''}
+           if (lastModifiedMap[uuid]['words'][page]) {
+// this collection has changed meanwhile, 
+// because i have now recieved a fresh page 
+// instead of a permission to use cache  
+// and as i do have some stale cache of it,
+// let's nuke it 
+             lastModifiedMap[uuid]['words'] = { page: [] }
+             allWordsMap = { ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) }
+           }
+           else {
+// this is just a new page of a collection that did not change meanwhile:
+             allWordsMap = { ...allWordsMap, ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) }
+           }
            lastModifiedMap[uuid]['words'][page] = words
            lastModifiedMap[uuid]['name'] = name 
            lastModifiedMap[uuid]['time'] = time 
            lastModifiedMap[uuid]['allWordCount'] = allWordCount
+
            dispatch({
              type: SWITCH_VISIBILITY,
              payload: { ...getState().visibility.visibilityMap, 
@@ -138,9 +152,8 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
           dispatch({
             type: FETCH_WORDS_FULFILLED,
             payload: { words, 
-                       'allWordsMap': { ...allWordsMap, 
-                                        ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) },
                        pageNext, pagePrev, 
+                       allWordsMap,
                        allWordCount, page 
                      }
           });
@@ -167,11 +180,13 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
 export const deleteWord = (word) => { return (dispatch, getState) => {
   const { uuid, name, items } = getState().collections
   let { lastModifiedMap } = getState().collections
-  let { page, allWordsMap } = getState().words
+  let { page, allWordsMap, pagePrev, pageNext, allWordCount } = getState().words
   const { visibilityMap } = getState().visibility
   const { refMap } = getState().refs
 
-  const url = 'api/word/delete/' + word + '/' + (uuid ? uuid + '/' + page : '')
+  let time = lastModifiedMap[uuid] && lastModifiedMap[uuid]['words'][pageNext] ? lastModifiedMap[uuid]['time'] : ''
+
+  const url = 'api/word/delete/' + word + '/' + (uuid ? uuid + `/${page}/` + time : '')
   return fetch(url)
   .then(response =>
       response.json().then(json => ({
@@ -189,21 +204,43 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
                      payload: {error: 'fetching words failed', word: word}})
         } else {
           // Status looks good
-         const words = json.empty ? [] : conflateWords(json.words) 
-         const pagePrev = json.page_prev
-         const pageNext = json.page_next
-         const allWordCount = json.all_word_count
-         page = json.page ? json.page : page
-         let w
-         for (w in allWordsMap) {
-           if (allWordsMap[w] == page) {
-             delete allWordsMap[w]
-           }
+         let words;
+         if (json.empty) {
+           words = []
          }
+         else if (json.words) {
+// the collection changed - let's  nuke its cache
+           pagePrev = json.page_prev
+           pageNext = json.page_next
+           allWordCount = json.all_word_count
+           page = json.page ? json.page : page
+           words = conflateWords(json.words)
+           lastModifiedMap[uuid]['words'] = { [page]: words }
+           allWordsMap = { ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) }
+         }
+         else {
+// let's deal with local changes
+// filter the deleted word from the words' array
+// rearrange the allWordsMap and lastModified's page cache if words' array was from not the last page
+           words = lastModifiedMap[uuid]['words'][page].filter(w => w.word != word)
+           lastModifiedMap[uuid]['words'] = { ...lastModifiedMap[uuid]['words'], [page]: words }
+           allWordsMap = filterMap(allWordsMap, word)
+           if (lastModifiedMap[uuid]['words'][pageNext]) {
+             let wordsOnPage = lastModifiedMap[uuid]['words'][pageNext]
+             const shifted = wordsOnPage.shift()
+             allWordsMap = filterMap(allWordsMap, shifted.word)
+             let cachedWords
+             cachedWords, allWordsMap = shiftWordsOnPages(shifted, lastModifiedMap[uuid]['words'], allWordsMap, pageNext)
+           }
+           allWordCount = lastModifiedMap[uuid]['allWordCount'] - 1
+           pagePrev = page > 1 ? page - 1 : 0
+           pageNext = (page*20) < allWordCount ? page + 1 : 0
+         }
+         console.log(allWordsMap)
          dispatch({
             type: FETCH_WORDS_FULFILLED,
             payload: { words, 
-                       'allWordsMap': { ...allWordsMap, ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) },
+                       allWordsMap,
                        pagePrev, pageNext, allWordCount, page }
           });
         dispatch({
@@ -217,8 +254,9 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
         if (json.empty)
           delete lastModifiedMap[uuid]
         else {
-          lastModifiedMap = { ...lastModifiedMap, [uuid]: { time, 'words': { [page]: words }, name, allWordCount } } 
+          lastModifiedMap = { ...lastModifiedMap, [uuid]: { time, 'words': lastModifiedMap[uuid]['words'], name, allWordCount } } 
         }
+        console.log(lastModifiedMap)
         dispatch({
           type: SAVE_COLLECTION_FULFILLED,
           payload: { items: collections,
@@ -309,7 +347,7 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
             }
           }
             words = [ obj, ...words ]
-            allWordsMap = { ...allWordsMap, ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) }
+            allWordsMap = { ...allWordsMap, ...{ [obj.word]: page } }
           }
           console.log(allWordsMap)
           console.log(lastModifiedMap)
