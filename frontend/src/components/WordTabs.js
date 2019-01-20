@@ -46,6 +46,7 @@ class WordTabs extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const { word } = nextProps
     if (nextProps.mapTabIndex[word] == this.props.mapTabIndex[word]) {
+      console.log(word)
       return 0
     }
     else {
