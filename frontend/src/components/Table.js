@@ -5,7 +5,7 @@ import WordCell from "./WordCell";
 import WordLabel from "./WordLabel";
 import key from "weak-key";
 import { connect } from 'react-redux';
-import { deleteWord, lookUpWord, fetchWords, requestWords, requestWord } from '../actions/wordsActions';
+import { deleteWord, lookUpWord, fetchWords, requestWords, requestWord, clearFetching } from '../actions/wordsActions';
 import { switchVisibility } from '../actions/visibilityActions';
 import { logWordDivOffset, setAllDataRef } from '../actions/refActions';
 import { scrollToDomRef } from './helpers';
@@ -58,7 +58,8 @@ class Table extends Component {
     if (parentOffset) {
       this.props.logWordDivOffset(original, parentOffset);
     }
-    console.log(this.props.refMap[word])
+
+    const { refMap, allWordsMap, uuid, page } = this.props
      
     if (!this.props.allWordsMap[word]) {
       this.props.requestWord();
@@ -66,9 +67,20 @@ class Table extends Component {
         scrollToDomRef(this.myRef, 35)
       })
     }
-    else if (this.props.refMap[word] && this.props.refMap[word].current) {
+    else {
       console.log('i am here will scroll to exisitng')
-      scrollToDomRef(this.props.refMap[word], 80)
+      if (allWordsMap[word] != page) {
+        console.log('i used to see this word but elsewhere')
+        this.props.requestWord(word);
+        this.props.fetchWords(uuid, allWordsMap[word]).then(() => {
+          this.props.clearFetching()
+        })
+      }
+      else if (refMap[word]) {
+        this.props.requestWord(word);
+        scrollToDomRef(refMap[word], 80)
+        this.props.clearFetching()
+      }
     }
   }
 
@@ -182,5 +194,6 @@ export default connect(mapStateToProps, { setAllDataRef,
                                           fetchWords, 
                                           requestWords, 
                                           requestWord, 
+                                          clearFetching,
                                           switchVisibility, 
                                           logWordDivOffset  })(Table);
