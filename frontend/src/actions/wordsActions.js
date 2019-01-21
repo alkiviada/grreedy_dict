@@ -13,6 +13,7 @@ import {
 } from './types';
 
 import { conflateWords, filterMap, reshuffleWordsOnPages, shiftWordsOnPages } from './helpers';
+import { maxWordsOnPages } from './constants';
 
 export const requestWords = () => dispatch => {
   dispatch({
@@ -142,7 +143,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
             name = lastModifiedMap[uuid]['name']
             allWordCount = lastModifiedMap[uuid]['allWordCount']
             pagePrev = page > 1 ? page - 1 : 0
-            pageNext = (page*20) < allWordCount ? page + 1 : 0
+            pageNext = (page*maxWordsOnPages) < allWordCount ? page + 1 : 0
           }
           console.log(name)
           dispatch({
@@ -234,7 +235,7 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
            }
            allWordCount = lastModifiedMap[uuid]['allWordCount'] - 1
            pagePrev = page > 1 ? page - 1 : 0
-           pageNext = (page*20) < allWordCount ? page + 1 : 0
+           pageNext = (page*maxWordsOnPages) < allWordCount ? page + 1 : 0
          }
          console.log(allWordsMap)
          dispatch({
@@ -337,13 +338,13 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
             type: SWITCH_VISIBILITY,
             payload: { ...visibilityMap, ...{ [obj.word]: 'show' } }
           });
-          if (words.length >= 20) {
+          if (words.length >= maxWordsOnPages) {
             console.log('popping')
             const popped = words.pop();
             pageNext = 2;            
             allWordsMap = filterMap(allWordsMap, popped.word)
             if (lastModifiedMap[uuid]['words'][pageNext]) {
-              lastModifiedMap, allWordsMap = reshuffleWordsOnPages(popped, lastModifiedMap[uuid]['words'], allWordsMap, pageNext)
+              lastModifiedMap, allWordsMap = reshuffleWordsOnPages(popped, lastModifiedMap[uuid]['words'], allWordsMap, pageNext, allWordCount)
             }
           }
             words = [ obj, ...words ]

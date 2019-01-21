@@ -36,6 +36,7 @@ class NewWordForm extends Component {
     console.log('looking up');
     const { word } = this.state
     const { page, allWordsMap, refMap, uuid } = this.props
+    console.log(allWordsMap)
     if (!allWordsMap[word]) {
       console.log('ive never seen this word')
       this.props.requestWord(word);

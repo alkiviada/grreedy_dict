@@ -192,7 +192,7 @@ export const saveCollection = (name, wordsString) => { return (dispatch, getStat
           }),
           dispatch({
             type: FETCH_WORDS_FULFILLED,
-            payload: { 'words': [] }
+            payload: { 'words': [], 'allWordsMap': {} }
           });
           return json;
         }
@@ -271,7 +271,7 @@ export const saveCollectionAndLoadNew = (name, newUuid) => { return (dispatch, g
           }),
           dispatch({
             type: FETCH_WORDS_FULFILLED,
-            payload: { 'words': [] }
+            payload: { 'words': [], 'allWordsMap': {} }
           });
          return dispatch(fetchWords(newUuid))
         }

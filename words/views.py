@@ -97,7 +97,7 @@ class WordList(generics.ListAPIView):
                             'page_prev': int(page) - 1 if int(page) - 1 > 0 else 0,
                             'name': coll.name,
                             'uuid': coll.uuid,
-                            'all_word_count': len(distinct_words) if len(distinct_words) > 20 else 0
+                            'all_word_count': len(distinct_words) if len(distinct_words) > WORDS_ON_PAGE else 0
                          })
         else:
           return Response({
@@ -264,7 +264,7 @@ class WordSingleDelete(generics.RetrieveAPIView):
                           'name': coll.name,
                           'page': page,
                           'uuid': coll.uuid,
-                          'all_word_count': len(distinct_words) if len(distinct_words) > 20 else 0
+                          'all_word_count': len(distinct_words) if len(distinct_words) > WORDS_ON_PAGE else 0
                        })
         else:
           return Response({
@@ -399,7 +399,7 @@ class WordSingleCreate(generics.ListAPIView):
                           'name': coll.name,
                           'page': page,
                           'uuid': coll.uuid,
-                          'all_word_count': len(distinct_words) if len(distinct_words) > 20 else 0
+                          'all_word_count': len(distinct_words) if len(distinct_words) > WORDS_ON_PAGE else 0
                        })
       
 
@@ -408,8 +408,8 @@ class WordSingleCreate(generics.ListAPIView):
                       'uuid': coll.uuid, 
                       'name': coll.name, 
                       'page': 1,
-                      'page_next': 2 if len(words) > 20 else 0, 
-                      'all_word_count': len(words) if len(words) > 20 else 0
+                      'page_next': 2 if len(words) > WORDS_ON_PAGE else 0, 
+                      'all_word_count': len(words) if len(words) > WORDS_ON_PAGE else 0
                     })
 
 class WordSingleCreateSynonyms(generics.RetrieveAPIView):
