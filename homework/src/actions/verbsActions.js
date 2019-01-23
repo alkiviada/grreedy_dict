@@ -1,5 +1,7 @@
 import {  
          FETCH_VERBS, 
+         FETCH_VERB, 
+         FETCH_VERB_FULFILLED, 
          FETCH_VERBS_FULFILLED, 
          FETCH_VERBS_REJECTED, 
        } from './types';

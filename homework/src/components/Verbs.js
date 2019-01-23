@@ -27,11 +27,8 @@ class Verbs extends Component {
     }
   }
 
-  onVerbClick(e, uuid) {
+  onVerbClick(e, verb) {
     console.log('verb loading');
-    e.preventDefault();
-    this.props.requestVerb();
-    
   }
   
   render () {
@@ -42,7 +39,7 @@ class Verbs extends Component {
       <div className="verbs-list">
       <ul className="verbs-ul">
        { verbs.map(v => 
-          <li><a target="_blank" href={`/homework/conjugate/${v.word}`} 
+          <li><a href={`/homework/conjugate/${v.word}`} 
           onClick={(e) => this.onVerbClick(e, v.word)} className="verb-link">
             <span className="verb-word">{v.word}</span>
          </a></li>

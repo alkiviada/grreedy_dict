@@ -28,5 +28,13 @@ class Conjugate(generics.RetrieveAPIView):
     queryset = self.get_queryset()
     filter = {}
     filter[self.lookup_field] = self.kwargs[self.lookup_field]
-    print(self.lookup_field)
     return get_object_or_404(queryset, **filter) 
+
+
+  def get(self, request, word, tense_idx, format=None):
+     print(tense_idx)
+     print(word)
+     verb = self.get_object()
+     serializer = ConjugationSerializer(verb, context={'tense_idx': tense_idx })
+     return Response(serializer.data)
+

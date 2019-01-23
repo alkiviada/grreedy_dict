@@ -91,13 +91,15 @@ body {
 }
 
 .correct-answer {
-  margin: -25px 10px 0 15px; 
+  margin: -30px 10px 0 15px; 
   z-index:2; 
   color: var(--correct-color);
+  font-weight: bold;
 }
 
 .right-answer {
   color: var(--correct-color);
+  font-weight: bold;
 }
 
 .my-conjugate-verb {

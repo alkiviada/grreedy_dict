@@ -8,8 +8,10 @@ class ConjugationSerializer(serializers.ModelSerializer):
     fields = ['word', 'conjugations']
 
   def to_representation(self, instance):
+    print(self.context)
+    tense_idx = self.context['tense_idx']
     ret = super().to_representation(instance)
-    ret['conjugations'] = pull_conjugations_arrays(ret['conjugations'])
+    ret['conjugations'] = pull_conjugations_arrays(ret['conjugations'], tense_idx)
     return ret
 
 class VerbSerializer(serializers.ModelSerializer):
