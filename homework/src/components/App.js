@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import Conjugate from "./Conjugate";
+import HomeWork from "./HomeWork";
 import {Provider} from "react-redux";
 
 import store from "./store";
@@ -8,7 +8,7 @@ import store from "./store";
 class App extends Component {
   render () {
     return <Provider store={store}>
-     <Conjugate />
+     <HomeWork />
     </Provider>
   }
 }

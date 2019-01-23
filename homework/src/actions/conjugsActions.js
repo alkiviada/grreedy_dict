@@ -2,7 +2,11 @@ import {
          FETCH_CONJUGATIONS, 
          FETCH_CONJUGATIONS_FULFILLED, 
          FETCH_CONJUGATIONS_REJECTED, 
+         STORE_CONJUGATE_REFS,
+         STORE_MY_CONJUGATIONS,
        } from './types';
+
+import { prons } from '../components/helpers'
 
 export const requestConjugations = () => dispatch => {
  console.log('requesting conjugations');
@@ -14,7 +18,7 @@ export const requestConjugations = () => dispatch => {
 export const fetchConjugations = (word) => (dispatch, getState) => {
   console.log('fetching conjugations');
 
-  return fetch('/homework/conjugate/' + word)
+  return fetch('/homework/conjugations/' + word)
   .then(response =>
       response.json().then(json => ({
         status: response.status,
@@ -45,4 +49,23 @@ export const fetchConjugations = (word) => (dispatch, getState) => {
         throw json;
       }
     ); 
+};
+
+export const storeMyConjugateRefs = (myConjugsRefMap) => dispatch => {
+ console.log('storing conjugate refs');
+ console.log(myConjugsRefMap)
+  dispatch({
+    type: STORE_CONJUGATE_REFS,
+    payload: myConjugsRefMap
+  })
+};
+
+export const storeMyConjugs = (myConjugsRefMap) => dispatch => {
+ console.log('storing my conjugations');
+ console.log(myConjugsRefMap)
+ const myConjugs = prons.reduce((cA, p) => (cA.push(myConjugsRefMap[p].current.innerHTML.trim()), cA), [])
+  dispatch({
+    type: STORE_MY_CONJUGATIONS,
+    payload: myConjugs
+  })
 };

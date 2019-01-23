@@ -1,50 +1,36 @@
 import React, { Component } from "react";
 import Placeholder from "./Placeholder";
 import { connect } from 'react-redux';
-import { fetchConjugations, requestConjugations, } from '../actions/conjugsActions';
+import { storeMyConjugateRefs } from '../actions/conjugsActions';
 
-const prons = ['je', 'tu', 'il', 'nous', 'vous', 'ils']
+import { prons } from './helpers'
 
 class JustConjugate extends Component {
   constructor(props) { 
     super(props)
-    this.check = this.check.bind(this) 
-    this.jconjRefMap = prons.reduce((map, p) => (map[p] = [ React.createRef(), React.createRef() ], map), {});
+    this.jconjRefMap = prons.reduce((map, p) => (map[p] = React.createRef(), map), {});
   }
-  check(e) {
-    console.log('check');
-    e.preventDefault();
-    this.props.requestConjugations()
-    this.props.fetchConjugations('fare').then(() => {
-      const { conjugs } = this.props
-      prons.forEach((p, i) => { 
-        console.log(this.jconjRefMap[p][1].current.innerHTML)
-        console.log(conjugs[i])
-        if (conjugs[i] != this.jconjRefMap[p][1].current.innerHTML.trim())  
-          this.jconjRefMap[p][0].current.innerHTML = conjugs[i]
-      })
-    });
+
+  componentDidMount() {
+    console.log('registering conjugate refs');
+    this.props.storeMyConjugateRefs(this.jconjRefMap)
   }
 
   render () {
-    return <div ref={this.jconjRef} className="just-conjugate">
+    console.log(this.props.myConjugsRefMap)
+    return <div ref={this.jconjRef} className="jconjugate">
     { prons.map(p => 
        <div className="who-conjugate">
-         <div className="who">
-           <span className="pron">{p}</span>
-         </div>
-         <div className="correct">
-         <span ref={this.jconjRefMap[p][0]} className="super"></span>
-         <Placeholder ref={this.jconjRefMap[p][1]} />
-         </div></div>
+         <div className="who">{p}</div>
+         <Placeholder pref={this.props.myConjugsRefMap[p]} />
+       </div>
      )}
-    <button onClick={(e) => this.check(e)}>Test</button>
     </div>
   }
 }
 
 const mapStateToProps = state => ({
-  conjugs: state.conjugs.items,
+  myConjugsRefMap: state.conjugs.myConjugsRefMap,
 });
 
-export default connect(mapStateToProps, { fetchConjugations, requestConjugations, })(JustConjugate);
+export default connect(mapStateToProps, { storeMyConjugateRefs })(JustConjugate);

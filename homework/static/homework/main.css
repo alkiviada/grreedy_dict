@@ -1,10 +1,11 @@
 :root {
-  --grass-color: #334a09;
+  --grass-color: #788400;
   --sky-color: #0088e6;
-  --body-font: Alegreya;
-  --word-font: Cormorant Garamond;
+  --word-font: Alegreya;
+  --body-font: Cormorant Garamond;
   --sidebar-color: #dee6f7;
   --work-area-color: #e1e7f3;
+  --correct-color: #fb5043;
 }
 
 *{
@@ -36,6 +37,9 @@ body {
   background-size: cover;
 }
 
+/* conjugate */
+
+
 .conjugate-container {
   max-height: 100%;
   min-height: 100vh;
@@ -47,16 +51,62 @@ body {
   grid-template-areas: 
     ". verbs work ."
     ". verbs more-work ."
-    ". . . ."
+    ". . . .";
 }
 
 .just-conjugate {
   grid-area: work;
   background: var(--work-area-color);
   margin: 1em .8em .5em .8em;
+}
+
+.jconjugate, .chk-conjugate {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(7em, auto));
 }
+
+.who-conjugate {
+  display: grid;
+  grid-template-areas: "who verb-form";
+  grid-template-columns: 2.5em 1fr;
+}
+
+.who {
+  grid-area: who;
+  font-weight: bold;
+  color: var(--sky-color);
+}
+
+.correct {
+  grid-area: verb-form;
+}
+
+.corrections {
+  position:absolute;
+}
+
+.wrong-answer {
+ z-index: 1;
+ text-decoration: line-through;
+}
+
+.correct-answer {
+  margin: -25px 10px 0 15px; 
+  z-index:2; 
+  color: var(--correct-color);
+}
+
+.right-answer {
+  color: var(--correct-color);
+}
+
+.my-conjugate-verb {
+  grid-area: verb-form;
+}
+
+[contenteditable=true]:empty:before { content: attr(placeholder); display: block; color: #aaa; }
+
+/* homework */
 
 .conjugate-homework {
   grid-area: more-work;
@@ -64,32 +114,7 @@ body {
   margin: 1em .8em .5em .8em;
 }
 
-.correct {
-  grid-area: correct;
-  display: grid;
-  grid-template-rows: repeat(auto-fit, minmax(1em, auto));
-}
-
-.who-conjugate {
-  display: grid;
-  grid-template-areas: "who correct";
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-
-}
-
-.who {
-  grid-area: who;
-  display: grid;
-  grid-template-areas: "."
-  "pron";
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr;
-}
-
-.pron {
-  grid-area: pron;
-}
+/* verbs sidebar */
 
 .verbs-sidebar {
   grid-area: verbs;
@@ -100,4 +125,71 @@ body {
 .verbs-list {
   background: var(--sidebar-color);
   margin: 1em .1em .5em .1em;
+}
+
+.verb-word {
+  color: var(--grass-color);
+  font-weight: bold;
+}
+
+.verb-link {
+  text-decoration: none;
+}
+/* react tabs */
+
+.react-tabs {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.react-tabs__tab-list {
+  border-bottom: 1px solid #aaa;
+  margin: 0 0 10px;
+  padding: 0;
+}
+
+.react-tabs__tab {
+  display: inline-block;
+  border: 1px solid transparent;
+  border-bottom: none;
+  bottom: -1px;
+  position: relative;
+  list-style: none;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.react-tabs__tab--selected {
+  background: #fff;
+  border-color: #aaa;
+  color: black;
+  border-radius: 5px 5px 0 0;
+}
+
+.react-tabs__tab--disabled {
+  color: GrayText;
+  cursor: default;
+}
+
+.react-tabs__tab:focus {
+  box-shadow: 0 0 5px hsl(208, 99%, 50%);
+  border-color: hsl(208, 99%, 50%);
+  outline: none;
+}
+
+.react-tabs__tab:focus:after {
+  content: "";
+  position: absolute;
+  height: 5px;
+  left: -4px;
+  right: -4px;
+  bottom: -5px;
+  background: #fff;
+}
+
+.react-tabs__tab-panel {
+  display: none;
+}
+
+.react-tabs__tab-panel--selected {
+  display: block;
 }

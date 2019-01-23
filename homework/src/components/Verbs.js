@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { fetchVerbs, requestVerbs } from '../actions/verbsActions';
 
 const mapStateToProps = state => ({
-  verbs: state.verbs.items,
+  verbs: state.verbs.verbs,
 });
 
 class Verbs extends Component {
@@ -42,7 +42,7 @@ class Verbs extends Component {
       <div className="verbs-list">
       <ul className="verbs-ul">
        { verbs.map(v => 
-          <li><a target="_blank" href={`/api/collection/${v.word}`} 
+          <li><a target="_blank" href={`/homework/conjugate/${v.word}`} 
           onClick={(e) => this.onVerbClick(e, v.word)} className="verb-link">
             <span className="verb-word">{v.word}</span>
          </a></li>

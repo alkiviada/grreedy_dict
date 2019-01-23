@@ -93,6 +93,8 @@ class Table extends Component {
     const oldData = this.props.data 
     if (nextProps.allFetching !== this.props.allFetching && !oldData.length)
       return true 
+    if (nextProps.auth.isAuthenticated !== this.props.auth.isAuthenticated)
+      return true 
     if (oldData.length !== newData.length)
       return true;
     for (var i = oldData.length; i--;) {
@@ -127,6 +129,8 @@ class Table extends Component {
       )
     } 
     const auth = this.props.auth
+    console.log('am i uath?')
+    console.log(auth.isAuthenticated)
     return !data.length ? (
       <BodyClassName className="body-with-image">
       <div className="words-container" ref={this.myRef}>

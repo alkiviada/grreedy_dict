@@ -5,9 +5,12 @@ import {
        } from '../actions/types';
 
 const initialState = {
-  items: [],
+  verbs: [],
+  verb: '',
   verbsFetching: false,
+  verbFetching: false,
   verbsFetched: false,
+  verbFetched: false,
   error: null
 };
 
@@ -16,12 +19,24 @@ export default function(state = initialState, action) {
     case FETCH_VERBS: return { ...state, 
                                verbsFetching: true, 
                              };
+    case FETCH_VERB: return { ...state, 
+                               verbFetching: true, 
+                             };
+    case FETCH_VERB_FULFILLED: return { ...state, 
+                                         verbFetching: false, 
+                                         error: null, 
+                                         verbFetched: true,
+                                         verb: action.payload, 
+                                       };
     case FETCH_VERBS_FULFILLED: return { ...state, 
                                          verbsFetching: false, 
                                          error: null, 
                                          verbsFetched: true,
-                                         items: action.payload, 
+                                         verbs: action.payload, 
                                        };
+    case FETCH_VERB_REJECTED: return { ...state, verbFetching: false, 
+                                        error: action.payload, 
+                                      };
     case FETCH_VERBS_REJECTED: return { ...state, verbsFetching: false, 
                                         error: action.payload, 
                                       };

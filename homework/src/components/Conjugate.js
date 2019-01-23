@@ -1,14 +1,19 @@
 import React, { Component } from "react";
 import Verbs from "./Verbs";
 import ConjugateHomeWork from "./ConjugateHomeWork";
-import JustConjugate from "./JustConjugate";
+import JustConjugateTabs from "./JustConjugateTabs";
 
-const Conjugate = () => (
-  <div className="conjugate-container">
+class Conjugate extends Component {
+  render() {
+  console.log(this.props.match.params)
+  const { verb } = this.props.match.params 
+
+  return <div className="conjugate-container">
   <Verbs />
-  <JustConjugate />
+  <JustConjugateTabs verb={verb}/>
   <ConjugateHomeWork />
   </div>
-)
+  }
+}
 
 export default Conjugate;

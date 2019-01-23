@@ -1,7 +1,19 @@
 import React, { Component } from "react";
 
-const Placeholder = React.forwardRef((props, ref) => (
- <span ref={ref} className="my-conjugate-verb" contenteditable="true"> ... </span>
-))
+class Placeholder extends Component {
+  constructor(props) { 
+    super(props)
+  }
+  componentWillUnmount() {
+  }
+
+  componentDidUpdate() {
+  }
+
+  render () {
+    const { pref } = this.props
+  return <span ref={pref} className="my-conjugate-verb" contenteditable="true" placeholder={"..."}></span>
+  }
+}
 
 export default Placeholder
