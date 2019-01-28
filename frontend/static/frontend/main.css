@@ -58,7 +58,7 @@ body {
     display: none;
   }
   .tab-carousel-arrow-tab {
-    display: none;
+    display: none !important;
   }
 }
 
