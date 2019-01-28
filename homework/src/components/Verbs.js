@@ -6,6 +6,7 @@ import { fetchVerbs, requestVerbs } from '../actions/verbsActions';
 
 const mapStateToProps = state => ({
   verbs: state.verbs.verbs,
+  tenseIdx: state.conjugs.tenseIdx,
 });
 
 class Verbs extends Component {
@@ -29,21 +30,28 @@ class Verbs extends Component {
 
   onVerbClick(e, verb) {
     console.log('verb loading');
+    const { tenseIdx } = this.props
+    // return <Redirect to="/homework/conjugate/{verb}/{tenseIdx}"
   }
   
   render () {
-    const { verbs } = this.props;
+    const { verbs, tenseIdx } = this.props;
+    let seenVerbMap = {}
     console.log('verbs')
     return verbs.length ? (
       <div className="verbs-sidebar">
       <div className="verbs-list">
       <ul className="verbs-ul">
-       { verbs.map(v => 
-          <li><a href={`/homework/conjugate/${v.word}`} 
+       { 
+         verbs.map(v => {
+          seenVerbMap[v.word] = seenVerbMap[v.word] ? seenVerbMap[v.word]++ : 1;
+          return <li><a href={`/homework/conjugate/${v.word}/${v.language}`} 
           onClick={(e) => this.onVerbClick(e, v.word)} className="verb-link">
-            <span className="verb-word">{v.word}</span>
+            <span className="verb-word">{v.word}</span> 
+            { seenVerbMap[v.word] > 1 ? <span className="verb-language">{v.language == 'italian' ? '(it)' : '(fr)'}</span> : '' }
          </a></li>
-       )}
+                 })
+       }
       </ul>
      </div>
     </div>

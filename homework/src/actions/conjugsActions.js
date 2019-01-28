@@ -2,7 +2,8 @@ import {
          FETCH_CONJUGATIONS, 
          FETCH_CONJUGATIONS_FULFILLED, 
          FETCH_CONJUGATIONS_REJECTED, 
-         STORE_CONJUGATE_REFS,
+         LOG_CONJUGATE_REFS,
+         LOG_TENSE_IDX,
          STORE_MY_CONJUGATIONS,
        } from './types';
 
@@ -15,10 +16,10 @@ export const requestConjugations = () => dispatch => {
   })
 };
 
-export const fetchConjugations = (word) => (dispatch, getState) => {
+export const fetchConjugations = (word, tenseIdx) => (dispatch, getState) => {
   console.log('fetching conjugations');
 
-  return fetch('/homework/conjugations/' + word)
+  return fetch('/homework/conjugations/' + word + '/' + tenseIdx)
   .then(response =>
       response.json().then(json => ({
         status: response.status,
@@ -55,7 +56,7 @@ export const storeMyConjugateRefs = (myConjugsRefMap) => dispatch => {
  console.log('storing conjugate refs');
  console.log(myConjugsRefMap)
   dispatch({
-    type: STORE_CONJUGATE_REFS,
+    type: LOG_CONJUGATE_REFS,
     payload: myConjugsRefMap
   })
 };
@@ -67,5 +68,13 @@ export const storeMyConjugs = (myConjugsRefMap) => dispatch => {
   dispatch({
     type: STORE_MY_CONJUGATIONS,
     payload: myConjugs
+  })
+};
+
+export const logTenseIdx = (tenseIdx) => dispatch => {
+ console.log('logging tense idx');
+  dispatch({
+    type: LOG_TENSE_IDX,
+    payload: tenseIdx
   })
 };

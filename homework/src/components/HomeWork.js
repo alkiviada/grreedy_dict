@@ -10,7 +10,7 @@ class HomeWork extends Component {
     return (
        <Router>
     <div>
-      <Route path="/homework/conjugate/:verb" exact component={Conjugate} />
+      <Route path="/homework/conjugate/:verb/:language" exact component={Conjugate} />
     </div>
   </Router>
     )

@@ -8,7 +8,8 @@ import { prons } from './helpers'
 class JustConjugate extends Component {
   constructor(props) { 
     super(props)
-    this.jconjRefMap = prons.reduce((map, p) => (map[p] = React.createRef(), map), {});
+    console.log(props)
+    this.jconjRefMap = prons[props.language].reduce((map, p) => (map[p] = React.createRef(), map), {});
   }
 
   componentDidMount() {
@@ -19,7 +20,7 @@ class JustConjugate extends Component {
   render () {
     console.log(this.props.myConjugsRefMap)
     return <div ref={this.jconjRef} className="jconjugate">
-    { prons.map(p => 
+    { prons[this.props.language].map(p => 
        <div className="who-conjugate">
          <div className="who">{p}</div>
          <Placeholder pref={this.props.myConjugsRefMap[p]} />

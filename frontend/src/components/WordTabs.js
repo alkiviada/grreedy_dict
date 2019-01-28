@@ -17,7 +17,7 @@ import { fetchConjugations, requestConjugations, } from '../actions/conjugateAct
 import { lookUpCollocations, requestCollocations, } from '../actions/collocationsActions';
 import { lookUpSynonyms, requestSynonyms, } from '../actions/synonymsActions';
 import { fetchNote, requestNote } from '../actions/notesActions';
-import { renderList, listStyles } from './helpers';
+import { renderList, listStyles, makeTabLabel } from './helpers';
 import { logWordDivOffset } from '../actions/refActions';
 
 const mapStateToProps = state => ({
@@ -34,18 +34,28 @@ const mapStateToProps = state => ({
   synonymsFetchingMap: state.synonyms.fetchingMap,
 });
 
+const carouselItems = 4;
+    const tabWordMap = {
+                        'english': { 1: 'Original word', 2: 'TRANSLATIONS', 3: 'COLLOCATIONS', 4: 'SYNONYMS', 5: 'PRONUNCIATION', 6: 'ADD NOTE', 7: 'CONJUGATE' },
+                        'non-english': { 1: 'Original Word', 2: 'COLLOCATIONS', 3: 'SYNONYMS', 4: 'PRONUNCIATION', 5: 'ADD NOTE', 6: 'CONJUGATE' },
+                       }
 
 class WordTabs extends Component {
   constructor(props) { 
     super(props)
     this.handleSelect = this.handleSelect.bind(this) 
     let i = this.props.mapTabIndex[this.props.word];
-    this.state = { tabIndex: i ? i : 0 };
+    this.state = { tabIndex: i ? i : 1,
+                   carouselIdx: 0,
+    };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     const { word } = nextProps
-    if (nextProps.mapTabIndex[word] == this.props.mapTabIndex[word]) {
+    const { carouselIdx } = nextState
+    console.log(carouselIdx)
+    console.log(this.state.carouselIdx)
+    if (nextProps.mapTabIndex[word] == this.props.mapTabIndex[word] && (carouselIdx == this.state.carouselIdx)) {
       return 0
     }
     else {
@@ -60,19 +70,15 @@ class WordTabs extends Component {
     element: PropTypes.array.isRequired,
   };
 
-  handleSelect(prev, index, word, isEnglishWord, parentRef) {
+  handleSelect(prev, index, word, isEnglishWord, isVerb, parentRef) {
     const parentOffset = parentRef.current.scrollTop
-    if (parentOffset && [0,1,2].filter(i => i == prev)) {
+    if (parentOffset && [1, 2, 3].filter(i => i == prev)) {
       this.props.logWordDivOffset(word, parentOffset);
     }
-     
-    this.props.switchTab(index, word, this.props.mapTabIndex);
-    this.setState( { tabIndex: index } );
-
-    const tabWordMap = {
-                        'english': { 1: 'TRANSLATIONS', 2: 'COLLOCATIONS', 3: 'SYNONYMS', 4: 'PRONUNCIATION', 5: 'ADD_NOTE', 6: 'CONJUGATE' },
-                        'non-english': { 1: 'COLLOCATIONS', 2: 'SYNONYMS', 3: 'PRONUNCIATION', 4: 'ADD_NOTE', 5: 'CONJUGATE' },
-                       }
+    if (index) { 
+// this is a legit tab - let's switch to it
+      this.props.switchTab(index, word, this.props.mapTabIndex);
+      this.setState( { tabIndex: index } );
     let tabMap = {}
     if (isEnglishWord) {
       tabMap = tabWordMap['english']
@@ -82,7 +88,7 @@ class WordTabs extends Component {
     }
 
     switch (tabMap[index]) {
-      case 'ADD_NOTE':
+      case 'ADD NOTE':
         if (!this.props.allNotes[word]) {
           console.log('looking up notes'); 
           this.props.requestNote(word)
@@ -130,6 +136,16 @@ class WordTabs extends Component {
       default:
         Function.prototype()
     }
+    }
+    else {
+// this is a legit tab - let's switch to it
+      let c = this.state.carouselIdx 
+      const myItems = isEnglishWord ? 6 + isVerb : 5 + isVerb;
+      console.log(c)
+      console.log(myItems)
+      c = myItems - c - 1 > carouselItems ? c + 1 : c
+      this.setState( { carouselIdx: c } );
+    }
   }
 
   render() {
@@ -140,19 +156,32 @@ class WordTabs extends Component {
 
     const isVerb = element.reduce((isVerb, e) => 
       {return e['is_verb'] ?  ++isVerb : isVerb}, 0)
+    const iAmHidden = this.state.carouselIdx
+    let i = 1;
+    let tabMap = isEnglishWord ? tabWordMap['english'] : tabWordMap['non-english']
+    const myItems = isEnglishWord ? 6 + isVerb : 5 + isVerb;
+    let canMoveLeft = myItems - iAmHidden - 1 > carouselItems ? 1 : 0 
 
     return ( 
       <Tabs selectedIndex={this.state.tabIndex} 
-        onSelect={(prev, index) => this.handleSelect(index, prev, word, isEnglishWord, parentRef)}>
+        onSelect={(prev, index) => this.handleSelect(index, prev, word, isEnglishWord, isVerb, parentRef)}>
         <TabList>
-          <Tab>Original Word</Tab>
-          { isEnglishWord ? <Tab>Translations</Tab> : <Tab>Collocations</Tab> }
-          { isEnglishWord ? <Tab>Collocations</Tab> : <Tab>Synonyms</Tab> }
-          { isEnglishWord ? <Tab>Synonyms</Tab> : <Tab>Pronunciation</Tab> }
-          { isEnglishWord ? <Tab>Pronunciation</Tab> : <Tab>Add Note</Tab> }
-          { isEnglishWord ? <Tab>Add Note</Tab> : isVerb ? <Tab>Conjugate</Tab> : '' }
-          { isVerb && isEnglishWord ? <Tab>Conjugate</Tab> : '' }
+          { canMoveLeft ? 
+          <Tab className="tab-carousel-arrow-tab"><a className="tab-carousel-right fas fa-chevron-left"></a></Tab> :
+          <Tab className="tab-carousel-arrow-tab hide-tab-item"><a className="tab-carousel-right fas fa-chevron-left"></a></Tab>
+         }
+{         
+          Object.keys(tabMap).map((t, i) =>  {
+               const visibilityClassName = (i >= iAmHidden) && (i <= carouselItems + iAmHidden) ? 'react-tabs__tab show-tab-item' : 'react-tabs__tab hide-tab-item'
+               return (
+              ((!isEnglishWord && t == 6) || t == 7) && ! isVerb ? '' : 
+              isEnglishWord ? <Tab className={visibilityClassName}>{ makeTabLabel(tabWordMap['english'][t]) }</Tab> : 
+                              <Tab className={visibilityClassName}>{ makeTabLabel(tabWordMap['non-english'][t]) }</Tab>
+             )
+})
+}
         </TabList>
+        <TabPanel className="carousel-dummy-tab" />
         <TabPanel>
           { element.map(e => 
                 <div>

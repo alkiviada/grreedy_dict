@@ -6,11 +6,11 @@ import JustConjugateTabs from "./JustConjugateTabs";
 class Conjugate extends Component {
   render() {
   console.log(this.props.match.params)
-  const { verb } = this.props.match.params 
+  const { verb, language } = this.props.match.params 
 
   return <div className="conjugate-container">
   <Verbs />
-  <JustConjugateTabs verb={verb}/>
+  <JustConjugateTabs verb={verb} language={language} />
   <ConjugateHomeWork />
   </div>
   }

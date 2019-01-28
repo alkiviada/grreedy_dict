@@ -493,7 +493,13 @@ class RussianWordManager(YandexWordMixin, models.Manager):
 
 class VerbManager(WordRefWordMixin, models.Manager):
   def get_queryset(self):
-    return super().get_queryset().exclude(word='').filter(is_verb=True).filter(origin_verb=None).exclude(conjugations=None)
+    return super().get_queryset().filter(language__in=['english', 'french', 'italian', 'russian', 'ukrainian']).annotate(order=Case(
+      When(language='english', then=Value(0)),
+      When(language='french', then=Value(1)),
+      When(language='italian', then=Value(2)),
+      When(language='russian', then=Value(3)),
+      When(language='ukrainian', then=Value(4)),
+      output_field=IntegerField())).order_by('order').exclude(word='').filter(is_verb=True).exclude(conjugations=None)
 
 class RomanceWordManager(WordRefWordMixin, models.Manager):
   def get_queryset(self):

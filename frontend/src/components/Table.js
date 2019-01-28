@@ -148,11 +148,11 @@ class Table extends Component {
     { pageNext ? <div className="pagination-1">
                  <a className="pagination-a fas fa-chevron-right" onClick={(e) => this.navigateToPage(e, uuid, pageNext)}></a>
                  <a className="pagination-b fas fa-chevron-right" onClick={(e) => this.navigateToPage(e, uuid, pageNext)}></a>
-                 </div> : <div className="pagination-1-placeholder"></div> }
+                 </div> : pagePrev ? <div className="pagination-1-placeholder"></div> : '' }
     { pagePrev ? <div className="pagination-2">
                  <a className="pagination-a fas fa-chevron-left" onClick={(e) => this.navigateToPage(e, uuid, pagePrev)}></a>
                  <a className="pagination-b fas fa-chevron-left" onClick={(e) => this.navigateToPage(e, uuid, pagePrev)}></a>
-                 </div> : <div className="pagination-2-placeholder"></div> }
+                 </div> : pageNext ? <div className="pagination-2-placeholder"></div> : '' }
       <h2 className="coll-title">
         Showing <WordLabel count={data.length} page={page} allCount={allWordCount} /> 
         { allWordCount ? ` out of ${allWordCount} ` : ' ' } 

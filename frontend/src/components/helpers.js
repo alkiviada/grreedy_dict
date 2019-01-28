@@ -26,3 +26,8 @@ export const scrollToDomRef = (ref, offset = 35) => {
   const domNode = ReactDOM.findDOMNode(ref.current)
   window.scrollTo(0, domNode.offsetTop-offset)
 }
+
+export const makeTabLabel = (stub) => {
+  const tabLabelPartsCapitalized = stub.split(' ').map(p => p.charAt(0) + p.slice(1).toLowerCase())
+  return tabLabelPartsCapitalized.join(' ');
+}

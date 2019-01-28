@@ -19,7 +19,7 @@ class VerbsList(generics.ListAPIView):
 
 class Conjugate(generics.RetrieveAPIView):
   serializer_class = ConjugationSerializer
-  lookup_field = 'word'
+  lookup_fields = ['word', 'language']
 
   def get_queryset(self):
     return Word.true_verb_objects.all()
@@ -27,7 +27,9 @@ class Conjugate(generics.RetrieveAPIView):
   def get_object(self):
     queryset = self.get_queryset()
     filter = {}
-    filter[self.lookup_field] = self.kwargs[self.lookup_field]
+    for field in self.lookup_fields:
+      if self.kwargs[field]:  # Ignore empty fields.
+        filter[field] = self.kwargs[field]
     return get_object_or_404(queryset, **filter) 
 
 

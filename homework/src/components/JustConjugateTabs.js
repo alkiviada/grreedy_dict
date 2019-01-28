@@ -5,14 +5,13 @@ import { connect } from 'react-redux';
 
 import JustConjugate from "./JustConjugate";
 import CheckConjugate from "./CheckConjugate";
+import TenseSelect  from "./TenseSelect";
 
 import { fetchConjugations, requestConjugations, storeMyConjugs } from '../actions/conjugsActions';
-import { prons } from './helpers'
-
 const mapStateToProps = state => ({
   myConjugsRefMap: state.conjugs.myConjugsRefMap,
+  tenseIdx: state.conjugs.tenseIdx,
 });
-
 
 class JustConjugateTabs extends Component {
   constructor(props) { 
@@ -30,8 +29,9 @@ class JustConjugateTabs extends Component {
   static propTypes = {
   };
 
-  handleSelect(prev, index, verb, myConjugsRefMap) {
+  handleSelect(prev, index, verb) {
     console.log('switchinh tabs')
+    const { tenseIdx, myConjugsRefMap } = this.props
 
     this.setState( { tabIndex: index } );
 
@@ -39,23 +39,23 @@ class JustConjugateTabs extends Component {
       console.log('check');
       this.props.storeMyConjugs(myConjugsRefMap)
       this.props.requestConjugations()
-      this.props.fetchConjugations(verb)
+      this.props.fetchConjugations(verb, language, tenseIdx)
     }
   }
 
   render() {
-    const { verb, myConjugsRefMap } = this.props;
+    const { verb, myConjugsRefMap, language } = this.props;
 
     return ( 
      <div className="just-conjugate">
       <Tabs selectedIndex={this.state.tabIndex} 
-        onSelect={(prev, index) => this.handleSelect(index, prev, verb, myConjugsRefMap)}>
+        onSelect={(prev, index) => this.handleSelect(index, prev, verb, language)}>
         <TabList>
-          <Tab>Try</Tab>
+          <Tab>Try <TenseSelect /></Tab>
           <Tab>Check</Tab>
         </TabList>
         <TabPanel>
-          <JustConjugate />
+          <JustConjugate language={language} />
         </TabPanel>
         <TabPanel>
           <CheckConjugate />

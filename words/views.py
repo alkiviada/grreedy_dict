@@ -472,7 +472,8 @@ class WordNoteSingleCreate(generics.GenericAPIView):
   def post(self, request, format=None):
     print('ADD NOTE')
     word = request.data.get('word')
-    words = Word.objects.filter(word=word)
+    words = Word.single_object.filter(word=word)
+    print(words)
     collection_uuid = request.data.get('uuid')
     note = request.data.get('note')
     coll = Collection.objects.get(uuid=collection_uuid)
@@ -517,6 +518,10 @@ class WordNoteSingleCreate(generics.GenericAPIView):
         
       notes_coll.update_fields({ 'last_modified_date': timezone.now() })
       
+    words = Word.single_object.filter(word=word)
+    print(words)
+    print('finished')
+
     return Response(WordNoteSerializer(word_note).data)
 
 class WordNoteSingleDetail(APIView):
@@ -564,7 +569,8 @@ class WordSingleCreateConjugate(generics.RetrieveAPIView):
     print(word);
     conjs = []
     word = word.lower()
-    words = Word.romance_words.filter(word=word, is_verb=True)
+    words = Word.romance_words.filter(word=word, is_verb=True).order_by('language').distinct()
+    print(words)
     print(words)
     for w in words:
       print('conjugate: ', w, ' ', w.language) 

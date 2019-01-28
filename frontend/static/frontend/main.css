@@ -57,6 +57,9 @@ body {
   .word-hide, .word-show {
     display: none;
   }
+  .tab-carousel-arrow-tab {
+    display: none;
+  }
 }
 
 h4 {
@@ -407,6 +410,7 @@ ul {
   word-wrap: break-word;
   background: #F5FBFD;
   font-family: var(--word-font);
+  font-variant-ligatures: discretionary-ligatures;
   max-height: 19.5em;
   height: auto;
   overflow: auto;
@@ -688,7 +692,6 @@ ul {
     "words-table words-table";
   padding: .1em .1em;
   grid-template-rows: 1.5em 2.5em 1fr;
-  grid-row-gap: .1em;
 } 
 
 
@@ -867,7 +870,7 @@ ul {
   width: 71%;
   z-index: 10000;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(4em, auto));
+  grid-template-columns: repeat(auto-fit, minmax(1em, auto));
   justify-content: start;
   align-content: start;
   grid-row: 1;   
@@ -939,6 +942,7 @@ ul {
     padding: 0.3em 0.3em;
     grid-template-rows: 2em 1fr;
     grid-template-columns: .5fr 6fr .5fr;
+    grid-row-gap: .3em;
   } 
   .new-word-btn, .save-btn {
     padding: .1em .07em .1em .2em !important;
@@ -1111,11 +1115,15 @@ font-family: FontAwesome;
 }
 
 @media(max-width: 800px) {
-.hide-me {
+  .hide-me {
     visibility: hidden;
     height: 0;
     padding: 0;
-}
+    overflow: hidden;
+  }
+  .hide-tab-item {
+    display: none;
+  }
 
   .react-tabs__tab-list {
     width: 82%;
@@ -1127,25 +1135,25 @@ font-family: FontAwesome;
     text-overflow: ellipsis;
     font-weight: 700;
   }
-.new-word-btn, .save-btn {
-  padding: .1em .07em .1em .2em !important;
-}
-.user-tag {
-  margin-bottom: .1em !important;
-}
+  .new-word-btn, .save-btn {
+    padding: .1em .07em .1em .2em !important;
+  }
 
-.words-table {
-  grid-template-areas: 
-    "words-rows";
+  .user-tag {
+    margin-bottom: .1em !important;
+  }
+
+  .words-table {
+    grid-template-areas: "words-rows";
     grid-template-rows: 1fr;
-}
-.word {
-  display: grid;
-  grid-template-areas: "show-hide word delete";
-  grid-template-columns: 1.05em 1fr 1.1em;
-  padding-right: 0;
-  padding-left: 0;
-}
+  }
+  .word {
+    display: grid;
+    grid-template-areas: "show-hide word delete";
+    grid-template-columns: 1.05em 1fr 1.1em;
+    padding-right: 0;
+    padding-left: 0;
+  }
  .words-head {
  display: none;
 }

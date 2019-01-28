@@ -42,7 +42,7 @@ export const fetchVerbs = () => (dispatch, getState) => {
           let verbs = json;
           dispatch({
             type: FETCH_VERBS_FULFILLED,
-            payload:verbs 
+            payload: verbs 
           });
          return json;
         }
