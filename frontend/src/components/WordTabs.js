@@ -75,10 +75,6 @@ class WordTabs extends Component {
     if (parentOffset && [1, 2, 3].filter(i => i == prev)) {
       this.props.logWordDivOffset(word, parentOffset);
     }
-    if (index) { 
-// this is a legit tab - let's switch to it
-      this.props.switchTab(index, word, this.props.mapTabIndex);
-      this.setState( { tabIndex: index } );
     let tabMap = {}
     if (isEnglishWord) {
       tabMap = tabWordMap['english']
@@ -87,6 +83,19 @@ class WordTabs extends Component {
       tabMap = tabWordMap['non-english']
     }
 
+    if (index) { 
+// this is a legit tab - let's switch to it
+      if ((isVerb && ((isEnglishWord && index == 8) || index == 7)) || ((isEnglishWord && index == 7) || index == 6)) {
+      let c = this.state.carouselIdx 
+      const myItems = isEnglishWord ? 6 + isVerb : 5 + isVerb;
+      console.log(c)
+      console.log(myItems)
+      c = myItems - c - 1 > carouselItems ? c + 1 : c
+      this.setState( { carouselIdx: c } );
+      }
+      else {
+      this.props.switchTab(index, word, this.props.mapTabIndex);
+      this.setState( { tabIndex: index } );
     switch (tabMap[index]) {
       case 'ADD NOTE':
         if (!this.props.allNotes[word]) {
@@ -137,13 +146,11 @@ class WordTabs extends Component {
         Function.prototype()
     }
     }
+    }
     else {
 // this is a legit tab - let's switch to it
       let c = this.state.carouselIdx 
-      const myItems = isEnglishWord ? 6 + isVerb : 5 + isVerb;
-      console.log(c)
-      console.log(myItems)
-      c = myItems - c - 1 > carouselItems ? c + 1 : c
+      c = c - 1
       this.setState( { carouselIdx: c } );
     }
   }
@@ -157,17 +164,21 @@ class WordTabs extends Component {
     const isVerb = element.reduce((isVerb, e) => 
       {return e['is_verb'] ?  ++isVerb : isVerb}, 0)
     const iAmHidden = this.state.carouselIdx
+    console.log('i am hidden')
+    console.log(iAmHidden)
     let i = 1;
     let tabMap = isEnglishWord ? tabWordMap['english'] : tabWordMap['non-english']
     const myItems = isEnglishWord ? 6 + isVerb : 5 + isVerb;
-    let canMoveLeft = myItems - iAmHidden - 1 > carouselItems ? 1 : 0 
+    let canMoveRight = myItems - iAmHidden - 1 > carouselItems ? 1 : 0 
+    console.log(myItems)
+    let canMoveLeft = iAmHidden > 0 ? 1 : 0 
 
     return ( 
       <Tabs selectedIndex={this.state.tabIndex} 
         onSelect={(prev, index) => this.handleSelect(index, prev, word, isEnglishWord, isVerb, parentRef)}>
         <TabList>
           { canMoveLeft ? 
-          <Tab className="tab-carousel-arrow-tab"><a className="tab-carousel-right fas fa-chevron-left"></a></Tab> :
+          <Tab className="tab-carousel-arrow-tab react-tabs__tab"><a className="tab-carousel-right fas fa-chevron-left"></a></Tab> :
           <Tab className="tab-carousel-arrow-tab hide-tab-item"><a className="tab-carousel-right fas fa-chevron-left"></a></Tab>
          }
 {         
@@ -180,6 +191,10 @@ class WordTabs extends Component {
              )
 })
 }
+          { canMoveRight ? 
+          <Tab className="tab-carousel-arrow-tab react-tabs__tab"><a className="tab-carousel-right fas fa-chevron-right"></a></Tab> :
+          <Tab className="tab-carousel-arrow-tab hide-tab-item"><a className="tab-carousel-right fas fa-chevron-right"></a></Tab>
+         }
         </TabList>
         <TabPanel className="carousel-dummy-tab" />
         <TabPanel>
@@ -201,6 +216,7 @@ class WordTabs extends Component {
         { isEnglishWord ? <TabPanel><Pronunciation word={word} /></TabPanel> : <TabPanel><WordNote word={word} /></TabPanel>}
         { isEnglishWord ? <TabPanel><WordNote word={word} /></TabPanel> : isVerb ? <TabPanel><Conjugate word={word} /></TabPanel> : '' }
         { isVerb ? <TabPanel><Conjugate word={word} /></TabPanel> : '' }
+        <TabPanel className="carousel-dummy-tab" />
      </Tabs>
     );
   }

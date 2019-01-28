@@ -863,7 +863,7 @@ ul {
 
 .react-tabs__tab-list {
   border-bottom: 1px solid #aaa;
-  margin: 0 0 1em;
+  margin: 0 0 .5em;
   padding: 0;
   position: absolute;
   background: #F5FBFD;
@@ -874,6 +874,10 @@ ul {
   justify-content: start;
   align-content: start;
   grid-row: 1;   
+}
+
+.tab-carousel-arrow-tab {
+  color: var(--sky-color);
 }
 
 .react-tabs__tab {
