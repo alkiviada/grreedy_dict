@@ -85,7 +85,7 @@ class WordTabs extends Component {
 
     if (index) { 
 // this is a legit tab - let's switch to it
-      if ((isVerb && ((isEnglishWord && index == 8) || index == 7)) || ((isEnglishWord && index == 7) || index == 6)) {
+      if ((isVerb && ((isEnglishWord && index == 8) || index == 7)) || ((isEnglishWord && index == 7) || (!isEnglishWord && index == 6)) {
       let c = this.state.carouselIdx 
       const myItems = isEnglishWord ? 6 + isVerb : 5 + isVerb;
       console.log(c)
