@@ -85,7 +85,10 @@ class WordTabs extends Component {
 
     if (index) { 
 // this is a legit tab - let's switch to it
-      if ((isVerb && ((isEnglishWord && index == 8) || index == 7)) || (isEnglishWord && index == 7) || (!isEnglishWord && index == 6)) {
+      console.log(index)
+      console.log('index')
+      console.log(isVerb)
+      if ((isVerb && ((isEnglishWord && index == 8) || (!isEnglishWord && index == 7))) || (!isVerb && ((isEnglishWord && index == 7) || (!isEnglishWord && index == 6)))) {
       let c = this.state.carouselIdx 
       const myItems = isEnglishWord ? 6 + isVerb : 5 + isVerb;
       console.log(c)
@@ -162,7 +165,7 @@ class WordTabs extends Component {
       {return e['language'] === 'english' ?  ++englishFlag : englishFlag}, 0)
 
     const isVerb = element.reduce((isVerb, e) => 
-      {return e['is_verb'] ?  ++isVerb : isVerb}, 0)
+      {return e['is_verb'] ? 1 : 0}, 0)
     const iAmHidden = this.state.carouselIdx
     console.log('i am hidden')
     console.log(iAmHidden)
@@ -170,6 +173,7 @@ class WordTabs extends Component {
     let tabMap = isEnglishWord ? tabWordMap['english'] : tabWordMap['non-english']
     const myItems = isEnglishWord ? 6 + isVerb : 5 + isVerb;
     let canMoveRight = myItems - iAmHidden - 1 > carouselItems ? 1 : 0 
+    console.log(canMoveRight)
     console.log(myItems)
     let canMoveLeft = iAmHidden > 0 ? 1 : 0 
 
