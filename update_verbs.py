@@ -94,6 +94,8 @@ def generate_examples():
   print(tenses)
   verbs = Word.true_verb_objects.all()
   for v in verbs:
+    if v.language != 'french':
+      continue
     c = v.conjugations
     for t in tenses:
       conjugs = Conjugation.objects.filter(word=v, tense=t)
@@ -287,5 +289,7 @@ def fill_conjugations_table():
 #pull_conjugations()
 exs = generate_examples()
 for e in exs:
-  ConjugationExample.objects.create(example e['example'], conjugation=e['conjugation'])
+  ce = ConjugationExample.objects.filter(example=e['example'], conjugation=e['conjugation'])
+  if not len(ce):
+    ConjugationExample.objects.create(example=e['example'], conjugation=e['conjugation'])
 

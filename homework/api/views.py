@@ -1,8 +1,9 @@
 from words.models import Word
+from homework.models import Tense, Conjugation, ConjugationExample
 
 from .serializers import (VerbSerializer, 
                          ConjugationSerializer,
-                         ConjugateHomeworkSerializer,
+                         ConjugationExampleSerializer,
 )
 
 from rest_framework import generics
@@ -20,39 +21,47 @@ class VerbsList(generics.ListAPIView):
   def get_queryset(self):
     return Word.true_verb_objects.all()
 
-class ConjugateMixIn(generics.RetrieveAPIView):
-  def get_object(self):
-    queryset = self.get_queryset()
-    filter = {}
-    for field in self.lookup_fields:
-      if self.kwargs[field]:  # Ignore empty fields.
-        filter[field] = self.kwargs[field]
-    return get_object_or_404(queryset, **filter) 
 
-class Conjugate(ConjugateMixIn):
+class Conjugate(generics.RetrieveAPIView):
   serializer_class = ConjugationSerializer
-  lookup_fields = ['word', 'language']
+  verb_lookup_fields = ['word', 'language'] 
 
   def get_queryset(self):
-    return Word.true_verb_objects.all()
+    verb_filter = {}
+    filter = {}
+    for field in self.verb_lookup_fields:
+      if self.kwargs[field]:  # Ignore empty fields.
+        verb_filter[field] = self.kwargs[field]
+    verb = Word.true_verb_objects.get(**verb_filter)
+    print(verb)
+    tense = Tense.objects.get(num_id=self.kwargs['tense_idx'])
+    filter = {'word': verb, 'tense': tense }
+    return Conjugation.objects.filter(**filter)
 
   def get(self, request, word, language, tense_idx, format=None):
-     print(tense_idx)
-     print(word)
-     verb = self.get_object()
-     serializer = ConjugationSerializer(verb, context={'tense_idx': tense_idx })
+     verb_forms = self.get_queryset()
+     serializer = ConjugationSerializer(verb_forms, many=True)
      return Response(serializer.data)
 
 
-class ConjugateHomework(ConjugateMixIn):
-  serializer_class = ConjugationSerializer
-  lookup_fields = ['word', 'language']
+class ConjugateHomework(generics.RetrieveAPIView):
+  serializer_class = ConjugationExampleSerializer
+  verb_lookup_fields = ['word', 'language']
 
   def get_queryset(self):
-    return Word.true_verb_objects.all()
+    verb_filter = {}
+    for field in self.verb_lookup_fields:
+      if self.kwargs[field]:  # Ignore empty fields.
+        verb_filter[field] = self.kwargs[field]
+    verb = Word.true_verb_objects.get(**verb_filter)
+    print(verb)
+    tense = Tense.objects.get(num_id=self.kwargs['tense_idx'])
+    conjugs_filter = {'word': verb, 'tense': tense }
+    conjugs = Conjugation.objects.filter(**conjugs_filter)
+    return ConjugationExample.objects.filter(conjugation__in=conjugs)
 
   def get(self, request, word, language, tense_idx, format=None):
      print(word)
-     verb = self.get_object()
-     serializer = ConjugateHomeworkSerializer(verb, context={'tense_idx': tense_idx })
+     examples = self.get_queryset()
+     serializer = ConjugationExampleSerializer(examples, many=True)
      return Response(serializer.data)

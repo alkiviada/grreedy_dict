@@ -35,7 +35,7 @@ export const fetchConjugations = (word, language, tenseIdx) => (dispatch, getSta
           dispatch({ type: FETCH_CONJUGATIONS_REJECTED, payload: 'fetching conjugations failed' })
         } else {
           // Status looks good
-          let conjugations = json.conjugations;
+          let conjugations = json.map(e => e.verb_form);
           dispatch({
             type: FETCH_CONJUGATIONS_FULFILLED,
             payload: conjugations

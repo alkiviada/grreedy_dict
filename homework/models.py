@@ -40,6 +40,6 @@ class Conjugation(models.Model):
 
 
 class ConjugationExample(models.Model):
-  example = models.CharField(max_length=500)
+  example = models.TextField()
   conjugation = models.ForeignKey(Conjugation, related_name="conjugation")
   is_bad = models.BooleanField(default=False)
