@@ -1,9 +1,32 @@
 import React, { Component } from "react";
+import ProcessPlaceholder from "./ProcessPlaceholder";
+import { connect } from 'react-redux';
 
-const ConjugateHomeWork = () => (
-  <div className="conjugate-homework">
-  Le prix des actions <span contenteditable="true"> ... </span> après l'annonce par l'entreprise des profits du trimestre précédent.
-  </div>
-)
+class ConjugateHomework extends Component {
+  constructor(props) { 
+    super(props)
+    console.log(props)
+  }
 
-export default ConjugateHomeWork;
+  render () {
+    const { homework, hRefs } = this.props
+    console.log(hRefs)
+    if (!homework.length) {
+      return (
+        <div className="clear-notification-message">
+          <em>Loading...</em>
+        </div>
+      )
+    }
+    return <div className="hconjugate">
+      { homework.map((h,i) => { console.log(hRefs[i]); return <ProcessPlaceholder homework={h} pref={hRefs[i]} />}) }
+    </div>
+  }
+}
+
+const mapStateToProps = state => ({
+  homework: state.conjugsHomework.homework,
+  hRefs: state.conjugsHomework.myConjugsRefs,
+});
+
+export default connect(mapStateToProps, { })(ConjugateHomework);

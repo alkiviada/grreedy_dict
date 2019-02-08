@@ -16,7 +16,7 @@ class SaveCollection extends Component {
     this.onSubmit = this.onSubmitSave.bind(this);
   };
 
-  componentWillMount() {
+  componentDidMount() {
     console.log('mounting save bar');
   }
 

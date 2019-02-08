@@ -208,6 +208,7 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
          let words;
          if (json.empty) {
            words = []
+           allWordsMap = {}
          }
          else if (json.words) {
 // the collection changed - let's  nuke its cache

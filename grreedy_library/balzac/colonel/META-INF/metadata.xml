@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entry xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns="http://www.w3.org/2005/Atom" xmlns:schema="http://schema.org/">
+<title>Le Colonel Chabert</title>
+<id>http://www.feedbooks.com/book/1886</id>
+<author>
+  <name>Honor&#233; de  Balzac</name>
+  <uri>http://www.feedbooks.com/author/51</uri>
+</author>
+<published>2007-10-30T23:05:13Z</published>
+<updated>2017-04-04T12:52:27Z</updated>
+<dcterms:language>fr</dcterms:language>
+<dcterms:issued>1832</dcterms:issued>
+<category term="FBFIC000000" label="Fiction" scheme="http://www.feedbooks.com/categories"/>
+<category term="FBFIC029000" label="Short Stories" scheme="http://www.feedbooks.com/categories"/>
+<summary>No Description Available</summary>
+<dcterms:extent>23,389 words</dcterms:extent>
+<dcterms:source>http://fr.wikisource.org</dcterms:source>
+<link type="text/html" title="View on Feedbooks" rel="alternate" href="http://generation.feedbooks.com/book/1886"/>
+<link type="application/epub+zip" rel="http://opds-spec.org/acquisition" href="http://generation.feedbooks.com/book/1886.epub"/>
+<link type="application/x-mobipocket-ebook" rel="http://opds-spec.org/acquisition" href="http://generation.feedbooks.com/book/1886.mobi"/>
+<link type="application/pdf" rel="http://opds-spec.org/acquisition" href="http://generation.feedbooks.com/book/1886.pdf"/>
+<link type="image/jpeg" rel="http://opds-spec.org/image" href="http://covers.feedbooks.net/book/1886.jpg?size=large&amp;t=1491310347"/>
+<link type="image/jpeg" rel="http://opds-spec.org/image/thumbnail" href="http://covers.feedbooks.net/book/1886.jpg?t=1491310347"/>
+<link type="application/atom+xml;profile=opds-catalog;kind=acquisition" title="From the same author" rel="http://www.feedbooks.com/opds/same_author" href="http://generation.feedbooks.com/author/51/books/top.atom?lang=fr"/>
+<link type="application/atom+xml;profile=opds-catalog;kind=navigation" title="Categories for this book" rel="related" href="http://generation.feedbooks.com/book/1886/categories.atom"/>
+<link type="application/atom+xml;profile=opds-catalog;kind=navigation" title="Reading lists for this book" rel="related" href="http://generation.feedbooks.com/book/1886/lists.atom"/>
+<link type="application/atom+xml" title="Comments for this book (0)" rel="replies" thr:count="0" href="http://generation.feedbooks.com/book/1886/comments.atom" thr:updated="2009-08-18T01:17:37Z"/>
+<link type="application/atom+xml;type=entry;profile=opds-catalog" rel="self" href="http://generation.feedbooks.com/book/1886.atom"/>
+  <link type="application/atom+xml" rel="contents" href="http://generation.feedbooks.com/book/1886/contents.atom"/>
+</entry>

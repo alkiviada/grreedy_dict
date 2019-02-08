@@ -10,6 +10,7 @@ import {
 const initialState = {
   verbs: [],
   verb: '',
+  language: '',
   verbsFetching: false,
   verbFetching: false,
   verbsFetched: false,
@@ -24,12 +25,15 @@ export default function(state = initialState, action) {
                              };
     case FETCH_VERB: return { ...state, 
                                verbFetching: true, 
+                               verb: action.payload.verb, 
+                               language: action.payload.language, 
                              };
     case FETCH_VERB_FULFILLED: return { ...state, 
                                          verbFetching: false, 
                                          error: null, 
                                          verbFetched: true,
-                                         verb: action.payload, 
+                                         verb: action.payload.verb, 
+                                         language: action.payload.language, 
                                        };
     case FETCH_VERBS_FULFILLED: return { ...state, 
                                          verbsFetching: false, 

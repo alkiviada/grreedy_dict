@@ -11,8 +11,9 @@ class Placeholder extends Component {
   }
 
   render () {
-    const { pref } = this.props
-  return <span ref={pref} className="my-conjugate-verb" contenteditable="true" placeholder={"..."}></span>
+    const { pref, styleClass } = this.props
+    console.log(pref)
+    return <span ref={pref} className={styleClass} contenteditable="true" placeholder={"..."}></span>
   }
 }
 

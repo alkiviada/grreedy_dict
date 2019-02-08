@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 
 import { tenses } from './helpers'
-import { logTenseIdx } from '../actions/conjugsActions'
 
 class TenseSelect extends React.Component {
   constructor(props) {
@@ -13,9 +12,13 @@ class TenseSelect extends React.Component {
   }
 
   handleChange(event) {
-    this.props.logTenseIdx(event.target.value)
+    console.log(this.props)
+    this.props.logTabTense(event.target.value)
     console.log(event.target.value)
     this.setState({ tenseIdx: event.target.value });
+    if (this.props.onChangeFunc) {
+        this.props.onChangeFunc()
+    }
   }
 
   render() {
@@ -26,11 +29,8 @@ class TenseSelect extends React.Component {
     );
   }
 }
-const mapDispatchToProps = {
-  logTenseIdx, 
-}
 
 const mapStateToProps = state => ({
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TenseSelect);
+export default connect(mapStateToProps, {})(TenseSelect);

@@ -1,0 +1,84 @@
+/*  XML blockout */
+p {
+    margin-top: 0.75em;
+    text-align: justify;
+    margin-bottom: 0.75em;
+    text-indent: 2%
+    }
+p.ind {
+    text-indent: 0%
+    }
+h1, h2, h3 {
+    text-align: center;
+    clear: both
+    }
+hr {
+    width: 33%;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    clear: both
+    }
+table {
+    margin-left: auto;
+    margin-right: auto
+    }
+body {
+    margin-left: 10%;
+    margin-right: 10%;
+    background: #fdfdfd;
+    color: black;
+    font-family: "Times New Roman", serif;
+    font-size: large
+    }
+a:link {
+    background-color: #fff;
+    color: blue;
+    text-decoration: none
+    }
+link {
+    background-color: #fff;
+    color: blue;
+    text-decoration: none
+    }
+a:visited {
+    background-color: #fff;
+    color: blue;
+    text-decoration: none
+    }
+a:hover {
+    background-color: #fff;
+    color: red;
+    text-decoration: underline
+    }
+.center {
+    text-align: center
+    }
+.footnote {
+    margin-left: 10%;
+    margin-right: 10%;
+    font-size: 0.9em
+    }
+.footnote .label {
+    text-align: right
+    }
+.fnanchor {
+    vertical-align: super;
+    font-size: 0.5em;
+    text-decoration: none
+    }
+.poem {
+    margin-left: 20%;
+    margin-right: 10%;
+    text-align: left
+    }
+.poem .stanza {
+    margin: 1em 0 1em 0
+    }
+.poem span.i0 {
+    display: block;
+    margin-left: 0;
+    padding-left: 3em;
+    text-indent: -3em
+    }

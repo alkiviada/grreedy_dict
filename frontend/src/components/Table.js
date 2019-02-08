@@ -5,7 +5,10 @@ import WordCell from "./WordCell";
 import WordLabel from "./WordLabel";
 import key from "weak-key";
 import { connect } from 'react-redux';
-import { deleteWord, lookUpWord, fetchWords, requestWords, requestWord, clearFetching } from '../actions/wordsActions';
+import { deleteWord, 
+         lookUpWord, fetchWords, requestWords, requestWord, 
+         clearFetched,
+         clearFetching } from '../actions/wordsActions';
 import { switchVisibility } from '../actions/visibilityActions';
 import { logWordDivOffset, setAllDataRef } from '../actions/refActions';
 import { scrollToDomRef } from './helpers';
@@ -62,9 +65,8 @@ class Table extends Component {
     const { refMap, allWordsMap, uuid, page } = this.props
      
     if (!this.props.allWordsMap[word]) {
-      this.props.requestWord();
+      this.props.requestWord(word);
       this.props.lookUpWord(word, this.props.uuid).then(() => {
-        scrollToDomRef(this.myRef, 35)
       })
     }
     else {
@@ -85,6 +87,17 @@ class Table extends Component {
   }
 
   componentDidUpdate() {
+    console.log('did update on table')
+    const { word, page, fetched, allWordsMap, refMap } = this.props
+    console.log(fetched)
+    console.log(word)
+    console.log(refMap[word])
+    console.log(refMap)
+    if (refMap[word] && refMap[word].current && fetched) {
+      console.log('i will scroll to new')
+      scrollToDomRef(refMap[word], 80)
+      this.props.clearFetched()
+    }
     this.props.setAllDataRef(this.myRef)
   }
 
@@ -186,6 +199,7 @@ const mapStateToProps = state => ({
   allFetching: state.words.allWordsFetching,
   collFetching: state.collections.fetching,
   wordFetching: state.words.newWordFetching,
+  fetched: state.words.newWordFetched,
   pageNext: state.words.pageNext,
   pagePrev: state.words.pagePrev,
   page: state.words.page,
@@ -199,5 +213,6 @@ export default connect(mapStateToProps, { setAllDataRef,
                                           requestWords, 
                                           requestWord, 
                                           clearFetching,
+                                          clearFetched,
                                           switchVisibility, 
                                           logWordDivOffset  })(Table);

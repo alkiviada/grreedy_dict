@@ -659,7 +659,7 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
     print(word);
 
     orig_word = Word.english_objects.get(word=word)
-    translated_words = orig_word.translations.all()
+    translated_words = orig_word.translations.order_by('pk').distinct().all()
 
     if not translated_words:
       translated_words = []

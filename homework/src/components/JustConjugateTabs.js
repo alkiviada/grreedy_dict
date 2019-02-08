@@ -7,7 +7,8 @@ import JustConjugate from "./JustConjugate";
 import CheckConjugate from "./CheckConjugate";
 import TenseSelect  from "./TenseSelect";
 
-import { fetchConjugations, requestConjugations, storeMyConjugs } from '../actions/conjugsActions';
+import { fetchConjugations, requestConjugations, storeMyConjugs, logTenseIdx } from '../actions/conjugsActions';
+
 const mapStateToProps = state => ({
   myConjugsRefMap: state.conjugs.myConjugsRefMap,
   tenseIdx: state.conjugs.tenseIdx,
@@ -31,13 +32,13 @@ class JustConjugateTabs extends Component {
 
   handleSelect(prev, index, verb) {
     console.log('switchinh tabs')
-    const { tenseIdx, myConjugsRefMap } = this.props
+    const { tenseIdx, myConjugsRefMap, language } = this.props
 
     this.setState( { tabIndex: index } );
 
     if (index == 1) {
       console.log('check');
-      this.props.storeMyConjugs(myConjugsRefMap)
+      this.props.storeMyConjugs(myConjugsRefMap, language)
       this.props.requestConjugations()
       this.props.fetchConjugations(verb, language, tenseIdx)
     }
@@ -51,14 +52,14 @@ class JustConjugateTabs extends Component {
       <Tabs selectedIndex={this.state.tabIndex} 
         onSelect={(prev, index) => this.handleSelect(index, prev, verb, language)}>
         <TabList>
-          <Tab>Try <TenseSelect /></Tab>
+          <Tab>Try <TenseSelect logTabTense={this.props.logTenseIdx} /></Tab>
           <Tab>Check</Tab>
         </TabList>
         <TabPanel>
           <JustConjugate language={language} />
         </TabPanel>
         <TabPanel>
-          <CheckConjugate />
+          <CheckConjugate language={language} />
         </TabPanel>
      </Tabs>
     </div>
@@ -68,7 +69,7 @@ class JustConjugateTabs extends Component {
 
 const mapDispatchToProps = {
   fetchConjugations, requestConjugations,
-  storeMyConjugs,
+  storeMyConjugs, logTenseIdx
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(JustConjugateTabs);

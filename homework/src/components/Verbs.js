@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import key from "weak-key";
 import { connect } from 'react-redux';
-import { fetchVerbs, requestVerbs } from '../actions/verbsActions';
+import { fetchVerbs, requestVerbs, requestVerb } from '../actions/verbsActions';
 
 const mapStateToProps = state => ({
   verbs: state.verbs.verbs,
@@ -20,7 +20,7 @@ class Verbs extends Component {
     verbs: PropTypes.array.isRequired,
   }
 
-  componentWillMount() {
+  componentDidMount() {
     console.log('mounting verbs');
     if (!this.props.verbs.length) {
       this.props.requestVerbs();
@@ -28,9 +28,10 @@ class Verbs extends Component {
     }
   }
 
-  onVerbClick(e, verb) {
+  onVerbClick(e, verb, language) {
     console.log('verb loading');
-    const { tenseIdx } = this.props
+    console.log(this.props)
+    this.props.requestVerb(verb, language) 
     // return <Redirect to="/homework/conjugate/{verb}/{tenseIdx}"
   }
   
@@ -46,7 +47,7 @@ class Verbs extends Component {
          verbs.map(v => {
           seenVerbMap[v.word] = seenVerbMap[v.word] ? seenVerbMap[v.word]++ : 1;
           return <li><a href={`/homework/conjugate/${v.word}/${v.language}`} 
-          onClick={(e) => this.onVerbClick(e, v.word)} className="verb-link">
+          onClick={(e) => this.onVerbClick(e, v.word, v.language)} className="verb-link">
             <span className="verb-word">{v.word}</span> 
             { seenVerbMap[v.word] > 1 ? <span className="verb-language">{v.language == 'italian' ? '(it)' : '(fr)'}</span> : '' }
          </a></li>
@@ -61,4 +62,5 @@ class Verbs extends Component {
 
 export default connect(mapStateToProps, { requestVerbs, 
                                           fetchVerbs, 
+                                          requestVerb, 
                                           })(Verbs);

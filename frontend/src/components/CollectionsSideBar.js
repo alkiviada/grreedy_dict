@@ -34,7 +34,7 @@ class CollectionsSideBar extends Component {
     items: PropTypes.array.isRequired,
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.auth.isAuthenticated && !this.props.colls.length) {
       this.props.requestCollections();
       this.props.fetchCollections();

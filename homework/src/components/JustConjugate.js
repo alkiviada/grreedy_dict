@@ -14,16 +14,16 @@ class JustConjugate extends Component {
 
   componentDidMount() {
     console.log('registering conjugate refs');
-    this.props.storeMyConjugateRefs(this.jconjRefMap)
+    this.props.storeMyConjugateRefs(this.jconjRefMap, this.props.language)
   }
 
   render () {
     console.log(this.props.myConjugsRefMap)
-    return <div ref={this.jconjRef} className="jconjugate">
+    return <div className="jconjugate">
     { prons[this.props.language].map(p => 
        <div className="who-conjugate">
          <div className="who">{p}</div>
-         <Placeholder pref={this.props.myConjugsRefMap[p]} />
+         <Placeholder classStyle="my-conjugate-verb" pref={this.props.myConjugsRefMap[p]} />
        </div>
      )}
     </div>

@@ -9,7 +9,7 @@ class CheckConjugate extends Component {
   }
 
   render () {
-    const { myConjugs, fetching, correctConjugs } = this.props
+    const { myConjugs, language, fetching, correctConjugs } = this.props
     console.log(correctConjugs)
     console.log(myConjugs)
     if (fetching) {
@@ -20,7 +20,7 @@ class CheckConjugate extends Component {
       )
     }
     return <div className="chk-conjugate">
-    { prons.map((p, i) => 
+    { prons[language].map((p, i) => 
        <div className="who-conjugate">
          <div className="who">{p}</div>
          <div className="correct">

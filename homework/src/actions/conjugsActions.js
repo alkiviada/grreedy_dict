@@ -16,10 +16,10 @@ export const requestConjugations = () => dispatch => {
   })
 };
 
-export const fetchConjugations = (word, tenseIdx) => (dispatch, getState) => {
+export const fetchConjugations = (word, language, tenseIdx) => (dispatch, getState) => {
   console.log('fetching conjugations');
 
-  return fetch('/homework/conjugations/' + word + '/' + tenseIdx)
+  return fetch('/homework/conjugations/' + word + '/' + language + '/' + tenseIdx)
   .then(response =>
       response.json().then(json => ({
         status: response.status,
@@ -61,10 +61,13 @@ export const storeMyConjugateRefs = (myConjugsRefMap) => dispatch => {
   })
 };
 
-export const storeMyConjugs = (myConjugsRefMap) => dispatch => {
+export const storeMyConjugs = (myConjugsRefMap, lang) => dispatch => {
+ console.log(lang)
  console.log('storing my conjugations');
- console.log(myConjugsRefMap)
- const myConjugs = prons.reduce((cA, p) => (cA.push(myConjugsRefMap[p].current.innerHTML.trim()), cA), [])
+ console.log(prons[lang])
+ const myConjugs = prons[lang].reduce((cA, p) => (cA.push(myConjugsRefMap[p].current.innerHTML.trim()), cA), [])
+ console.log('my conjugs')
+ console.log(myConjugs)
   dispatch({
     type: STORE_MY_CONJUGATIONS,
     payload: myConjugs

@@ -60,10 +60,38 @@ body {
   grid-template-columns: .5fr auto 10fr .5fr;
   grid-template-rows: 2em auto 1fr 5em;
   grid-template-areas: 
-    ". . . ."
+    ". . verb-title ."
     ". verbs work ."
     ". verbs more-work ."
     ". . . .";
+  padding: 1em;
+}
+
+.verb-title {
+  font-family: var(--word-font);
+  text-transform: uppercase;
+  grid-area: verb-title;
+  font-weight: bold;
+  color: var(--work-area-color); 
+  letter-spacing: .1em;
+  font-size: 2vw;
+  text-shadow:
+    0.05em 0 black,
+        0 0.05em black,
+        -0.05em 0 black,
+        0 -0.05em black,
+        -0.05em -0.05em black,
+        -0.05em 0.05em black,
+        0.05em -0.05em black,
+        0.05em 0.05em black;
+}
+
+.hconjugate {
+  background: var(--work-area-color);
+  margin: 0 .8em .5em .8em;
+  padding: .2em .5em .5em;
+  max-height: 15em;
+  overflow-y: auto;
 }
 
 .just-conjugate {
@@ -91,11 +119,16 @@ body {
 }
 
 .correct {
+  position: relative;
   grid-area: verb-form;
 }
 
 .corrections {
-  position:absolute;
+  position: absolute;
+}
+
+.homework-corrections {
+  display: inline-flex;
 }
 
 .wrong-answer {
@@ -104,12 +137,19 @@ body {
 }
 
 .correct-answer {
-  margin: -30px 15px 0 15px; 
+  margin: -35px 15px 0 15px; 
   z-index:2; 
   color: var(--correct-color);
 }
 
+.correct-answer-homework {
+  margin: -10px -10px 0 -13px;
+  z-index: 2; 
+  color: var(--correct-color);
+}
+
 .right-answer {
+  display: inline;
   color: var(--correct-color);
 }
 
@@ -117,13 +157,12 @@ body {
   grid-area: verb-form;
 }
 
-[contenteditable=true]:empty:before { content: attr(placeholder); display: block; color: #aaa; }
+[contenteditable=true]:empty:before { content: attr(placeholder); color: #aaa; }
 
 /* homework */
 
 .conjugate-homework {
   grid-area: more-work;
-  background: var(--work-area-color);
   margin: 1em .8em .5em .8em;
   max-height: 20em;
   overflow-y: auto;
@@ -144,7 +183,7 @@ body {
 }
 
 .verbs-ul {
-  padding: 0 0 0 .5em;
+  padding: 0 .5em 0 .5em;
   list-style-type: none;
 }
 
@@ -160,6 +199,7 @@ body {
 
 .react-tabs {
   -webkit-tap-highlight-color: transparent;
+  background: var(--work-area-color);
 }
 
 .react-tabs__tab-list {

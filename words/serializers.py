@@ -88,6 +88,14 @@ class SynonymSerializer(serializers.ModelSerializer):
         model = Word
         fields = ['word', 'language']
 
+class CollocationExampleSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Collocation
+    fields = ['example']
+  def to_representation(self, instance):
+    result = super(CollocationExampleSerializer, self).to_representation(instance)
+    return OrderedDict([(key, result[key]) for key in result if result[key] is not ''])
+
 class CollocationSerializer(serializers.ModelSerializer):
   class Meta:
     model = Collocation

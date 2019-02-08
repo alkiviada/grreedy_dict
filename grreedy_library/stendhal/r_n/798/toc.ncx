@@ -1,0 +1,527 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ncx PUBLIC '-//NISO//DTD ncx 2005-1//EN' 'http://www.daisy.org/z3986/2005/ncx-2005-1.dtd'>
+
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="fr">
+  <head>
+    <meta content="http://www.gutenberg.org/ebooks/798" name="dtb:uid"/>
+    <meta content="3" name="dtb:depth"/>
+    <meta content="EpubMaker 0.3.20a6 by Marcello Perathoner &lt;webmaster@gutenberg.org&gt;" name="dtb:generator"/>
+    <meta content="0" name="dtb:totalPageCount"/>
+    <meta content="0" name="dtb:maxPageNumber"/>
+  </head>
+  <docTitle>
+    <text>Le Rouge et le noir</text>
+  </docTitle>
+  <navMap>
+    <navPoint id="np-1" playOrder="1">
+      <navLabel>
+        <text>VOLUME PREMIER</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-0.txt.html#id00011"/>
+    </navPoint>
+    <navPoint id="np-2" playOrder="2">
+      <navLabel>
+        <text>CHAPITRE PREMIER</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-0.txt.html#id00014"/>
+      <navPoint id="np-3" playOrder="3">
+        <navLabel>
+          <text>UNE PETITE VILLE</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@798@798-8-0.txt.html#id00015"/>
+      </navPoint>
+    </navPoint>
+    <navPoint id="np-4" playOrder="4">
+      <navLabel>
+        <text>CHAPITRE II</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-0.txt.html#id00032"/>
+    </navPoint>
+    <navPoint id="np-5" playOrder="5">
+      <navLabel>
+        <text>CHAPITRE III</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-0.txt.html#id00053"/>
+    </navPoint>
+    <navPoint id="np-6" playOrder="6">
+      <navLabel>
+        <text>CHAPITRE IV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-0.txt.html#id00085"/>
+    </navPoint>
+    <navPoint id="np-7" playOrder="7">
+      <navLabel>
+        <text>CHAPITRE V</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-0.txt.html#id00106"/>
+    </navPoint>
+    <navPoint id="np-8" playOrder="8">
+      <navLabel>
+        <text>CHAPITRE VI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-0.txt.html#id00169"/>
+    </navPoint>
+    <navPoint id="np-9" playOrder="9">
+      <navLabel>
+        <text>CHAPITRE VII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-1.txt.html#id00236"/>
+    </navPoint>
+    <navPoint id="np-10" playOrder="10">
+      <navLabel>
+        <text>CHAPITRE VIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-1.txt.html#id00298"/>
+    </navPoint>
+    <navPoint id="np-11" playOrder="11">
+      <navLabel>
+        <text>CHAPITRE IX</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-1.txt.html#id00348"/>
+    </navPoint>
+    <navPoint id="np-12" playOrder="12">
+      <navLabel>
+        <text>CHAPITRE X</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-2.txt.html#id00413"/>
+    </navPoint>
+    <navPoint id="np-13" playOrder="13">
+      <navLabel>
+        <text>CHAPITRE XI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-2.txt.html#id00445"/>
+    </navPoint>
+    <navPoint id="np-14" playOrder="14">
+      <navLabel>
+        <text>CHAPITRE XII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-2.txt.html#id00465"/>
+    </navPoint>
+    <navPoint id="np-15" playOrder="15">
+      <navLabel>
+        <text>CHAPITRE XIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-2.txt.html#id00500"/>
+    </navPoint>
+    <navPoint id="np-16" playOrder="16">
+      <navLabel>
+        <text>CHAPITRE XIV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-2.txt.html#id00532"/>
+    </navPoint>
+    <navPoint id="np-17" playOrder="17">
+      <navLabel>
+        <text>CHAPITRE XV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-2.txt.html#id00561"/>
+    </navPoint>
+    <navPoint id="np-18" playOrder="18">
+      <navLabel>
+        <text>CHAPITRE XVI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-2.txt.html#id00588"/>
+    </navPoint>
+    <navPoint id="np-19" playOrder="19">
+      <navLabel>
+        <text>CHAPITRE XVII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-3.txt.html#id00623"/>
+    </navPoint>
+    <navPoint id="np-20" playOrder="20">
+      <navLabel>
+        <text>CHAPITRE XVIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-3.txt.html#id00650"/>
+    </navPoint>
+    <navPoint id="np-21" playOrder="21">
+      <navLabel>
+        <text>CHAPITRE XIX</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-3.txt.html#id00737"/>
+    </navPoint>
+    <navPoint id="np-22" playOrder="22">
+      <navLabel>
+        <text>CHAPITRE XX</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-4.txt.html#id00807"/>
+    </navPoint>
+    <navPoint id="np-23" playOrder="23">
+      <navLabel>
+        <text>CHAPITRE XXI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-4.txt.html#id00833"/>
+    </navPoint>
+    <navPoint id="np-24" playOrder="24">
+      <navLabel>
+        <text>CHAPITRE XXII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-4.txt.html#id00934"/>
+    </navPoint>
+    <navPoint id="np-25" playOrder="25">
+      <navLabel>
+        <text>CHAPITRE XXIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-5.txt.html#id00998"/>
+    </navPoint>
+    <navPoint id="np-26" playOrder="26">
+      <navLabel>
+        <text>CHAPITRE XXIV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-5.txt.html#id01119"/>
+    </navPoint>
+    <navPoint id="np-27" playOrder="27">
+      <navLabel>
+        <text>CHAPITRE XXV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-5.txt.html#id01183"/>
+    </navPoint>
+    <navPoint id="np-28" playOrder="28">
+      <navLabel>
+        <text>CHAPITRE XXVI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-6.txt.html#id01252"/>
+    </navPoint>
+    <navPoint id="np-29" playOrder="29">
+      <navLabel>
+        <text>CHAPITRE XXVII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-6.txt.html#id01330"/>
+    </navPoint>
+    <navPoint id="np-30" playOrder="30">
+      <navLabel>
+        <text>CHAPITRE XXVIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-6.txt.html#id01353"/>
+    </navPoint>
+    <navPoint id="np-31" playOrder="31">
+      <navLabel>
+        <text>CHAPITRE XXIX</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-6.txt.html#id01398"/>
+    </navPoint>
+    <navPoint id="np-32" playOrder="32">
+      <navLabel>
+        <text>CHAPITRE XXX</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-7.txt.html#id01511"/>
+    </navPoint>
+    <navPoint id="np-33" playOrder="33">
+      <navLabel>
+        <text>VOLUME SECOND</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-7.txt.html#id01671"/>
+    </navPoint>
+    <navPoint id="np-34" playOrder="34">
+      <navLabel>
+        <text>CHAPITRE PREMIER</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-7.txt.html#id01674"/>
+    </navPoint>
+    <navPoint id="np-35" playOrder="35">
+      <navLabel>
+        <text>CHAPITRE II</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-8.txt.html#id01759"/>
+    </navPoint>
+    <navPoint id="np-36" playOrder="36">
+      <navLabel>
+        <text>CHAPITRE III</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-8.txt.html#id01815"/>
+    </navPoint>
+    <navPoint id="np-37" playOrder="37">
+      <navLabel>
+        <text>CHAPITRE IV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-8.txt.html#id01850"/>
+    </navPoint>
+    <navPoint id="np-38" playOrder="38">
+      <navLabel>
+        <text>CHAPITRE V</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-9.txt.html#id01936"/>
+    </navPoint>
+    <navPoint id="np-39" playOrder="39">
+      <navLabel>
+        <text>CHAPITRE VI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-9.txt.html#id01951"/>
+    </navPoint>
+    <navPoint id="np-40" playOrder="40">
+      <navLabel>
+        <text>CHAPITRE VII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-9.txt.html#id02004"/>
+    </navPoint>
+    <navPoint id="np-41" playOrder="41">
+      <navLabel>
+        <text>CHAPITRE VIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-9.txt.html#id02077"/>
+    </navPoint>
+    <navPoint id="np-42" playOrder="42">
+      <navLabel>
+        <text>CHAPITRE IX</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-10.txt.html#id02161"/>
+    </navPoint>
+    <navPoint id="np-43" playOrder="43">
+      <navLabel>
+        <text>CHAPITRE X</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-10.txt.html#id02233"/>
+    </navPoint>
+    <navPoint id="np-44" playOrder="44">
+      <navLabel>
+        <text>CHAPITRE XI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-10.txt.html#id02291"/>
+    </navPoint>
+    <navPoint id="np-45" playOrder="45">
+      <navLabel>
+        <text>CHAPITRE XII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-10.txt.html#id02314"/>
+    </navPoint>
+    <navPoint id="np-46" playOrder="46">
+      <navLabel>
+        <text>CHAPITRE XIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-11.txt.html#id02354"/>
+    </navPoint>
+    <navPoint id="np-47" playOrder="47">
+      <navLabel>
+        <text>CHAPITRE XIV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-11.txt.html#id02419"/>
+    </navPoint>
+    <navPoint id="np-48" playOrder="48">
+      <navLabel>
+        <text>CHAPITRE XV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-11.txt.html#id02461"/>
+    </navPoint>
+    <navPoint id="np-49" playOrder="49">
+      <navLabel>
+        <text>CHAPITRE XVI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-11.txt.html#id02497"/>
+    </navPoint>
+    <navPoint id="np-50" playOrder="50">
+      <navLabel>
+        <text>CHAPITRE XVII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-12.txt.html#id02555"/>
+    </navPoint>
+    <navPoint id="np-51" playOrder="51">
+      <navLabel>
+        <text>CHAPITRE XVIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-12.txt.html#id02602"/>
+    </navPoint>
+    <navPoint id="np-52" playOrder="52">
+      <navLabel>
+        <text>CHAPITRE XIX</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-12.txt.html#id02643"/>
+    </navPoint>
+    <navPoint id="np-53" playOrder="53">
+      <navLabel>
+        <text>CHAPITRE XX</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-12.txt.html#id02715"/>
+    </navPoint>
+    <navPoint id="np-54" playOrder="54">
+      <navLabel>
+        <text>CHAPITRE XXI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-12.txt.html#id02761"/>
+    </navPoint>
+    <navPoint id="np-55" playOrder="55">
+      <navLabel>
+        <text>CHAPITRE XXII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-13.txt.html#id02807"/>
+    </navPoint>
+    <navPoint id="np-56" playOrder="56">
+      <navLabel>
+        <text>CHAPITRE XXIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-13.txt.html#id02879"/>
+    </navPoint>
+    <navPoint id="np-57" playOrder="57">
+      <navLabel>
+        <text>CHAPITRE XXIV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-13.txt.html#id02967"/>
+    </navPoint>
+    <navPoint id="np-58" playOrder="58">
+      <navLabel>
+        <text>CHAPITRE XXV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-13.txt.html#id03027"/>
+    </navPoint>
+    <navPoint id="np-59" playOrder="59">
+      <navLabel>
+        <text>CHAPITRE XXVI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-14.txt.html#id03083"/>
+    </navPoint>
+    <navPoint id="np-60" playOrder="60">
+      <navLabel>
+        <text>CHAPITRE XXVII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-14.txt.html#id03104"/>
+    </navPoint>
+    <navPoint id="np-61" playOrder="61">
+      <navLabel>
+        <text>CHAPITRE XXVIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-14.txt.html#id03126"/>
+    </navPoint>
+    <navPoint id="np-62" playOrder="62">
+      <navLabel>
+        <text>CHAPITRE XXIX</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-14.txt.html#id03154"/>
+    </navPoint>
+    <navPoint id="np-63" playOrder="63">
+      <navLabel>
+        <text>CHAPITRE XXX</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-14.txt.html#id03184"/>
+    </navPoint>
+    <navPoint id="np-64" playOrder="64">
+      <navLabel>
+        <text>CHAPITRE XXXI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-14.txt.html#id03226"/>
+    </navPoint>
+    <navPoint id="np-65" playOrder="65">
+      <navLabel>
+        <text>CHAPITRE XXXII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-14.txt.html#id03281"/>
+    </navPoint>
+    <navPoint id="np-66" playOrder="66">
+      <navLabel>
+        <text>CHAPITRE XXXIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-15.txt.html#id03334"/>
+    </navPoint>
+    <navPoint id="np-67" playOrder="67">
+      <navLabel>
+        <text>CHAPITRE XXXIV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-15.txt.html#id03388"/>
+    </navPoint>
+    <navPoint id="np-68" playOrder="68">
+      <navLabel>
+        <text>CHAPITRE XXXV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-15.txt.html#id03434"/>
+    </navPoint>
+    <navPoint id="np-69" playOrder="69">
+      <navLabel>
+        <text>CHAPITRE XXXVI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-15.txt.html#id03476"/>
+    </navPoint>
+    <navPoint id="np-70" playOrder="70">
+      <navLabel>
+        <text>CHAPITRE XXXVII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-15.txt.html#id03542"/>
+    </navPoint>
+    <navPoint id="np-71" playOrder="71">
+      <navLabel>
+        <text>CHAPITRE XXXVIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-16.txt.html#id03581"/>
+    </navPoint>
+    <navPoint id="np-72" playOrder="72">
+      <navLabel>
+        <text>CHAPITRE XXXIX</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-16.txt.html#id03628"/>
+    </navPoint>
+    <navPoint id="np-73" playOrder="73">
+      <navLabel>
+        <text>CHAPITRE XL</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-16.txt.html#id03661"/>
+    </navPoint>
+    <navPoint id="np-74" playOrder="74">
+      <navLabel>
+        <text>CHAPITRE XLI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-16.txt.html#id03692"/>
+    </navPoint>
+    <navPoint id="np-75" playOrder="75">
+      <navLabel>
+        <text>CHAPITRE XLII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-16.txt.html#id03744"/>
+    </navPoint>
+    <navPoint id="np-76" playOrder="76">
+      <navLabel>
+        <text>CHAPITRE XLIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-17.txt.html#id03796"/>
+    </navPoint>
+    <navPoint id="np-77" playOrder="77">
+      <navLabel>
+        <text>CHAPITRE XLIV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-17.txt.html#id03859"/>
+    </navPoint>
+    <navPoint id="np-78" playOrder="78">
+      <navLabel>
+        <text>CHAPITRE XLV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@798@798-8-17.txt.html#id03930"/>
+      <navPoint id="np-79" playOrder="79">
+        <navLabel>
+          <text>FIN</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@798@798-8-17.txt.html#id03983"/>
+      </navPoint>
+      <navPoint id="np-80" playOrder="80">
+        <navLabel>
+          <text>*** START: FULL LICENSE ***</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@798@798-8-17.txt.html#id03990"/>
+        <navPoint id="np-81" playOrder="81">
+          <navLabel>
+            <text>Section 1. General Terms of Use and Redistributing Project Gutenberg-tm electronic works</text>
+          </navLabel>
+          <content src="@public@vhost@g@gutenberg@html@files@798@798-8-17.txt.html#id03993"/>
+        </navPoint>
+        <navPoint id="np-82" playOrder="82">
+          <navLabel>
+            <text>Section 2. Information about the Mission of Project Gutenberg-tm</text>
+          </navLabel>
+          <content src="@public@vhost@g@gutenberg@html@files@798@798-8-17.txt.html#id04020"/>
+        </navPoint>
+        <navPoint id="np-83" playOrder="83">
+          <navLabel>
+            <text>Section 3. Information about the Project Gutenberg Literary Archive Foundation</text>
+          </navLabel>
+          <content src="@public@vhost@g@gutenberg@html@files@798@798-8-17.txt.html#id04023"/>
+        </navPoint>
+        <navPoint id="np-84" playOrder="84">
+          <navLabel>
+            <text>Section 4. Information about Donations to the Project Gutenberg Literary Archive Foundation</text>
+          </navLabel>
+          <content src="@public@vhost@g@gutenberg@html@files@798@798-8-17.txt.html#id04027"/>
+        </navPoint>
+        <navPoint id="np-85" playOrder="85">
+          <navLabel>
+            <text>Section 5. General Information About Project Gutenberg-tm electronic works.</text>
+          </navLabel>
+          <content src="@public@vhost@g@gutenberg@html@files@798@798-8-17.txt.html#id04033"/>
+        </navPoint>
+      </navPoint>
+    </navPoint>
+  </navMap>
+</ncx>

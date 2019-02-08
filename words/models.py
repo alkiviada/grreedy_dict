@@ -51,6 +51,9 @@ class Example(models.Model):
     definition = models.ForeignKey(Definition, on_delete=models.CASCADE, related_name='examples', blank=True, null=True)
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_examples')
 
+    def __str__(self):
+        return self.example
+
 class YandexWordMixin(models.Manager):
 
   def create_or_get_translations(self, orig_word, **args):
@@ -523,7 +526,7 @@ class RomanceWordManager(WordRefWordMixin, models.Manager):
       orig_verb = Word.objects.get(language=word.language, word=original)
       print('i have original verb: ', orig_verb.word)
     except ObjectDoesNotExist:
-      orig_verb = Word.objects.create(language=word.language, 
+      orig_verb = Word.objects.create(word=original, language=word.language, 
                                       from_translation=True, 
                                       lookup_date=timezone.now(), is_verb=True)
     if orig_verb.conjugations:

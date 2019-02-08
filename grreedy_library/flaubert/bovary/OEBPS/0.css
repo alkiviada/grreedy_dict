@@ -1,0 +1,289 @@
+/**/
+body {
+    margin-left: 15%;
+    margin-right: 15%
+    }
+p {
+    margin-top: 0.75em;
+    text-align: justify;
+    margin-bottom: 0.75em;
+    text-indent: 1.5em
+    }
+.noindent {
+    text-indent: 0
+    }
+/* all headings centered */
+h1, h2, h3, h4 {
+    text-align: center
+    }
+h1 {
+    font-size: 2em;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em
+    }
+h2 {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em
+    }
+h2.notes {
+    text-align: center;
+    margin-bottom: -0.5em
+    }
+hr.full {
+    width: 100%;
+    margin: 5em auto 5em auto;
+    border-width: 4px 0 0 0;
+    border-style: solid;
+    border-color: #000;
+    clear: both
+    }
+hr.small {
+    margin: 4em 35% 4em 35%;
+    border-color: #A9A9A9;
+    border-style: solid;
+    clear: both
+    }
+hr.small2 {
+    margin: 2em 45% 2em 45%;
+    border-color: #000;
+    border-style: solid;
+    clear: both
+    }
+hr.small3 {
+    margin: 1em 47% 1em 47%;
+    border-color: #000;
+    border-style: solid;
+    clear: both
+    }
+.smcap {
+    font-variant: small-caps;
+    font-size: 85%
+    }
+sup {
+    font-size: 80%;
+    vertical-align: 30%
+    }
+.sup2 {
+    font-size: 60%;
+    vertical-align: 30%
+    }
+.small50 {
+    font-size: 50%
+    }
+.small60 {
+    font-size: 60%
+    }
+.small80 {
+    font-size: 80%
+    }
+.big110 {
+    font-size: 110%
+    }
+.big130 {
+    font-size: 130%
+    }
+.big150 {
+    font-size: 150%
+    }
+.big200 {
+    font-size: 200%
+    }
+.left {
+    text-align: left
+    }
+.center {
+    text-align: center;
+    text-indent: 0
+    }
+.tablematieres {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    text-align: center;
+    text-indent: 0
+    }
+.dottedline {
+    border-top: thin dotted black;
+    margin-top: 0;
+    margin-bottom: -1em
+    }
+.quote {
+    margin: 0.5em 8% 0.5em 8%;
+    font-size: 100%
+    }
+.totopleft {
+    text-align: left;
+    margin-top: 1.5em;
+    margin-left: 2.5em;
+    text-indent: 0
+    }
+.dateleft {
+    text-align: left;
+    margin-top: 2em;
+    margin-left: 2em
+    }
+.signatureright {
+    text-align: right;
+    margin-top: 2em;
+    margin-right: 2em;
+    margin-bottom: 2em
+    }
+.signatureright4 {
+    text-align: right;
+    margin-top: 0.5em;
+    margin-right: 4em;
+    margin-bottom: 1em
+    }
+.signatureright2 {
+    text-align: right;
+    margin-top: 2em;
+    margin-right: 3em;
+    margin-bottom: 2em
+    }
+.signatureright3 {
+    text-align: right;
+    margin-top: 2em;
+    margin-right: 4em;
+    margin-bottom: 2em
+    }
+/* poems */
+.poem {
+    text-align: left;
+    margin-left: 10%;
+    margin-right: 10%
+    }
+/* images */
+img {
+    margin-left: auto;
+    margin-right: auto
+    }
+.figcenter {
+    margin: 4em auto 4em auto;
+    text-align: center;
+    text-indent: 0
+    }
+.figcenter2 {
+    margin: 2em auto 2em auto;
+    text-align: center;
+    text-indent: 0
+    }
+.caption {
+    margin: 0.25em 0 0.5em 0;
+    color: #A9A9A9;
+    text-indent: 0
+    }
+.captionleft {
+    text-align: left;
+    font-size: 80%
+    }
+.captioncenter {
+    text-align: center;
+    font-size: 110%
+    }
+.captionright2 {
+    text-align: right;
+    font-size: 80%;
+    margin-top: -2em
+    }
+/* tables */
+table {
+    margin: 1.25em auto 1.25em auto
+    }
+.tdltop {
+    text-align: left;
+    vertical-align: top
+    }
+.tdltop2 {
+    text-align: left;
+    vertical-align: top
+    }
+.tdrtop {
+    text-align: right;
+    vertical-align: top
+    }
+/* footnotes */
+.line {
+    text-align: center;
+    text-indent: 0;
+    margin-top: -1.5em
+    }
+.fnanchor {
+    vertical-align: 0.3em;
+    font-size: 0.6em;
+    text-decoration: none
+    }
+.footnotes {
+    margin-top: 2em
+    }
+.footnote {
+    margin-left: 5%;
+    margin-right: 5%
+    }
+.footnote .label {
+    text-align: right
+    }
+/* page numbers */
+.pagenum {
+    font-size: 90%;
+    font-weight: normal;
+    font-style: normal;
+    text-align: right;
+    color: #C0C0C0;
+    background-color: inherit;
+    text-indent: 0
+    }
+.pagenum2 {
+    font-size: 70%;
+    font-weight: normal;
+    font-style: normal;
+    text-align: right;
+    color: #C0C0C0;
+    background-color: inherit;
+    text-indent: 0
+    }
+a {
+    text-decoration: none
+    }
+.link {
+    font-size: small;
+    text-align: center;
+    margin-top: 0;
+    font-weight: 400
+    }
+/* note au lecteur */
+.tnote {
+    margin: 20px 20% 20px 20%;
+    font-family: sans-serif;
+    font-size: 100%
+    }
+/* correction popup */
+ins.correction {
+    text-decoration: none;
+    border-bottom: thin dotted silver
+    }
+/* e-readers */
+@media all {
+    /* was @media handheld */
+    body {
+        margin: 0;
+        padding: 0;
+        width: 90%
+        }
+    }
+h1.pg {
+    font-size: 190%;
+    margin-top: 0;
+    margin-bottom: 1em
+    }
+hr.pg {
+    width: 100%;
+    margin-top: 3em;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    border-width: 4px 0 0 0;
+    /* remove all borders except the top one */
+    border-style: solid;
+    border-color: #000;
+    clear: both
+    }
+/**/

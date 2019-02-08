@@ -13,10 +13,11 @@ export const requestVerbs = () => dispatch => {
   })
 };
 
-export const requestVerb = () => dispatch => {
+export const requestVerb = (verb, language) => dispatch => {
  console.log('requesting verb');
   dispatch({
     type: FETCH_VERB,
+    payload: { language, verb }
   })
 };
 

@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<package xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="id">
+  <metadata>
+    <dc:rights>Public domain in the USA.</dc:rights>
+    <dc:identifier opf:scheme="URI" id="id">http://www.gutenberg.org/ebooks/2650</dc:identifier>
+    <dc:creator opf:file-as="Proust, Marcel">Marcel Proust</dc:creator>
+    <dc:title>Du côté de chez Swann</dc:title>
+    <dc:language xsi:type="dcterms:RFC4646">fr</dc:language>
+    <dc:subject>Autobiographical fiction</dc:subject>
+    <dc:subject>Villages -- Fiction</dc:subject>
+    <dc:subject>France -- Social life and customs -- 19th century -- Fiction</dc:subject>
+    <dc:date opf:event="publication">2001-05-01</dc:date>
+    <dc:date opf:event="conversion">2018-11-02T05:43:01.182012+00:00</dc:date>
+    <dc:source>http://www.gutenberg.org/files/2650/2650-h/2650-h.htm</dc:source>
+  </metadata>
+  <manifest>
+    <item href="pgepub.css" media-type="text/css" id="item1"/>
+    <item href="0.css" media-type="text/css" id="item2"/>
+    <item href="1.css" media-type="text/css" id="item3"/>
+    <!--Chunk: size=83250 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@2650@2650-h@2650-h-0.htm.html" media-type="application/xhtml+xml" id="item4"/>
+    <!--Chunk: size=82287 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@2650@2650-h@2650-h-1.htm.html" media-type="application/xhtml+xml" id="item5"/>
+    <!--Chunk: size=82082 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@2650@2650-h@2650-h-2.htm.html" media-type="application/xhtml+xml" id="item6"/>
+    <!--Chunk: size=84453 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@2650@2650-h@2650-h-3.htm.html" media-type="application/xhtml+xml" id="item7"/>
+    <!--Chunk: size=86157 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@2650@2650-h@2650-h-4.htm.html" media-type="application/xhtml+xml" id="item8"/>
+    <!--Chunk: size=82134 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@2650@2650-h@2650-h-5.htm.html" media-type="application/xhtml+xml" id="item9"/>
+    <!--Chunk: size=83295 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@2650@2650-h@2650-h-6.htm.html" media-type="application/xhtml+xml" id="item10"/>
+    <!--Chunk: size=89898 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@2650@2650-h@2650-h-7.htm.html" media-type="application/xhtml+xml" id="item11"/>
+    <!--Chunk: size=84817 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@2650@2650-h@2650-h-8.htm.html" media-type="application/xhtml+xml" id="item12"/>
+    <!--Chunk: size=83248 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@2650@2650-h@2650-h-9.htm.html" media-type="application/xhtml+xml" id="item13"/>
+    <!--Chunk: size=82652 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@2650@2650-h@2650-h-10.htm.html" media-type="application/xhtml+xml" id="item14"/>
+    <!--Chunk: size=83553 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@2650@2650-h@2650-h-11.htm.html" media-type="application/xhtml+xml" id="item15"/>
+    <!--Chunk: size=84853 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@2650@2650-h@2650-h-12.htm.html" media-type="application/xhtml+xml" id="item16"/>
+    <!--Chunk: size=82603 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@2650@2650-h@2650-h-13.htm.html" media-type="application/xhtml+xml" id="item17"/>
+    <!--Chunk: size=52493-->
+    <item href="@public@vhost@g@gutenberg@html@files@2650@2650-h@2650-h-14.htm.html" media-type="application/xhtml+xml" id="item18"/>
+    <item href="toc.ncx" media-type="application/x-dtbncx+xml" id="ncx"/>
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="item4" linear="yes"/>
+    <itemref idref="item5" linear="yes"/>
+    <itemref idref="item6" linear="yes"/>
+    <itemref idref="item7" linear="yes"/>
+    <itemref idref="item8" linear="yes"/>
+    <itemref idref="item9" linear="yes"/>
+    <itemref idref="item10" linear="yes"/>
+    <itemref idref="item11" linear="yes"/>
+    <itemref idref="item12" linear="yes"/>
+    <itemref idref="item13" linear="yes"/>
+    <itemref idref="item14" linear="yes"/>
+    <itemref idref="item15" linear="yes"/>
+    <itemref idref="item16" linear="yes"/>
+    <itemref idref="item17" linear="yes"/>
+    <itemref idref="item18" linear="yes"/>
+  </spine>
+</package>
