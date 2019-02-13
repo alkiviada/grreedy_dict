@@ -103,10 +103,25 @@ def generate_examples():
       for c in conjugs:
         print(c)
         vf = c.verb_form
+        vf_re_sep = ''
         if seen_vf.get(vf):
           continue
         seen_vf[vf] = 1
-        if re.search(r'\(', vf):
+        if re.search(r'\s+', vf):
+          print(vf)
+          vf_parts = vf.split(' ')
+          for vf_part in vf_parts:
+            if re.search(r'\(', vf_part):
+              vf_part = re.sub(r'\(.+$', '', vf_part)
+              vf_part = vf_part + r"\w*\W+"
+            if re.search(r"\'", vf_part):
+              vf_part = re.sub(r"\'", ".*", vf_part)
+            vf_re_sep += r"\W" + vf_part + r"\W.*"
+          vf_db_re = vf_re = vf_re_sep
+          print(vf_db_re)
+          print(vf_re)
+          
+        elif re.search(r'\(', vf):
           vf_stripped = re.sub(r'\(.+$', '', vf)
           vf_db_re = r"\W+" + vf_stripped + r"\w*\W+"
           vf_re = r"\b" + vf_stripped + r"\w*\b"
@@ -119,8 +134,11 @@ def generate_examples():
           print(vf_db_re)
           print(vf_re)
         else:
-          vf_db_re = r"\W+?" + vf + r"\W+"
-          vf_re = r"\b" + vf + r"\b"
+          vf_sub = ''
+          if re.search(r"\'", vf):
+            vf_sub = re.sub(r"\'", ".*", vf)
+          vf_db_re = r"\W+?" + vf_sub if vf_sub else vf + r"\W+"
+          vf_re = r"\b" + vf_sub if vf_sub else vf + r"\b"
 
         all_db_examples = []
         ret_map = search_db_examples(v)

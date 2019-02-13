@@ -1,1 +1,1 @@
-export const maxWordsOnPages = 3
+export const maxWordsOnPages = 20
