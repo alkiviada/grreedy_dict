@@ -271,7 +271,7 @@ body {
 }
 
 .verb-word {
-  letter-spacing: .01em;
+  letter-spacing: .05em;
   text-transform: uppercase;
   color: var(--grass-color);
   font-weight: bold;

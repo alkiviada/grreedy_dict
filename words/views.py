@@ -211,6 +211,7 @@ class WordSingleDelete(generics.RetrieveAPIView):
     word = word.lower()
     db_words = Word.single_object.filter(word=word);
     coll = Collection.objects.get(uuid=uuid)
+    print(db_words)
 
     is_empty = 0
     for w in db_words:

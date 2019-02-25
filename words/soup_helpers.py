@@ -10,9 +10,9 @@ def scrape_wordref_words(words_string, split=1):
   if re.match('Note', words_string):
     return words_string
   words_string = re.sub(
-    r'(?<!^)(?<!\[)(?<!\:\ )\b(ab(b)?r$|inter$|(proper )?n((m|f|noun|pl|pr)|( ?(propre)))|pp|prépp|'
+    r'(?<!^)(?<!\[)(?<!\:\ )\b(ab(b)?r$|inter$|(proper )?n((m|f|noun|pl|pr)?$|( ?(propre)))|pp|prépp|s$|'
      'préf$|prefix|suffix|v(i|tr)?$|v(i|tr(verbe)?)?( ?(\+ )?(impers|indverbe|rif|refl|prép|past|aux|pron|pres|phras|expr|(in)?trans).*?)$|Note|'
-     'loc (.+)|loc$|agg$|adj(( inv)?adj.+| inv| n).+?$|interjinterj|advadv|avv$| contraction|expr((expr|verb).*)?$|'
+     'loc (.+)|loc$|agg$|adj(( inv)?adj.+| inv| n).+?$|interjinterj|adv(adv.+)?$|avv$| contraction|expr((expr|verb).*)?$|'
      'escl$|n as|prepp.+?$|prep$|conjc|cong$|idiom$|pron(pron.+)?$|prep +|viverbe).*', 
     '', words_string)
   if not split:

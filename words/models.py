@@ -319,12 +319,13 @@ class FrontendOrderCollectionManager(models.Manager):
 
 class SingleWordManager(models.Manager):
   def get_queryset(self):
-    return super().get_queryset().filter(language__in=['english', 'french', 'italian', 'russian', 'ukrainian']).annotate(order=Case(
+    return super().get_queryset().filter(language__in=['english', 'french', 'italian', 'swedish', 'russian', 'ukrainian']).annotate(order=Case(
       When(language='english', then=Value(0)),
       When(language='french', then=Value(1)),
       When(language='italian', then=Value(2)),
-      When(language='russian', then=Value(3)),
-      When(language='ukrainian', then=Value(4)),
+      When(language='swedish', then=Value(3)),
+      When(language='russian', then=Value(4)),
+      When(language='ukrainian', then=Value(5)),
       output_field=IntegerField())).order_by('order')
 
 class EnglishWordManager(models.Manager):
@@ -496,12 +497,13 @@ class RussianWordManager(YandexWordMixin, models.Manager):
 
 class VerbManager(WordRefWordMixin, models.Manager):
   def get_queryset(self):
-    return super().get_queryset().filter(language__in=['english', 'french', 'italian', 'russian', 'ukrainian']).annotate(order=Case(
+    return super().get_queryset().filter(language__in=['english', 'french', 'italian', 'russian', 'ukrainian', 'swedish']).annotate(order=Case(
       When(language='english', then=Value(0)),
       When(language='french', then=Value(1)),
       When(language='italian', then=Value(2)),
-      When(language='russian', then=Value(3)),
-      When(language='ukrainian', then=Value(4)),
+      When(language='swedish', then=Value(3)),
+      When(language='russian', then=Value(4)),
+      When(language='ukrainian', then=Value(5)),
       output_field=IntegerField())).order_by('order').exclude(word='').filter(is_verb=True).exclude(conjugations=None)
 
 class RomanceWordManager(WordRefWordMixin, models.Manager):
@@ -559,6 +561,43 @@ class RomanceWordManager(WordRefWordMixin, models.Manager):
         word.origin_verb = orig_verb 
         word.save()
       return orig_verb
+
+class SwedishWordManager(WordRefWordMixin, models.Manager):
+  def get_queryset(self):
+    return super().get_queryset().filter(language='swedish')
+
+  def fetch_conjugate(self, word):
+    return self.fetch_and_parse_conjugations(word)
+ 
+  def fetch_synonyms(self, orig_word):
+    print('doing the fetch')
+    synonyms = self.fetch_and_parse_synonyms(orig_word, ext='sven')
+    synonyms = list(set(synonyms))
+    return self.create_bare_word(language='swedish', words=synonyms, original=orig_word)
+
+  def fetch_translation(self, orig_word):
+    trans = self.fetch_and_parse_translations(orig_word, ext='ensv')
+    return self.create_bare_word(language='swedish', words=trans, original=orig_word)
+
+  def fetch_collocations(self, word):
+    collocs_map = self.fetch_and_parse_collocations(word, ext='sven')
+    return self.create_collocations(collocations=collocs_map, word=word)
+
+  def fetch_word(self, word):
+    fetch_return = self.fetch_and_parse_word(ext='sven', word=word)
+    #print(fetch_return)
+    words_map, pronounce, is_verb = [ fetch_return.get(e) for e in ('words_map', 'pronounce', 'is_verb') ]
+    #print(pronounce)
+    return self.create_word(word=word, words_map=words_map, language='swedish', pronounce=pronounce, is_verb=is_verb)
+    
+  def fetch_pronounce(self, word):
+    r = try_fetch(WORDREF_BASE + "sven/" + word.word)
+    if r:
+      pronounce = parse_pronounce(r)
+      #print(pronounce)
+      if pronounce:
+        word.pronounce = pronounce
+        word.save(update_fields=['pronounce'])
 
 class ItalianWordManager(RomanceWordManager, models.Manager):
   def get_queryset(self):
@@ -662,6 +701,7 @@ class Word(models.Model):
     russian_objects = RussianWordManager()
     ukrainian_objects = UkrainianWordManager()
     french_objects = FrenchWordManager()
+    swedish_objects = SwedishWordManager()
     italian_objects = ItalianWordManager()
     free_words = FreeWordsManager()
     romance_words = RomanceWordManager()

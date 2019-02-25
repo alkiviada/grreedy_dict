@@ -206,6 +206,8 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
         } else {
           // Status looks good
          let words;
+         console.log('after delete')
+         console.log(json)
          if (json.empty) {
            words = []
            allWordsMap = {}
