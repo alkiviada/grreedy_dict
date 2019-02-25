@@ -10,7 +10,7 @@ class ProcessPlaceholder extends Component {
   }
 
   render() {
-    const { pref, homework } = this.props;
+    const { pref, homework, pp, fn } = this.props;
     let config = [
      {
       regex: /(\.\.\.)/gm,
@@ -20,7 +20,13 @@ class ProcessPlaceholder extends Component {
      },
     ];
     let processed = processString(config)(this.props.homework);
-    return <p>{processed}</p>
+    if (pp) {
+      const PostProcess = pp
+      return <PostProcess words={processed} onLinkClick={fn} />
+    }
+    else {
+      return processed
+    }
   }
 }
 

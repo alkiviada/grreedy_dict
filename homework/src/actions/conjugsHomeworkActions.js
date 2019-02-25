@@ -23,7 +23,7 @@ export const fetchConjugateHomework = (verb, language) => (dispatch, getState) =
   if (!verb) {
     let { verb, language } = getState().verbs
   }
-  console.log(getState().verbs)
+  //console.log(getState().verbs)
   console.log('this was my verb state')
   const { tenseIdx } = getState().conjugsHomework
 
@@ -43,8 +43,9 @@ export const fetchConjugateHomework = (verb, language) => (dispatch, getState) =
           dispatch({ type: FETCH_HOMEWORK_REJECTED, payload: 'fetching homework failed' })
         } else {
           // Status looks good
-          const homework = json.examples.map(e => e.example.stub)
-          const correct = json.examples.map(e => e.example.correct)
+          const examples = json.filter(o => o)
+          const homework = examples.map(e => e.example)
+          const correct = examples.map(e => e.conjugation.verb_form)
           dispatch({
             type: FETCH_HOMEWORK_FULFILLED,
             payload: { homework, correct } 
@@ -66,19 +67,23 @@ export const storeMyHomeworkConjugateRefs = () => (dispatch, getState) => {
   const placeHNum = countMatches(getState().conjugsHomework.homework.join(''))
   console.log(placeHNum)
   const hconjRefs = [ ...Array(placeHNum).keys() ].map(m => React.createRef());
-  console.log(hconjRefs)
+  //console.log(hconjRefs)
   dispatch({
     type: LOG_HOMEWORK_REFS,
     payload: hconjRefs
   })
 };
 
-export const storeMyHomeworkConjugs = (myConjugsRefs) => dispatch => {
+export const storeMyHomeworkConjugs = () => (dispatch, getState) => {
  console.log('storing my homework conjugations');
- console.log(myConjugsRefs)
+ const { myConjugsRefs } = getState().conjugsHomework
+
+ //console.log(myConjugsRefs)
+ myConjugsRefs.forEach(c => console.log(c.current))
+
  const myConjugs = myConjugsRefs.map(c => c.current.innerHTML.trim())
  console.log('my homework')
- console.log(myConjugs)
+ //console.log(myConjugs)
   dispatch({
     type: STORE_MY_HOMEWORK_CONJUGATIONS,
     payload: myConjugs

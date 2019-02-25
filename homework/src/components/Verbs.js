@@ -46,7 +46,7 @@ class Verbs extends Component {
        { 
          verbs.map(v => {
           seenVerbMap[v.word] = seenVerbMap[v.word] ? seenVerbMap[v.word]++ : 1;
-          return <li><a href={`/homework/conjugate/${v.word}/${v.language}`} 
+          return <li><a href={`/homework/conjugate/${v.word}/${v.language}`} data-verb-tool-tip="conjugate"
           onClick={(e) => this.onVerbClick(e, v.word, v.language)} className="verb-link">
             <span className="verb-word">{v.word}</span> 
             { seenVerbMap[v.word] > 1 ? <span className="verb-language">{v.language == 'italian' ? '(it)' : '(fr)'}</span> : '' }

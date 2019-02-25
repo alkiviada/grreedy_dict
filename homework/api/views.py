@@ -19,7 +19,19 @@ class VerbsList(generics.ListAPIView):
   serializer_class = VerbSerializer
 
   def get_queryset(self):
-    return Word.true_verb_objects.all()
+    all_verbs = Word.true_verb_objects.exclude(conjugation_word=None)
+    tenses = Tense.objects.all()
+    verbs_list = []
+    for v in all_verbs:
+      u_v = ''
+      for t in tenses:
+        if ConjugationExample.objects.filter(word=v, tense=t).count() >= 5:
+          u_v = v
+          continue
+      if u_v:
+        verbs_list.append(u_v)
+        continue
+    return verbs_list
 
 
 class Conjugate(generics.RetrieveAPIView):

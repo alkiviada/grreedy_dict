@@ -12,7 +12,7 @@ class Placeholder extends Component {
 
   render () {
     const { pref, styleClass } = this.props
-    console.log(pref)
+    //console.log(pref)
     return <span ref={pref} className={styleClass} contenteditable="true" placeholder={"..."}></span>
   }
 }

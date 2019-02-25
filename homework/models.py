@@ -43,3 +43,5 @@ class ConjugationExample(models.Model):
   example = models.TextField()
   conjugation = models.ForeignKey(Conjugation, related_name="conjugation")
   is_bad = models.BooleanField(default=False)
+  word = models.ForeignKey(Word, related_name="conjugation_word")
+  tense = models.ForeignKey(Tense, related_name="conjugation_tense")

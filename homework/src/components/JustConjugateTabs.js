@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import JustConjugate from "./JustConjugate";
 import CheckConjugate from "./CheckConjugate";
 import TenseSelect  from "./TenseSelect";
+import { tenses } from './helpers'
 
 import { fetchConjugations, requestConjugations, storeMyConjugs, logTenseIdx } from '../actions/conjugsActions';
 
@@ -52,7 +53,7 @@ class JustConjugateTabs extends Component {
       <Tabs selectedIndex={this.state.tabIndex} 
         onSelect={(prev, index) => this.handleSelect(index, prev, verb, language)}>
         <TabList>
-          <Tab>Try <TenseSelect logTabTense={this.props.logTenseIdx} /></Tab>
+          <Tab>Conjugate <TenseSelect logTabTense={this.props.logTenseIdx} tenses={tenses} /></Tab>
           <Tab>Check</Tab>
         </TabList>
         <TabPanel>

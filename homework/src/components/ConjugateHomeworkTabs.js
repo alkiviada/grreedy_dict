@@ -8,16 +8,22 @@ import { fetchConjugateHomework,
          logHomeworkTenseIdx
        } from '../actions/conjugsHomeworkActions';
 
+import { fetchVerbTenses } from '../actions/tensesActions';
+
 import TenseSelect  from "./TenseSelect";
 import ConjugateHomework from "./ConjugateHomework";
 import ConjugateHomeworkCheck from "./ConjugateHomeworkCheck";
 
 import { countMatches } from './helpers'
+let classNames = require('classnames');
 
 const mapStateToProps = state => ({
   myConjugsRefs: state.conjugsHomework.myConjugsRefs,
   tenseIdx: state.conjugsHomework.tenseIdx,
   homework: state.conjugsHomework.homework,
+  fetching: state.conjugsHomework.homeworkFetching,
+  fetched: state.conjugsHomework.homeworkFetched,
+  verbTensesMap: state.tense.verbTensesMap,
 });
 
 class ConjugateHomeworkTabs extends Component {
@@ -32,9 +38,12 @@ class ConjugateHomeworkTabs extends Component {
   fetchHomework() {
     const { verb, language } = this.props
     this.props.requestConjugateHomework();
-    this.props.fetchConjugateHomework(verb, language)
-     .then(() => {
-       this.props.storeMyHomeworkConjugateRefs()
+    this.props.fetchVerbTenses()
+      .then(() => {
+        this.props.fetchConjugateHomework(verb, language)
+         .then(() => {
+           this.props.storeMyHomeworkConjugateRefs()
+        })
     })
   }
 
@@ -50,29 +59,31 @@ class ConjugateHomeworkTabs extends Component {
 
   handleSelect(prev, index, verb) {
     console.log('switchinh homework tabs')
-    const { tenseIdx, myConjugsRefs, language } = this.props
+    const { tenseIdx } = this.props
 
     this.setState( { tabIndex: index } );
 
     if (index == 1) {
       console.log('check homework');
-      this.props.storeMyHomeworkConjugs(myConjugsRefs, language)
+      this.props.storeMyHomeworkConjugs()
     }
   }
 
   render() {
-    const { verb, language, homework } = this.props;
-
+    const { verb, verbTenseMap, language, homework, addWord, fetching, fetched } = this.props;
+    const tenses = verbTenseMap[verb]
+    const hwClassNames = classNames({ 'conjugate-homework': true, 'conjugate-hw__empty': fetching });
+    console.log(hwClassNames)
     return ( 
-     <div className="conjugate-homework">
+     <div className={hwClassNames}>
       <Tabs selectedIndex={this.state.tabIndex} 
         onSelect={(prev, index) => this.handleSelect(index, prev, verb, language)}>
         <TabList>
-          <Tab>Try <TenseSelect logTabTense={this.props.logHomeworkTenseIdx} onChangeFunc={this.fetchHomework} /></Tab>
+          <Tab>Practice <TenseSelect logTabTense={this.props.logHomeworkTenseIdx} onChangeFunc={this.fetchHomework} tenses={tenses} /></Tab>
           <Tab>Check</Tab>
         </TabList>
         <TabPanel>
-          <ConjugateHomework homework={homework} />
+          { fetching ? <em>Loading...</em> : <ConjugateHomework homework={homework} addWord={addWord} /> }
         </TabPanel>
         <TabPanel>
           <ConjugateHomeworkCheck homework={homework} />

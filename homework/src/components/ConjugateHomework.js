@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ProcessPlaceholder from "./ProcessPlaceholder";
+import DecorateWithLinks from "./DecorateWithLinks";
 import { connect } from 'react-redux';
 
 class ConjugateHomework extends Component {
@@ -8,18 +9,13 @@ class ConjugateHomework extends Component {
     console.log(props)
   }
 
+
   render () {
-    const { homework, hRefs } = this.props
-    console.log(hRefs)
-    if (!homework.length) {
-      return (
-        <div className="clear-notification-message">
-          <em>Loading...</em>
-        </div>
-      )
-    }
+    const { homework, hRefs, addWord } = this.props
     return <div className="hconjugate">
-      { homework.map((h,i) => { console.log(hRefs[i]); return <ProcessPlaceholder homework={h} pref={hRefs[i]} />}) }
+      { homework.map((h,i) =>  {
+        return <div className="homework-example"><ProcessPlaceholder homework={h} pref={hRefs[i]} pp={DecorateWithLinks} fn={addWord} /></div>
+        })}
     </div>
   }
 }
@@ -27,6 +23,7 @@ class ConjugateHomework extends Component {
 const mapStateToProps = state => ({
   homework: state.conjugsHomework.homework,
   hRefs: state.conjugsHomework.myConjugsRefs,
+  words: state.words.words,
 });
 
 export default connect(mapStateToProps, { })(ConjugateHomework);

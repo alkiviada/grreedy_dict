@@ -305,9 +305,14 @@ def fill_conjugations_table():
 #fetch_conjugations()
 
 #pull_conjugations()
-exs = generate_examples()
-for e in exs:
-  ce = ConjugationExample.objects.filter(example=e['example'], conjugation=e['conjugation'])
-  if not len(ce):
-    ConjugationExample.objects.create(example=e['example'], conjugation=e['conjugation'])
+#exs = generate_examples()
+#for e in exs:
+#  ce = ConjugationExample.objects.filter(example=e['example'], conjugation=e['conjugation'])
+#  if not len(ce):
+#    ConjugationExample.objects.create(example=e['example'], conjugation=e['conjugation'])
 
+
+ces = ConjugationExample.objects.all()
+for ce in ces:
+  ce.tense = ce.conjugation.tense
+  ce.save()

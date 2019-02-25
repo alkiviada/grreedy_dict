@@ -13,7 +13,7 @@ class ProcessCorrect extends Component {
      {
       regex: /(\.\.\.)/gm,
       fn: (key, result) => {
-        console.log(answer)
+        //console.log(answer)
         if (!answer) {
           return <div className="right-answer">{correct}</div>
         }
