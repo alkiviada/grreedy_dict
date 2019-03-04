@@ -23,7 +23,7 @@ const mapStateToProps = state => ({
   homework: state.conjugsHomework.homework,
   fetching: state.conjugsHomework.homeworkFetching,
   fetched: state.conjugsHomework.homeworkFetched,
-  verbTensesMap: state.tense.verbTensesMap,
+  verbTensesMap: state.tenses.verbTensesMap,
 });
 
 class ConjugateHomeworkTabs extends Component {
@@ -38,7 +38,7 @@ class ConjugateHomeworkTabs extends Component {
   fetchHomework() {
     const { verb, language } = this.props
     this.props.requestConjugateHomework();
-    this.props.fetchVerbTenses()
+    this.props.fetchVerbTenses(verb)
       .then(() => {
         this.props.fetchConjugateHomework(verb, language)
          .then(() => {
@@ -70,8 +70,10 @@ class ConjugateHomeworkTabs extends Component {
   }
 
   render() {
-    const { verb, verbTenseMap, language, homework, addWord, fetching, fetched } = this.props;
-    const tenses = verbTenseMap[verb]
+    const { verb, verbTensesMap, language, homework, addWord, fetching, fetched } = this.props;
+    const tenses = verbTensesMap[verb] ? verbTensesMap[verb] : [ 0 ]
+    console.log('tenses')
+    console.log(tenses)
     const hwClassNames = classNames({ 'conjugate-homework': true, 'conjugate-hw__empty': fetching });
     console.log(hwClassNames)
     return ( 
@@ -97,7 +99,8 @@ class ConjugateHomeworkTabs extends Component {
 const mapDispatchToProps = {
   fetchConjugateHomework, requestConjugateHomework,
   storeMyHomeworkConjugs, logHomeworkTenseIdx,
-  storeMyHomeworkConjugateRefs
+  storeMyHomeworkConjugateRefs,
+  fetchVerbTenses,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConjugateHomeworkTabs);

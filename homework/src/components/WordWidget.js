@@ -27,6 +27,7 @@ class WordWidget extends Component {
 
   render () {
     const { addWord, word, words } = this.props
+    console.log(words)
     const wordElement = words.find(w => w.word == word);
     console.log(wordElement)
     if (wordElement) {

@@ -1,4 +1,4 @@
-export const tenses = ['present', 'past progressive', 'simple past', 'future', 'preterite past', ]
+export const TENSES = { 0: 'present', 1: 'past progressive', 2: 'simple past', 3: 'future', 4: 'preterite past', }
 
 export const contentToMap = (w) => {
   const obj = w.reduce((o, e) => 

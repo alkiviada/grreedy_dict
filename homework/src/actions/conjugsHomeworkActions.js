@@ -79,11 +79,12 @@ export const storeMyHomeworkConjugs = () => (dispatch, getState) => {
  const { myConjugsRefs } = getState().conjugsHomework
 
  //console.log(myConjugsRefs)
- myConjugsRefs.forEach(c => console.log(c.current))
+ //myConjugsRefs.forEach(c => console.log(c.current))
 
+ console.log('my homework 1')
  const myConjugs = myConjugsRefs.map(c => c.current.innerHTML.trim())
- console.log('my homework')
- //console.log(myConjugs)
+ console.log('my homework 2')
+ console.log(myConjugs)
   dispatch({
     type: STORE_MY_HOMEWORK_CONJUGATIONS,
     payload: myConjugs

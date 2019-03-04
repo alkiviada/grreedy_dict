@@ -37,7 +37,7 @@ class NewWordForm extends Component {
       <form className="new-word" onSubmit={(e) => this.onSubmitLookUp(e)}> 
         <input className="new-word-input" type="text" placeholder="New Word" value={word} onChange={this.handleWordChange} />
         <a className="new-word-btn look-up-btn" onClick={(e) => this.onSubmitLookUp(e)}>Look Up</a>
-      { this.props.error ? <div className="grid-warn">Can't load word</div> : '' }
+      { this.props.error ? <div className="grid-warn">Can't load</div> : '' }
     </form> : <div className="new-word"><p className="grid-notification"><em>Loading...</em></p></div>
     );
   }

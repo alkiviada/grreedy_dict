@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import ProcessCorrect from "./ProcessCorrect";
 import { connect } from 'react-redux';
 
+let classNames = require('classnames');
+
 class ConjugateHomeworkCheck extends Component {
   constructor(props) { 
     super(props)
@@ -15,7 +17,12 @@ class ConjugateHomeworkCheck extends Component {
     console.log(myConjugs)
     console.log(correct)
     return <div className="hconjugate">
-      { homework.map((h,i) => <ProcessCorrect homework={h} correct={correct[i]} answer={myConjugs[i]} />) }
+      { homework.map((h,i) => { 
+          const hweClassNames = classNames({ 'homework-example': true, 'hw-example-wrong': correct[i] != myConjugs[i] ? true : false });
+          console.log(hweClassNames, correct[i], myConjugs[i])
+          return <div className={hweClassNames}><ProcessCorrect homework={h} correct={correct[i]} answer={myConjugs[i]} /></div>
+        })
+      }
     </div>
   }
 }

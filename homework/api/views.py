@@ -1,7 +1,7 @@
 from words.models import Word
 from homework.models import Tense, Conjugation, ConjugationExample
 
-from .serializers import (VerbSerializer, 
+from .serializers import (VerbSerializer, VerbTenseSerializer,
                          ConjugationSerializer,
                          ConjugationExampleSerializer,
 )
@@ -76,4 +76,31 @@ class ConjugateHomework(generics.RetrieveAPIView):
      print(word)
      examples = self.get_queryset()
      serializer = ConjugationExampleSerializer(examples, many=True)
+     return Response(serializer.data)
+
+class VerbTenses(generics.RetrieveAPIView):
+  serializer_class = VerbTenseSerializer
+  lookup_fields = ['word']
+
+  def get_queryset(self):
+    filter = {}
+    for field in self.lookup_fields:
+      if self.kwargs[field]:  # Ignore empty fields.
+        filter[field] = self.kwargs[field]
+    verb = Word.true_verb_objects.get(**filter)
+    print(verb)
+    tenses = Tense.objects.all()
+    verb_tenses = []
+    for t in tenses:
+      conjugs_filter = {'word': verb, 'tense': t}
+      ce_count = ConjugationExample.objects.filter(**conjugs_filter).count()
+      print(ce_count)
+      if ce_count >= 5:
+        verb_tenses.append(t)
+    return verb_tenses
+
+  def get(self, request, word, format=None):
+     print(word)
+     tenses = self.get_queryset()
+     serializer = VerbTenseSerializer(tenses, many=True)
      return Response(serializer.data)

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from words.models import Word, Example
-from homework.models import Conjugation, ConjugationExample
+from homework.models import Conjugation, ConjugationExample, Tense
 from words.serializers import ExampleSerializer, CollocationExampleSerializer
 from .helpers import pull_conjugations_arrays, process_examples_by_tense, search_books
 import re
@@ -9,6 +9,11 @@ class ConjugationSerializer(serializers.ModelSerializer):
   class Meta:
     model = Conjugation
     fields = [ 'verb_form' ]
+
+class VerbTenseSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Tense
+    fields = [ 'num_id' ]
 
 class VerbSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,7 +42,7 @@ class ConjugationExampleSerializer(serializers.ModelSerializer):
       vf_match = re.search(vf_re, ret['example'], re.S|re.I)
      
       if vf_match:
-        ret['example'] = re.sub(vf_re, "...", ret['example'])
+        ret['example'] = re.sub(vf_re, "...", ret['example'], flags=re.I)
         ret['conjugation']['verb_form'] = vf_match[0] 
         return ret
 
@@ -49,7 +54,7 @@ class ConjugationExampleSerializer(serializers.ModelSerializer):
       if vf_match:
         #print(ret['example'])
         #print(vf_match.group())
-        ret['example'] = re.sub(vf_match[1], "...", ret['example'])
+        ret['example'] = re.sub(vf_match[1], "...", ret['example'], flags=re.I)
         ret['example'] = re.sub(vf_match[2], "...", ret['example']) 
         ret['conjugation']['verb_form'] = vf_match[1] + (' ' + vf_match[2] if vf_match[2] else '')
         return ret
@@ -57,13 +62,17 @@ class ConjugationExampleSerializer(serializers.ModelSerializer):
         print(vf_match)
         print(ret['example'])
         print(vf)
-    elif re.search(vf_re, ret['example'], re.S|re.I):
-      vf_re = r'\b' + vf + r'\b'
-      ret['example'] = re.sub(vf_re, "...", ret['example'])
-      return ret
     else:
-      print(ret['example'])
-      print(vf)
+      vf_match = re.search(vf_re, ret['example'], re.S|re.I)
+      if vf_match:
+        print(vf_match[0])
+        vf_re = r'\b' + vf + r'\b'
+        ret['example'] = re.sub(vf_re, "...", ret['example'], flags=re.I)
+        ret['conjugation']['verb_form'] = vf_match[0]
+        return ret
+      else:
+        print(ret['example'])
+        print(vf)
     #if re.search(r"\'", vf):
     #  vf_parts = vf.split("\'") 
     #  vf_pron = 

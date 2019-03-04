@@ -41,6 +41,7 @@ class Verbs extends Component {
     console.log('verbs')
     return verbs.length ? (
       <div className="verbs-sidebar">
+      <input type="checkbox" id="verbs-toggle" class="verbs-toggle" />
       <div className="verbs-list">
       <ul className="verbs-ul">
        { 
@@ -55,6 +56,9 @@ class Verbs extends Component {
        }
       </ul>
      </div>
+    <label for="verbs-toggle" class="verbs-toggle-label">
+    <span class="verbs-label">Verbs</span>
+    </label>
     </div>
    ) : <div className="verbs-sidebar"><div className="verbs-empty"></div></div>
  }

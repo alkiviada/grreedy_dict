@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 
+import { TENSES } from '../actions/helpers'
+
 class TenseSelect extends React.Component {
   constructor(props) {
     super(props);
@@ -23,7 +25,7 @@ class TenseSelect extends React.Component {
     const { tenses } = this.props
     return (
           <select value={this.state.tenseIdx} onChange={this.handleChange}>
-            { tenses.map((t, i) => <option value={i}>{t}</option>) }
+            { tenses.map(t => <option value={t}>{TENSES[t]}</option>) }
           </select>
     );
   }

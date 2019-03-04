@@ -1,4 +1,4 @@
-import {applyMiddleware, createStore, compose} from "redux";
+import { applyMiddleware, createStore, compose } from "redux";
 import throttle from 'lodash/throttle'
 import { loadState, saveState } from '../reducers/localStorage'
 
@@ -20,10 +20,8 @@ const store = createStore(
 
 store.subscribe(throttle(() => {
   saveState({
-    collections: store.getState().collections,
-    auth: store.getState().auth,
     words: store.getState().words,
-    visibility: store.getState().visibility
+    verbs: store.getState().verbs,
   });
 }, 1000));
 
