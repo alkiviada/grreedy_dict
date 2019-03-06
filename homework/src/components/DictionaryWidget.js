@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import WordWidget from "./WordWidget";
 
-const DictionaryWidget = () => (
+const DictionaryWidget = (addWord) => (
   <div className="dict-container">
-  <WordWidget />
+  <WordWidget addWord={addWord} />
   </div>
 )
 

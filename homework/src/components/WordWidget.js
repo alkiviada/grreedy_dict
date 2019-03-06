@@ -16,34 +16,42 @@ class WordWidget extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const newWord = nextProps.word
+    const fetching = nextProps.fetching
     const newWordElement = nextProps.words.find(w => w.word == newWord);
-    console.log(newWordElement)
+    if (fetching) {
+      return true 
+    }
     if (newWordElement) {
-      console.log('i will update')
       return true 
     }
     return false 
   }
 
   render () {
-    const { addWord, word, words } = this.props
-    console.log(words)
+    const { addWord, word, words, fetching } = this.props
     const wordElement = words.find(w => w.word == word);
-    console.log(wordElement)
     if (wordElement) {
     return <Fragment> 
      <Word word={word} el={wordElement} /> 
      <WordTabs word={wordElement} addWord={addWord} />
      </Fragment>
      }
-     else 
-       return ''
+     else {
+       if (fetching) {
+         return <div className="word"><strong className="just-word">{word}</strong>
+                <div className="word-tabs-empty"><em>Loading</em></div>
+                </div>
+       }
+       else 
+         return ''
+     }
   }
 }
 
 const mapStateToProps = state => ({
   word: state.words.word,
   words: state.words.words,
+  fetching: state.words.wordFetching,
 });
 
 export default connect(mapStateToProps, { })(WordWidget);

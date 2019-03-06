@@ -49,8 +49,6 @@ class ConjugateHomeworkTabs extends Component {
 
   componentDidMount() {
     const { verb, homework, language, tenseIdx } =  this.props
-    console.log('tis is my verb')
-    console.log('mounting homework tabs')
     this.fetchHomework()
   }
 
@@ -58,13 +56,11 @@ class ConjugateHomeworkTabs extends Component {
   };
 
   handleSelect(prev, index, verb) {
-    console.log('switchinh homework tabs')
     const { tenseIdx } = this.props
 
     this.setState( { tabIndex: index } );
 
     if (index == 1) {
-      console.log('check homework');
       this.props.storeMyHomeworkConjugs()
     }
   }
@@ -72,10 +68,7 @@ class ConjugateHomeworkTabs extends Component {
   render() {
     const { verb, verbTensesMap, language, homework, addWord, fetching, fetched } = this.props;
     const tenses = verbTensesMap[verb] ? verbTensesMap[verb] : [ 0 ]
-    console.log('tenses')
-    console.log(tenses)
     const hwClassNames = classNames({ 'conjugate-homework': true, 'conjugate-hw__empty': fetching });
-    console.log(hwClassNames)
     return ( 
      <div className={hwClassNames}>
       <Tabs selectedIndex={this.state.tabIndex} 
@@ -85,7 +78,7 @@ class ConjugateHomeworkTabs extends Component {
           <Tab>Check</Tab>
         </TabList>
         <TabPanel>
-          { fetching ? <em>Loading...</em> : <ConjugateHomework homework={homework} addWord={addWord} /> }
+          { fetching ? <div className="hconjugate-empty"><em>Loading...</em></div> : <ConjugateHomework homework={homework} addWord={addWord} /> }
         </TabPanel>
         <TabPanel>
           <ConjugateHomeworkCheck homework={homework} />

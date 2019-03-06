@@ -10,7 +10,6 @@ class DecorateWithLinks extends Component {
   }
   render() {
     const { words, onLinkClick, original, parentRef } = this.props;
-    console.log(onLinkClick)
     let config = [
      {
       regex: /(\{)(.*?)(\})/gm,

@@ -21,7 +21,6 @@ class Verbs extends Component {
   }
 
   componentDidMount() {
-    console.log('mounting verbs');
     if (!this.props.verbs.length) {
       this.props.requestVerbs();
       this.props.fetchVerbs();
@@ -29,7 +28,6 @@ class Verbs extends Component {
   }
 
   onVerbClick(e, verb, language) {
-    console.log('verb loading');
     console.log(this.props)
     this.props.requestVerb(verb, language) 
     // return <Redirect to="/homework/conjugate/{verb}/{tenseIdx}"
@@ -38,7 +36,6 @@ class Verbs extends Component {
   render () {
     const { verbs, tenseIdx } = this.props;
     let seenVerbMap = {}
-    console.log('verbs')
     return verbs.length ? (
       <div className="verbs-sidebar">
       <input type="checkbox" id="verbs-toggle" class="verbs-toggle" />

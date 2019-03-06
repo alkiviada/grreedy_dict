@@ -22,6 +22,13 @@ export const requestWord = (word) => dispatch => {
 export const lookUpWord = (word) => { return (dispatch, getState) => {
   let { uuid, words } = getState().words
   const url = '/api/word/' + word + '/' + (uuid ? uuid : '')
+  const dictWord = words.find(w => w.word == word);
+  if (dictWord) {
+    dispatch({
+      type: FETCH_WORD_FULFILLED,
+      payload: { words, uuid }
+    });
+  }
   return fetch(url)
   .then(response =>
       response.json().then(json => ({

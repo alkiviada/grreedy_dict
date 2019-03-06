@@ -469,6 +469,10 @@ ul {
   font-family: Croissant One;
 }
 
+.lang-swedish {
+  font-family: Fjord One;
+}
+
 .lang-italian {
   font-family: Vesper Libre;
 }
@@ -1154,8 +1158,6 @@ font-family: FontAwesome;
     overflow: hidden;
     text-overflow: ellipsis;
     font-weight: 700;
-  }
-  .new-word-btn, .save-btn {
   }
 
   .user-tag {

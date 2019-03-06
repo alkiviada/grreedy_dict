@@ -8,24 +8,23 @@ import { requestVerb } from '../actions/verbsActions';
 import { lookUpWord, requestWord, } from '../actions/wordsActions';
 
 const mapStateToProps = state => ({
+  words: state.words.words,
 });
 
 class Conjugate extends Component {
   constructor(props) { 
     super(props)
-    console.log(props)
     this.addWord = this.addWord.bind(this) 
   }
   
   componentDidMount () {
     const { verb, language } = this.props
-    console.log('i will be mounting my main conjugate container')
     this.props.requestVerb(verb, language)
   }
 
   addWord (e, word) {
     e.preventDefault();
-    console.log(word)
+    const { words } = this.props
     console.log('looking up')
     this.props.requestWord(word)
     this.props.lookUpWord(word).then(() => {
@@ -35,8 +34,6 @@ class Conjugate extends Component {
 
   render() {
     const { verb, language } = this.props.match.params 
-    console.log(' i am conjugate')
-    console.log(this.addWord)
 
   return (
     <div className="conjugate-container">

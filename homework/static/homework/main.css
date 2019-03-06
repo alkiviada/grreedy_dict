@@ -6,7 +6,8 @@
   --sidebar-color: #ede4d3ed;
   --work-area-color: #ede4d3ed;
   --correct-color: #fb5043;
-  --select-color: #bcc0cd;
+  --select-color: #c7d2e1;
+  --dict-color: #c7d2e1;
 }
 
 
@@ -104,14 +105,14 @@ body {
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-rows: 2em 6.4em 14em 1fr 5em;
+  grid-template-rows: 2em 6.4em 14em 1fr 2em;
   grid-template-columns: .1fr 6fr 1fr .1fr;
   grid-template-areas: 
     ". verb-title verbs ."
     ". work work ."
     ". more-work more-work ."
     ". dictionary dictionary .";
-  grid-gap: .5em;
+  grid-gap: 1em;
 }
 
 .verb-title {
@@ -123,6 +124,7 @@ body {
   letter-spacing: .2em;
   font-size: 3vmax;
   padding-top: .5em;
+  padding-left: .2em;
   text-shadow:
     0.05em 0 black,
         0 0.05em black,
@@ -138,6 +140,54 @@ body {
 
 .dict-container {
   grid-area: dictionary;
+  background: var(--work-area-color);
+  max-height: 17em;
+  overflow-y: auto;
+  display: grid;
+  grid-auto-rows: minmax(auto, max-content);
+  grid-auto-rows: minmax(auto, -webkit-max-content);
+}
+
+.word strong {
+  text-transform: uppercase;
+  color: var(--grass-color);
+  font-weight: 700;
+  place-self: start;
+  padding-top: .5em;
+  letter-spacing: .1em;
+  word-break: break-all;
+}
+
+.def-style {
+  list-style-type: circle;
+  margin-left: 1.5em;
+}
+
+.word {
+  word-wrap: break-word;
+  font-family: var(--head-font);
+  height: 1.8em;
+  display: grid;
+  line-height: 1;
+  grid-template-areas: "delete word";
+  grid-template-columns: .7em 1fr;
+  grid-gap: .1em;
+}
+
+.just-word {
+  grid-area: word;
+}
+
+.etym-style {
+  font-family: var(--body-font);
+  padding: .1em .3em;
+  margin: .2em .5em .2em .3em;
+  list-style: none;  
+}
+
+.exmpl-style {
+  list-style: square;
+  margin-left: 1em;
 }
 
 .word-link {
@@ -145,66 +195,32 @@ body {
   color: black;
 }
 
-.hconjugate {
-  padding: .7em 2em .6em 2.3em;
-  overflow-y: auto;
-
-  counter-reset: example-counter;
+.lang-french {
+  font-family: Inika;
 }
 
-.homework-example {
-  padding: .5em;
-  position: relative;
-}
-
-.homework-example::before {
-  counter-increment: example-counter;
-  content: counter(example-counter);
-  position: absolute;
-  left: -2em;
-  top: .8em;
-  border-radius: 50%;
-  background: var(--sky-color);
-  width: 1.5em;
-  height: 1.5em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 2px solid var(--grass-color);
-  color: var(--grass-color);
-  font-size: .8em;
-}
-
-.hw-example-wrong::before {
-  background: none;
-  border-radius: 0;
-  width: 0;
-  height: 0;
-  border: none;
-  z-index: 100;
+.lang-head {
+  text-transform: capitalize;
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  padding-bottom: .5em;
+  padding-left: .5em;
   color: var(--sky-color);
-  left: -1.4em;
-  top: 1.7em;
 }
 
-.hw-example-wrong::after {
-  content: '';
-  position: absolute;
-  background: none;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-color: transparent transparent transparent var(--correct-color);
-  color: var(--grass-color);
-  left: -1.6em;
-  top: .5em;
-  border-width: .9em 1.4em;
+
+.lang-english {
+  font-size: 1.1rem;
+  color: #586b92;
+  font-family: Merriweather;
 }
+
+/* just conjugate */
 
 .just-conjugate {
   grid-area: work;
   background: var(--work-area-color);
-  border: 2px solid var(--grass-color);
 }
 
 .jconjugate, .chk-conjugate {
@@ -274,7 +290,72 @@ body {
   grid-area: more-work;
   max-height: 20em;
   overflow-y: auto;
+}
+
+.conjugate-homework, .just-conjugate, .verbs-list, .dict-container {
+  border: 1px solid var(--grass-color);
+  box-shadow: 0 0 15px 2px #585b5d6e;
+}
+
+.hconjugate {
+  padding: .7em 2em .6em 2.3em;
+  overflow-y: auto;
+
+  counter-reset: example-counter;
+}
+
+.hconjugate-empty {
+  padding: .1em .5em;
+  height: 11em;
+}
+
+.homework-example {
+  padding: .5em;
+  position: relative;
+}
+
+.homework-example::before {
+  counter-increment: example-counter;
+  content: counter(example-counter);
+  position: absolute;
+  left: -2em;
+  top: .8em;
+  border-radius: 50%;
+  background: var(--sky-color);
+  width: 1.5em;
+  height: 1.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 2px solid var(--grass-color);
+  color: var(--grass-color);
+  font-size: .8em;
+}
+
+.hw-example-wrong::before {
+  background: none;
+  border-radius: 0;
+  width: 0;
+  height: 0;
+  border: none;
+  z-index: 100;
+  color: var(--sky-color);
+  left: -1.4em;
+  top: 1.7em;
+}
+
+.hw-example-wrong::after {
+  content: '';
+  position: absolute;
+  background: none;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: transparent transparent transparent var(--correct-color);
+  color: var(--grass-color);
+  left: -1.6em;
+  top: .5em;
+  border-width: .9em 1.4em;
 }
 
 /* verbs sidebar */
@@ -294,12 +375,11 @@ body {
   position: absolute;
   grid-area: verbs-list;
   overflow-y: auto;
-  border: 2px solid var(--grass-color);
   background: var(--sidebar-color);
   padding: .7em .1em .2em .1em;
   right: 0;
   top: 100%;
-  max-height: 19.3em; 
+  max-height: 20.7em; 
   transform: scale(1, 0);
   transition: transform 300ms ease-in-out, border-top ease-out 150ms, top ease-out 150ms;
   transform-origin: top;
@@ -339,7 +419,7 @@ body {
 
 .verbs-toggle:checked ~ .verbs-list {
   transform: scale(1,1);
-  top: 80%;
+  top: 96%;
   border-top: 15px solid var(--grass-color);
 }
 
@@ -352,7 +432,7 @@ body {
 }
 
 .verb-word {
-  letter-spacing: .05em;
+  letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--grass-color);
   font-weight: bold;
@@ -375,6 +455,7 @@ body {
   border-bottom: 1px solid #aaa;
   margin: 0 0 10px;
   padding: 0;
+  list-style: none;
 }
 
 .react-tabs__tab {
@@ -384,7 +465,7 @@ body {
   bottom: -1px;
   position: relative;
   list-style: none;
-  padding: 6px 12px;
+  padding: .1em .3em;
   cursor: pointer;
 }
 
@@ -423,7 +504,81 @@ body {
 .react-tabs__tab-panel--selected {
   display: block;
 }
+
+@media (max-width: 601px) {
+  .hide-tab-item4 {
+    display: none;
+  }
+  .tab-carousel-arrow-tab3 {
+    display: none;
+  }
+  .tab-carousel-arrow-tab2 {
+    display: none;
+  }
+  .jconjugate, .chk-conjugate {
+    grid-template-columns: repeat(1, minmax(7em, auto));
+  }
+
+  .conjugate-container {
+    grid-template-rows: 2em 12.5em 14em 1fr 1em;
+  }
+}
+
+@media (max-width: 551px) {
+  .hide-tab-item {
+    display: none;
+  }
+  .hide-tab-item3, .hide-tab-item4, .show-tab-item4 {
+    display: none;
+  }
+  .tab-carousel-arrow-tab3 {
+    display: inline-block;
+  }
+  .tab-carousel-arrow-tab2 {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .hide-tab-item {
+    display: none;
+  }
+  .hide-tab-item3, .hide-tab-item4, .show-tab-item4, .show-tab-item3 {
+    display: none;
+  }
+  .tab-carousel-arrow-tab3 {
+    display: inline-block;
+  }
+  .tab-carousel-arrow-tab2 {
+    display: inline-block;
+  }
+}
+
+@media (min-width: 550px) {
+  .hide-tab-item {
+    display: none;
+  }
+}
+
+@media (min-width: 600px) {
+  .tab-carousel-arrow-tab2 {
+    display: none;
+  }
+  .tab-carousel-arrow-tab3 {
+    display: none;
+  }
+  .tab-carousel-arrow-tab4 {
+    display: none;
+  }
+  .hide-tab-item {
+    display: none;
+  }
+}
+
 @media (min-width: 900px) {
+.dict-container {
+  grid-template-columns: minmax(9em, 15%) 1fr;
+}
 
   .verbs-toggle-label { 
     display: none;
@@ -456,6 +611,10 @@ body {
 }
 
 }
+
+
+
+
 
 @media (min-width: 1065px) {
   .jconjugate, .chk-conjugate {

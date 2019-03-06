@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 class ConjugateHomework extends Component {
   constructor(props) { 
     super(props)
-    console.log(props)
   }
 
 

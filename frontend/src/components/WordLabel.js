@@ -4,7 +4,6 @@ import { maxWordsOnPages } from '../actions/constants';
 
 const WordLabel = (props) => {
   const { page, count, allCount } = props;
-  console.log(page)
   if (page == 1 && !(count < allCount)) { 
     return (
       <strong>
