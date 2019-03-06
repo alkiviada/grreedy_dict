@@ -520,7 +520,7 @@ body {
   }
 
   .conjugate-container {
-    grid-template-rows: 2em 12.5em 14em 1fr 1em;
+    grid-template-rows: 2em 12em 14em 1fr 1em;
   }
 }
 

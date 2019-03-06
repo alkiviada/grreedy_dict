@@ -108,7 +108,7 @@ class WordTabs extends Component {
     else {
 // this is a legit tab - let's switch to it
       c2 = c2 - 1
-      c3 = c3 - 1
+      c3 = c3 ? c3 - 1 : c3
       c4 = c4 ? c4 - 1 : c4
       this.setState( { carouselIdx3: c3, carouselIdx4: c4, carouselIdx2: c2 } );
     }
