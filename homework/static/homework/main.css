@@ -522,9 +522,16 @@ body {
   .conjugate-container {
     grid-template-rows: 2em 12em 14em 1fr 1em;
   }
+
+  .hconjugate {
+    padding: .7em .5em .6em 2.3em;
+  }
 }
 
 @media (max-width: 551px) {
+  .hconjugate {
+    padding: .7em .5em .6em 2.3em;
+  }
   .hide-tab-item {
     display: none;
   }
@@ -533,6 +540,7 @@ body {
   }
   .tab-carousel-arrow-tab3 {
     display: inline-block;
+    
   }
   .tab-carousel-arrow-tab2 {
     display: none;
@@ -540,6 +548,15 @@ body {
 }
 
 @media (max-width: 420px) {
+  .conjugate-container {
+    grid-template-columns: .1em 6fr 1fr .1em;
+    grid-gap: .5em;
+  }
+
+  .hconjugate {
+    padding: .7em .2em .6em 2.3em;
+  }
+
   .hide-tab-item {
     display: none;
   }
