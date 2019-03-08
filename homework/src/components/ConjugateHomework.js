@@ -22,7 +22,7 @@ class ConjugateHomework extends Component {
 const mapStateToProps = state => ({
   homework: state.conjugsHomework.homework,
   hRefs: state.conjugsHomework.myConjugsRefs,
-  words: state.words.words,
+  words: state.dict.words,
 });
 
 export default connect(mapStateToProps, { })(ConjugateHomework);

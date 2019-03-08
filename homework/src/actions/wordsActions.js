@@ -20,7 +20,7 @@ export const requestWord = (word) => dispatch => {
 };
 
 export const lookUpWord = (word) => { return (dispatch, getState) => {
-  let { uuid, words } = getState().words
+  let { uuid, words } = getState().dict
   const url = '/api/word/' + word + '/' + (uuid ? uuid : '')
   const dictWord = words.find(w => w.word == word);
   if (dictWord) {

@@ -10,7 +10,7 @@ import synonymsReducer from "./synonymsReducers";
 export default combineReducers({
   verbs: verbsReducer,
   tenses: tensesReducer,
-  words: wordsReducer,
+  dict: wordsReducer,
   conjugs: conjugsReducer,
   conjugsHomework: conjugsHomeworkReducer,
   synonyms: synonymsReducer,

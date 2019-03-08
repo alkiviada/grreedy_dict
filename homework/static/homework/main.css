@@ -105,14 +105,15 @@ body {
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-rows: 2em 6.4em 14em 1fr 2em;
+  grid-template-rows: 2em 6em 14em 1fr 2em;
   grid-template-columns: .1fr 6fr 1fr .1fr;
   grid-template-areas: 
     ". verb-title verbs ."
     ". work work ."
     ". more-work more-work ."
     ". dictionary dictionary .";
-  grid-gap: 1em;
+  row-gap: 3em;
+  column-gap: 1em;
 }
 
 .verb-title {
@@ -137,6 +138,10 @@ body {
 }
 
 /* dictionary widget */
+
+.word-tabs-empty {
+  background-color: var(--work-area-color);
+}
 
 .dict-container {
   grid-area: dictionary;
@@ -221,6 +226,20 @@ body {
 .just-conjugate {
   grid-area: work;
   background: var(--work-area-color);
+  position: relative;
+}
+
+.scalloped-paper {
+  position: absolute;
+  bottom: 100%;
+}
+
+.scalloped-paper__top {
+ fill: var(--work-area-color);
+}
+
+.scalloped-paper__circle {
+ fill: transparent;
 }
 
 .jconjugate, .chk-conjugate {
@@ -234,6 +253,8 @@ body {
   display: grid;
   grid-template-areas: "who verb-form";
   grid-template-columns: minmax(auto, max-content) 1fr;
+  background: linear-gradient(to top, #eee .1em, transparent .1em);
+  background-size: 100% 1.2em;
 }
 
 .who {
@@ -294,7 +315,8 @@ body {
 
 .conjugate-homework, .just-conjugate, .verbs-list, .dict-container {
   border: 1px solid var(--grass-color);
-  box-shadow: 0 0 15px 2px #585b5d6e;
+  /* box-shadow: 0 0 15px 2px #585b5d6e; */
+  box-shadow: -3px 0 0 0px rgba(0,0,0,.2), 3px 0 0 0px rgba(0,0,0,.2);
 }
 
 .hconjugate {
@@ -306,7 +328,7 @@ body {
 
 .hconjugate-empty {
   padding: .1em .5em;
-  height: 11em;
+  height: 11.5em;
 }
 
 .homework-example {
@@ -448,6 +470,7 @@ body {
   background: var(--work-area-color);
 }
 
+
 .react-tabs__tab-list {
   font-variant-ligatures: discretionary-ligatures;
   font-family: var(--head-font);
@@ -456,10 +479,15 @@ body {
   margin: 0 0 10px;
   padding: 0;
   list-style: none;
+  display: flex;
+  justify-content: flex-start;
 }
 
+.react-tabs__tab-list-flex {
+  justify-content: space-between;
+}
 .react-tabs__tab {
-  display: inline-block;
+/*  display: inline-block; */
   border: 1px solid transparent;
   border-bottom: none;
   bottom: -1px;
@@ -521,6 +549,7 @@ body {
 
   .conjugate-container {
     grid-template-rows: 2em 12em 14em 1fr 1em;
+    row-gap: 2em;
   }
 
   .hconjugate {
@@ -549,8 +578,9 @@ body {
 
 @media (max-width: 420px) {
   .conjugate-container {
-    grid-template-columns: .1em 6fr 1fr .1em;
-    grid-gap: .5em;
+    grid-template-columns: .2em 6fr 1fr .2em;
+    row-gap: 2em;
+    column-gap: 0;
   }
 
   .hconjugate {
@@ -624,8 +654,12 @@ body {
     ". verbs more-work ."
     ". dictionary dictionary ."
     ". . . .";
-  grid-gap: 1em;
+  row-gap: 3em;
+  column-gap: 1em;
 }
+.verbs-sidebar {
+  top: -7%;
+ }
 
 }
 
@@ -634,7 +668,14 @@ body {
 
 
 @media (min-width: 1065px) {
+.conjugate-container {
+  row-gap: 4em;
+  column-gap: 1em;
+}
   .jconjugate, .chk-conjugate {
     grid-template-columns: repeat(auto-fit, minmax(12em, auto));
   }
+.verbs-sidebar {
+  top: -9%;
+ }
 }

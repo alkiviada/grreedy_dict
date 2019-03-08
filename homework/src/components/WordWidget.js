@@ -29,17 +29,19 @@ class WordWidget extends Component {
 
   render () {
     const { addWord, word, words, fetching } = this.props
-    const wordElement = words.find(w => w.word == word);
+    const wordElementIndex = words.findIndex(w => w.word == word);
+    console.log(wordElementIndex)
+    const wordElement = typeof wordElementIndex !== 'undefined' ? words[wordElementIndex] : ''
     if (wordElement) {
     return <Fragment> 
      <Word word={word} el={wordElement} /> 
-     <WordTabs word={wordElement} addWord={addWord} />
+     <WordTabs word={wordElement} addWord={addWord} wordIndex={wordElementIndex} />
      </Fragment>
      }
      else {
        if (fetching) {
          return <div className="word"><strong className="just-word">{word}</strong>
-                <div className="word-tabs-empty"><em>Loading</em></div>
+                <div className="word-tabs-empty"><em>Loading...</em></div>
                 </div>
        }
        else 
@@ -49,9 +51,9 @@ class WordWidget extends Component {
 }
 
 const mapStateToProps = state => ({
-  word: state.words.word,
-  words: state.words.words,
-  fetching: state.words.wordFetching,
+  word: state.dict.word,
+  words: state.dict.words,
+  fetching: state.dict.wordFetching,
 });
 
 export default connect(mapStateToProps, { })(WordWidget);

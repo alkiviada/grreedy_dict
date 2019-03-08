@@ -21,7 +21,7 @@ const store = createStore(
 store.subscribe(throttle(() => {
   saveState({
     verbs: store.getState().verbs,
-    words: store.getState().words,
+    dict: store.getState().dict,
   });
 }, 1000));
 

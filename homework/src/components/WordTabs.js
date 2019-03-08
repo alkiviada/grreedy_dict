@@ -12,6 +12,7 @@ import { lookUpSynonyms, requestSynonyms, } from '../actions/synonymsActions';
 import { renderList, listStyles, makeTabLabel } from './helpers';
 
 const mapStateToProps = state => ({
+  words: state.dict.words,
   allSynonyms: state.synonyms.allSynonyms,
   synonymsFetchingMap: state.synonyms.fetchingMap,
 });
@@ -43,12 +44,12 @@ class WordTabs extends Component {
     let c3 = this.state.carouselIdx3
     let c4 = this.state.carouselIdx4
     if (index) { 
-// this is a legit tab - let's switch to it
+// this MIGHT be a legit tab - let's TRY to switch to it
       console.log(index)
       console.log('index')
 
 // if this is the end of my tab's list
-// which means this is a fake 'tab'
+// it means this is a FAKE 'tab'
 // that is: an arrow to move tabs to the right is being clicked
 
       if (index == myItemsCount) {
@@ -115,7 +116,8 @@ class WordTabs extends Component {
   }
 
   render() {
-    const { word, addWord } = this.props;
+    const { word, addWord, wordIndex, words } = this.props;
+    console.log('will render word tabs')
 
     const iAmHidden2 = this.state.carouselIdx2
     const iAmHidden3 = this.state.carouselIdx3
@@ -142,7 +144,7 @@ class WordTabs extends Component {
     return ( 
       <Tabs selectedIndex={this.state.tabIndex} 
         onSelect={(prev, index) => this.handleSelect(index, prev, word)}>
-        <TabList>
+        <TabList className="react-tabs__tab-list react-tabs__tab-list-flex">
           { iAmHidden3 + iAmHidden4 + iAmHidden2 > 0 ? 
               <Tab className={canMoveLeftClass}>
                 <a className="tab-carousel-right fas fa-chevron-left"></a>
