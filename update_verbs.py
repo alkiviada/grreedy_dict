@@ -296,15 +296,37 @@ def fill_conjugations_table():
         c = Conjugation.objects.create(word=v, tense=t, pronoun=p, verb_form=c_arr[p.num_id])
         print(c)
 
+def fill_empty_verbs():
+  empty_verbs = Word.objects.filter(word='').exclude(is_verb=False)
+  for e_v in empty_verbs:
+    o_w = e_v.verb.first()
+    print(o_w)
+    if not o_w:
+      continue
+    print(o_w.language)
+    ext = '/fren/' if o_w.language == 'french' else '/iten/'
+    r = try_fetch(WORDREF_BASE + ext + o_w.word)
+    word_page = r.content
+    word_soup = BeautifulSoup(word_page, features="html.parser")
+    original = word_soup.find('a', href=lambda x: x and re.search('conj.+(It|Fr)Verbs.+v=', x))
+    r = try_fetch(WORDREF_BASE + original['href'])
+    word_page = r.content
+    word_soup = BeautifulSoup(word_page, features="html.parser")
+    original = word_soup.find('h3').get_text()
+    print(original)
+    e_v.word = original
+    e_v.save()
+
+fill_empty_verbs()
 #fill_conjugations_table()
-
-
 #fill_tense_table()
 #fill_pronoun_table()
+
 #update_verb_words()
 #fetch_conjugations()
 
 #pull_conjugations()
+
 #exs = generate_examples()
 #for e in exs:
 #  ce = ConjugationExample.objects.filter(example=e['example'], conjugation=e['conjugation'])
@@ -312,7 +334,8 @@ def fill_conjugations_table():
 #    ConjugationExample.objects.create(example=e['example'], conjugation=e['conjugation'])
 
 
-ces = ConjugationExample.objects.all()
-for ce in ces:
-  ce.tense = ce.conjugation.tense
-  ce.save()
+#ces = ConjugationExample.objects.all()
+#for ce in ces:
+#  ce.tense = ce.conjugation.tense
+#  ce.word = ce.conjugation.word
+#  ce.save()
