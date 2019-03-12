@@ -531,6 +531,7 @@ ul {
   padding-bottom: .2em;
   grid-column: 1/-1; 
   letter-spacing: .05em;
+  font-size: 1.1rem;
 }
 
 .save-coll {

@@ -45,7 +45,7 @@ class Conjugate extends Component {
        <div className="verb-title">{verb}</div>
        <Verbs />
        <JustConjugateTabs verb={verb} language={language} />
-       <ConjugateHomeworkTabs verb={verb} language={language} addWord={this.addWord} />
+       <div className="conjugate-homework-paper"><ConjugateHomeworkTabs verb={verb} language={language} addWord={this.addWord} /></div>
        { word || words.length ? <DictionaryWidget addWord={this.addWord} /> : '' }
       </div>
     )}

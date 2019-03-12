@@ -65,10 +65,10 @@ class ConjugationExampleSerializer(serializers.ModelSerializer):
     else:
       vf_match = re.search(vf_re, ret['example'], re.S|re.I)
       if vf_match:
-        print(vf_match[0])
+        print(vf_match.group(0))
         vf_re = r'\b' + vf + r'\b'
         ret['example'] = re.sub(vf_re, "...", ret['example'], flags=re.I)
-        ret['conjugation']['verb_form'] = vf_match[0]
+        ret['conjugation']['verb_form'] = vf_match.group(0)
         return ret
       else:
         print(ret['example'])
