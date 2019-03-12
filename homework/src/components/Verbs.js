@@ -21,10 +21,8 @@ class Verbs extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.verbs.length) {
-      this.props.requestVerbs();
-      this.props.fetchVerbs();
-    }
+    this.props.requestVerbs();
+    this.props.fetchVerbs();
   }
 
   onVerbClick(e, verb, language) {

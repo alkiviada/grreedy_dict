@@ -44,7 +44,7 @@ class Conjugate(generics.RetrieveAPIView):
     for field in self.verb_lookup_fields:
       if self.kwargs[field]:  # Ignore empty fields.
         verb_filter[field] = self.kwargs[field]
-    verb = Word.true_verb_objects.get(**verb_filter)
+    verb = Word.true_verb_objects.get(**verb_filter).first()
     print(verb)
     tense = Tense.objects.get(num_id=self.kwargs['tense_idx'])
     filter = {'word': verb, 'tense': tense }
