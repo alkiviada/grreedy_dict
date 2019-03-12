@@ -3,13 +3,13 @@ import {
          FETCH_TENSES_REJECTED, 
        } from './types';
 
-export const fetchVerbTenses = (verb) => (dispatch, getState) => {
+export const fetchVerbTenses = (verb, language) => (dispatch, getState) => {
  console.log('fetching tenses for verb')
 
   const { verbTensesMap } = getState().tenses
   console.log(verb)
 
-  return fetch('/homework/tenses/' + verb) 
+  return fetch('/homework/tenses/' + verb + '/' + language) 
   .then(response =>
       response.json().then(json => ({
         status: response.status,

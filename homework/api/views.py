@@ -80,7 +80,7 @@ class ConjugateHomework(generics.RetrieveAPIView):
 
 class VerbTenses(generics.RetrieveAPIView):
   serializer_class = VerbTenseSerializer
-  lookup_fields = ['word']
+  lookup_fields = ['word', 'language']
 
   def get_queryset(self):
     filter = {}
@@ -99,7 +99,7 @@ class VerbTenses(generics.RetrieveAPIView):
         verb_tenses.append(t)
     return verb_tenses
 
-  def get(self, request, word, format=None):
+  def get(self, request, word, language, format=None):
      print(word)
      tenses = self.get_queryset()
      serializer = VerbTenseSerializer(tenses, many=True)

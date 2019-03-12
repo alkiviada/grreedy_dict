@@ -38,7 +38,7 @@ class ConjugateHomeworkTabs extends Component {
   fetchHomework() {
     const { verb, language } = this.props
     this.props.requestConjugateHomework();
-    this.props.fetchVerbTenses(verb)
+    this.props.fetchVerbTenses(verb, language)
       .then(() => {
         this.props.fetchConjugateHomework(verb, language)
          .then(() => {
