@@ -33,18 +33,29 @@ class WordWidget extends Component {
     console.log(wordElementIndex)
     const wordElement = typeof wordElementIndex !== 'undefined' ? words[wordElementIndex] : ''
     if (wordElement) {
-    return <Fragment> 
-     <Word word={word} el={wordElement} /> 
-     <WordTabs word={wordElement} addWord={addWord} wordIndex={wordElementIndex} />
-     </Fragment>
+      return (
+        <Fragment> 
+          <Word word={word} el={wordElement} /> 
+          <WordTabs word={wordElement} addWord={addWord} wordIndex={wordElementIndex} />
+       </Fragment>)
      }
      else {
        if (fetching) {
-         return <div className="word"><strong className="just-word">{word}</strong>
-                <div className="word-tabs-empty"><em>Loading...</em></div>
-                </div>
+         return (
+           <Fragment> 
+             <div className="word"><strong className="just-word">{word}</strong></div>
+             <div className="word-tabs-empty"><em>Loading...</em></div>
+           </Fragment>)
        }
        else 
+         if (words.length) {
+           return (
+             <Fragment> 
+               <Word word={word} el={words[0]} /> 
+               <WordTabs word={words[0]} addWord={addWord} />
+             </Fragment>)
+
+         }
          return ''
      }
   }

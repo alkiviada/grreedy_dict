@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from words.models import Word, Etymology, Definition, Example, Collection, Collocation, WordNote
+from .models import Word, Etymology, Definition, Example, Collection, Collocation, WordNote
+from homework.models import Tense
 from collections import OrderedDict
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -79,9 +80,27 @@ class PronounceSerializer(serializers.ModelSerializer):
         fields = ['pronounce', 'language']
 
 class ConjugateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Word
-        fields = ['conjugations', 'language']
+  class Meta:
+    model = Word
+    fields = ['conjugations', 'language', 'did_book_examples']
+
+  def to_representation(self, instance):
+    result = super(ConjugateSerializer, self).to_representation(instance)
+    if not result['did_book_examples']:
+      return result
+    print(self)
+    tenses = Tense.objects.all()
+    have_examples = 0
+    for t in tenses:
+      if instance.conjugation_word.filter(tense=t).count() > 4:
+        have_examples = 1
+        break
+    if have_examples:
+      result['did_book_examples'] = 1
+    else:
+      result['did_book_examples'] = 0 
+    print(result['did_book_examples'])
+    return result
 
 class SynonymSerializer(serializers.ModelSerializer):
     class Meta:

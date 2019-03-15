@@ -3,11 +3,20 @@ import {
   FETCH_WORD_REJECTED, 
   FETCH_WORD, 
   FETCH_WORD_FULFILLED,
+  REGISTER_UUID,
 } from './types';
 
 export const clearNewWordError = () => dispatch => {
   dispatch({
     type: CLEAR_NEW_WORD_ERROR,
+  })
+};
+
+export const registerUUId = (uuid) => dispatch => {
+  console.log(uuid)
+  dispatch({
+    type: REGISTER_UUID,
+    payload: uuid,
   })
 };
 
@@ -21,7 +30,9 @@ export const requestWord = (word) => dispatch => {
 
 export const lookUpWord = (word) => { return (dispatch, getState) => {
   let { uuid, words } = getState().dict
+  console.log(uuid)
   const url = '/api/word/' + word + '/' + (uuid ? uuid : '')
+  console.log(url)
   const dictWord = words.find(w => w.word == word);
   if (dictWord) {
     dispatch({

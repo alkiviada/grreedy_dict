@@ -33,6 +33,7 @@ ALLOWED_HOSTS = [ 'grreedy-dict.appspot.com', '127.0.0.1', '209.177.145.192', 'l
 # Application definition
 
 INSTALLED_APPS = [
+    'background_task',
     'knox',
     'rest_framework',
     'frontend',

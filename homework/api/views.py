@@ -69,8 +69,14 @@ class ConjugateHomework(generics.RetrieveAPIView):
     print(verb)
     tense = Tense.objects.get(num_id=self.kwargs['tense_idx'])
     conjugs_filter = {'word': verb, 'tense': tense }
+    limit = self.kwargs['limit'] if self.kwargs.get('limit') else 10;
+       
     conjugs = Conjugation.objects.filter(**conjugs_filter)
-    return ConjugationExample.objects.filter(conjugation__in=conjugs)
+    ce = ConjugationExample.objects.filter(conjugation__in=conjugs)
+    if self.kwargs.get('exclude'):
+      exclude = self.kwargs['exclude'].split(',')
+      ce = ce.exclude(pk_in=exclude)
+    return ce[:limit]
 
   def get(self, request, word, language, tense_idx, format=None):
      print(word)

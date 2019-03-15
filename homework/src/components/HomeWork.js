@@ -10,7 +10,7 @@ class HomeWork extends Component {
     return (
        <Router>
     <div>
-      <Route path="/homework/conjugate/:verb/:language" exact component={Conjugate} />
+      <Route path="/homework/conjugate/:verb/:language/:uuid" exact component={Conjugate} />
     </div>
   </Router>
     )
@@ -18,4 +18,3 @@ class HomeWork extends Component {
 }
 
 export default HomeWork;
-

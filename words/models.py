@@ -522,18 +522,24 @@ class RomanceWordManager(WordRefWordMixin, models.Manager):
       print('problems with wordref content')
       return ''
     original = original.get_text()
-    if original == word.word and word.conjugations:
-      return word
-    try:
-      orig_verb = Word.objects.get(language=word.language, word=original)
-      print('i have original verb: ', orig_verb.word)
-    except ObjectDoesNotExist:
-      orig_verb = Word.objects.create(word=original, language=word.language, 
+    orig_verb = ''
+    if original == word.word:
+      if word.conjugations:
+        return word
+      else:
+        orig_verb = word
+    else:
+      try:
+        orig_verb = Word.objects.get(language=word.language, word=original)
+        print('i have original verb: ', orig_verb.word)
+      except ObjectDoesNotExist:
+        orig_verb = Word.objects.create(word=original, language=word.language, 
                                       from_translation=True, 
                                       lookup_date=timezone.now(), is_verb=True)
     if orig_verb.conjugations:
       word.origin_verb = orig_verb 
       word.save()
+      print('returning here')
       return orig_verb
     else:
       conjs = word_soup.findAll('div', { 'class': 'aa' })
@@ -560,6 +566,8 @@ class RomanceWordManager(WordRefWordMixin, models.Manager):
       if not (orig_verb.word == word.word): 
         word.origin_verb = orig_verb 
         word.save()
+      print(orig_verb.conjugations)
+      orig_verb.save()
       return orig_verb
 
 class SwedishWordManager(WordRefWordMixin, models.Manager):
@@ -694,6 +702,8 @@ class Word(models.Model):
     is_verb = models.BooleanField(default=False)
     conjugations = models.TextField(blank=True, null=True)
     origin_verb = models.ForeignKey("self", blank=True, related_name='verb', null=True, on_delete=models.CASCADE)
+    did_conjugations = models.BooleanField(default=False)
+    did_book_examples = models.BooleanField(default=False)
     
     objects = models.Manager()
     single_object = SingleWordManager()

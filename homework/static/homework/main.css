@@ -141,6 +141,9 @@ body {
 
 .word-tabs-empty {
   background-color: var(--work-area-color);
+  padding: .3em;
+  font-family: var(--head-font);
+  font-size: 75%;
 }
 
 .dict-container {
@@ -171,13 +174,14 @@ body {
 .word {
   word-wrap: break-word;
   font-family: var(--head-font);
-  height: 1.8em;
+  height: 100%;
   display: grid;
   line-height: 1;
   grid-template-areas: "delete word ."
                        "prev-word . next-word";
   grid-template-columns: .7em 1fr .7em;
   grid-gap: .1em;
+  background: var(--select-color);
 }
 
 .just-word {
@@ -337,7 +341,7 @@ body {
 }
 
 .conjugate-homework-paper::before,
-.conjugate-homework::after {
+.conjugate-homework-paper::after {
   content: "";
   position: absolute;
   height: 95%;
@@ -531,6 +535,7 @@ body {
 
 .react-tabs__tab-list-flex {
   justify-content: space-between;
+  padding: 0 .2em 0 0;
 }
 .react-tabs__tab {
 /*  display: inline-block; */

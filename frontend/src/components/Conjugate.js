@@ -3,12 +3,13 @@ import PropTypes from "prop-types";
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => ({
+  uuid: state.collections.uuid,
   conjugations: state.conjugate.allConjugations,
   fetchingMap: state.conjugate.fetchingMap,
 });
 
 const Conjugate = (props) => {
-    const { word, conjugations, fetchingMap } = props;
+    const { word, language, conjugations, fetchingMap, uuid } = props;
     const wordConjs = conjugations[word];
     console.log(wordConjs)
     console.log(fetchingMap)
@@ -26,7 +27,18 @@ const Conjugate = (props) => {
     ) : 
     ( 
       wordConjs.map(e => 
-     <div className="etym-style"><p className={`heading lang-head lang-${e.language}`}>{e.language}</p> <div className="conj-wrapper" dangerouslySetInnerHTML={{ __html:e.conjugations}} /></div>)
+        <div className="etym-style">
+          <div className="conjugation-head">
+            <p className={`heading lang-head lang-${e.language}`}>{e.language}</p> 
+            { e.did_book_examples ?
+                <a href={`/homework/conjugate/${word}/${e.language}/${uuid}`} data-verb-tool-tip="conjugate"
+                  target="_blank" className="conjugate-link">
+                  <span className="conjugate-invite">practice conjugation</span> 
+                </a> : '' 
+            }
+          </div>
+          <div className="conj-wrapper" dangerouslySetInnerHTML={{ __html:e.conjugations}} />
+        </div>)
     );
 }
 

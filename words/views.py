@@ -3,6 +3,7 @@ from django.utils import timezone
 from knox.models import AuthToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .constants import LANGUAGES, WORDS_ON_PAGE
+from .background import generate_examples
 import datetime
 
 from .serializers import (WordSerializer, SynonymSerializer, TranslationSerializer, CollectionSerializer, 
@@ -572,7 +573,6 @@ class WordSingleCreateConjugate(generics.RetrieveAPIView):
     word = word.lower()
     words = Word.romance_words.filter(word=word, is_verb=True).order_by('language').distinct()
     print(words)
-    print(words)
     for w in words:
       print('conjugate: ', w, ' ', w.language) 
       origin_verb = ''
@@ -586,6 +586,8 @@ class WordSingleCreateConjugate(generics.RetrieveAPIView):
         print('i have original verb')
         conjs.append(origin_verb)
       else: 
+        if w.did_conjugations:
+          continue
         try:
           objects_manager = getattr(Word, w.language + '_objects')
           print(objects_manager)
@@ -602,7 +604,11 @@ class WordSingleCreateConjugate(generics.RetrieveAPIView):
           print(e)
           print('No method to get conjugations')
           raise Http404("No Conjugate API for the word: ", word)
-    print(conjs)
+      if not w.did_conjugations:
+        w.did_conjugations = 1
+        w.save()
+        generate_examples(w.pk) 
+    #[ print(c.conjugations, c.pk) for c in conjs ]
     if not conjs:
       print("Could not fetch conjugations: " + word);
       raise Http404("No Conjugation API for the word: ", word)

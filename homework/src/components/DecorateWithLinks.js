@@ -9,7 +9,7 @@ class DecorateWithLinks extends Component {
     onLinkClick: PropTypes.func.isRequired,
   }
   render() {
-    const { words, onLinkClick, original, parentRef } = this.props;
+    const { words, onLinkClick } = this.props;
     let config = [
      {
       regex: /(\{)(.*?)(\})/gm,

@@ -1,5 +1,6 @@
 import { 
          FETCH_WORD, 
+         REGISTER_UUID,
          FETCH_WORD_FULFILLED, 
          FETCH_WORD_REJECTED, 
          CLEAR_NEW_WORD_ERROR,
@@ -19,6 +20,9 @@ export default function(state = initialState, action) {
     case FETCH_WORD: return { ...state, 
                               word: action.payload, 
                               wordFetching: true, 
+                             };
+    case REGISTER_UUID: return { ...state, 
+                              uuid: action.payload, 
                              };
     case FETCH_WORD_FULFILLED: return { ...state, 
                                         wordFetching: false, 

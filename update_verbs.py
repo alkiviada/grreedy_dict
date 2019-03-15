@@ -86,13 +86,19 @@ def more_db_examples(vf_db_re, examples_pks, collocs_pks, v):
     more_examples.append(e)
   return more_examples
 
+def mark_did_examples():
+  verbs = Word.true_verb_objects.filter(language='french', did_book_examples=False).exclude(word='opter')
+  for v in verbs:
+    v.did_book_examples = 1
+    v.save()
+
 def generate_examples():
   exs = []
   nlp = spacy.load('fr')
   print('privet')
   tenses = Tense.objects.all()
   print(tenses)
-  verbs = Word.true_verb_objects.all()
+  verbs = Word.true_verb_objects.filter(word_conjugations=None, language='french', did_book_examples=False)
   for v in verbs:
     if v.language != 'french':
       continue
@@ -317,7 +323,7 @@ def fill_empty_verbs():
     e_v.word = original
     e_v.save()
 
-fill_empty_verbs()
+#fill_empty_verbs()
 #fill_conjugations_table()
 #fill_tense_table()
 #fill_pronoun_table()
@@ -339,3 +345,5 @@ fill_empty_verbs()
 #  ce.tense = ce.conjugation.tense
 #  ce.word = ce.conjugation.word
 #  ce.save()
+
+mark_did_examples()

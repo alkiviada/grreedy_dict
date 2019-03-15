@@ -26,4 +26,3 @@ store.subscribe(throttle(() => {
 }, 1000));
 
 export default store;
-

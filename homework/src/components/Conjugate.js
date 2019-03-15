@@ -5,11 +5,12 @@ import DictionaryWidget from "./DictionaryWidget";
 import JustConjugateTabs from "./JustConjugateTabs";
 import { connect } from 'react-redux';
 import { requestVerb } from '../actions/verbsActions';
-import { lookUpWord, requestWord, } from '../actions/wordsActions';
+import { lookUpWord, requestWord, registerUUId } from '../actions/wordsActions';
 
 const mapStateToProps = state => ({
   words: state.dict.words,
   word: state.dict.word,
+  uuid: state.dict.uuid,
 });
 
 class Conjugate extends Component {
@@ -19,8 +20,12 @@ class Conjugate extends Component {
   }
   
   componentDidMount () {
-    const { verb, language } = this.props
+    const { verb, language, uuid } = this.props.match.params 
+    console.log(uuid)
+    console.log('this is my verb ', verb);
     this.props.requestVerb(verb, language)
+    if (uuid)
+      this.props.registerUUId(uuid)
   }
 
   addWord (e, word) {
@@ -34,7 +39,8 @@ class Conjugate extends Component {
   }
 
   render() {
-    const { verb, language, } = this.props.match.params 
+    const { verb, language, uuid } = this.props.match.params 
+    console.log(uuid)
     const { word, words } = this.props 
     console.log(word)
     console.log(words)
@@ -51,4 +57,4 @@ class Conjugate extends Component {
     )}
 }
 
-export default connect(mapStateToProps, { requestVerb, lookUpWord, requestWord })(Conjugate);
+export default connect(mapStateToProps, { requestVerb, lookUpWord, requestWord, registerUUId })(Conjugate);
