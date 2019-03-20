@@ -102,8 +102,6 @@ class WordTabs extends Component {
 
     if (index) { 
 // this is a legit tab - let's switch to it
-      console.log(index)
-      console.log('index')
       if (index == myItemsCount) {
         c5 = myItemsCount - c5 - 1 > carouselItems5 ? c5 + 1 : c5
         c4 = myItemsCount - c4 - 1 > carouselItems4 ? c4 + 1 : c4
@@ -184,7 +182,6 @@ class WordTabs extends Component {
 
   render() {
     const { word, element, addRow, parentRef } = this.props;
-    console.log(word)
 
     const isEnglishWord = element.reduce((englishFlag, e) => 
       {return e['language'] === 'english' ?  ++englishFlag : englishFlag}, 0)
@@ -240,8 +237,6 @@ class WordTabs extends Component {
                   (i >= iAmHidden5) && (i < carouselItems5 + iAmHidden5) ? 
                   'react-tabs__tab show-tab-item5' : 
                   'react-tabs__tab hide-tab-item5'
-               console.log(t)
-               console.log(visibilityClassName)
                return <Tab className={visibilityClassName}>{ makeTabLabel(t) }</Tab> 
             })
           }
