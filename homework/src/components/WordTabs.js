@@ -107,7 +107,8 @@ class WordTabs extends Component {
     }
     }
     else {
-// this is a legit tab - let's switch to it
+// this is a carousel tab - let's deal with it:
+// log the carousel count  and NOT switch to it
       c2 = c2 - 1
       c3 = c3 ? c3 - 1 : c3
       c4 = c4 ? c4 - 1 : c4

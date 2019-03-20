@@ -674,16 +674,18 @@ body {
 }
 
 @media (min-width: 900px) {
-.dict-container {
-  grid-template-columns: minmax(9em, 15%) 1fr;
-}
+  .dict-container {
+    grid-template-columns: minmax(9em, 15%) 1fr;
+  }
 
   .verbs-toggle-label { 
     display: none;
   }
+
   .verbs-ul {
     padding: .3em .6em 0 .6em;
   }
+
   .verbs-list {
     max-height: 20.3em; 
     left: unset; 

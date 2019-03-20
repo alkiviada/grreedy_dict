@@ -34,11 +34,17 @@ const mapStateToProps = state => ({
   synonymsFetchingMap: state.synonyms.fetchingMap,
 });
 
-const carouselItems = 4;
-    const tabWordMap = {
-                        'english': { 1: 'Original word', 2: 'TRANSLATIONS', 3: 'COLLOCATIONS', 4: 'SYNONYMS', 5: 'PRONUNCIATION', 6: 'ADD NOTE', 7: 'CONJUGATE' },
-                        'non-english': { 1: 'Original Word', 2: 'COLLOCATIONS', 3: 'SYNONYMS', 4: 'PRONUNCIATION', 5: 'ADD NOTE', 6: 'CONJUGATE' },
-                       }
+const carouselItems5 = 5;
+const carouselItems4 = 4;
+const carouselItems3 = 3;
+const carouselItems2 = 2;
+const tabs = [ 'Original word', 
+               'TRANSLATIONS', 
+               'COLLOCATIONS', 
+               'SYNONYMS', 
+               'PRONUNCIATION', 
+               'ADD NOTE', 
+               'CONJUGATE' ] 
 
 class WordTabs extends Component {
   constructor(props) { 
@@ -46,16 +52,22 @@ class WordTabs extends Component {
     this.handleSelect = this.handleSelect.bind(this) 
     let i = this.props.mapTabIndex[this.props.word];
     this.state = { tabIndex: i ? i : 1,
-                   carouselIdx: 0,
+                   carouselIdx5: 0,
+                   carouselIdx4: 0,
+                   carouselIdx3: 0,
+                   carouselIdx2: 0,
     };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     const { word } = nextProps
-    const { carouselIdx } = nextState
-    console.log(carouselIdx)
-    console.log(this.state.carouselIdx)
-    if (nextProps.mapTabIndex[word] == this.props.mapTabIndex[word] && (carouselIdx == this.state.carouselIdx)) {
+    const { carouselIdx5, carouselIdx4, carouselIdx3, carouselIdx2 } = nextState
+    if (nextProps.mapTabIndex[word] == this.props.mapTabIndex[word] && 
+        (carouselIdx5 == this.state.carouselIdx5) && 
+        (carouselIdx4 == this.state.carouselIdx4) &&
+        (carouselIdx2 == this.state.carouselIdx2) &&
+        (carouselIdx3 == this.state.carouselIdx3) 
+    ) {
       return 0
     }
     else {
@@ -75,31 +87,37 @@ class WordTabs extends Component {
     if (parentOffset && [1, 2, 3].filter(i => i == prev)) {
       this.props.logWordDivOffset(word, parentOffset);
     }
-    let tabMap = {}
-    if (isEnglishWord) {
-      tabMap = tabWordMap['english']
+    let myTabs = []
+    if (!isEnglishWord) {
+      myTabs = tabs.filter(t => t != 'TRANSLATIONS')
     }
-    else {
-      tabMap = tabWordMap['non-english']
+    if (!isVerb) {
+      myTabs = tabs.filter(t => t != 'CONJUGATE')
     }
+    const myItemsCount = myTabs.length + 1
+    let c5 = this.state.carouselIdx5 
+    let c4 = this.state.carouselIdx4
+    let c3 = this.state.carouselIdx3
+    let c2 = this.state.carouselIdx2
 
     if (index) { 
 // this is a legit tab - let's switch to it
       console.log(index)
       console.log('index')
-      console.log(isVerb)
-      if ((isVerb && ((isEnglishWord && index == 8) || (!isEnglishWord && index == 7))) || (!isVerb && ((isEnglishWord && index == 7) || (!isEnglishWord && index == 6)))) {
-      let c = this.state.carouselIdx 
-      const myItems = isEnglishWord ? 6 + isVerb : 5 + isVerb;
-      console.log(c)
-      console.log(myItems)
-      c = myItems - c - 1 > carouselItems ? c + 1 : c
-      this.setState( { carouselIdx: c } );
+      if (index == myItemsCount) {
+        c5 = myItemsCount - c5 - 1 > carouselItems5 ? c5 + 1 : c5
+        c4 = myItemsCount - c4 - 1 > carouselItems4 ? c4 + 1 : c4
+        c3 = myItemsCount - c3 - 1 > carouselItems3 ? c3 + 1 : c3
+        c2 = myItemsCount - c2 - 1 > carouselItems2 ? c2 + 1 : c2
+        this.setState({ carouselIdx5: c5, 
+                        carouselIdx4: c4, 
+                        carouselIdx2: c2,
+                        carouselIdx3: c3 });
       }
       else {
       this.props.switchTab(index, word, this.props.mapTabIndex);
       this.setState( { tabIndex: index } );
-    switch (tabMap[index]) {
+    switch (myTabs[index-1]) {
       case 'ADD NOTE':
         if (!this.props.allNotes[word]) {
           console.log('looking up notes'); 
@@ -151,57 +169,105 @@ class WordTabs extends Component {
     }
     }
     else {
-// this is a legit tab - let's switch to it
-      let c = this.state.carouselIdx 
-      c = c - 1
-      this.setState( { carouselIdx: c } );
+// this is a left-moving carousel tab - let's deal with it:
+// log the carousel count (so the items can be moved accordingly) and NOT switch to it
+      c5 = c5 ? c5 - 1 : c5
+      c4 = c4 ? c4 - 1 : c4
+      c3 = c3 ? c3 - 1 : c3
+      c2 = c2 ? c2 - 1 : c2
+      this.setState({ carouselIdx5: c5, 
+                      carouselIdx4: c4, 
+                      carouselIdx2: c2, 
+                      carouselIdx3: c3 });
     }
   }
 
   render() {
     const { word, element, addRow, parentRef } = this.props;
+    console.log(word)
 
     const isEnglishWord = element.reduce((englishFlag, e) => 
       {return e['language'] === 'english' ?  ++englishFlag : englishFlag}, 0)
 
     const isVerb = element.reduce((isVerb, e) => 
       {return e['is_verb'] ? 1 : 0}, 0)
-    const iAmHidden = this.state.carouselIdx
-    console.log('i am hidden')
-    console.log(iAmHidden)
-    let i = 1;
-    let tabMap = isEnglishWord ? tabWordMap['english'] : tabWordMap['non-english']
-    const myItems = isEnglishWord ? 6 + isVerb : 5 + isVerb;
-    let canMoveRight = myItems - iAmHidden - 1 > carouselItems ? 1 : 0 
-    console.log(canMoveRight)
-    console.log(myItems)
-    let canMoveLeft = iAmHidden > 0 ? 1 : 0 
+
+    const iAmHidden5 = this.state.carouselIdx5
+    const iAmHidden4 = this.state.carouselIdx4
+    const iAmHidden3 = this.state.carouselIdx3
+    const iAmHidden2 = this.state.carouselIdx2
+
+    const canMoveLeftClass = iAmHidden5 ? "tab-carousel-arrow-tab5 react-tabs__tab" : 
+      iAmHidden4 ? "tab-carousel-arrow-tab4 react-tabs__tab" : 
+      iAmHidden3 ? "tab-carousel-arrow-tab3 react-tabs__tab" : 
+      iAmHidden2 ? "tab-carousel-arrow-tab2 react-tabs__tab" : ''
+
+    let myTabs = []
+    if (!isEnglishWord) {
+      myTabs = tabs.filter(t => t != 'TRANSLATIONS')
+    }
+    if (!isVerb) {
+      myTabs = tabs.filter(t => t != 'CONJUGATE')
+    }
+    const myItemsCount = myTabs.length + 1
+
+    let canMoveRight5 = myItemsCount - iAmHidden5 - 1 > carouselItems5 ? 1 : 0 
+    let canMoveRight4 = myItemsCount - iAmHidden4 - 1 > carouselItems4 ? 1 : 0 
+    let canMoveRight3 = myItemsCount - iAmHidden3 - 1 > carouselItems3 ? 1 : 0 
+    let canMoveRight2 = myItemsCount - iAmHidden2 - 1 > carouselItems2 ? 1 : 0 
 
     return ( 
       <Tabs selectedIndex={this.state.tabIndex} 
         onSelect={(prev, index) => this.handleSelect(index, prev, word, isEnglishWord, isVerb, parentRef)}>
         <TabList>
-          { canMoveLeft ? 
-          <Tab className="tab-carousel-arrow-tab react-tabs__tab"><a className="tab-carousel-right fas fa-chevron-left"></a></Tab> :
-          <Tab className="tab-carousel-arrow-tab hide-tab-item"><a className="tab-carousel-right fas fa-chevron-left"></a></Tab>
-         }
-{         
-          Object.keys(tabMap).map((t, i) =>  {
-               const visibilityClassName = (i >= iAmHidden) && (i <= carouselItems + iAmHidden) ? 'react-tabs__tab show-tab-item' : 'react-tabs__tab hide-tab-item'
-               return (
-              ((!isEnglishWord && t == 6) || t == 7) && ! isVerb ? '' : 
-              isEnglishWord ? <Tab className={visibilityClassName}>{ makeTabLabel(tabWordMap['english'][t]) }</Tab> : 
-                              <Tab className={visibilityClassName}>{ makeTabLabel(tabWordMap['non-english'][t]) }</Tab>
-             )
-})
-}
-          { canMoveRight ? 
-          <Tab className="tab-carousel-arrow-tab react-tabs__tab"><a className="tab-carousel-right fas fa-chevron-right"></a></Tab> :
-          <Tab className="tab-carousel-arrow-tab hide-tab-item"><a className="tab-carousel-right fas fa-chevron-right"></a></Tab>
-         }
-        </TabList>
-        <TabPanel className="carousel-dummy-tab" />
-        <TabPanel>
+          { iAmHidden5 + iAmHidden4 + iAmHidden3 + iAmHidden2 > 0 ? 
+              <Tab className={canMoveLeftClass}>
+                <a className="tab-carousel-right fas fa-chevron-left"></a>
+              </Tab> :
+              <Tab className="tab-carousel-arrow-tab hide-tab-item">
+                <a className="tab-carousel-right fas fa-chevron-left"></a>
+              </Tab>
+          }
+          {         
+            myTabs.map((t, i) =>  {
+              const visibilityClassName = 
+                (i >= iAmHidden2) && (i < carouselItems2 + iAmHidden2) ? 
+                  'react-tabs__tab show-tab-item2' : 
+                (i >= iAmHidden3) && (i < carouselItems3 + iAmHidden3) ? 
+                  'react-tabs__tab show-tab-item3' : 
+                  (i >= iAmHidden4) && (i < carouselItems4 + iAmHidden4) ? 
+                  'react-tabs__tab show-tab-item4' : 
+                  (i >= iAmHidden5) && (i < carouselItems5 + iAmHidden5) ? 
+                  'react-tabs__tab show-tab-item5' : 
+                  'react-tabs__tab hide-tab-item5'
+               console.log(t)
+               console.log(visibilityClassName)
+               return <Tab className={visibilityClassName}>{ makeTabLabel(t) }</Tab> 
+            })
+          }
+          { canMoveRight5 ? 
+              <Tab className="tab-carousel-arrow-tab5 react-tabs__tab">
+                <a className="tab-carousel-right fas fa-chevron-right"></a>
+              </Tab> :
+           canMoveRight4 ? 
+              <Tab className="tab-carousel-arrow-tab4 react-tabs__tab">
+                <a className="tab-carousel-right fas fa-chevron-right"></a>
+              </Tab> :
+           canMoveRight3 ? 
+              <Tab className="tab-carousel-arrow-tab3 react-tabs__tab">
+                <a className="tab-carousel-right fas fa-chevron-right"></a>
+              </Tab> :
+           canMoveRight2 ? 
+              <Tab className="tab-carousel-arrow-tab2 react-tabs__tab">
+                <a className="tab-carousel-right fas fa-chevron-right"></a>
+              </Tab> :
+              <Tab className="tab-carousel-arrow-tab hide-tab-item">
+                <a className="tab-carousel-right fas fa-chevron-right"></a>
+              </Tab>
+          }
+          </TabList>
+          <TabPanel className="carousel-dummy-tab" />
+          <TabPanel>
           { element.map(e => 
                 <div>
                 <p className={`heading lang-head lang-${e['language']}`}>{e['language']}</p>
@@ -211,7 +277,9 @@ class WordTabs extends Component {
           }
         </TabPanel>
         <TabPanel>
-          { isEnglishWord ? <Translations word={word} addRow={addRow} parentRef={parentRef} /> : <Collocations word={word} addRow={addRow} parentRef={parentRef} />}
+          { isEnglishWord ? 
+            <Translations word={word} addRow={addRow} parentRef={parentRef} /> : 
+            <Collocations word={word} addRow={addRow} parentRef={parentRef} />}
         </TabPanel>
         <TabPanel>
           { isEnglishWord ? <Collocations word={word} addRow={addRow} parentRef={parentRef} /> : <Synonyms word={word} addRow={addRow} parentRef={parentRef} />}
