@@ -553,8 +553,10 @@ ul {
   justify-self: end;
   align-self: center;
   color: white;
-  margin-right: .7em;
-  margin-bottom: .2em;
+  line-height: 1;
+  margin: 0 0 0 50%;
+  font-family: var(--word-font);
+  font-size: 80%;
 }
 
 .user-tag a {
@@ -578,7 +580,7 @@ ul {
 
   display: grid;
   grid-template-areas: "input-or-load button error";
-  grid-template-columns: 8.2em 5.2em 1fr;
+  grid-template-columns: 5.2em 5.5em 1fr;
 }
 
 .save-coll a:hover, .new-word a:hover, .login-form a:hover, .add-note-form a:hover {
@@ -938,7 +940,7 @@ a[href^="/homework/conjugate"]::after {
   grid-area: save-words;
   display: grid;
   grid-template-areas: "save user";
-  grid-template-columns: 1fr 9em;
+  grid-template-columns: 1fr 6em;
 
   z-index: 111500;
   bottom: 0px;
@@ -1196,7 +1198,6 @@ font-family: FontAwesome;
   }
 
   .user-tag {
-    margin-bottom: .1em !important;
   }
 
   .words-table {
@@ -1326,86 +1327,6 @@ i.defect {color: red;font-style:normal;}
 i.defect {color: var(--field-color);font-style:normal;}    
 .antiquated {color: var(--field-color);}
 	
-
-
-
-
-@media (min-width: 579px) {
-  .dict-container {
-  grid-template-columns: 1fr 7em;
-    grid-template-areas: 
-      "new-word colls"
-      "words words"
-      "save-words save-words";
-  }
-  .words-container { 
-    grid-area: words;
-    display: grid;
-    grid-template-areas: 
-      "coll-title coll-title coll-title"
-      "pagination-left words-table pagination-right";
-    padding: 0.3em 0.3em;
-    grid-template-rows: 2em 1fr;
-    grid-template-columns: .5fr 6fr .5fr;
-    grid-row-gap: .3em;
-  } 
-
-  .pagination-1, .pagination-2 {
-    background-color: inherit;
-    top: 0;
-    z-index: 0;
-    grid-template-columns: 1fr;
-  }
-
-  .pagination-1 {
-    grid-area: pagination-right;
-  }
-  
-  .pagination-2 {
-    grid-area: pagination-left;
-  }
-  
-  .pagination-1, .pagination-2 {
-    display: grid;
-    position: relative;
-    grid-template-areas: 
-    "top"
-    "."
-    "bottom";
-    grid-template-rows: 1em 1fr 1em;
-  }
-  
-  .pagination-a {
-    grid-area: top;
-    top: 4.1em;
-    color: var(--field-color);
-    margin-right: 0;
-    margin-left: 0;
-  }
-  
-  .pagination-b {
-    display: grid;
-    grid-area: bottom;
-    bottom: 3.5em;
-    color: var(--sky-color);
-    margin-left: 0;
-    margin-right: 0;
-  }
-  
-  .pagination-a, .pagination-b {
-    position: sticky;
-    position: -webkit-sticky;
-    cursor: pointer;
-    font-size: .9rem;
-    align-self: center;
-    font-weight: 900;
-    justify-self: center;
-    text-shadow: none;
-  }
-
-}
-
-
 @media screen and (max-width:640px), handheld and (max-width:640px), projection and (max-width:640px), tv and (max-width:640px), tty and (max-width:640px) {
 
    .aa table.neoConj {
