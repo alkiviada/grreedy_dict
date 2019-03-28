@@ -148,6 +148,7 @@ body {
 
 .dict-container {
   grid-area: dictionary;
+  position: relative;
   background: var(--work-area-color);
   max-height: 17em;
   overflow-y: auto;
@@ -156,12 +157,27 @@ body {
   grid-auto-rows: minmax(auto, -webkit-max-content);
 }
 
+.word::after {
+  position: absolute;
+  content: '';
+  width: 5em;
+  height: 2em;
+  background: red;
+  top: 0;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.word::after {
+  transform: rotate(.1turn);
+  right: 0%;
+}
+
 .word strong {
   text-transform: uppercase;
   color: var(--grass-color);
   font-weight: 700;
   place-self: start;
-  padding-top: .5em;
+  padding: .5em 0;
   letter-spacing: .1em;
   word-break: break-all;
 }
@@ -535,7 +551,7 @@ body {
 
 .react-tabs__tab-list-flex {
   justify-content: space-between;
-  padding: 0 .2em 0 0;
+  padding: 0 1em 0 0;
 }
 .react-tabs__tab {
 /*  display: inline-block; */
@@ -584,7 +600,7 @@ body {
   display: block;
 }
 
-@media (max-width: 601px) {
+@media (max-width: 618px) {
   .hide-tab-item4 {
     display: none;
   }
@@ -608,7 +624,7 @@ body {
   }
 }
 
-@media (max-width: 551px) {
+@media (max-width: 568px) {
   .hconjugate {
     padding: .7em .5em .6em 2.3em;
   }
@@ -627,7 +643,7 @@ body {
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 437px) {
   .conjugate-container {
     grid-template-columns: .2em 6fr 1fr .2em;
     row-gap: 1em;
@@ -652,13 +668,13 @@ body {
   }
 }
 
-@media (min-width: 550px) {
+@media (min-width: 567px) {
   .hide-tab-item {
     display: none;
   }
 }
 
-@media (min-width: 600px) {
+@media (min-width: 618px) {
   .tab-carousel-arrow-tab2 {
     display: none;
   }

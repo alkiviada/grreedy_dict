@@ -82,7 +82,7 @@ class PronounceSerializer(serializers.ModelSerializer):
 class ConjugateSerializer(serializers.ModelSerializer):
   class Meta:
     model = Word
-    fields = ['conjugations', 'language', 'did_book_examples']
+    fields = ['conjugations', 'language', 'did_book_examples', 'word']
 
   def to_representation(self, instance):
     result = super(ConjugateSerializer, self).to_representation(instance)

@@ -17,7 +17,7 @@ import { fetchConjugations, requestConjugations, } from '../actions/conjugateAct
 import { lookUpCollocations, requestCollocations, } from '../actions/collocationsActions';
 import { lookUpSynonyms, requestSynonyms, } from '../actions/synonymsActions';
 import { fetchNote, requestNote } from '../actions/notesActions';
-import { renderList, listStyles, makeTabLabel } from './helpers';
+import { renderList, listStyles, makeTabLabel, tabs } from './helpers';
 import { logWordDivOffset } from '../actions/refActions';
 
 const mapStateToProps = state => ({
@@ -38,13 +38,6 @@ const carouselItems5 = 5;
 const carouselItems4 = 4;
 const carouselItems3 = 3;
 const carouselItems2 = 2;
-const tabs = [ 'Original word', 
-               'TRANSLATIONS', 
-               'COLLOCATIONS', 
-               'SYNONYMS', 
-               'PRONUNCIATION', 
-               'ADD NOTE', 
-               'CONJUGATE' ] 
 
 class WordTabs extends Component {
   constructor(props) { 
@@ -87,12 +80,12 @@ class WordTabs extends Component {
     if (parentOffset && [1, 2, 3].filter(i => i == prev)) {
       this.props.logWordDivOffset(word, parentOffset);
     }
-    let myTabs = []
+    let myTabs = tabs
     if (!isEnglishWord) {
-      myTabs = tabs.filter(t => t != 'TRANSLATIONS')
+      myTabs = myTabs.filter(t => t != 'TRANSLATIONS')
     }
     if (!isVerb) {
-      myTabs = tabs.filter(t => t != 'CONJUGATE')
+      myTabs = myTabs.filter(t => t != 'CONJUGATE')
     }
     const myItemsCount = myTabs.length + 1
     let c5 = this.state.carouselIdx5 
@@ -186,8 +179,8 @@ class WordTabs extends Component {
     const isEnglishWord = element.reduce((englishFlag, e) => 
       {return e['language'] === 'english' ?  ++englishFlag : englishFlag}, 0)
 
-    const isVerb = element.reduce((isVerb, e) => 
-      {return e['is_verb'] ? 1 : 0}, 0)
+    const isVerb = element.reduce((isVerbFlag, e) => 
+      {return e['is_verb'] ? ++isVerbFlag : isVerbFlag}, 0)
 
     const iAmHidden5 = this.state.carouselIdx5
     const iAmHidden4 = this.state.carouselIdx4
@@ -199,12 +192,12 @@ class WordTabs extends Component {
       iAmHidden3 ? "tab-carousel-arrow-tab3 react-tabs__tab" : 
       iAmHidden2 ? "tab-carousel-arrow-tab2 react-tabs__tab" : ''
 
-    let myTabs = []
+    let myTabs = tabs
     if (!isEnglishWord) {
-      myTabs = tabs.filter(t => t != 'TRANSLATIONS')
+      myTabs = myTabs.filter(t => t != 'TRANSLATIONS')
     }
     if (!isVerb) {
-      myTabs = tabs.filter(t => t != 'CONJUGATE')
+      myTabs = myTabs.filter(t => t != 'CONJUGATE')
     }
     const myItemsCount = myTabs.length + 1
 

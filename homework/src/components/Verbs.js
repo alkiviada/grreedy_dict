@@ -6,6 +6,7 @@ import { fetchVerbs, requestVerbs, requestVerb } from '../actions/verbsActions';
 
 const mapStateToProps = state => ({
   verbs: state.verbs.verbs,
+  uuid: state.dict.uuid,
   tenseIdx: state.conjugs.tenseIdx,
 });
 
@@ -32,7 +33,7 @@ class Verbs extends Component {
   }
   
   render () {
-    const { verbs, tenseIdx } = this.props;
+    const { verbs, tenseIdx, uuid } = this.props;
     let seenVerbMap = {}
     return verbs.length ? (
       <div className="verbs-sidebar">
@@ -42,7 +43,7 @@ class Verbs extends Component {
        { 
          verbs.map(v => {
           seenVerbMap[v.word] = seenVerbMap[v.word] ? seenVerbMap[v.word]++ : 1;
-          return <li><a href={`/homework/conjugate/${v.word}/${v.language}`} data-verb-tool-tip="conjugate"
+          return <li><a href={`/homework/conjugate/${v.word}/${v.language}/${uuid}`} data-verb-tool-tip="conjugate"
           onClick={(e) => this.onVerbClick(e, v.word, v.language)} className="verb-link">
             <span className="verb-word">{v.word}</span> 
             { seenVerbMap[v.word] > 1 ? <span className="verb-language">{v.language == 'italian' ? '(it)' : '(fr)'}</span> : '' }

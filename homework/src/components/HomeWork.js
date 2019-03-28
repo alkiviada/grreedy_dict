@@ -7,10 +7,11 @@ import Conjugate from "./Conjugate";
 class HomeWork extends Component {
 
   render() {
+    console.log('homework')
     return (
        <Router>
     <div>
-      <Route path="/homework/conjugate/:verb/:language/:uuid" exact component={Conjugate} />
+      <Route path="/homework/conjugate/:verb/:language/:uuid" component={Conjugate} />
     </div>
   </Router>
     )

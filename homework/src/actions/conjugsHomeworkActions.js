@@ -43,6 +43,7 @@ export const fetchConjugateHomework = (verb, language) => (dispatch, getState) =
           dispatch({ type: FETCH_HOMEWORK_REJECTED, payload: 'fetching homework failed' })
         } else {
           // Status looks good
+          console.log('my homework is ', json)
           const examples = json.filter(o => o)
           const homework = examples.map(e => e.example)
           const correct = examples.map(e => e.conjugation.verb_form)

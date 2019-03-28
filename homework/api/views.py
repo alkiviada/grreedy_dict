@@ -44,7 +44,7 @@ class Conjugate(generics.RetrieveAPIView):
     for field in self.verb_lookup_fields:
       if self.kwargs[field]:  # Ignore empty fields.
         verb_filter[field] = self.kwargs[field]
-    verb = Word.true_verb_objects.get(**verb_filter).first()
+    verb = Word.true_verb_objects.get(**verb_filter)
     print(verb)
     tense = Tense.objects.get(num_id=self.kwargs['tense_idx'])
     filter = {'word': verb, 'tense': tense }
@@ -72,7 +72,7 @@ class ConjugateHomework(generics.RetrieveAPIView):
     limit = self.kwargs['limit'] if self.kwargs.get('limit') else 10;
        
     conjugs = Conjugation.objects.filter(**conjugs_filter)
-    ce = ConjugationExample.objects.filter(conjugation__in=conjugs)
+    ce = ConjugationExample.objects.filter(conjugation__in=conjugs).exclude(is_bad=1)
     if self.kwargs.get('exclude'):
       exclude = self.kwargs['exclude'].split(',')
       ce = ce.exclude(pk_in=exclude)
@@ -93,6 +93,7 @@ class VerbTenses(generics.RetrieveAPIView):
     for field in self.lookup_fields:
       if self.kwargs[field]:  # Ignore empty fields.
         filter[field] = self.kwargs[field]
+    print(filter)
     verb = Word.true_verb_objects.get(**filter)
     print(verb)
     tenses = Tense.objects.all()
@@ -103,6 +104,7 @@ class VerbTenses(generics.RetrieveAPIView):
       print(ce_count)
       if ce_count >= 5:
         verb_tenses.append(t)
+    print(verb_tenses)
     return verb_tenses
 
   def get(self, request, word, language, format=None):

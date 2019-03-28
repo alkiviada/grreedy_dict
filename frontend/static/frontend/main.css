@@ -918,7 +918,9 @@ a[data-word-tool-tip]:hover::after {
   color: var(--field-color);
   font-size: .9rem;
   font-family: var(--word-font);
-  padding-right: .5em;
+  padding-right: 1em;
+  text-decoration: underline;
+  position: relative;
 }
 
 a[href^="/homework/conjugate"]::after {
@@ -926,6 +928,9 @@ a[href^="/homework/conjugate"]::after {
   font-family: 'Font Awesome 5 Free';
   font-size: .7rem;
   font-weight: 900;
+  position: absolute;
+  top: -4px;
+  right: 0px;
 }
 
 .conjugation-head {

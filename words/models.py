@@ -532,6 +532,8 @@ class RomanceWordManager(WordRefWordMixin, models.Manager):
       try:
         orig_verb = Word.objects.get(language=word.language, word=original)
         print('i have original verb: ', orig_verb.word)
+        if not orig_verb.is_verb:
+          orig_verb.is_verb = 1
       except ObjectDoesNotExist:
         orig_verb = Word.objects.create(word=original, language=word.language, 
                                       from_translation=True, 

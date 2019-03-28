@@ -607,12 +607,12 @@ class WordSingleCreateConjugate(generics.RetrieveAPIView):
       if not w.did_conjugations:
         w.did_conjugations = 1
         w.save()
-        generate_examples(w.pk) 
     #[ print(c.conjugations, c.pk) for c in conjs ]
     if not conjs:
       print("Could not fetch conjugations: " + word);
       raise Http404("No Conjugation API for the word: ", word)
-
+    
+    generate_examples(w.pk) 
     serializer = ConjugateSerializer(conjs, many=True)
     return Response(serializer.data)
 

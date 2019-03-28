@@ -31,3 +31,11 @@ export const makeTabLabel = (stub) => {
   const tabLabelPartsCapitalized = stub.split(' ').map(p => p.charAt(0) + p.slice(1).toLowerCase())
   return tabLabelPartsCapitalized.join(' ');
 }
+
+export const tabs = [ 'Original word', 
+               'TRANSLATIONS', 
+               'COLLOCATIONS', 
+               'SYNONYMS', 
+               'PRONUNCIATION', 
+               'ADD NOTE', 
+               'CONJUGATE' ] 

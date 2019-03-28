@@ -13,6 +13,8 @@ def generate_examples(word_pk):
   if word.language != 'french':
     return 
   verb = word.origin_verb if word.origin_verb else word
+  if verb.did_book_examples:
+    return 
   pull_conjugations(verb)
   exs = []
   nlp = spacy.load('fr')

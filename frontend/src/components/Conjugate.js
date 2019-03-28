@@ -31,7 +31,7 @@ const Conjugate = (props) => {
           <div className="conjugation-head">
             <p className={`heading lang-head lang-${e.language}`}>{e.language}</p> 
             { e.did_book_examples ?
-                <a href={`/homework/conjugate/${word}/${e.language}/${uuid}`} data-verb-tool-tip="conjugate"
+                <a href={`/homework/conjugate/${e.word}/${e.language}/${uuid}`} data-verb-tool-tip="conjugate"
                   target="_blank" className="conjugate-link">
                   <span className="conjugate-invite">practice conjugation</span> 
                 </a> : '' 
