@@ -112,7 +112,7 @@ body {
     ". work work ."
     ". more-work more-work ."
     ". dictionary dictionary .";
-  row-gap: 1em;
+  row-gap: 2em;
   column-gap: 1em;
 }
 
@@ -123,9 +123,9 @@ body {
   font-weight: bold;
   color: var(--correct-color); 
   letter-spacing: .2em;
-  font-size: 3vmax;
+  font-size: 2.5vmax;
   padding-top: .5em;
-  padding-left: .2em;
+  /* padding-left: .2em; */
   text-shadow:
     0.05em 0 black,
         0 0.05em black,
@@ -250,11 +250,15 @@ body {
   position: relative;
 }
 
-.scalloped-paper1 {
+.scalloped-paper {
   position: absolute;
   bottom: 100%;
-  width: 35%;
+  width: 100%;
   right: 0%;
+}
+
+.scalloped-paper-path {
+  fill: var(--work-area-color);
 }
 
 .scalloped-paper2 {
@@ -489,7 +493,7 @@ body {
   top: .5em;
   right: 0;
   font-weight: bold;
-  font-size: 3vmax;
+  font-size: 2.5vmax;
   font-family: var(--head-font);
   letter-spacing: .2em;
   color: var(--grass-color);
@@ -723,24 +727,24 @@ body {
     ". verbs more-work ."
     ". dictionary dictionary ."
     ". . . .";
-  row-gap: 1em;
+  row-gap: 2em;
   column-gap: 1em;
 }
 .verbs-sidebar {
-  top: -2.5%;
+  top: -4.5%;
  }
 
 }
 
 @media (min-width: 1065px) {
 .conjugate-container {
-  row-gap: 2em;
+  row-gap: 3em;
   column-gap: 1em;
 }
   .jconjugate, .chk-conjugate {
     grid-template-columns: repeat(auto-fit, minmax(12em, auto));
   }
 .verbs-sidebar {
-  top: -3%;
+  top: -5.5%;
  }
 }
