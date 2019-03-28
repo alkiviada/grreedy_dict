@@ -1146,7 +1146,7 @@ font-family: FontAwesome;
     }
 }
 
-@media (max-width:988px) {
+@media (max-width:1123px) {
 .react-tabs__tab-list {
   width: 69%;
 }
@@ -1159,7 +1159,7 @@ font-family: FontAwesome;
   }
 }
 
-@media (min-width:989px) {
+@media (min-width:1124px) {
   .tab-carousel-arrow-tab5, .tab-carousel-arrow-tab4, .tab-carousel-arrow-tab3 {
     display: none;
   }
