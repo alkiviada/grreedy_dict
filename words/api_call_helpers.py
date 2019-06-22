@@ -4,10 +4,12 @@ from words.soup_helpers import parse_straight_collocations, parse_reverse_colloc
 def try_fetch(url, **args):
   headers = args.get('headers', {})
   params = args.get('params', {});
+  headers['User-Agent'] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36"
   r = ''
   try:
     #print(url)
-    r = requests.get(url, headers = headers, allow_redirects=False, params=params)
+    print(headers)
+    r = requests.get(url, headers = headers, allow_redirects=False, params=params, verify=False)
     r.raise_for_status()
   except requests.exceptions.HTTPError as errh:
     print ("Http Error:", errh)

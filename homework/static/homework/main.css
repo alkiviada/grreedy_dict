@@ -372,14 +372,14 @@ body {
 .conjugate-homework-paper::before {
   right: 15px;
   top: 0;
-  transform: rotate(-1deg);
+  transform: rotate(-1.5deg);
   z-index: -1;
 }
 
 .conjugate-homework-paper::after {
   top: 5px;
   right: -5px;
-  transform: rotate(1deg);
+  transform: rotate(1.5deg);
   z-index: -2;
 }
 

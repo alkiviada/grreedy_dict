@@ -2,11 +2,11 @@ import React, { Component } from "react";
 
 const ScallopedSVG = () => {
   return ( 
-<svg viewBox="3 0 97 3" xmlns="http://www.w3.org/2000/svg" className="scalloped-paper">
+<svg viewBox="3 0 97 2.4" xmlns="http://www.w3.org/2000/svg" className="scalloped-paper">
     <path
        d="M 3 0
-          L 3 3 
-          L 100 3 
+          L 3 2.4
+          L 100 2.4 
           L 100 0 
           L 99 0
           A 1.1 1.2 0 0 1 96 0 

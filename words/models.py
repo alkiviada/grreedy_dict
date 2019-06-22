@@ -18,7 +18,7 @@ from .soup_helpers import (scrape_wordref_words,
                            parse_straight_translations, parse_reverse_translations,
                            parse_straight_collocations, parse_reverse_collocations)
 from .words_helpers import prep_def_exmpl
-from .constants import WORDREF_BASE
+from .constants import WORDREF_BASE, OXFORD_BASE
 
 class Etymology(models.Model):
     etymology = models.CharField(max_length=800, null=True)
@@ -333,9 +333,10 @@ class EnglishWordManager(models.Manager):
     return super().get_queryset().filter(language='english')
 
   def fetch_collocations(self, word):
+    return []
     print('fetching')
-    base_url = 'https://od-api.oxforddictionaries.com:443/api/v1/search/'
-    url = base_url + 'en' + '?q=' + word.word + '&prefix=false'
+    base_url = 'https://od-api.oxforddictionaries.com/api/v2/search/'
+    url = base_url + 'en-us' + '?q=' + word.word + '&prefix=false'
     r = try_fetch(url, 
                   headers={ 'app_key': os.environ.get('OXFORD_API_KEY'), 
                             'app_id': os.environ.get('OXFORD_API_ID')})
@@ -359,7 +360,7 @@ class EnglishWordManager(models.Manager):
         
   def fetch_synonyms(self, word):
     print('fetching')
-    base_url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/'
+    base_url = 'https://od-api.oxforddictionaries.com/api/v2/entries/'
     url = base_url + 'en' + '/' + word.word + '/synonyms'
     r = try_fetch(url, 
                   headers={'app_key': os.environ.get('OXFORD_API_KEY'), 
@@ -389,7 +390,7 @@ class EnglishWordManager(models.Manager):
 
   def fetch_pronounce(self, word):
     print('Fetching')
-    base_url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/en/' + word.word
+    base_url = 'https://od-api.oxforddictionaries.com/api/v2/entries/en/' + word.word
     r = try_fetch(base_url, 
                   headers={ 'app_key': os.environ.get('OXFORD_API_KEY'), 
                             'app_id': os.environ.get('OXFORD_API_ID')})
@@ -409,7 +410,7 @@ class EnglishWordManager(models.Manager):
 
   def fetch_word(self, word):
     print('Fetching')
-    base_url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/en/' + word
+    base_url = 'https://od-api.oxforddictionaries.com/api/v2/entries/en-us/' + word
     r = try_fetch(base_url, 
                   headers={ 'app_key': os.environ.get('OXFORD_API_KEY'), 
                             'app_id': os.environ.get('OXFORD_API_ID')})
