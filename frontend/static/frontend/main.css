@@ -42,11 +42,26 @@ body {
 
 .word-hide, .word-show {
   cursor: pointer;
-  font-size: .9rem;
+  font-size: 2rem;
   grid-area: show-hide;
   align-self: center;
   font-weight: 900;
   justify-self: center;
+}
+
+.word-svg-text {
+}
+
+.word-svg {
+  width: 100%;
+  align-self: center;
+}
+
+@media(max-width: 888px) {
+.word-svg {
+  width: unset;
+  height: 100%;
+}
 }
 
 .word-hide {
@@ -428,7 +443,7 @@ i.defect {color: var(--field-color);font-style:normal;}
   background: white;
   border: 1px solid #dbdbdb;
   border-width: 0 0 1px;
-  padding: .2em .7em .2em .1em;
+  padding: .2em .5em .2em .1em;
   vertical-align: top;
 }
 
@@ -468,27 +483,35 @@ ul {
 }
 
 .word {
-  word-wrap: break-word;
   font-family: var(--word-font);
-  font-size: calc(18px + 0.25vw);
-  max-height: 11.5em;
   padding: .5em 0;
-  height: auto;
   display: grid;
-  line-height: 1;
   grid-template-areas: "delete word";
-  grid-template-columns: 1em 1fr;
-  grid-gap: .1em;
+  grid-template-columns: 1.7em 1fr;
+}
+
+@media(max-width: 888px) {
+  .word {
+    grid-template-areas: "show-hide word delete";
+    grid-template-columns: 2em 1fr 3em;
+    padding: .01em 0;
+    height: 3em;
+  }
 }
 
 .word-delete {
   grid-area: delete;
   cursor: pointer;
-  font-size: .9rem;
+  font-size: 2rem;
+  background: inherit;
+  border: none;
   align-self: center;
   font-weight: 900;
-  justify-self: center;
+  text-align: center;
+  justify-self: end;
+  margin-right: .3em;
   color: #b2b8c4;
+  font-family:Sedgwick Ave Display;
 }
 
 .just-word {
@@ -496,27 +519,25 @@ ul {
 }
 
 .lang-english {
-  font-family: IM Fell English SC;
+  font-family: Englebert;
 }
 
 .lang-ukrainian {
-  font-family: Volkhov;
+  font-family: Sedgwick Ave Display;
 }
 
 .lang-russian {
   font-family: Russo One;
 }
 
-.lang-french {
-  font-family: Croissant One;
-}
 
 .lang-swedish {
-  font-family: Fjord One;
+  font-family: Passero One;
+  font-weight: 400;
 }
 
 .lang-italian {
-  font-family: Vesper Libre;
+  font-family: Italiana;
 }
 
 .word-meaning {
@@ -856,14 +877,16 @@ ul {
   list-style: none;
 }
 
+.lang-french {
+  font-family: Croissant One;
+  font-weight: 400;
+}
 
 .lang-head {
   text-transform: capitalize;
-  font-weight: bold;
   font-size: 1rem;
   line-height: 1.5;
-  padding-top: .5em;
-  padding-bottom: .3em;
+  padding: .3em 0;
   color: var(--sky-color);
 }
 
@@ -902,7 +925,7 @@ a[data-word-tool-tip]::after {
 }
 
 a[data-word-tool-tip]:hover::after {
-  transform: scale(1);
+/*  transform: scale(1); */
   bottom: 70%;
 }
 
@@ -1178,12 +1201,6 @@ font-family: FontAwesome;
 }
 
 @media(max-width: 888px) {
-  .tab-carousel-arrow-tab5 {
-    display: none;
-  }
-.hide-tab-item5 {
-    display: inline-block;
-}
 
   .hide-me {
     visibility: hidden;
@@ -1208,12 +1225,6 @@ font-family: FontAwesome;
   .words-table {
     grid-template-areas: "words-rows";
     grid-template-rows: 1fr;
-  }
-  .word {
-    display: grid;
-    grid-template-areas: "show-hide word delete";
-    grid-template-columns: 1.05em 1fr 1.1em;
-    padding: .4em 0;
   }
  .words-head {
  display: none;
@@ -1274,11 +1285,24 @@ font-family: FontAwesome;
 
 .word-hide, .word-show {
   cursor: pointer;
-  font-size: .9rem;
+  font-size: 3rem;
   grid-area: show-hide;
-  align-self: center;
-  font-weight: 900;
+  font-family: Sedgwick Ave Display;
+  border: none;
+  background: inherit;
   justify-self: center;
+  align-self: end;
+  position: relative;
+  transform: rotate(-90deg) translate(5px, 0);
+}
+
+.word-hide:before {
+  content: "|";
+  position: absolute;
+  transform: rotate(-90deg) translate(12px, 0);
+  bottom: 0;
+  font-family: Sedgwick Ave Display;
+  font-size: 1.8rem;
 }
 
 .word-hide {
