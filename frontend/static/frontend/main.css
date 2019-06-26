@@ -1293,10 +1293,16 @@ font-family: FontAwesome;
   justify-self: center;
   align-self: end;
   position: relative;
-  transform: rotate(-90deg) translate(5px, 0);
 }
 
-.word-hide:before {
+.word-hide {
+  transform: rotate(-90deg) translate(5px, 0);
+}
+.word-show {
+  transform: rotate(90deg) translate(5px, 0);
+}
+
+.word-hide:before, .word-show:before {
   content: "|";
   position: absolute;
   transform: rotate(-90deg) translate(12px, 0);
