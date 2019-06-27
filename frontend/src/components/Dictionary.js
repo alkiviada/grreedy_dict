@@ -3,12 +3,13 @@ import Table from "./Table";
 import NewWordForm from "./NewWordForm";
 import SaveCollection from "./SaveCollection";
 import CollectionsSideBar from "./CollectionsSideBar";
+import SideMenu from "./SideMenu";
 
 const Dictionary = () => (
   <div className="dict-container">
   <NewWordForm />
   <Table />
-  <CollectionsSideBar />
+  <SideMenu />
   <SaveCollection />
   </div>
 )

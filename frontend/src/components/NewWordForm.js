@@ -67,10 +67,26 @@ class NewWordForm extends Component {
     return (
       !fetching ? 
       <form className="new-word" onSubmit={(e) => this.onSubmitLookUp(e)}> 
+       <div className="input-form-wrapper">
         <input className="new-word-input" type="text" placeholder="New Word" value={word} onChange={this.handleWordChange} />
-        <a className="new-word-btn look-up-btn" onClick={(e) => this.onSubmitLookUp(e)}>Look Up</a>
-      { this.props.error ? <div className="grid-warn">Can't load word</div> : '' }
-    </form> : <div className="new-word"><p className="grid-notification"><em>Loading...</em></p></div>
+    <button className="look-up">
+    <svg     
+      xmlns="http://www.w3.org/2000/svg"    
+      version="1.1"
+      className="look-up-svg-container"
+      viewBox="-2 2.3 11.2 10.4" width="100%" height="100%">
+<defs>
+</defs>
+<g transform="rotate(25)" className="look-up-svg">
+<circle cx="5" cy="5" r="4" />
+<line x1="9" y1="6" x2="13" y2="7.5" />
+</g>
+</svg>
+</button>
+</div>
+      { this.props.error ? '' : '' }
+    </form> : 
+    <div className="new-word"><p className="grid-notification"><em>Loading...</em></p></div>
     );
   }
 };

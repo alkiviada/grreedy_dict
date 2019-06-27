@@ -209,10 +209,10 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-rows: 2.8em 1fr 2.4em;
-  grid-template-columns: 1fr 7em;
+  grid-template-rows: 3em 1fr 2.4em;
+  grid-template-columns: 1fr 3.5em;
   grid-template-areas: 
-    "new-word colls"
+    "new-word menu"
     "words words"
     "save-words save-words"
 }
@@ -249,6 +249,24 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
   margin-bottom: .2em;
   margin-top: .8em;
 }
+
+
+/* side menu start */
+.side-menu-wrapper {
+  grid-area: menu;
+  padding-right: .5em;
+  background-color: var(--sky-color);
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0px;
+  z-index: 11001;
+}
+
+.side-menu-svg {
+  width: 100%;
+}
+
+/* side menu end */
 
 
 /* collections sidebar starts here */
@@ -530,19 +548,79 @@ ul {
 /* new word starts here */
 
 .new-word {
+  position: relative;
   grid-area: new-word;
   position: sticky;
   position: -webkit-sticky;
-  letter-spacing: .1em;
   top: 0px;
   z-index: 11001;
 
   background-color: var(--sky-color);
 
   display: grid;
-  grid-template-areas: "input-or-load button error";
-  grid-template-columns: 6.1em 4em 1fr;;
+  grid-template-columns: 10em 1fr;
+  grid-template-areas: "input-or-load error";
 }
+
+.look-up {
+  position: absolute;
+  z-index: 10;
+  right: 0;
+  bottom: 16px;
+  width: 2em;
+  height: 2em;
+  border: none;
+  background: transparent;
+}
+
+.look-up-svg {
+  fill: none;
+  stroke: var(--sky-color);
+  stroke-width: 1;
+}
+
+.input-form-wrapper {
+  grid-area: input-or-load;
+  position: relative;
+  width: 100%;
+}
+
+.new-word-input {
+  position: absolute;
+  width: 100%;
+  margin: .5em;
+  left: 0;
+  bottom: 0;
+  border: none;
+  padding-left: .4em;
+  color: rgba(0,0,0,.87);
+  word-wrap: break-word;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  height: 2em;
+  border: 1px solid #dfe1e5;
+  border-radius: .3em;
+  font-size: 1.2rem;
+}
+
+.new-word-btn {
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: .3em;
+  align-self: center;
+  border-color: transparent;
+  color: #fff;
+  -webkit-box-pack: center;
+  user-select: none;
+  grid-area: button-or-err;
+  justify-self: start;
+  margin-left: .4em;
+  height: 2em;
+  background-color: var(--field-color-light);
+  padding: .2em .6em;
+}
+
+/* new word end here */
 
 .user-tag {
   grid-area: user;
@@ -625,7 +703,7 @@ ul {
   margin: auto 0;
 } 
 
-.new-word-input, .save-coll-input, .login-username-input, .login-pass-input, .register-user, .register-pass {
+.save-coll-input, .login-username-input, .login-pass-input, .register-user, .register-pass {
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
   align-items: center;
@@ -649,26 +727,23 @@ ul {
   font-size: .9rem;
 }
 
-.new-word-input, .save-coll-input {
+.save-coll-input {
   grid-area: input-or-load;
   margin: auto 0 auto .3em;
 }
 
-.new-word-input::placeholder, .save-coll-input::placeholder {
+.save-coll-input::placeholder {
   font-weight: 100;
   font-size: 1rem;
   padding: .1em .3em;
 }
 
-.new-word-input::placeholder {
-  color: var(--field-color-dark);
-}
 
 .save-coll-input::placeholder {
   color: var(--sky-color);
 }
 
-.new-word-btn, .save-btn, .login-btn, .register-btn, .add-note-btn {
+.save-btn, .login-btn, .register-btn, .add-note-btn {
   font-size: .9rem;
   cursor: pointer;
   border-radius: .2em;
@@ -679,12 +754,12 @@ ul {
   user-select: none;
 }
 
-.new-word-btn, .save-btn {
+.save-btn {
   grid-area: button;
   justify-self: center;
 }
 
-.new-word-btn, .login-btn, .save-btn {
+.login-btn, .save-btn {
   background-color: var(--field-color-light);
   margin: auto 0;
   padding: 0 .2em 0 .3em;
@@ -1267,7 +1342,6 @@ font-family: FontAwesome;
 }
 
 .word-hide, .word-show {
-  outline: none;
   cursor: pointer;
   font-size: 3rem;
   grid-area: show-hide;
@@ -1277,10 +1351,6 @@ font-family: FontAwesome;
   justify-self: center;
   align-self: end;
   position: relative;
-}
-
-.word-hide:focus, .word-show:focus {
-  border: solid black 1px;
 }
 
 .word-hide {
@@ -1447,11 +1517,7 @@ font-family: FontAwesome;
 
 @media (min-width: 630px) {
   .dict-container {
-  grid-template-columns: 1fr 7em;
-    grid-template-areas: 
-      "new-word colls"
-      "words words"
-      "save-words save-words";
+    grid-template-columns: 1fr 7em;
   }
   .words-container { 
     grid-area: words;
@@ -1521,9 +1587,6 @@ font-family: FontAwesome;
 }
 
 @media (max-width: 430px) {
- .new-word {
-    grid-template-columns: 5.1em 4.2em 1fr;
-}
   .word-about {
     max-height: 25.5em;
   }
