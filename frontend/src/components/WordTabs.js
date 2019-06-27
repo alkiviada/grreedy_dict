@@ -187,10 +187,10 @@ class WordTabs extends Component {
     const iAmHidden3 = this.state.carouselIdx3
     const iAmHidden2 = this.state.carouselIdx2
 
-    const canMoveLeftClass = iAmHidden5 ? "tab-carousel-arrow-tab5 react-tabs__tab" : 
-      iAmHidden4 ? "tab-carousel-arrow-tab4 react-tabs__tab" : 
-      iAmHidden3 ? "tab-carousel-arrow-tab3 react-tabs__tab" : 
-      iAmHidden2 ? "tab-carousel-arrow-tab2 react-tabs__tab" : ''
+    const canMoveLeftClass = iAmHidden5 ? "tab-carousel arrow-tab5 react-tabs__tab" : 
+      iAmHidden4 ? "tab-carousel arrow-tab4 react-tabs__tab" : 
+      iAmHidden3 ? "tab-carousel arrow-tab3 react-tabs__tab" : 
+      iAmHidden2 ? "tab-carousel arrow-tab2 react-tabs__tab" : ''
 
     let myTabs = tabs
     if (!isEnglishWord) {
@@ -211,11 +211,9 @@ class WordTabs extends Component {
         onSelect={(prev, index) => this.handleSelect(index, prev, word, isEnglishWord, isVerb, parentRef)}>
         <TabList>
           { iAmHidden5 + iAmHidden4 + iAmHidden3 + iAmHidden2 > 0 ? 
-              <Tab className={canMoveLeftClass}>
-                <a className="tab-carousel-right fas fa-chevron-left"></a>
-              </Tab> :
-              <Tab className="tab-carousel-arrow-tab hide-tab-item">
-                <a className="tab-carousel-right fas fa-chevron-left"></a>
+              <Tab className={canMoveLeftClass}>&lt;</Tab> :
+              <Tab className="tab-carousel arrow-tab hide-tab-item">
+               &lt; 
               </Tab>
           }
           {         
@@ -234,23 +232,23 @@ class WordTabs extends Component {
             })
           }
           { canMoveRight5 ? 
-              <Tab className="tab-carousel-arrow-tab5 react-tabs__tab">
-                <a className="tab-carousel-right fas fa-chevron-right"></a>
+              <Tab className="tab-carousel arrow-tab5 react-tabs__tab">
+               &gt; 
               </Tab> :
            canMoveRight4 ? 
-              <Tab className="tab-carousel-arrow-tab4 react-tabs__tab">
-                <a className="tab-carousel-right fas fa-chevron-right"></a>
+              <Tab className="tab-carousel arrow-tab4 react-tabs__tab">
+               &gt; 
               </Tab> :
            canMoveRight3 ? 
-              <Tab className="tab-carousel-arrow-tab3 react-tabs__tab">
-                <a className="tab-carousel-right fas fa-chevron-right"></a>
+              <Tab className="tab-carousel arrow-tab3 react-tabs__tab">
+               &gt; 
               </Tab> :
            canMoveRight2 ? 
-              <Tab className="tab-carousel-arrow-tab2 react-tabs__tab">
-                <a className="tab-carousel-right fas fa-chevron-right"></a>
+              <Tab className="tab-carousel arrow-tab2 react-tabs__tab">
+              &gt; 
               </Tab> :
-              <Tab className="tab-carousel-arrow-tab hide-tab-item">
-                <a className="tab-carousel-right fas fa-chevron-right"></a>
+              <Tab className="tab-carousel arrow-tab hide-tab-item">
+              &gt; 
               </Tab>
           }
           </TabList>

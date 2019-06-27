@@ -159,12 +159,12 @@ class Table extends Component {
     <div className="words-container" ref={this.myRef}>
     { wordFetching ? <em>Loading...</em> : '' }
     { pageNext ? <div className="pagination-1">
-                 <a className="pagination-a fas fa-chevron-right" onClick={(e) => this.navigateToPage(e, uuid, pageNext)}></a>
-                 <a className="pagination-b fas fa-chevron-right" onClick={(e) => this.navigateToPage(e, uuid, pageNext)}></a>
+                 <button className="pagination-a" onClick={(e) => this.navigateToPage(e, uuid, pageNext)}>&gt;</button>
+                 <button className="pagination-b" onClick={(e) => this.navigateToPage(e, uuid, pageNext)}>&gt;</button>
                  </div> : pagePrev ? <div className="pagination-1-placeholder"></div> : '' }
     { pagePrev ? <div className="pagination-2">
-                 <a className="pagination-a fas fa-chevron-left" onClick={(e) => this.navigateToPage(e, uuid, pagePrev)}></a>
-                 <a className="pagination-b fas fa-chevron-left" onClick={(e) => this.navigateToPage(e, uuid, pagePrev)}></a>
+                 <button className="pagination-a" onClick={(e) => this.navigateToPage(e, uuid, pagePrev)}>&lt;</button>
+                 <button className="pagination-b" onClick={(e) => this.navigateToPage(e, uuid, pagePrev)}>&lt;</button>
                  </div> : pageNext ? <div className="pagination-2-placeholder"></div> : '' }
       <h2 className="coll-title">
         Showing <WordLabel count={data.length} page={page} allCount={allWordCount} /> 
@@ -172,9 +172,6 @@ class Table extends Component {
         <strong>word{data.length > 1 ? 's' : ''}</strong>
       </h2>
       <div className="words-table">
-       <div className="words-head">
-            {Object.entries(data[0]).map((el, i) => <p>{el[0]}</p>)}
-        </div>
         <div className="words-rows">
           {data.map(el => {
             let word = el.word;

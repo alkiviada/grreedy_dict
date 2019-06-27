@@ -14,6 +14,7 @@ def generate_examples(word_pk):
     return 
   verb = word.origin_verb if word.origin_verb else word
   if verb.did_book_examples:
+    print('i did')
     return 
   pull_conjugations(verb)
   exs = []

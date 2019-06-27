@@ -1,5 +1,6 @@
 :root {
-  --field-color: #856831E6;
+  --field-color-light: #b78d52E6;
+  --field-color-dark: #96753ee6;
   --sky-color: #84a6d2;
   --body-font: Alegreya;
   --word-font: Cormorant Garamond;
@@ -19,7 +20,7 @@ html {
 
 body {
   text-rendering: optimizeLegibility;
-  background: linear-gradient(var(--sky-color), #b2b8c4, var(--field-color));
+  background: linear-gradient(var(--sky-color), white, var(--field-color-light));
   font-family: var(--body-font);
   max-height: 100%;
   min-height: 100vh;
@@ -40,18 +41,6 @@ body {
 }
 
 
-.word-hide, .word-show {
-  cursor: pointer;
-  font-size: 2rem;
-  grid-area: show-hide;
-  align-self: center;
-  font-weight: 900;
-  justify-self: center;
-}
-
-.word-svg-text {
-}
-
 .word-svg {
   width: 100%;
   align-self: center;
@@ -65,7 +54,7 @@ body {
 }
 
 .word-hide {
-  color: var(--field-color);
+  color: var(--field-color-dark);
 }
 .word-show {
   color: var(--sky-color);
@@ -145,7 +134,7 @@ h4 {
 
 .react-tabs__tab-panel--selected {
   display: block;
-  padding-top: 2em;
+  padding-top: 3em;
 }
 
 @media all and (min-width: 1040px), print
@@ -210,8 +199,8 @@ background-color:#5E58C7;padding:0px;padding-left: 5px;}
 table.layout {background-color: #f0f0f8;height:100%; margin-left:auto; margin-right:auto;}
 	
 i.defect {color: red;font-style:normal;}
-i.defect {color: var(--field-color);font-style:normal;}    
-.antiquated {color: var(--field-color);}
+i.defect {color: var(--field-color-dark);font-style:normal;}    
+.antiquated {color: var(--field-color-dark);}
 	
 
 .dict-container {
@@ -381,7 +370,7 @@ i.defect {color: var(--field-color);font-style:normal;}
 }
 
 .colls-toggle-label span {
-  color: var(--field-color);
+  color: var(--field-color-dark);
   cursor: pointer;
   padding-right: 1em;
   padding-top: .5em;
@@ -414,9 +403,7 @@ i.defect {color: var(--field-color);font-style:normal;}
 .words-table {
   grid-area: words-table;
   display: grid;
-  grid-template-rows: 2em 1fr;
   grid-template-areas: 
-    "words-head"
     "words-rows";
 }
 
@@ -430,14 +417,6 @@ i.defect {color: var(--field-color);font-style:normal;}
   word-break: break-all; 
 }
 
-.words-head {
-  padding: .1em .8em .4em;
-  place-items: start;
-
-  grid-area: words-head;
-  display: grid;
-  grid-template-columns: minmax(5vw, 15%) 1fr;
-}
 
 .word-cell {
   background: white;
@@ -544,7 +523,7 @@ ul {
   font-style: italic;
   font-weight: lighter;
   font-size: 0.8rem;
-  color: var(--field-color);
+  color: var(--field-color-dark);
 }
 
 
@@ -682,7 +661,7 @@ ul {
 }
 
 .new-word-input::placeholder {
-  color: var(--field-color);
+  color: var(--field-color-dark);
 }
 
 .save-coll-input::placeholder {
@@ -706,7 +685,7 @@ ul {
 }
 
 .new-word-btn, .login-btn, .save-btn {
-  background-color: var(--field-color);
+  background-color: var(--field-color-light);
   margin: auto 0;
   padding: 0 .2em 0 .3em;
 }
@@ -774,18 +753,16 @@ ul {
     "coll-title coll-title"
     "pagination-l pagination-r" 
     "words-table words-table";
-  padding: .1em .1em;
-  grid-template-rows: 1.4em 1.5em 1fr;
+  padding: .2em .1em;
+  grid-template-rows: 1.4em 3em 1fr;
 } 
 
 
 .pagination-1, .pagination-2, .pagination-1-placeholder, .pagination-2-placeholder {
   position: sticky;
   position: -webkit-sticky;
-  top: 2.8em;
-  background-color: var(--sky-color);
+  top: 3em;
   z-index: 99999999;
-  opacity: .7;
 }
 
 .pagination-1-placeholder, .pagination-1 {
@@ -802,12 +779,12 @@ ul {
 
 .pagination-2 {
   grid-template-areas: "page .";
-  grid-template-columns: 2em 1fr;
+  grid-template-columns: 3em 1fr;
 }
 
 .pagination-1 {
   grid-template-areas: ". page";
-  grid-template-columns: 1fr 2em;
+  grid-template-columns: 1fr 3em;
 }
 
 .pagination-b {
@@ -816,13 +793,18 @@ ul {
 
 .pagination-a {
   grid-area: page;
-  color: var(--field-color);
+  color: white;
+  font-family: Sedgwick Ave Display;
+  font-size: 3rem;
+  border: none;
+  background-color: var(--sky-color);
+  border-radius: 50%;
+  width: 1em;
+  height: 1em;
   cursor: pointer;
-  font-size: 1.1rem;
   align-self: center;
-  font-weight: 900;
-  text-shadow: 1px 1px 2px pink;
-  margin-left: .6em;
+  margin-left: .1em;
+  line-height: 1;
 }
 
 .words-invite {
@@ -834,14 +816,6 @@ ul {
   font-weight: 600;
 }
 
-.words-head {
-  padding: .1em .8em .4em;
-  place-items: start;
-
-  grid-area: words-head;
-  display: grid;
-  grid-template-columns: minmax(5em, 15%) 1fr;
-}
 
 .words-rows {
   grid-area: words-rows;
@@ -890,13 +864,6 @@ ul {
   color: var(--sky-color);
 }
 
-.word-meaning {
-  font-style: italic;
-  font-weight: lighter;
-  font-size: 0.8rem;
-  color: var(--field-color);
-}
-
 a[data-word-tool-tip] {
   position: relative;
 }
@@ -938,7 +905,7 @@ a[data-word-tool-tip]:hover::after {
 }
 
 .conjugate-link {
-  color: var(--field-color);
+  color: var(--field-color-dark);
   font-size: .9rem;
   font-family: var(--word-font);
   padding-right: 1em;
@@ -974,7 +941,7 @@ a[href^="/homework/conjugate"]::after {
   bottom: 0px;
   position: sticky;
   position: -webkit-sticky;
-  background-color: var(--field-color);
+  background-color: var(--field-color-dark);
 }
 
 .coll-link {
@@ -1014,9 +981,38 @@ a[href^="/homework/conjugate"]::after {
   display: flex;
   justify-content: space-between;
 }
+@media (max-width:1123px) {
+.react-tabs__tab-list {
+  width: 69%;
+}
+}
 
-.tab-carousel-arrow-tab, .tab-carousel-arrow-tab5, .tab-carousel-arrow-tab4, .tab-carousel-arrow-tab3, .tab-carousel-arrow-tab2 {
-  color: var(--sky-color);
+@media(max-width: 888px) {
+  .react-tabs__tab-list {
+    width: 82%;
+  }
+}
+@media (max-width:810px) {
+  .react-tabs__tab-list {
+    width: 80%;
+  }
+}
+@media (max-width:730px) {
+  .react-tabs__tab-list {
+    width: 78%;
+  }
+}
+
+@media (max-width:670px) {
+  .react-tabs__tab-list {
+    width: 76.5%;
+  }
+}
+
+@media (max-width: 629px) {
+  .react-tabs__tab-list {
+    width: 96%;
+  }
 }
 
 .react-tabs__tab {
@@ -1065,10 +1061,17 @@ a[href^="/homework/conjugate"]::after {
 
 .react-tabs__tab-panel--selected {
   display: block;
-  padding-top: 2em;
+  padding-top: 3em;
 }
 
 
+.tab-carousel {
+  color: var(--sky-color);
+  font-family: Sedgwick Ave Display;
+  font-size: 2.3rem;
+  padding: 0;
+  justify-self: end;
+}
 
 @media(max-width: 1040px) {
    .aa table.neoConj {
@@ -1170,20 +1173,17 @@ font-family: FontAwesome;
 }
 
 @media (max-width:1123px) {
-.react-tabs__tab-list {
-  width: 69%;
-}
 
   .hide-tab-item5 {
     display: none;
   }
-  .tab-carousel-arrow-tab4, .tab-carousel-arrow-tab3, .tab-carousel-arrow-tab2 {
+  .arrow-tab4, .arrow-tab3, .arrow-tab2 {
     display: none;
   }
 }
 
 @media (min-width:1124px) {
-  .tab-carousel-arrow-tab5, .tab-carousel-arrow-tab4, .tab-carousel-arrow-tab3 {
+  .arrow-tab5, .arrow-tab4, .arrow-tab3 {
     display: none;
   }
   .hide-tab-item {
@@ -1195,7 +1195,7 @@ font-family: FontAwesome;
   .word-hide, .word-show {
     display: none;
   }
-  .tab-carousel-arrow-tab {
+  .arrow-tab {
     display: none !important;
   }
 }
@@ -1212,23 +1212,6 @@ font-family: FontAwesome;
     display: none;
   }
 
-  .react-tabs__tab-list {
-    width: 82%;
-  }
-
-  .react-tabs__tab {
-  }
-
-  .user-tag {
-  }
-
-  .words-table {
-    grid-template-areas: "words-rows";
-    grid-template-rows: 1fr;
-  }
- .words-head {
- display: none;
-}
 .words-rows {
   grid-area: words-rows;
   display: grid;
@@ -1241,24 +1224,24 @@ font-family: FontAwesome;
 }
 
 @media (max-width:810px) {
-  .tab-carousel-arrow-tab5 {
+  .arrow-tab5 {
     display: inline-block;
 }
 
   .hide-tab-item5 {
     display: none;
   }
-  .tab-carousel-arrow-tab4, .tab-carousel-arrow-tab3 {
+  .arrow-tab4, .arrow-tab3 {
     display: none;
   }
 }
 
-@media (max-width:723px) {
+@media (max-width:730px) {
 
   .hide-tab-item5, .show-tab-item5 {
     display: none;
   }
-  .tab-carousel-arrow-tab4 {
+  .arrow-tab4 {
     display: inline-block;
   }
 }
@@ -1268,7 +1251,7 @@ font-family: FontAwesome;
   .hide-tab-item4, .show-tab-item4 {
     display: none;
   }
-  .tab-carousel-arrow-tab3 {
+  .arrow-tab3 {
     display: inline-block;
   }
 }
@@ -1278,12 +1261,13 @@ font-family: FontAwesome;
   .hide-tab-item3, .show-tab-item3 {
     display: none;
   }
-  .tab-carousel-arrow-tab2 {
+  .arrow-tab2 {
     display: inline-block;
   }
 }
 
 .word-hide, .word-show {
+  outline: none;
   cursor: pointer;
   font-size: 3rem;
   grid-area: show-hide;
@@ -1295,14 +1279,18 @@ font-family: FontAwesome;
   position: relative;
 }
 
+.word-hide:focus, .word-show:focus {
+  border: solid black 1px;
+}
+
 .word-hide {
-  transform: rotate(-90deg) translate(5px, 0);
+  transform: rotate(-90deg) translate(1px, 0);
 }
 .word-show {
   transform: rotate(90deg) translate(5px, 0);
 }
 
-.word-hide:before, .word-show:before {
+.word-hide::before, .word-show::before {
   content: "|";
   position: absolute;
   transform: rotate(-90deg) translate(12px, 0);
@@ -1312,7 +1300,7 @@ font-family: FontAwesome;
 }
 
 .word-hide {
-  color: var(--field-color);
+  color: var(--field-color-dark);
 }
 .word-show {
   color: var(--sky-color);
@@ -1456,13 +1444,8 @@ font-family: FontAwesome;
 }
 
 
-@media (max-width: 578px) {
-  .react-tabs__tab-list {
-    width: 96%;
-  }
-}
 
-@media (min-width: 579px) {
+@media (min-width: 630px) {
   .dict-container {
   grid-template-columns: 1fr 7em;
     grid-template-areas: 
@@ -1504,13 +1487,11 @@ font-family: FontAwesome;
     "top"
     "."
     "bottom";
-    grid-template-rows: 1em 1fr 1em;
+    grid-template-rows: 3em 1fr 3em;
   }
   
   .pagination-a {
     grid-area: top;
-    top: 4.1em;
-    color: var(--field-color);
     margin-right: 0;
     margin-left: 0;
   }
@@ -1518,30 +1499,32 @@ font-family: FontAwesome;
   .pagination-b {
     display: grid;
     grid-area: bottom;
-    bottom: 3.5em;
-    color: var(--sky-color);
+    bottom: .7em;
     margin-left: 0;
     margin-right: 0;
   }
   
   .pagination-a, .pagination-b {
+    color: white;
+    border: none;
+    outline: none;
     position: sticky;
     position: -webkit-sticky;
     cursor: pointer;
-    font-size: .9rem;
+    font-size: 4rem;
+    font-family: Sedgwick Ave Display;
     align-self: center;
-    font-weight: 900;
     justify-self: center;
+    background-color: transparent;
     text-shadow: none;
   }
-
 }
 
 @media (max-width: 430px) {
  .new-word {
     grid-template-columns: 5.1em 4.2em 1fr;
 }
-.word-about {
-  max-height: 25.5em;
-}
+  .word-about {
+    max-height: 25.5em;
+  }
 }
