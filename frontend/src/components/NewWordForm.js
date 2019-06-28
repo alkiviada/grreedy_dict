@@ -8,9 +8,16 @@ import { scrollToDomRef } from './helpers';
 class NewWordForm extends Component {
   constructor(props) { 
     super(props)
+    this.newWordLabelRef = React.createRef()
+
     this.state = {
-      word: '',
+      word: '', 
+      nwLabel: 'floating-label',
     };
+
+    this.inputOrLabel = this.inputOrLabel.bind(this) 
+    this.hideLabel = this.hideLabel.bind(this) 
+    this.showLabel = this.showLabel.bind(this) 
     this.handleWordChange = this.handleWordChange.bind(this);
     this.onSubmit = this.onSubmitLookUp.bind(this);
   };
@@ -29,6 +36,24 @@ class NewWordForm extends Component {
      this.props.clearNewWordError();
    }
    this.setState({word: w.target.value});
+  }
+
+  hideLabel(e, labelRef) {
+    const key = labelRef.current.htmlFor 
+    this.setState({ nwLabel: 'floating-label top-label' });
+  }
+
+  showLabel(e, labelRef) {
+    this.setState({ nwLabel: 'floating-label' });
+  }
+
+  inputOrLabel(e, labelRef) {
+    if (e.target.value == "") {
+      this.showLabel(e, labelRef);
+    } 
+    else if (e.target.value != "") {
+      this.hideLabel(e, labelRef);
+    }
   }
 
   onSubmitLookUp(e) {
@@ -61,14 +86,21 @@ class NewWordForm extends Component {
   }
 
   render () {
-    const fetching = this.props.fetching;
+    const { fetching, error } = this.props;
+
+    console.log('this is my errror ', error)
+
     const word = !this.props.error ? this.state.word : this.props.word
+    const nwLabel = error ? 'floating-label top-label error' : word ? 'floating-label top-label' : 'floating-label'
+    const nwClass = error ? 'new-word-input error' : 'new-word-input'
+    const nwLabelText = error ? "Cant' find word" : 'New Word'
     console.log('rendering new word form');
     return (
       !fetching ? 
       <form className="new-word" onSubmit={(e) => this.onSubmitLookUp(e)}> 
        <div className="input-form-wrapper">
-        <input className="new-word-input" type="text" placeholder="New Word" value={word} onChange={this.handleWordChange} />
+        <label className={nwLabel} htmlFor="new-word" ref={this.newWordLabelRef}>{nwLabelText}</label>
+        <input className={nwClass} onFocus={(e) => this.hideLabel(e, this.newWordLabelRef)} onInput={(e) => this.inputOrLabel(e, this.newWordLabelRef)} onBlur={(e) => this.inputOrLabel(e, this.newWordLabelRef)} type="text" value={word} onChange={this.handleWordChange} id="new-word" />
     <button className="look-up">
     <svg     
       xmlns="http://www.w3.org/2000/svg"    

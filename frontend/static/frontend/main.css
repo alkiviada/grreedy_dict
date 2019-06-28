@@ -3,7 +3,8 @@
   --field-color-dark: #96753ee6;
   --sky-color: #84a6d2;
   --body-font: Alegreya;
-  --word-font: Cormorant Garamond;
+  --hooligan-font: Sedgwick Ave Display;
+  --word-font: Alegreya Sans;
 }
 
 *{
@@ -563,8 +564,9 @@ ul {
 }
 
 .look-up {
+  cursor: pointer;
   position: absolute;
-  z-index: 10;
+  z-index: 900000;
   right: 0;
   bottom: 16px;
   width: 2em;
@@ -587,20 +589,54 @@ ul {
 
 .new-word-input {
   position: absolute;
+  font-family: var(--word-font);
+  font-size: 1.2rem;
   width: 100%;
   margin: .5em;
   left: 0;
   bottom: 0;
-  border: none;
   padding-left: .4em;
   color: rgba(0,0,0,.87);
   word-wrap: break-word;
   outline: none;
-  -webkit-tap-highlight-color: transparent;
   height: 2em;
   border: 1px solid #dfe1e5;
   border-radius: .3em;
-  font-size: 1.2rem;
+}
+
+.new-word-input.error {
+  border: 1px solid red;
+}
+
+
+.floating-label {
+  color: var(--sky-color);
+  font-family: var(--word-font);
+  font-weight: lighter;
+  font-size: 1.5rem;
+  line-height: 1;
+  z-index: 1000;
+  position: absolute;
+  bottom: .6em;
+  left: .6em;
+  transition: .1s ease;
+  cursor: text;
+}
+
+.floating-label.top-label {
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-family: var(--hooligan-font);
+  color: var(--field-color-dark);
+  font-size: 1.1rem;
+  right: -1em;
+  z-index: 1000;
+  left: auto;
+  top: .2em;
+}
+
+.floating-label.top-label.error {
+  color: red;
 }
 
 .new-word-btn {
@@ -610,7 +646,6 @@ ul {
   align-self: center;
   border-color: transparent;
   color: #fff;
-  -webkit-box-pack: center;
   user-select: none;
   grid-area: button-or-err;
   justify-self: start;
@@ -888,7 +923,7 @@ ul {
 
 .coll-title strong {
   color: #363636;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 
