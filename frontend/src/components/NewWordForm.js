@@ -86,6 +86,11 @@ class NewWordForm extends Component {
   }
 
   render () {
+    const opened = this.props.menuOpen
+    console.log(opened)
+    if (opened)
+      return ''
+
     const { fetching, error } = this.props;
 
     console.log('this is my errror ', error)
@@ -101,7 +106,7 @@ class NewWordForm extends Component {
        <div className="input-form-wrapper">
         <label className={nwLabel} htmlFor="new-word" ref={this.newWordLabelRef}>{nwLabelText}</label>
         <input className={nwClass} onFocus={(e) => this.hideLabel(e, this.newWordLabelRef)} onInput={(e) => this.inputOrLabel(e, this.newWordLabelRef)} onBlur={(e) => this.inputOrLabel(e, this.newWordLabelRef)} type="text" value={word} onChange={this.handleWordChange} id="new-word" />
-    <button className="look-up">
+    <button className="look-up-button">
     <svg     
       xmlns="http://www.w3.org/2000/svg"    
       version="1.1"
@@ -135,6 +140,7 @@ const mapStateToProps = state => ({
   user: state.auth.user,
   allDataRef: state.refs.allDataRef,
   refMap: state.refs.refMap,
+  menuOpen: state.context.menuOpen,
 });
 
 NewWordForm.propTypes = {

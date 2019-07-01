@@ -33,6 +33,7 @@ class WordsRoot extends Component {
         <Switch>
           <PrivateRoute exact path="/" component={Dictionary} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/logout" component={Dictionary} />
           <Route exact path="/register" component={Register} />
           <Route component={NotFound} />
         </Switch>

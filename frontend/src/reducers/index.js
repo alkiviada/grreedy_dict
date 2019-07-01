@@ -12,6 +12,7 @@ import auth from "./authReducers";
 import tabReducer from "./tabReducers";
 import visibilityReducer from "./visibilityReducers";
 import refReducer from "./refReducers";
+import context from "./contextReducer";
 
 export default combineReducers({
   words: wordsReducer,
@@ -23,6 +24,7 @@ export default combineReducers({
   collections: collsReducer,
   collocations: collocationsReducer,
   auth: auth,
+  context: context,
   notes: noteReducer,
   pronounce: pronounceReducer,
   conjugate: conjugateReducer

@@ -1,10 +1,17 @@
 :root {
   --field-color-light: #b78d52E6;
   --field-color-dark: #96753ee6;
+  --field-color-dark-noop: #96753e;
   --sky-color: #84a6d2;
+  --sky-color-light: #b7cbe4;
   --body-font: Alegreya;
   --hooligan-font: Sedgwick Ave Display;
   --word-font: Alegreya Sans;
+}
+@font-face {
+  font-family: Alegreya Sans;
+  src: url(AlegreyaSans-Regular.woff2);
+  font-feature-settings: "smcp";
 }
 
 *{
@@ -23,6 +30,7 @@ body {
   text-rendering: optimizeLegibility;
   background: linear-gradient(var(--sky-color), white, var(--field-color-light));
   font-family: var(--body-font);
+  font-feature-settings: 'liga', 'clig', 'dlig';
   max-height: 100%;
   min-height: 100vh;
   height: 100%;
@@ -50,7 +58,7 @@ body {
 @media(max-width: 888px) {
 .word-svg {
   width: unset;
-  height: 100%;
+  height: 75%;
 }
 }
 
@@ -213,7 +221,7 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
   grid-template-rows: 3em 1fr 2.4em;
   grid-template-columns: 1fr 3.5em;
   grid-template-areas: 
-    "new-word menu"
+    "top menu"
     "words words"
     "save-words save-words"
 }
@@ -252,22 +260,132 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
 }
 
 
-/* side menu start */
-.side-menu-wrapper {
+/* menu start */
+.menu-open-button {
+  background-color: var(--field-color-dark);
+}
+.menu-closed-button, .empty-menu {
+  background-color: var(--sky-color);
+}
+
+.menu-closed-button, .menu-open-button, .empty-menu {
   grid-area: menu;
   padding-right: .5em;
-  background-color: var(--sky-color);
   position: sticky;
   position: -webkit-sticky;
   top: 0px;
   z-index: 11001;
+  border: none;
+  cursor: pointer;
 }
 
-.side-menu-svg {
+
+.menu-closed-svg {
   width: 100%;
 }
 
-/* side menu end */
+.menu-open-svg {
+  stroke: white;
+  stroke-width: .3;
+  fill: var(--sky-color);
+}
+
+.menu {
+  grid-area: top;
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0px;
+  display: flex;
+  align-items: center;
+  z-index: 11001;
+  background-color: var(--field-color-dark-noop);
+}
+
+.sign-out-link:link {
+  text-decoration: none;
+  color: var(--sky-color);
+}
+
+.sign-out-link:visited {
+  color: var(--sky-color-light);
+}
+
+.sign-out-link:hover, .sign-out-link:focus {
+
+}
+.sign-out-link:active {
+
+}
+
+
+.menu-list {
+  position: relative;
+  align-items: center;
+  justify-content: space-around;
+  flex: 1 100%;
+  display: flex;
+  flex-direction: row; 
+}
+
+.menu-li {
+  color: var(--sky-color-light);
+  letter-spacing: 2;
+  font-size: 1.5rem;
+  font-family: var(--hooligan-font);
+}
+
+.collections-button {
+  color: var(--sky-color-light);
+  font-size: 1.5rem;
+  font-family: var(--hooligan-font);
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+
+.collections-button ~ .collections-list {
+  display: none;
+}
+
+.collections-button.full.open ~ .collections-list {
+  padding: .5em 1em;
+  overflow: auto;
+  max-height: 90.5vh;
+  position: absolute;
+  top: 1.5em;
+  left: 0px;
+  display: block;
+  font-family: var(--word-font);
+  font-feature-settings: 'smcp', 'liga', 'clig', 'dlig', 'tnum', 'lnum';
+  background-color: var(--field-color-dark-noop);
+  color: var(--sky-color-light);
+  font-size: 1.5rem;
+  z-index: 11;
+}
+
+.collections-li {
+  
+  list-style: none;
+  padding-bottom: .5em;
+}
+
+.coll-link {
+  color: var(--sky-color-light);
+  text-decoration: none;
+}
+
+.coll-name {
+}
+
+.coll-date {
+  font-size: 80%;
+}
+
+.collections-button.full:hover {
+}
+
+/* menu end */
 
 
 /* collections sidebar starts here */
@@ -282,7 +400,7 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
   position: -webkit-sticky;
 }
 
-.coll-name {
+.-coll-name {
  color: #483C32;
  text-shadow: .4px .4px .4px var(--field-color), .2px .2px .2px #fff;
 }
@@ -292,13 +410,13 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
   text-shadow: 1px 1px 1px var(--field-color), .2px .2px .2px #000;
 }
 
-.coll-date {
+.-coll-date {
   font-size: .8rem;
   color: #dbdbdb;
   text-shadow: 1px 1px 1px #b2b8c4;
 }
 
-.coll-date:hover {
+.-coll-date:hover {
   color: #b2b8c4;
   text-shadow: 1px 1px 1px #dbdbdb;
 }
@@ -458,6 +576,7 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
 .etym-style {
   background: #FFFCF9;
   font-family: var(--body-font);
+  font-feature-settings: 'liga', 'clig', 'dlig';
   padding-left: .3em;
   padding-right: .3em;
   padding-bottom: .3em;
@@ -473,7 +592,7 @@ ul {
   word-wrap: break-word;
   background: #F5FBFD;
   font-family: var(--word-font);
-  font-variant-ligatures: discretionary-ligatures;
+  font-feature-settings: 'liga', 'clig', 'dlig';
   max-height: 19.5em;
   height: auto;
   overflow: auto;
@@ -482,6 +601,7 @@ ul {
 
 .word {
   font-family: var(--word-font);
+  font-feature-settings: 'liga', 'clig', 'dlig';
   padding: .5em 0;
   display: grid;
   grid-template-areas: "delete word";
@@ -550,11 +670,11 @@ ul {
 
 .new-word {
   position: relative;
-  grid-area: new-word;
+  grid-area: top;
   position: sticky;
   position: -webkit-sticky;
   top: 0px;
-  z-index: 11001;
+  z-index: 10;
 
   background-color: var(--sky-color);
 
@@ -563,10 +683,10 @@ ul {
   grid-template-areas: "input-or-load error";
 }
 
-.look-up {
+.look-up-button {
   cursor: pointer;
   position: absolute;
-  z-index: 900000;
+  z-index: 12;
   right: 0;
   bottom: 16px;
   width: 2em;
@@ -615,7 +735,7 @@ ul {
   font-weight: lighter;
   font-size: 1.5rem;
   line-height: 1;
-  z-index: 1000;
+  z-index: 10;
   position: absolute;
   bottom: .6em;
   left: .6em;
@@ -630,7 +750,7 @@ ul {
   color: var(--field-color-dark);
   font-size: 1.1rem;
   right: -1em;
-  z-index: 1000;
+  z-index: 10;
   left: auto;
   top: .2em;
 }
@@ -856,6 +976,7 @@ ul {
 /* words panel starts here */
 
 .words-container { 
+  position: relative;
   grid-area: words;
   grid-column: 1/-1;
   display: grid;
@@ -872,7 +993,7 @@ ul {
   position: sticky;
   position: -webkit-sticky;
   top: 3em;
-  z-index: 99999999;
+  z-index: 10;
 }
 
 .pagination-1-placeholder, .pagination-1 {
@@ -919,6 +1040,7 @@ ul {
 
 .words-invite {
   grid-area: coll-title;
+  padding: 1em;
 }
 
 .coll-title strong {
@@ -1047,14 +1169,14 @@ a[href^="/homework/conjugate"]::after {
   grid-template-areas: "save user";
   grid-template-columns: 1fr 6em;
 
-  z-index: 111500;
+  z-index: 10;
   bottom: 0px;
   position: sticky;
   position: -webkit-sticky;
   background-color: var(--field-color-dark);
 }
 
-.coll-link {
+.-coll-link {
   opacity: 0;
   transition: opacity 150ms ease-in-out;
   color: white;
@@ -1087,7 +1209,7 @@ a[href^="/homework/conjugate"]::after {
   position: absolute;
   background: #F5FBFD;
   width: 70.5%;
-  z-index: 10000;
+  z-index: 8;
   display: flex;
   justify-content: space-between;
 }

@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import key from "weak-key";
 import { connect } from 'react-redux';
-import { fetchCollections, 
+import { 
+         fetchCollections, 
          fetchCollection, 
          saveCollection, 
          saveCollectionAndLoadNew, 

@@ -5,6 +5,7 @@ import WordCell from "./WordCell";
 import WordLabel from "./WordLabel";
 import key from "weak-key";
 import { connect } from 'react-redux';
+import { closeMenu } from '../actions/contextActions';
 import { deleteWord, 
          lookUpWord, fetchWords, requestWords, requestWord, 
          clearFetched,
@@ -57,6 +58,10 @@ class Table extends Component {
   addRow (e, word, original, parentRef) {
     console.log('look up');
     e.preventDefault();
+    const opened = this.props.menuOpen
+    if (opened) 
+      this.props.closeMenu() 
+    
     const parentOffset = parentRef.current.scrollTop
     if (parentOffset) {
       this.props.logWordDivOffset(original, parentOffset);
@@ -188,6 +193,7 @@ class Table extends Component {
 }
 
 const mapStateToProps = state => ({
+  menuOpen: state.context.menuOpen,
   auth: state.auth,
   refMap: state.refs.refMap,
   uuid: state.collections.uuid,
@@ -204,6 +210,7 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, { setAllDataRef, 
+                                          closeMenu,
                                           deleteWord, 
                                           lookUpWord, 
                                           fetchWords, 

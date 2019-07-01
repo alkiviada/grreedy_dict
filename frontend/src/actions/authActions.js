@@ -107,6 +107,7 @@ export const register = (username, password) => {
 }
 
 export const logout = () => {
+  console.log('loggin out');
   return (dispatch, getState) => {
     let headers = {"Content-Type": "application/json"};
     const token = getState().auth.token;

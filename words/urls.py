@@ -25,7 +25,7 @@ urlpatterns = [
 
     url("^api/auth/register/$", views.RegistrationAPI.as_view()),
     url("^api/auth/login/$", views.LoginAPI.as_view(), name='words_login'),
-    url(r'^api/auth/logout/', knox_views.LogoutView.as_view(), name='knox_logout'),
+    url(r'^api/auth/logout/$', knox_views.LogoutView.as_view(), name='knox_logout'),
     url(r'api/auth/logoutall/', knox_views.LogoutAllView.as_view(), name='knox_logoutall'),
     url("^api/auth/user/$", views.UserAPI.as_view()),
     url(r'^api/auth/', include('knox.urls')),

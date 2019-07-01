@@ -49,3 +49,6 @@ export const SET_ALL_DATA_REF = 'SET_ALL_DATA_REF';
 export const MAP_OFFSET  = 'MAP_OFFSET';
 
 export const SWITCH_VISIBILITY = 'SWITCH_VISIBILITY';
+
+export const MENU_OPEN = 'MENU_OPEN';
+export const MENU_CLOSE = 'MENU_CLOSE';
