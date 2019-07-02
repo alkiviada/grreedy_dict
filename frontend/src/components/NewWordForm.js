@@ -49,6 +49,7 @@ class NewWordForm extends Component {
 
   inputOrLabel(e, labelRef) {
     if (e.target.value == "") {
+      console.log('hmm')
       this.showLabel(e, labelRef);
     } 
     else if (e.target.value != "") {
@@ -96,7 +97,7 @@ class NewWordForm extends Component {
     console.log('this is my errror ', error)
 
     const word = !this.props.error ? this.state.word : this.props.word
-    const nwLabel = error ? 'floating-label top-label error' : word ? 'floating-label top-label' : 'floating-label'
+    const nwLabel = error ? 'floating-label top-label error' : word ? 'floating-label top-label' : this.state.nwLabel
     const nwClass = error ? 'new-word-input error' : 'new-word-input'
     const nwLabelText = error ? "Cant' find word" : 'New Word'
     console.log('rendering new word form');

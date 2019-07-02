@@ -211,9 +211,9 @@ class WordTabs extends Component {
         onSelect={(prev, index) => this.handleSelect(index, prev, word, isEnglishWord, isVerb, parentRef)}>
         <TabList>
           { iAmHidden5 + iAmHidden4 + iAmHidden3 + iAmHidden2 > 0 ? 
-              <Tab className={canMoveLeftClass}>&lt;</Tab> :
+              <Tab className={canMoveLeftClass}>&#9664;</Tab> :
               <Tab className="tab-carousel arrow-tab hide-tab-item">
-               &lt; 
+              &#9664;
               </Tab>
           }
           {         
@@ -233,22 +233,22 @@ class WordTabs extends Component {
           }
           { canMoveRight5 ? 
               <Tab className="tab-carousel arrow-tab5 react-tabs__tab">
-               &gt; 
+              &#9654;
               </Tab> :
            canMoveRight4 ? 
               <Tab className="tab-carousel arrow-tab4 react-tabs__tab">
-               &gt; 
+               &#9654;
               </Tab> :
            canMoveRight3 ? 
               <Tab className="tab-carousel arrow-tab3 react-tabs__tab">
-               &gt; 
+              &#9654;
               </Tab> :
            canMoveRight2 ? 
               <Tab className="tab-carousel arrow-tab2 react-tabs__tab">
-              &gt; 
+              &#9654;
               </Tab> :
               <Tab className="tab-carousel arrow-tab hide-tab-item">
-              &gt; 
+               &#9654;
               </Tab>
           }
           </TabList>

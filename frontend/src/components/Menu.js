@@ -36,19 +36,17 @@ class Menu extends Component {
       this.props.openMenu() 
     else { 
       this.props.closeMenu();
-      if (this.state.collsClass.match('open')) {
-// I clicked to close the mian menu and the list of collections is opened too - close it as well
-        if (this.state.collsClass.match('full')) 
-          this.setState({ collsClass: 'collections-button full' });
-        else 
-          this.setState({ collsClass: 'collections-button' });
-      }
+      if (this.state.collsClass.match('full')) 
+        this.setState({ collsClass: 'collections-button full' });
+      else 
+        this.setState({ collsClass: 'collections-button' });
     }
   }
 
   onCollectionClick(e, uuid) {
     e.preventDefault();
     this.props.closeMenu();
+    this.setState({ collsClass: 'collections-button full' });
     this.props.requestCollection();
     const { origUUId, allWords } = this.props
     
@@ -101,7 +99,7 @@ class Menu extends Component {
       className="menu-open-svg"
       xmlns="http://www.w3.org/2000/svg"    
       version="1.1"
-      viewBox="0 3 18 20" width="100%" height="100%">
+      viewBox="0 3 18 22" width="100%" height="100%">
 <defs>
 </defs>
 <path  

@@ -5,13 +5,35 @@
   --sky-color: #84a6d2;
   --sky-color-light: #b7cbe4;
   --body-font: Alegreya;
-  --hooligan-font: Sedgwick Ave Display;
   --word-font: Alegreya Sans;
 }
 @font-face {
   font-family: Alegreya Sans;
   src: url(AlegreyaSans-Regular.woff2);
-  font-feature-settings: "smcp";
+  font-feature-settings: 'liga', 'clig', 'dlig', 'tnum', 'lnum';
+}
+@font-face {
+  font-family: Alegreya Sans;
+  src: url(Alegreya-Italic.woff2);
+  font-feature-settings: 'liga', 'clig', 'dlig', 'tnum', 'lnum';
+  font-style: italic;
+}
+@font-face {
+  font-family: Alegreya;
+  src: url(Alegreya-ExtraBold.woff2);
+  font-weight: 900;
+  font-feature-settings: 'liga', 'clig', 'dlig', 'tnum', 'lnum';
+}
+@font-face {
+  font-family: Alegreya;
+  src: url(Alegreya-Regular.woff2);
+  font-feature-settings: 'liga', 'clig', 'dlig', 'tnum', 'lnum';
+}
+@font-face {
+  font-family: Alegreya Sans;
+  src: url(AlegreyaSans-ExtraBold.woff2);
+  font-weight: 900;
+  font-feature-settings: 'liga', 'clig', 'dlig', 'tnum', 'lnum';
 }
 
 *{
@@ -51,14 +73,18 @@ body {
 
 
 .word-svg {
+  font-weight: 900;
   width: 100%;
   align-self: center;
+}
+.word-svg-text {
+  letter-spacing: 1.1px;
 }
 
 @media(max-width: 888px) {
 .word-svg {
   width: unset;
-  height: 75%;
+  height: 70%;
 }
 }
 
@@ -262,7 +288,7 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
 
 /* menu start */
 .menu-open-button {
-  background-color: var(--field-color-dark);
+  background-color: var(--field-color-dark-noop);
 }
 .menu-closed-button, .empty-menu {
   background-color: var(--sky-color);
@@ -329,15 +355,15 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
 
 .menu-li {
   color: var(--sky-color-light);
-  letter-spacing: 2;
+  letter-spacing: 1.1px;
   font-size: 1.5rem;
-  font-family: var(--hooligan-font);
 }
 
 .collections-button {
   color: var(--sky-color-light);
   font-size: 1.5rem;
-  font-family: var(--hooligan-font);
+  letter-spacing: 1.1px;
+  font-family: var(--body-font);
   border: none;
   background-color: transparent;
   cursor: pointer;
@@ -356,8 +382,8 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
   top: 1.5em;
   left: 0px;
   display: block;
-  font-family: var(--word-font);
-  font-feature-settings: 'smcp', 'liga', 'clig', 'dlig', 'tnum', 'lnum';
+  font-family: var(--body-font);
+  font-feature-settings: 'liga', 'clig', 'dlig', 'tnum', 'lnum';
   background-color: var(--field-color-dark-noop);
   color: var(--sky-color-light);
   font-size: 1.5rem;
@@ -365,7 +391,7 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
 }
 
 .collections-li {
-  
+  line-height: 1; 
   list-style: none;
   padding-bottom: .5em;
 }
@@ -611,7 +637,7 @@ ul {
 @media(max-width: 888px) {
   .word {
     grid-template-areas: "show-hide word delete";
-    grid-template-columns: 2em 1fr 3em;
+    grid-template-columns: 1.6em 1fr 3em;
     padding: .01em 0;
     height: 3em;
   }
@@ -619,6 +645,7 @@ ul {
 
 .word-delete {
   grid-area: delete;
+  font-family: var(--word-font);
   cursor: pointer;
   font-size: 2rem;
   background: inherit;
@@ -629,7 +656,6 @@ ul {
   justify-self: end;
   margin-right: .3em;
   color: #b2b8c4;
-  font-family:Sedgwick Ave Display;
 }
 
 .just-word {
@@ -637,30 +663,24 @@ ul {
 }
 
 .lang-english {
-  font-family: Englebert;
 }
 
 .lang-ukrainian {
-  font-family: Sedgwick Ave Display;
 }
 
 .lang-russian {
-  font-family: Russo One;
 }
 
 
 .lang-swedish {
-  font-family: Passero One;
   font-weight: 400;
 }
 
 .lang-italian {
-  font-family: Italiana;
 }
 
 .word-meaning {
   font-style: italic;
-  font-weight: lighter;
   font-size: 0.8rem;
   color: var(--field-color-dark);
 }
@@ -681,6 +701,7 @@ ul {
   display: grid;
   grid-template-columns: 10em 1fr;
   grid-template-areas: "input-or-load error";
+  transition: background-color 300ms ease-in-out, opacity 200ms;
 }
 
 .look-up-button {
@@ -709,6 +730,7 @@ ul {
 
 .new-word-input {
   position: absolute;
+  background-color: rgb(241, 243, 244, 1);
   font-family: var(--word-font);
   font-size: 1.2rem;
   width: 100%;
@@ -724,6 +746,10 @@ ul {
   border-radius: .3em;
 }
 
+.new-word-input:hover {
+  background-color: rgb(232, 234, 237);
+}
+
 .new-word-input.error {
   border: 1px solid red;
 }
@@ -731,22 +757,23 @@ ul {
 
 .floating-label {
   color: var(--sky-color);
+  opacity: .6;
   font-family: var(--word-font);
-  font-weight: lighter;
   font-size: 1.5rem;
   line-height: 1;
   z-index: 10;
   position: absolute;
   bottom: .6em;
   left: .6em;
-  transition: .1s ease;
+  transition: all .1s ease;
   cursor: text;
 }
 
 .floating-label.top-label {
+  opacity: 1;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  font-family: var(--hooligan-font);
+  letter-spacing: .5px;
   color: var(--field-color-dark);
   font-size: 1.1rem;
   right: -1em;
@@ -985,7 +1012,7 @@ ul {
     "pagination-l pagination-r" 
     "words-table words-table";
   padding: .2em .1em;
-  grid-template-rows: 1.4em 3em 1fr;
+  grid-template-rows: 2em 4em 1fr;
 } 
 
 
@@ -1025,8 +1052,8 @@ ul {
 .pagination-a {
   grid-area: page;
   color: white;
-  font-family: Sedgwick Ave Display;
   font-size: 3rem;
+  font-family: var(--word-font);
   border: none;
   background-color: var(--sky-color);
   border-radius: 50%;
@@ -1045,7 +1072,7 @@ ul {
 
 .coll-title strong {
   color: #363636;
-  font-weight: 700;
+  font-weight: 900;
 }
 
 
@@ -1060,7 +1087,7 @@ ul {
 
 .coll-title {
   grid-area: coll-title;
-  font-size: 1rem;
+  font-size: 1.4rem;
   color: #4a4a4a;
   margin: .1em .5em .5em .5em;
   font-weight: 400;
@@ -1299,8 +1326,7 @@ a[href^="/homework/conjugate"]::after {
 
 .tab-carousel {
   color: var(--sky-color);
-  font-family: Sedgwick Ave Display;
-  font-size: 2.3rem;
+  font-size: 4rem;
   padding: 0;
   justify-self: end;
 }
@@ -1500,29 +1526,28 @@ font-family: FontAwesome;
 
 .word-hide, .word-show {
   cursor: pointer;
-  font-size: 3rem;
+  font-size: 2.2rem;
+  font-family: var(--word-font);
   grid-area: show-hide;
-  font-family: Sedgwick Ave Display;
+  font-weight: 900;
   border: none;
   background: inherit;
   justify-self: center;
-  align-self: end;
+  align-self: center;
   position: relative;
+  padding-bottom: .1em;
 }
 
 .word-hide {
-  transform: rotate(-90deg) translate(1px, 0);
 }
 .word-show {
-  transform: rotate(90deg) translate(5px, 0);
 }
 
-.word-hide::before, .word-show::before {
+.-word-hide::before, .-word-show::before {
   content: "|";
   position: absolute;
   transform: rotate(-90deg) translate(12px, 0);
   bottom: 0;
-  font-family: Sedgwick Ave Display;
   font-size: 1.8rem;
 }
 
@@ -1735,7 +1760,6 @@ font-family: FontAwesome;
     position: -webkit-sticky;
     cursor: pointer;
     font-size: 4rem;
-    font-family: Sedgwick Ave Display;
     align-self: center;
     justify-self: center;
     background-color: transparent;

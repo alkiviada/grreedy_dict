@@ -5,8 +5,7 @@ import key from "weak-key";
 const Word = (props) => {
   const { wordElement, visibilityFilter, visibility, deleteWord } = props;
   const wl =  wordElement[1].length
-  const l = 8.2 * wl + 18
-  console.log(l)
+  const l = 8.6 * wl + 18
   return ( 
     <div className="word" key={key(wordElement)}>
     <svg className="word-svg"   
@@ -17,8 +16,8 @@ const Word = (props) => {
     {wordElement[1]}
       </text>
      </svg>
-    { visibility == 'hide' ? <button className="word-show" onClick={(e) => visibilityFilter(e, wordElement[1])}>></button> :
-    <button className="word-hide" onClick={(e) => visibilityFilter(e, wordElement[1])}>></button> }
+    { visibility == 'hide' ? <button className="word-show" onClick={(e) => visibilityFilter(e, wordElement[1])}>&darr;</button> :
+    <button className="word-hide" onClick={(e) => visibilityFilter(e, wordElement[1])}>&uarr;</button> }
     <button className="word-delete" onClick={(e) => deleteWord(e, wordElement[1])}>x</button>
     </div>
   );
