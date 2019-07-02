@@ -83,7 +83,7 @@ class NewWordForm extends Component {
         this.props.clearFetching()
       }
     }
-    this.setState({word: ''})
+    this.setState({word: '', nwLabel: 'floating-label'})
   }
 
   render () {
@@ -97,8 +97,12 @@ class NewWordForm extends Component {
     console.log('this is my errror ', error)
 
     const word = !this.props.error ? this.state.word : this.props.word
+    console.log(this.state.nwLabel)
+    console.log(word)
+    if (word)
+      console.log('yes i have word :',  word)
     const nwLabel = error ? 'floating-label top-label error' : word ? 'floating-label top-label' : this.state.nwLabel
-    const nwClass = error ? 'new-word-input error' : 'new-word-input'
+    const nwClass = error ? 'input error' : 'input'
     const nwLabelText = error ? "Cant' find word" : 'New Word'
     console.log('rendering new word form');
     return (

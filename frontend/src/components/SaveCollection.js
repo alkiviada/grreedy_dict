@@ -9,15 +9,39 @@ import { Link } from "react-router-dom";
 class SaveCollection extends Component {
   constructor(props) { 
     super(props)
+    this.saveCollectionLabelRef = React.createRef()
     this.state = {
       name: '',
+      label: 'floating-label',
     };
     this.handleNameChange = this.handleNameChange.bind(this);
+    this.inputOrLabel = this.inputOrLabel.bind(this) 
+    this.hideLabel = this.hideLabel.bind(this) 
+    this.showLabel = this.showLabel.bind(this) 
     this.onSubmit = this.onSubmitSave.bind(this);
   };
 
   componentDidMount() {
     console.log('mounting save bar');
+  }
+
+  hideLabel(e, labelRef) {
+    const key = labelRef.current.htmlFor 
+    this.setState({ label: 'floating-label top-label' });
+  }
+
+  showLabel(e, labelRef) {
+    this.setState({ label: 'floating-label' });
+  }
+
+  inputOrLabel(e, labelRef) {
+    if (e.target.value == "") {
+      console.log('hmm')
+      this.showLabel(e, labelRef);
+    } 
+    else if (e.target.value != "") {
+      this.hideLabel(e, labelRef);
+    }
   }
 
   handleNameChange(n) {
@@ -41,8 +65,11 @@ class SaveCollection extends Component {
 
   render () {
     const words = this.props.allWords;
-    const saving = this.props.saving
-    const name = !this.props.fetched ? (this.state.name ? this.state.name : this.props.name) : this.props.name
+    const { fetched, error, saving } = this.props;
+    const name = !fetched ? (this.state.name ? this.state.name : this.props.name) : this.props.name
+    const label = error ? 'floating-label top-label error' : name ? 'floating-label top-label' : this.state.label
+    const inputClass = error ? 'input error' : 'input'
+    const labelText = error ? "Cant' save collection" : 'Name Collection'
 
     const auth = this.props.auth
 
@@ -50,32 +77,25 @@ class SaveCollection extends Component {
       if (words.length) {
         return (
         !saving ?
-        <div className="colls-footer">
         <form className="save-coll" onSubmit={(e) => this.onSubmitSave(e)}> 
-          <input class="save-coll-input" type="text" placeholder="Save Collection" value={name} onChange={this.handleNameChange} />
-          <a className="save-btn" onClick={(e) => this.onSubmitSave(e)}>Save Words</a>
-        { this.props.error ?  <p className="grid-warn">Can't save this collection</p> : '' }
-      </form>  
-      <div className="user-tag">
-      {auth.user.username} (<a onClick={this.props.logout}>logout</a>)
-      </div>
-      </div>
-      : <div className="colls-footer">
+       <div className="input-form-wrapper">
+        <label className={label} htmlFor="save-coll" ref={this.saveCollectionLabelRef}>{labelText}</label>
+        <input className={inputClass} onFocus={(e) => this.hideLabel(e, this.saveCollectionLabelRef)} onInput={(e) => this.inputOrLabel(e, this.saveCollectionLabelRef)} onBlur={(e) => this.inputOrLabel(e, this.saveCollectionLabelRef)} type="text" value={name} onChange={this.handleNameChange} id="save-coll" />
+    <button className="save-coll-button">
+    &#9660;
+    </button>
+</div>
+    </form> : 
+      <div className="colls-footer">
         <div className="save-coll"><p className="grid-notification"><em>Saving...</em></p></div>
-      <div className="user-tag">
-      {auth.user.username} (<a onClick={this.props.logout}>logout</a>)
-      </div>
         </div>
       );
     }
     else {
-        return (
+      return (
         <div className="colls-footer">
-     <div className="user-tag">
-      {auth.user.username} (<a onClick={this.props.logout}>logout</a>)
-      </div>
         </div>
-    )
+      )
     }
     }
     else {

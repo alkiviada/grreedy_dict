@@ -244,7 +244,7 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-rows: 3em 1fr 2.4em;
+  grid-template-rows: 3em 1fr 3em;
   grid-template-columns: 1fr 3.5em;
   grid-template-areas: 
     "top menu"
@@ -412,6 +412,46 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
 }
 
 /* menu end */
+/* save collection footer starts here */
+.save-coll {
+  grid-area: save-words;
+
+  display: grid;
+  position: relative;
+  position: sticky;
+  position: -webkit-sticky;
+  bottom: 0px;
+  z-index: 10;
+
+  background-color: var(--field-color-light);
+
+  display: grid;
+  grid-template-columns: 15em 1fr;
+  grid-template-areas: "input-or-load error";
+}
+.save-coll-button {
+  font-size: 1.6rem;
+  cursor: pointer;
+  position: absolute;
+  z-index: 12;
+  right: -16px;
+  bottom: 2px;
+  color: var(--field-color-dark);
+  width: 2em;
+  height: 2em;
+  border: none;
+  background: transparent;
+  transition: transform 200ms ease-in-out;
+}
+
+.save-coll .floating-label {
+  color: var(--field-color-light);
+}
+.save-coll .floating-label.top-label {
+  color: var(--sky-color);
+}
+
+/* save collection footer ends here */
 
 
 /* collections sidebar starts here */
@@ -701,7 +741,6 @@ ul {
   display: grid;
   grid-template-columns: 10em 1fr;
   grid-template-areas: "input-or-load error";
-  transition: background-color 300ms ease-in-out, opacity 200ms;
 }
 
 .look-up-button {
@@ -714,6 +753,11 @@ ul {
   height: 2em;
   border: none;
   background: transparent;
+  transition: transform 200ms ease-in-out;
+}
+
+.look-up-button:hover {
+  transform: scale(1.2);
 }
 
 .look-up-svg {
@@ -728,9 +772,9 @@ ul {
   width: 100%;
 }
 
-.new-word-input {
+.input {
   position: absolute;
-  background-color: rgb(241, 243, 244, 1);
+  background-color: rgb(255, 252, 249, 1);
   font-family: var(--word-font);
   font-size: 1.2rem;
   width: 100%;
@@ -744,13 +788,14 @@ ul {
   height: 2em;
   border: 1px solid #dfe1e5;
   border-radius: .3em;
+  transition: background-color 300ms ease-in-out;
 }
 
-.new-word-input:hover {
-  background-color: rgb(232, 234, 237);
+.input:hover {
+  background-color: rgba(245, 251, 253, 1);
 }
 
-.new-word-input.error {
+.input.error {
   border: 1px solid red;
 }
 
@@ -834,18 +879,6 @@ ul {
   font-size: 1.1rem;
 }
 
-.save-coll {
-  grid-area: save;
-  letter-spacing: .1em;
-
-  display: grid;
-  grid-template-areas: "input-or-load button error";
-  grid-template-columns: 5.2em 5.5em 1fr;
-}
-
-.save-coll a:hover, .new-word a:hover, .login-form a:hover, .add-note-form a:hover {
-  color: black;
-}
 
 .grid-notification {
   grid-area: input-or-load;
@@ -885,7 +918,7 @@ ul {
   margin: auto 0;
 } 
 
-.save-coll-input, .login-username-input, .login-pass-input, .register-user, .register-pass {
+.login-username-input, .login-pass-input, .register-user, .register-pass {
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
   align-items: center;
@@ -909,21 +942,6 @@ ul {
   font-size: .9rem;
 }
 
-.save-coll-input {
-  grid-area: input-or-load;
-  margin: auto 0 auto .3em;
-}
-
-.save-coll-input::placeholder {
-  font-weight: 100;
-  font-size: 1rem;
-  padding: .1em .3em;
-}
-
-
-.save-coll-input::placeholder {
-  color: var(--sky-color);
-}
 
 .save-btn, .login-btn, .register-btn, .add-note-btn {
   font-size: .9rem;
@@ -1005,6 +1023,7 @@ ul {
 .words-container { 
   position: relative;
   grid-area: words;
+  grid-row-gap: .2em;
   grid-column: 1/-1;
   display: grid;
   grid-template-areas: 
@@ -1012,7 +1031,7 @@ ul {
     "pagination-l pagination-r" 
     "words-table words-table";
   padding: .2em .1em;
-  grid-template-rows: 2em 4em 1fr;
+  grid-template-rows: 2em auto 1fr;
 } 
 
 
@@ -1033,6 +1052,8 @@ ul {
 
 .pagination-1, .pagination-2 {
   display: grid;
+  padding-top: .2em;
+  padding-bottom: .3em;
 }
 
 .pagination-2 {
