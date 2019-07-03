@@ -23,7 +23,7 @@ class Menu extends Component {
   }
 
   onSignOutClick(e) {
-    console.log('burger click');
+    console.log('cisgn out click');
     e.preventDefault();
     this.props.logout();
   }
@@ -137,7 +137,7 @@ class Menu extends Component {
               }
             </li>
             <li className="menu-li">
-               <a className="sign-out-link" onClick={this.onSingOutClick} href="/logout">Sign Out</a>
+               <button className="sign-out-button" onClick={this.onSignOutClick}>Sign Out</button>
             </li>
           </ul>
         </nav>

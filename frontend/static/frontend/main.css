@@ -359,7 +359,7 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
   font-size: 1.5rem;
 }
 
-.collections-button {
+.collections-button, .sign-out-button {
   color: var(--sky-color-light);
   font-size: 1.5rem;
   letter-spacing: 1.1px;
@@ -368,7 +368,6 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
   background-color: transparent;
   cursor: pointer;
 }
-
 
 .collections-button ~ .collections-list {
   display: none;
