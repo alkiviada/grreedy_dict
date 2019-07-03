@@ -105,7 +105,7 @@ class SaveCollection extends Component {
         </div>
         ) : (
         <div className="colls-footer">
-        <div className="coll-invite"><Link className="is-link" to="/login">Login</Link> or <Link className="is-link" to="/register">Register</Link> to save this collection of words</div>
+        <div className="coll-invite"><Link className="is-link" to="/login">Login</Link> or <Link className="is-link" to="/register">Register</Link> to save this collection</div>
         </div>
        )
       }

@@ -25,7 +25,9 @@ class Menu extends Component {
   onSignOutClick(e) {
     console.log('cisgn out click');
     e.preventDefault();
-    this.props.logout();
+    this.props.logout().then(() => {
+      this.props.closeMenu();
+    })
   }
 
   handleMainClick(e) {

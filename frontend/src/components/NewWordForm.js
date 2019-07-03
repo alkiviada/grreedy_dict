@@ -116,7 +116,7 @@ class NewWordForm extends Component {
       xmlns="http://www.w3.org/2000/svg"    
       version="1.1"
       className="look-up-svg-container"
-      viewBox="-2 2.3 11.2 10.4" width="100%" height="100%">
+      viewBox="-3 2.3 11.2 10.4" width="100%" height="100%">
 <defs>
 </defs>
 <g transform="rotate(25)" className="look-up-svg">
