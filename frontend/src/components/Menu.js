@@ -146,6 +146,7 @@ class Menu extends Component {
 </Fragment>
       ) : 
       (
+<Fragment>
       <button className="menu-closed-button" onClick={this.handleMainClick}>
     <svg     
       xmlns="http://www.w3.org/2000/svg"    
@@ -206,6 +207,26 @@ class Menu extends Component {
 </g>
 </svg>
       </button>
+         <nav className="menu" role="navigation" aria-label="Grreedy Menu">
+          <ul className="menu-list">
+            <li className="menu-li">
+               <button className={this.state.collsClass} onClick={this.handleCollectionsClick}>Collections</button>
+               { colls.length ?
+               <ul class="collections-list">
+                 { colls.map(e => 
+                   <li className="collections-li"><a target="_blank" href={`/api/collection/${e.uuid}`} 
+                   onClick={(c) => this.onCollectionClick(c, e.uuid)} className="coll-link">
+                    <span className="coll-name">{e.name}</span> <span className="coll-date">{e.last_modified_date}</span>
+                 </a></li>)}
+               </ul> : ''
+              }
+            </li>
+            <li className="menu-li">
+               <button className="sign-out-button" onClick={this.onSignOutClick}>Sign Out</button>
+            </li>
+          </ul>
+        </nav>
+</Fragment>
     )
   }
 }
