@@ -105,7 +105,7 @@ class Login extends Component {
         <label className={usernameLabel} htmlFor="username" ref={this.usernameLabelRef}>{usernameLabelText}</label>
         <input className={usernameClass} onFocus={(e) => this.hideLabel(e, this.usernameLabelRef)} onInput={(e) => this.inputOrLabel(e, this.usernameLabelRef)} onBlur={(e) => this.inputOrLabel(e, this.usernameLabelRef)} type="text" onChange={(e) => this.handleInputChange(e, 'username')} id="username" />
 </div>
-       <div className="login-input-wrapper">
+       <div className="login-input-wrapper password">
         <label className={passwordLabel} htmlFor="password" ref={this.passwordLabelRef}>{passwordLabelText}</label>
         <input className={passwordClass} onFocus={(e) => this.hideLabel(e, this.passwordLabelRef)} onInput={(e) => this.inputOrLabel(e, this.passwordLabelRef)} onBlur={(e) => this.inputOrLabel(e, this.passwordLabelRef)} type="password" onChange={(e) => this.handleInputChange(e, 'password')} id="password" />
 </div>

@@ -319,8 +319,21 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
   height: var(--size);
   width: var(--size);
 }
+.login-input-wrapper.password::after {
+  --size: 2.3em;
+  position: absolute;
+  opacity: .4;
+  display: block;
+  content: ' ';
+  right: -.4em;
+  top: -.7em;
+  background-image: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='-.5 6.6 18 14' width='100%25' height='100%25'%3E%3Cpath d='M 0 20 L 0 7 L 1 7 L 1 8 L 2 8 L 2 7 L 3 7 L 3 8 L 4 8 L 4 7 L 5 7 L 5 11 L 6 11 L 6 10 L 7 10 L 7 11 L 8 11 L 8 10 L 9 10 L 9 11 L 10 11 L 10 10 L 11 10 L 11 11 L 12 11 L 12 7 L 13 7 L 13 8 L 14 8 L 14 7 L 15 7 L 15 8 L 16 8 L 16 7 L 17 7 L 17 20 L 12 20 L 12 15 L 5 15 L 5 20 z ' fill='none' stroke='%2384a6d2' stroke-width='.5'%0A/%3E%3Cline x1='7' x2='7' y1='15' y2='20' stroke='%2384a6d2' stroke-width='.5' /%3E%3Cline x1='10' x2='10' y1='15' y2='20' stroke='%2384a6d2' stroke-width='.5' /%3E%3Cline x1='5' x2='12' y1='16.5' y2='16.5' stroke='%2384a6d2' stroke-width='.5' /%3E%3Cline x1='5' x2='12' y1='18.4' y2='18.4' stroke='%2384a6d2' stroke-width='.5' /%3E%3C/svg%3E%0A");
+  background-size: var(--size) var(--size);
+  height: var(--size);
+  width: var(--size);
+}
 
-.login-input-wrapper.username:hover::after {
+.login-input-wrapper.username:hover::after, .login-input-wrapper.password:hover::after {
   opacity: 1;
 }
 
@@ -377,6 +390,18 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
   border: none;
   border-radius: unset;
 }
+
+.login-container .is-link {
+  color: var(--sky-color-light);
+}
+.login-container .is-link:hover {
+  color: white;
+  -webkit-text-stroke: var(--outline) var(--sky-color-light);
+    text-stroke: var(--outline) var(--sky-color-light);
+}
+
+
+
 
 /* login screen ends here */
 
