@@ -5,7 +5,7 @@ import key from "weak-key";
 const Word = (props) => {
   const { wordElement, visibilityFilter, visibility, deleteWord } = props;
   const wl =  wordElement[1].length
-  const l = 9 * wl + 18
+  const l = 9.2 * wl + 18
   return ( 
     <div className="word" key={key(wordElement)}>
     <svg className="word-svg"   

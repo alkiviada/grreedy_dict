@@ -32,6 +32,7 @@ class Menu extends Component {
   handleMainClick(e) {
     e.preventDefault();
     const opened = this.props.menuOpen
+    console.log(opened)
     if (!opened) 
       this.props.openMenu() 
     else { 
