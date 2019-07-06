@@ -10,29 +10,29 @@
 }
 @font-face {
   font-family: Alegreya Sans;
-  src: url(AlegreyaSans-Regular.woff2);
+  src: url(AlegreyaSans-Regular.woff2) format('woff2'), url(AlegreyaSans-Regular.ttf) format('truetype');
   font-feature-settings: 'liga', 'clig', 'dlig', 'tnum', 'lnum';
 }
 @font-face {
   font-family: Alegreya Sans;
-  src: url(Alegreya-Italic.woff2);
+  src: url(Alegreya-Italic.woff2) format('woff2'), url(Alegreya-Italic.ttf) format('truetype');
   font-feature-settings: 'liga', 'clig', 'dlig', 'tnum', 'lnum';
   font-style: italic;
 }
 @font-face {
   font-family: Alegreya;
-  src: url(Alegreya-ExtraBold.woff2);
+  src: url(Alegreya-ExtraBold.woff2) format('woff2'), url(Alegreya-ExtraBold.ttf) format('truetype');
   font-weight: 900;
   font-feature-settings: 'liga', 'clig', 'dlig', 'tnum', 'lnum';
 }
 @font-face {
   font-family: Alegreya;
-  src: url(Alegreya-Regular.woff2);
+  src: url(Alegreya-Regular.woff2) format('woff2'), url(Alegreya-Regular.ttf) format('truetype');
   font-feature-settings: 'liga', 'clig', 'dlig', 'tnum', 'lnum';
 }
 @font-face {
   font-family: Alegreya Sans;
-  src: url(AlegreyaSans-ExtraBold.woff2);
+  src: url(AlegreyaSans-ExtraBold.woff2) format('woff2'), url(AlegreyaSans-ExtraBold.ttf) format('truetype');
   font-weight: 900;
   font-feature-settings: 'liga', 'clig', 'dlig', 'tnum', 'lnum';
 }
@@ -307,13 +307,13 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
 }
 
 .login-input-wrapper.username::after {
-  --size: 2.8em;
+  --size: 2.6em;
   position: absolute;
   opacity: .4;
   display: block;
   content: ' ';
   right: .1em;
-  top: -.9em;
+  top: -.7em;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='15 91 88 50' preserveAspectRatio='xMidYMid meet' height='100%25' width='100%25'%3E%3Cpath id='hair1' d='M 30 140 A 1 1 0 0 1 40 130 A 1 1 0 0 0 50 120 A 1 1 0 0 1 70 110 A 1 1 0 0 1 90 100 ' fill='none' stroke='%2384a6d2' stroke-width='3'%0Astroke-linejoin='round'%0Astroke-linecap='round' /%3E%3Cpath id='profile' d='M 90 100 Q 96 105 95 110 T 100 120 Q 96 125 95 130 T 90 132 ' fill='none' stroke='%2384a6d2' stroke-width='3'%0Astroke-linejoin='round'%0Astroke-linecap='round' /%3E%3C/svg%3E%0A");
   background-size: var(--size) var(--size);
   height: var(--size);
@@ -355,11 +355,6 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
 
 .login-input-wrapper .floating-label.top-label {
   top: -1.2em;
-}
-@media (min-width: 900px) {
-.login-input-wrapper .floating-label.top-label {
-  top: -1.3em;
-}
 }
 
 .login-button {
