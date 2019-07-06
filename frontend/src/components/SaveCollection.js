@@ -23,6 +23,9 @@ class SaveCollection extends Component {
 
   componentDidMount() {
     console.log('mounting save bar');
+    console.log(this.props.name)
+    if (this.props.name) 
+      this.setState({ name: this.props.name });
   }
 
   hideLabel(e, labelRef) {
@@ -65,8 +68,9 @@ class SaveCollection extends Component {
 
   render () {
     const words = this.props.allWords;
+    console.log(this.props.name);
     const { fetched, error, saving } = this.props;
-    const name = !fetched ? (this.state.name ? this.state.name : this.props.name) : this.props.name
+    const name = !fetched ? this.state.name : this.props.name
     const label = error ? 'floating-label top-label error' : name ? 'floating-label top-label' : this.state.label
     const inputClass = error ? 'input error' : 'input'
     const labelText = error ? "Cant' save collection" : 'Name Collection'
