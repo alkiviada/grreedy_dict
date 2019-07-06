@@ -28,8 +28,10 @@ class LoginAPI(generics.GenericAPIView):
     serializer.is_valid(raise_exception=True)
     user = serializer.validated_data
     token = AuthToken.objects.create(user, expires=datetime.timedelta(days=10))
+    print(UserSerializer(user))
     return Response({
       "user": UserSerializer(user, context=self.get_serializer_context()).data,
+      "has_collections": Collection.objects.filter(owner=user).count(),
       "token": token,
     })
 

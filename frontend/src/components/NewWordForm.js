@@ -40,6 +40,7 @@ class NewWordForm extends Component {
 
   hideLabel(e, labelRef) {
     const key = labelRef.current.htmlFor 
+    console.log(key);
     this.setState({ nwLabel: 'floating-label top-label' });
   }
 

@@ -8,6 +8,12 @@ from django.contrib.auth import authenticate
 class LoginUserSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
+    has_collections = serializers.SerializerMethodField('get_collections_boolean')
+
+    def get_collections_boolean(self, instance):
+      print(instance)
+      print(Collection.objects.filter(owner=instance).count())
+      return Collection.objects.filter(owner=instance).count() 
 
     def validate(self, data):
         print(data)

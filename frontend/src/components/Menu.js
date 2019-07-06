@@ -88,11 +88,12 @@ class Menu extends Component {
     if (!auth.isAuthenticated) {
       return <div className="empty-menu"></div>
     }
-    const opened = this.props.menuOpen
     const colls = this.props.colls
-    console.log(opened)
     console.log(colls)
-    console.log('menu')
+    console.log(colls.length)
+    console.log('collections');
+    const opened = this.props.menuOpen
+    console.log(opened)
     return opened ? 
       ( 
 <Fragment>
@@ -126,18 +127,18 @@ class Menu extends Component {
       </button>
          <nav className="menu" role="navigation" aria-label="Grreedy Menu">
           <ul className="menu-list">
+               { auth.has_collections ?
             <li className="menu-li">
                <button className={this.state.collsClass} onClick={this.handleCollectionsClick}>Collections</button>
-               { colls.length ?
                <ul class="collections-list">
                  { colls.map(e => 
                    <li className="collections-li"><a target="_blank" href={`/api/collection/${e.uuid}`} 
                    onClick={(c) => this.onCollectionClick(c, e.uuid)} className="coll-link">
                     <span className="coll-name">{e.name}</span> <span className="coll-date">{e.last_modified_date}</span>
                  </a></li>)}
-               </ul> : ''
+               </ul> 
+            </li> : ''
               }
-            </li>
             <li className="menu-li">
                <button className="sign-out-button" onClick={this.onSignOutClick}>Sign Out</button>
             </li>
@@ -209,18 +210,18 @@ class Menu extends Component {
       </button>
          <nav className="menu" role="navigation" aria-label="Grreedy Menu">
           <ul className="menu-list">
+               { auth.has_collections ?
             <li className="menu-li">
                <button className={this.state.collsClass} onClick={this.handleCollectionsClick}>Collections</button>
-               { colls.length ?
                <ul class="collections-list">
                  { colls.map(e => 
                    <li className="collections-li"><a target="_blank" href={`/api/collection/${e.uuid}`} 
                    onClick={(c) => this.onCollectionClick(c, e.uuid)} className="coll-link">
                     <span className="coll-name">{e.name}</span> <span className="coll-date">{e.last_modified_date}</span>
                  </a></li>)}
-               </ul> : ''
-              }
+               </ul>
             </li>
+              : '' }
             <li className="menu-li">
                <button className="sign-out-button" onClick={this.onSignOutClick}>Sign Out</button>
             </li>

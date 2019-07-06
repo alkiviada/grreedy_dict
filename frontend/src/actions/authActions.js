@@ -61,6 +61,7 @@ export const login = (username, password) => {
       .then(res => {
         if (res.status === 200) {
           dispatch({type: 'LOGIN_SUCCESSFUL', data: res.data });
+          console.log(res.data)
           return res.data;
         } else if (res.status === 403 || res.status === 401) {
           dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
@@ -153,7 +154,7 @@ export const logout = () => {
 };
 
 
-export const clearLoginError = () => dispatch => {
+export const clearAuthError = () => dispatch => {
   dispatch({
     type: CLEAR_ERROR,
   })
