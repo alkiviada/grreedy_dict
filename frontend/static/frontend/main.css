@@ -307,16 +307,17 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
 }
 
 .login-input-wrapper.username::after {
+  --size: 2.8em;
   position: absolute;
   opacity: .4;
   display: block;
   content: ' ';
-  right: 0px;
-  top: -.4em;
+  right: -.4em;
+  top: -.9em;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='15 91 88 50' preserveAspectRatio='xMidYMid meet' height='100%25' width='100%25'%3E%3Cpath id='hair1' d='M 30 140 A 1 1 0 0 1 40 130 A 1 1 0 0 0 50 120 A 1 1 0 0 1 70 110 A 1 1 0 0 1 90 100 ' fill='none' stroke='%2384a6d2' stroke-width='3'%0Astroke-linejoin='round'%0Astroke-linecap='round' /%3E%3Cpath id='profile' d='M 90 100 Q 96 105 95 110 T 100 120 Q 96 125 95 130 T 90 132 ' fill='none' stroke='%2384a6d2' stroke-width='3'%0Astroke-linejoin='round'%0Astroke-linecap='round' /%3E%3C/svg%3E%0A");
-  background-size: 2em 2em;
-  height: 2em;
-  width: 2em;
+  background-size: var(--size) var(--size);
+  height: var(--size);
+  width: var(--size);
 }
 
 .login-input-wrapper.username:hover::after {
@@ -614,6 +615,8 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
 
 .save-coll .floating-label {
   color: var(--field-color-light);
+  -webkit-text-stroke: 1px var(--sky-color-light); 
+  text-stroke: 1px var(--sky-color-light);
 }
 .save-coll .floating-label.top-label {
   color: var(--sky-color);
