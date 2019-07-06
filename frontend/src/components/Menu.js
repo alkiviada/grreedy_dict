@@ -23,7 +23,6 @@ class Menu extends Component {
   }
 
   onSignOutClick(e) {
-    console.log('cisgn out click');
     e.preventDefault();
     this.props.logout().then(() => {
       this.props.closeMenu();
@@ -31,7 +30,6 @@ class Menu extends Component {
   }
 
   handleMainClick(e) {
-    console.log('burger click');
     e.preventDefault();
     const opened = this.props.menuOpen
     if (!opened) 
@@ -56,14 +54,12 @@ class Menu extends Component {
       this.props.saveCollectionAndLoadNew(this.props.origName, uuid);
     }
     else {
-      console.log('fetch words')
       this.props.requestWords();
       this.props.fetchWords(uuid);
     }
   }
 
   handleCollectionsClick(e) {
-    console.log('collections click');
     e.preventDefault();
     if (!this.props.colls.length) {
 // I clicked - but the data is not loaded yet
@@ -88,12 +84,10 @@ class Menu extends Component {
     if (!auth.isAuthenticated) {
       return <div className="empty-menu"></div>
     }
+    console.log(auth)
+    console.log(auth.has_collections)
     const colls = this.props.colls
-    console.log(colls)
-    console.log(colls.length)
-    console.log('collections');
     const opened = this.props.menuOpen
-    console.log(opened)
     return opened ? 
       ( 
 <Fragment>

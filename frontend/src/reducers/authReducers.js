@@ -38,7 +38,7 @@ export default function auth(state=initialState, action) {
 
     case 'LOGOUT_SUCCESSFUL':
       console.log('i am logging out, true')
-      return {...state, loginErrors: action.data, token: null, user: null,
+      return {...state, loginErrors: action.data, token: null, user: null, has_collections: null,
         isAuthenticated: false, isLoading: false};
     case CLEAR_ERROR: return { ...state, 
                                loginErrors: null,

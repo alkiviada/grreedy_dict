@@ -89,7 +89,7 @@ class Register extends Component {
   <defs>
     <filter id="filter">
       <feTurbulence type="fractalNoise" baseFrequency="0 0.15" numOctaves="1" result="warp" />
-      <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="30" in="SourceGraphic" in2="warp" />
+      <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="18" in="SourceGraphic" in2="warp" />
     </filter>
   </defs>
 </svg>
