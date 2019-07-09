@@ -52,3 +52,5 @@ export const SWITCH_VISIBILITY = 'SWITCH_VISIBILITY';
 
 export const MENU_OPEN = 'MENU_OPEN';
 export const MENU_CLOSE = 'MENU_CLOSE';
+
+export const SET_HAS_COLLECTIONS = 'SET_HAS_COLLECTIONS';

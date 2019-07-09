@@ -1,4 +1,4 @@
-from .models import Word, Definition, Etymology, Example, Collection, Collocation, WordNote
+from .models import Word, Definition, Etymology, Example, Collection, Collocation, WordNote, Language, LookupMap, TranslationsMap
 from django.utils import timezone
 from knox.models import AuthToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -31,7 +31,7 @@ class LoginAPI(generics.GenericAPIView):
     print(UserSerializer(user))
     return Response({
       "user": UserSerializer(user, context=self.get_serializer_context()).data,
-      "has_collections": Collection.objects.filter(owner=user).count(),
+      "hasCollections": Collection.objects.filter(owner=user).count(),
       "token": token,
     })
 
@@ -294,34 +294,41 @@ class WordSingleCreate(generics.ListAPIView):
   def get(self, request, word, uuid, *args, **kwargs):
     print('GET ' + word);
     word = word.lower()
-    db_words = Word.single_object.filter(word=word, from_translation=False);
-   
-    if not db_words:
-      db_words = ()
-      print("Word is not in our DB");
-      for language in LANGUAGES:
-        print(language)
-        try:
-          objects_manager = getattr(Word, language + '_objects')
-          print(objects_manager)
+    db_words = ()
+    langs = Language.objects.all()
+    print(langs)
+    for l in langs: 
+      print(l)
+      w = Word.single_object.filter(word=word, language=l.language, from_translation=False)
+      if w:
+        db_words.append(*w)
+      else:
+        did_lookup = LookupMap.objects.filter(word=word, language=l).exists()
+        print(did_lookup)
+        if not did_lookup:
+          language = l.language
           try:
-            fetch_method = getattr(objects_manager, 'fetch_word')
-            words = fetch_method(word)
-            if words:
-              db_words = words + db_words
+            objects_manager = getattr(Word, language + '_objects')
+            print(objects_manager)
+            try:
+              fetch_method = getattr(objects_manager, 'fetch_word')
+              words = fetch_method(word)
+              if words:
+                db_words = words + db_words
+            except Exception as e:
+              print(e)
+              print('No method to fetch word')
+              raise Http404("No Fetch API for the word:", word)
           except Exception as e:
             print(e)
-            print('No method to fetch word')
+            print('No method to fecth word')
             raise Http404("No Fetch API for the word:", word)
-        except Exception as e:
-          print(e)
-          print('No method to fecth word')
-          raise Http404("No Fetch API for the word:", word)
 
     if not db_words:
       print("Could not fetch word: " + word);
       raise Http404("No API for the word:", word)
 
+    LookupMap.objects.update_or_create(word=word, language=l, lookup_date=timezone.now())
 # now that i have words in the db 
 # it is time to collect them in a collection
 
@@ -668,15 +675,20 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
     print(word);
 
     orig_word = Word.english_objects.get(word=word)
-    translated_words = orig_word.translations.order_by('pk').distinct().all()
-
-    if not translated_words:
-      translated_words = []
-      print("Translations for this Word are not in our DB");
-      for language in LANGUAGES:
+    translated_words = []
+    langs = Language.objects.all()
+    print(langs)
+    for l in langs: 
+      print(l)
+      if orig_word.language == l.language:
+        continue
+      t_words = orig_word.translations.filter(language=l.language)
+      if t_words:
+        translated_words.extend(t_words) 
+      else:
+        did_translations = TranslationsMap.objects.filter(word=word, language=l).exists()
+        language = l.language
         print(language)
-        if orig_word.language == language:
-          continue
         try:
           objects_manager = getattr(Word, language + '_objects')
           print(objects_manager)
@@ -698,6 +710,8 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
     if not translated_words:
       print("Could not fetch translations:" + word);
       raise Http404("No Translation API for the word:", word)
+    for l in langs: 
+      TranslationsMap.objects.update_or_create(word=word, language=l, lookup_date=timezone.now())
       
     serializer = TranslationSerializer(translated_words, many=True)
     return Response(serializer.data)

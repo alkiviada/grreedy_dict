@@ -775,3 +775,29 @@ class WordNote(models.Model):
     word = models.ForeignKey(Word, on_delete=models.CASCADE, related_name="word_notes")
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
     note = models.TextField()
+
+class Language(models.Model):
+  language = models.CharField(max_length=33)
+  num_id = models.IntegerField()
+
+  def __str__(self):
+    return self.language
+
+  class Meta:
+    ordering = ('num_id',)
+
+class LookupMap(models.Model):
+    word = models.CharField(max_length=60)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
+    lookup_date = models.DateTimeField('date looked up')
+
+    class Meta:
+        ordering = ('-lookup_date',)
+
+class TranslationsMap(models.Model):
+    word = models.CharField(max_length=60)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
+    lookup_date = models.DateTimeField('date looked up')
+
+    class Meta:
+        ordering = ('-lookup_date',)

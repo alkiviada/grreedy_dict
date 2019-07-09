@@ -15,13 +15,13 @@ const Conjugate = (props) => {
     console.log(fetchingMap)
     if (fetchingMap[word]) {
       return (
-          <div className="clear-notification-message">
-            <em>Loading...</em>
+          <div className="load-notify">
+            Loading...
           </div>
       )
     }
     return wordConjs['error'] ? ( 
-      <div className="notify-warn">
+      <div className="warn-notify">
         No conjugations 
       </div>
     ) : 

@@ -1,0 +1,21 @@
+2019-07-09 17:04:37.760 EDT [36010] LOG:  could not bind IPv6 address "::1": Address already in use
+2019-07-09 17:04:37.760 EDT [36010] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2019-07-09 17:04:37.760 EDT [36010] LOG:  could not bind IPv4 address "127.0.0.1": Address already in use
+2019-07-09 17:04:37.760 EDT [36010] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2019-07-09 17:04:37.760 EDT [36010] WARNING:  could not create listen socket for "localhost"
+2019-07-09 17:04:37.760 EDT [36010] FATAL:  could not create any TCP/IP sockets
+2019-07-09 17:04:37.760 EDT [36010] LOG:  database system is shut down
+2019-07-09 17:05:06.019 EDT [36138] LOG:  listening on IPv6 address "::1", port 5432
+2019-07-09 17:05:06.019 EDT [36138] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2019-07-09 17:05:06.020 EDT [36138] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2019-07-09 17:05:06.036 EDT [36139] LOG:  database system was shut down at 2019-07-09 17:04:13 EDT
+2019-07-09 17:05:06.041 EDT [36138] LOG:  database system is ready to accept connections
+2019-07-09 17:05:15.402 EDT [36152] FATAL:  role "postgres" does not exist
+2019-07-09 17:07:22.310 EDT [36168] FATAL:  database "grreedy-dict-db" does not exist
+2019-07-09 17:07:45.500 EDT [36172] FATAL:  database "grreedy-dict-db" does not exist
+2019-07-09 19:41:00.214 EDT [37078] ERROR:  null value in column "lookup_date" violates not-null constraint
+2019-07-09 19:41:00.214 EDT [37078] DETAIL:  Failing row contains (1, moment, null, 1).
+2019-07-09 19:41:00.214 EDT [37078] STATEMENT:  INSERT INTO "words_translationsmap" ("word", "language_id", "lookup_date") VALUES ('moment', 1, NULL) RETURNING "words_translationsmap"."id"
+2019-07-09 19:41:38.614 EDT [37082] ERROR:  null value in column "lookup_date" violates not-null constraint
+2019-07-09 19:41:38.614 EDT [37082] DETAIL:  Failing row contains (2, point, null, 1).
+2019-07-09 19:41:38.614 EDT [37082] STATEMENT:  INSERT INTO "words_translationsmap" ("word", "language_id", "lookup_date") VALUES ('point', 1, NULL) RETURNING "words_translationsmap"."id"

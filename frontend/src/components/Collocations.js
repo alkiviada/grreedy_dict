@@ -16,13 +16,11 @@ const Collocations = (props) => {
     const wordCollocs = collocs[word];
     if (fetchingMap[word]) {
       return (
-          <div className="clear-notification-message">
-            <em>Loading...</em>
-        </div>
+          <div className="load-notify">Loading... </div>
       )
     }
     return wordCollocs['error'] ? ( 
-      <div className="notify-warn">
+      <div className="warn-notify">
         No collocations
       </div>
     ) : 

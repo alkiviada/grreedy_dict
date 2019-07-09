@@ -159,3 +159,8 @@ export const clearAuthError = () => dispatch => {
     type: CLEAR_ERROR,
   })
 };
+export const setHasCollections = () => dispatch => {
+  dispatch({
+    type: SET_HAS_COLLECTIONS,
+  })
+};

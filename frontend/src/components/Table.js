@@ -141,7 +141,7 @@ class Table extends Component {
       return (
         <BodyClassName className="body-with-image">
         <div className="words-container">
-        <em>Loading...</em> 
+        <div className="load-notify">Loading...</div> 
         </div>
         </BodyClassName>
       )
@@ -162,7 +162,7 @@ class Table extends Component {
     ) : (
     <BodyClassName className={data.length < 11 ? 'body-with-image' : ''}>
     <div className="words-container" ref={this.myRef}>
-    { wordFetching ? <em>Loading...</em> : '' }
+    { wordFetching ? <div className="load-notify">Loading...</div> : '' }
     { pageNext ? <div className="pagination-1">
                  <button className="pagination-a" onClick={(e) => this.navigateToPage(e, uuid, pageNext)}>&#9654;</button>
                  <button className="pagination-b" onClick={(e) => this.navigateToPage(e, uuid, pageNext)}>&#9654;</button>

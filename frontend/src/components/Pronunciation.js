@@ -13,13 +13,13 @@ const Pronunciation = (props) => {
     const wordPronounce = pronunciations[word];
     if (fetchingMap[word]) {
       return (
-          <div className="clear-notification-message">
-            <em>Loading...</em>
+          <div className="load-notify">
+            Loading...
           </div>
       )
     }
     return wordPronounce['error'] || !wordPronounce.reduce((havePronounce, e) => { return e.pronounce != '' ? 1 : 0}, 0) ? ( 
-      <div className="notify-warn">
+      <div className="warn-notify">
         No pronunciation found
       </div>
     ) : 

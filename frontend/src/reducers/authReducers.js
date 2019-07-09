@@ -7,6 +7,7 @@ const initialState = {
   user: null,
   loginErrors: {},
   registerErrors: {},
+  hasCollections: null,
 };
 
 
@@ -14,6 +15,8 @@ export default function auth(state=initialState, action) {
   switch (action.type) {
     case 'USER_LOADING':
       return {...state, isLoading: true};
+    case 'SET_HAS_COLLECTIONS':
+      return {...state, hasCollections: true};
 
     case 'USER_LOADED':
       return {...state, isAuthenticated: true, isLoading: false, user: action.user};
@@ -38,7 +41,7 @@ export default function auth(state=initialState, action) {
 
     case 'LOGOUT_SUCCESSFUL':
       console.log('i am logging out, true')
-      return {...state, loginErrors: action.data, token: null, user: null, has_collections: null,
+      return {...state, loginErrors: action.data, token: null, user: null, hasCollections: null,
         isAuthenticated: false, isLoading: false};
     case CLEAR_ERROR: return { ...state, 
                                loginErrors: null,

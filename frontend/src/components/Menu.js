@@ -86,7 +86,7 @@ class Menu extends Component {
       return <div className="empty-menu"></div>
     }
     console.log(auth)
-    console.log(auth.has_collections)
+    console.log(auth.hasCollections)
     const colls = this.props.colls
     const opened = this.props.menuOpen
     return opened ? 
@@ -122,7 +122,7 @@ class Menu extends Component {
       </button>
          <nav className="menu" role="navigation" aria-label="Grreedy Menu">
           <ul className="menu-list">
-               { auth.has_collections ?
+               { auth.hasCollections ?
             <li className="menu-li">
                <button className={this.state.collsClass} onClick={this.handleCollectionsClick}>Collections</button>
                <ul class="collections-list">
@@ -205,7 +205,7 @@ class Menu extends Component {
       </button>
          <nav className="menu" role="navigation" aria-label="Grreedy Menu">
           <ul className="menu-list">
-               { auth.has_collections ?
+               { auth.hasCollections ?
             <li className="menu-li">
                <button className={this.state.collsClass} onClick={this.handleCollectionsClick}>Collections</button>
                <ul class="collections-list">

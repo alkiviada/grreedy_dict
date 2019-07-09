@@ -1270,19 +1270,22 @@ a[href^="/homework/conjugate"]::after {
   justify-content: space-between;
 }
 
-.login-notif {
-  background-color: inherit;
-  color: white;
-  font-family: var(--body-font);
-  margin-top:5px;
+.load-notify {
+  font-size: 1.7rem;
+  font-style: italic;
+  margin: .5em 0 0 .5em;
 }
 
-.notify-warn {
-  background-color: inherit;
+.word-about .load-notify {
+  margin: 0 0 .5em .5em;
+}
+
+
+.warn-notify {
+  font-size: 1.7rem;
+  font-style: italic;
+  margin: 0 0 .5em .5em;
   color: red;
-  padding: .1em .5em .5em; 
-  font-family: var(--word-font);
-  font-size: 80%;
 }
 
 

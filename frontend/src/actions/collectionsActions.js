@@ -9,6 +9,7 @@ import { SAVE_COLLECTION,
          FETCH_COLLECTIONS_FULFILLED, 
          FETCH_COLLECTION_FULFILLED, 
          SWITCH_TAB,
+         SET_HAS_COLLECTIONS,
          SWITCH_VISIBILITY,
          FETCH_COLLECTIONS, 
          FETCH_COLLECTION, 
@@ -193,6 +194,9 @@ export const saveCollection = (name, wordsString) => { return (dispatch, getStat
           dispatch({
             type: FETCH_WORDS_FULFILLED,
             payload: { 'words': [], 'allWordsMap': {} }
+          });
+          dispatch({
+            type: SET_HAS_COLLECTIONS,
           });
           return json;
         }
