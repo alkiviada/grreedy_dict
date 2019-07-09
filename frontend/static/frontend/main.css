@@ -1061,6 +1061,7 @@ ul {
 
 
 .pagination-1, .pagination-2, .pagination-1-placeholder, .pagination-2-placeholder {
+  pointer-events: all;
   position: sticky;
   position: -webkit-sticky;
   top: 3em;
@@ -1298,7 +1299,7 @@ a[href^="/homework/conjugate"]::after {
 }
 @media (max-width:1123px) {
 .react-tabs__tab-list {
-  width: 68%;
+  width: 69.5%;
 }
 }
 

@@ -28,14 +28,17 @@ export const scrollToDomRef = (ref, offset = 35) => {
 }
 
 export const makeTabLabel = (stub) => {
-  const tabLabelPartsCapitalized = stub.split(' ').map(p => p.charAt(0) + p.slice(1).toLowerCase())
-  return tabLabelPartsCapitalized.join(' ');
+  return tabLabels[stub] ? tabLabels[stub] : stub;
+}
+
+const tabLabels = {
+ 'WordNote': 'Add Note'
 }
 
 export const tabs = [ 'Original word', 
-               'TRANSLATIONS', 
-               'COLLOCATIONS', 
-               'SYNONYMS', 
-               'PRONUNCIATION', 
-               'ADD NOTE', 
-               'CONJUGATE' ] 
+               'Translations', 
+               'Collocations', 
+               'Synonyms', 
+               'Pronunciation', 
+               'WordNote', 
+               'Conjugate' ] 

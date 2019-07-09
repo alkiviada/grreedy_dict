@@ -39,6 +39,10 @@ const carouselItems4 = 4;
 const carouselItems3 = 3;
 const carouselItems2 = 2;
 
+const tabPanels = [
+  'Translations', 'Collocations', 'Synonyms', 'Pronounciation', 'Add Note', 'Conjugate'
+]
+
 class WordTabs extends Component {
   constructor(props) { 
     super(props)
@@ -75,24 +79,21 @@ class WordTabs extends Component {
     element: PropTypes.array.isRequired,
   };
 
-  handleSelect(prev, index, word, isEnglishWord, isVerb, parentRef) {
+  handleSelect(prev, index, word, myTabs, parentRef) {
     const parentOffset = parentRef.current.scrollTop
     if (parentOffset && [1, 2, 3].filter(i => i == prev)) {
       this.props.logWordDivOffset(word, parentOffset);
     }
-    let myTabs = tabs
-    if (!isEnglishWord) {
-      myTabs = myTabs.filter(t => t != 'TRANSLATIONS')
-    }
-    if (!isVerb) {
-      myTabs = myTabs.filter(t => t != 'CONJUGATE')
-    }
+
     const myItemsCount = myTabs.length + 1
+
     let c5 = this.state.carouselIdx5 
     let c4 = this.state.carouselIdx4
     let c3 = this.state.carouselIdx3
     let c2 = this.state.carouselIdx2
-
+    console.log(myTabs)
+    console.log(myTabs[index-1])
+    
     if (index) { 
 // this is a legit tab - let's switch to it
       if (index == myItemsCount) {
@@ -109,27 +110,27 @@ class WordTabs extends Component {
       this.props.switchTab(index, word, this.props.mapTabIndex);
       this.setState( { tabIndex: index } );
     switch (myTabs[index-1]) {
-      case 'ADD NOTE':
+      case 'WordNote':
         if (!this.props.allNotes[word]) {
           console.log('looking up notes'); 
           this.props.requestNote(word)
           this.props.fetchNote(word)
         }
         break
-      case 'TRANSLATIONS':
+      case 'Translations':
         if (!this.props.allTranslations[word]) {
           this.props.requestTranslations(word, this.props.transFetchingMap)
           this.props.lookUpTranslations(word, this.props.allTranslations, this.props.transFetchingMap)
         }
         break
-      case 'COLLOCATIONS':
+      case 'Collocations':
         if (!this.props.allCollocations[word]) {
           console.log('looking up collocations'); 
           this.props.requestCollocations(word, this.props.collocsFetchingMap)
           this.props.lookUpCollocations(word, this.props.allCollocations, this.props.collocsFetchingMap)
         }
         break
-      case 'SYNONYMS':
+      case 'Synonyms':
         if (!this.props.allSynonyms[word]) {
           console.log('looking up synonyms'); 
           this.props.requestSynonyms(word, this.props.synonymsFetchingMap)
@@ -137,7 +138,7 @@ class WordTabs extends Component {
           this.props.lookUpSynonyms(word, this.props.allSynonyms, this.props.synonymsFetchingMap)
         }
         break
-      case 'PRONUNCIATION':
+      case 'Pronunciation':
         if (!this.props.allPronunciations[word]) {
           console.log('looking up pronuciation'); 
           this.props.requestPronunciation(word)
@@ -145,7 +146,7 @@ class WordTabs extends Component {
           this.props.fetchPronunciation(word)
         }
         break
-      case 'CONJUGATE':
+      case 'Conjugate':
         console.log(9999999999)
         if (!this.props.allConjugations[word]) {
           console.log('looking up conjugations'); 
@@ -179,8 +180,25 @@ class WordTabs extends Component {
     const isEnglishWord = element.reduce((englishFlag, e) => 
       {return e['language'] === 'english' ?  ++englishFlag : englishFlag}, 0)
 
+    const isNotOnlyEnglishWord = element.reduce((onlyEnglishFlag, e) => 
+      {return e['language'] != 'english' ?  ++onlyEnglishFlag : onlyEnglishFlag}, 0)
+
+    const isNotOnlySwedishWord = element.reduce((notOnlySwedishFlag, e) => 
+      {return e['language'] != 'swedish' ?  ++notOnlySwedishFlag : notOnlySwedishFlag}, 0)
+
+
+    console.log(word)
+
+    const isNonPronWord = element.reduce((nonPronFlag, e) => 
+      {return e['language'].match('swedish|russian|ukrainian') ?  ++nonPronFlag : nonPronFlag}, 0)
+
     const isVerb = element.reduce((isVerbFlag, e) => 
       {return e['is_verb'] ? ++isVerbFlag : isVerbFlag}, 0)
+    
+    const myTabs = tabs.filter(t => (!isEnglishWord && t == 'Translations' ? 0 : 1) && 
+      (isNonPronWord && t == 'Pronounciation' ? 0 : 1) && (!isVerb && t == 'Conjugate' ? 0 : 1) && (!isNotOnlyEnglishWord && (t == 'Synonyms' || t == 'Collocations') ? 0 : 1) && (!isNotOnlySwedishWord && t == 'Synonyms' ? 0 : 1))
+     
+    console.log(myTabs)
 
     const iAmHidden5 = this.state.carouselIdx5
     const iAmHidden4 = this.state.carouselIdx4
@@ -192,13 +210,6 @@ class WordTabs extends Component {
       iAmHidden3 ? "tab-carousel arrow-tab3 react-tabs__tab" : 
       iAmHidden2 ? "tab-carousel arrow-tab2 react-tabs__tab" : ''
 
-    let myTabs = tabs
-    if (!isEnglishWord) {
-      myTabs = myTabs.filter(t => t != 'TRANSLATIONS')
-    }
-    if (!isVerb) {
-      myTabs = myTabs.filter(t => t != 'CONJUGATE')
-    }
     const myItemsCount = myTabs.length + 1
 
     let canMoveRight5 = myItemsCount - iAmHidden5 - 1 > carouselItems5 ? 1 : 0 
@@ -208,7 +219,7 @@ class WordTabs extends Component {
 
     return ( 
       <Tabs selectedIndex={this.state.tabIndex} 
-        onSelect={(prev, index) => this.handleSelect(index, prev, word, isEnglishWord, isVerb, parentRef)}>
+        onSelect={(prev, index) => this.handleSelect(index, prev, word, myTabs, parentRef)}>
         <TabList>
           { iAmHidden5 + iAmHidden4 + iAmHidden3 + iAmHidden2 > 0 ? 
               <Tab className={canMoveLeftClass}>&#9664;</Tab> :
@@ -262,18 +273,31 @@ class WordTabs extends Component {
                )
           }
         </TabPanel>
-        <TabPanel>
-          { isEnglishWord ? 
-            <Translations word={word} addRow={addRow} parentRef={parentRef} /> : 
-            <Collocations word={word} addRow={addRow} parentRef={parentRef} />}
-        </TabPanel>
-        <TabPanel>
-          { isEnglishWord ? <Collocations word={word} addRow={addRow} parentRef={parentRef} /> : <Synonyms word={word} addRow={addRow} parentRef={parentRef} />}
-        </TabPanel>
-        { isEnglishWord ? <TabPanel><Synonyms word={word} addRow={addRow} parentRef={parentRef} /></TabPanel> : <TabPanel><Pronunciation word={word} /></TabPanel>}
-        { isEnglishWord ? <TabPanel><Pronunciation word={word} /></TabPanel> : <TabPanel><WordNote word={word} /></TabPanel>}
-        { isEnglishWord ? <TabPanel><WordNote word={word} /></TabPanel> : isVerb ? <TabPanel><Conjugate word={word} /></TabPanel> : '' }
-        { isVerb ? <TabPanel><Conjugate word={word} /></TabPanel> : '' }
+        {  myTabs.slice(1).map(t => {
+             console.log(t)
+    switch (t) {
+      case 'WordNote':
+             return <TabPanel><WordNote word={word} /></TabPanel>
+        break
+      case 'Translations':
+             return <TabPanel><Translations word={word} addRow={addRow} parentRef={parentRef} /></TabPanel>
+        break
+      case 'Collocations':
+             return <TabPanel><Collocations word={word} addRow={addRow} parentRef={parentRef} /></TabPanel>
+        break
+      case 'Synonyms':
+             return <TabPanel><Synonyms word={word} addRow={addRow} parentRef={parentRef} /></TabPanel>
+        break
+      case 'Pronunciation':
+             return <TabPanel><Pronunciation word={word} /></TabPanel>
+        break
+      case 'Conjugate':
+             return <TabPanel><Conjugate word={word} /></TabPanel>
+        break
+      default:
+        Function.prototype()
+           }}) 
+        }
         <TabPanel className="carousel-dummy-tab" />
      </Tabs>
     );
