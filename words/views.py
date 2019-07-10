@@ -303,7 +303,7 @@ class WordSingleCreate(generics.ListAPIView):
       print(l)
       w = Word.single_object.filter(word=word, language=l.language, from_translation=False)
       if w:
-        db_words.append(*w)
+        db_words = (*db_words, *w)
       else:
         did_lookup = LookupMap.objects.filter(word=word, language=l).exists()
         print(did_lookup)
@@ -332,7 +332,9 @@ class WordSingleCreate(generics.ListAPIView):
     for l in langs:
       print(l.language)
       print(word)
-      LookupMap.objects.update_or_create(word=word, language=l, lookup_date=timezone.now())
+      did_lookup = LookupMap.objects.filter(word=word, language=l).exists()
+      if not did_lookup:
+        LookupMap.objects.create(word=word, language=l, lookup_date=timezone.now())
 # now that i have words in the db 
 # it is time to collect them in a collection
 
@@ -706,7 +708,7 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
           except Exception as e:
             print(e)
             print('No method to translate word')
-            raise Http404("No Tranlate API for the word:", word)
+            raise Http404("No Translate API for the word:", word)
         except Exception as e:
           print(e)
           print('No method to translate word')
@@ -715,7 +717,9 @@ class WordSingleCreateTranslate(generics.RetrieveAPIView):
       print("Could not fetch translations:" + word);
       raise Http404("No Translation API for the word:", word)
     for l in langs: 
-      TranslationsMap.objects.update_or_create(word=word, language=l, lookup_date=timezone.now())
+      did_translations = TranslationsMap.objects.filter(word=word, language=l).exists()
+      if not did_translations:
+        TranslationsMap.objects.update_or_create(word=word, language=l, lookup_date=timezone.now())
       
     serializer = TranslationSerializer(translated_words, many=True)
     return Response(serializer.data)
