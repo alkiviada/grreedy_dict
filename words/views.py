@@ -454,6 +454,8 @@ class WordSingleCreateSynonyms(generics.RetrieveAPIView):
       words = Word.single_object.filter(word=word)
       for w in words:
         language = w.language
+        if language == 'english' or language == 'swedish':
+          continue
         print(language)
         try:
           objects_manager = getattr(Word, language + '_objects')

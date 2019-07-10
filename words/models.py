@@ -668,11 +668,12 @@ class FrenchWordManager(RomanceWordManager, models.Manager):
         word.save(update_fields=['pronounce'])
 
   def fetch_synonyms(self, orig_word):
-    r = try_fetch("http://www.cnrtl.fr/synonymie/" + orig_word.word)
+    r = try_fetch("https://www.cnrtl.fr/synonymie/" + orig_word.word)
     if not r:
       return []
     synonyms = []
     word_page = r.content
+    print(word_page)
     word_soup = BeautifulSoup(word_page, features="html.parser")
     syns = word_soup.findAll('td', {'class': 'syno_format'})
     for s in syns:
