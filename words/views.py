@@ -227,6 +227,8 @@ class WordSingleDelete(generics.RetrieveAPIView):
     for w in db_words:
       if not w.words.count():
         w.delete()
+        TranslationsMap.objects.filter(word=word).delete()
+        LookupMap.objects.filter(word=word).delete()
 
     if not is_empty:
       if (not time or int(coll.last_modified_date.timestamp()) > int(time)):
@@ -327,8 +329,10 @@ class WordSingleCreate(generics.ListAPIView):
     if not db_words:
       print("Could not fetch word: " + word);
       raise Http404("No API for the word:", word)
-
-    LookupMap.objects.update_or_create(word=word, language=l, lookup_date=timezone.now())
+    for l in langs:
+      print(l.language)
+      print(word)
+      LookupMap.objects.update_or_create(word=word, language=l, lookup_date=timezone.now())
 # now that i have words in the db 
 # it is time to collect them in a collection
 

@@ -19,3 +19,6 @@
 2019-07-09 19:41:38.614 EDT [37082] ERROR:  null value in column "lookup_date" violates not-null constraint
 2019-07-09 19:41:38.614 EDT [37082] DETAIL:  Failing row contains (2, point, null, 1).
 2019-07-09 19:41:38.614 EDT [37082] STATEMENT:  INSERT INTO "words_translationsmap" ("word", "language_id", "lookup_date") VALUES ('point', 1, NULL) RETURNING "words_translationsmap"."id"
+2019-07-09 19:46:07.654 EDT [36638] ERROR:  column words_lookupmap.word_id does not exist at character 32
+2019-07-09 19:46:07.654 EDT [36638] HINT:  Perhaps you meant to reference the column "words_lookupmap.word".
+2019-07-09 19:46:07.654 EDT [36638] STATEMENT:  SELECT "words_lookupmap"."id", "words_lookupmap"."word_id", "words_lookupmap"."language_id", "words_lookupmap"."lookup_date" FROM "words_lookupmap" ORDER BY "words_lookupmap"."lookup_date" DESC LIMIT 21
