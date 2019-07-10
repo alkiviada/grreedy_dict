@@ -1233,9 +1233,11 @@ a[data-word-tool-tip]::after {
   background-color: var(--sky-color);
 }
 
-a[data-word-tool-tip]:hover::after {
-/*  transform: scale(1); */
-  bottom: 70%;
+@media (min-width:888px) {
+  a[data-word-tool-tip]:hover::after {
+    transform: scale(1); 
+    bottom: 70%;
+  }
 }
 
 .word-link, .conjugate-link {
