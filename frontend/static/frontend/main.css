@@ -812,6 +812,7 @@ ul {
 
 .look-up-button {
   cursor: pointer;
+  overflow: visible;
   position: absolute;
   z-index: 12;
   right: 2em;
@@ -855,8 +856,8 @@ ul {
   font-size: 1.2rem;
   width: 100%;
   margin: .2em;
-  left: .2em;
-  bottom: .4em;
+  left: .5em;
+  bottom: .3em;
   padding-left: .4em;
   color: rgba(0,0,0,.87);
   word-wrap: break-word;

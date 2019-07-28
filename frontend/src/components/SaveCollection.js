@@ -90,9 +90,7 @@ class SaveCollection extends Component {
     </button>
 </div>
     </form> : 
-      <div className="colls-footer">
         <div className="save-coll"><p className="grid-notification"><em>Saving...</em></p></div>
-        </div>
       );
     }
     else {
