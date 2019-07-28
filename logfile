@@ -22,3 +22,16 @@
 2019-07-09 19:46:07.654 EDT [36638] ERROR:  column words_lookupmap.word_id does not exist at character 32
 2019-07-09 19:46:07.654 EDT [36638] HINT:  Perhaps you meant to reference the column "words_lookupmap.word".
 2019-07-09 19:46:07.654 EDT [36638] STATEMENT:  SELECT "words_lookupmap"."id", "words_lookupmap"."word_id", "words_lookupmap"."language_id", "words_lookupmap"."lookup_date" FROM "words_lookupmap" ORDER BY "words_lookupmap"."lookup_date" DESC LIMIT 21
+2019-07-10 14:16:48.303 EDT [563] LOG:  listening on IPv6 address "::1", port 5432
+2019-07-10 14:16:48.303 EDT [563] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2019-07-10 14:16:48.305 EDT [563] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2019-07-10 14:16:48.457 EDT [564] LOG:  database system was interrupted; last known up at 2019-07-10 12:39:57 EDT
+2019-07-10 14:16:48.531 EDT [564] LOG:  database system was not properly shut down; automatic recovery in progress
+2019-07-10 14:16:48.533 EDT [564] LOG:  redo starts at 0/1A28280
+2019-07-10 14:16:48.533 EDT [564] LOG:  invalid record length at 0/1A28360: wanted 24, got 0
+2019-07-10 14:16:48.533 EDT [564] LOG:  redo done at 0/1A28328
+2019-07-10 14:16:48.571 EDT [563] LOG:  database system is ready to accept connections
+2019-07-11 11:43:44.599 EDT [563] LOG:  received smart shutdown request
+2019-07-11 11:43:44.609 EDT [563] LOG:  worker process: logical replication launcher (PID 570) exited with exit code 1
+2019-07-11 11:43:44.618 EDT [565] LOG:  shutting down
+2019-07-11 11:43:44.701 EDT [563] LOG:  database system is shut down
