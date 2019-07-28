@@ -299,10 +299,10 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
   position: absolute;
   display: block;
   content: ' ';
-  top: -.95em;
-  width: 105%;
+  top: -1.2em;
+  width: 106%;
   background-color: white;
-  height: 2.4em;
+  height: 2.8em;
   filter: url(#filter);
 }
 
@@ -815,10 +815,10 @@ ul {
   overflow: visible;
   position: absolute;
   z-index: 12;
-  right: 2em;
-  bottom: 3.1em;
-  width: 2em;
-  height: 2em;
+  right: 0;
+  bottom: 1.5em;
+  width: 4em;
+  height: 4em;
   border: none;
   background: transparent;
   transition: transform 200ms ease-in-out;
@@ -839,8 +839,6 @@ ul {
 }
 
 .look-up-svg-container {
-  width: 180%;
-  height: auto;
 }
 
 .input-form-wrapper {
@@ -887,7 +885,7 @@ ul {
   color: var(--sky-color);
   opacity: .5;
   font-family: var(--word-font);
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   line-height: 1;
   z-index: 10;
   position: absolute;
