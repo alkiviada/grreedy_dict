@@ -35,3 +35,12 @@
 2019-07-11 11:43:44.609 EDT [563] LOG:  worker process: logical replication launcher (PID 570) exited with exit code 1
 2019-07-11 11:43:44.618 EDT [565] LOG:  shutting down
 2019-07-11 11:43:44.701 EDT [563] LOG:  database system is shut down
+2019-07-28 14:40:17.559 EDT [1094] LOG:  listening on IPv6 address "::1", port 5432
+2019-07-28 14:40:17.559 EDT [1094] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2019-07-28 14:40:17.561 EDT [1094] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2019-07-28 14:40:17.710 EDT [1095] LOG:  database system was interrupted; last known up at 2019-07-28 11:34:41 EDT
+2019-07-28 14:40:17.805 EDT [1095] LOG:  database system was not properly shut down; automatic recovery in progress
+2019-07-28 14:40:17.807 EDT [1095] LOG:  redo starts at 0/1A50DB0
+2019-07-28 14:40:17.807 EDT [1095] LOG:  invalid record length at 0/1A50E90: wanted 24, got 0
+2019-07-28 14:40:17.807 EDT [1095] LOG:  redo done at 0/1A50E58
+2019-07-28 14:40:17.861 EDT [1094] LOG:  database system is ready to accept connections

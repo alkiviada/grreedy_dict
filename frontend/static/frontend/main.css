@@ -1073,7 +1073,7 @@ ul {
   pointer-events: all;
   position: sticky;
   position: -webkit-sticky;
-  top: 3em;
+  top: 3.4em;
   z-index: 10;
 }
 
