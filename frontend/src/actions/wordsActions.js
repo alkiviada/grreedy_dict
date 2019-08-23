@@ -11,6 +11,7 @@ import {
   MAP_REF,
   SWITCH_VISIBILITY
 } from './types';
+import { history } from '../components/WordsRoot'
 
 import { conflateWords, filterMap, reshuffleWordsOnPages, shiftWordsOnPages } from './helpers';
 import { maxWordsOnPages } from './constants';
@@ -50,7 +51,6 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
   const { items } = getState().words;
   let { pagePrev, pageNext, allWordCount, allWordsMap } = getState().words;
   const { visibilityMap } = getState().visibility
-  console.log(visibilityMap)
 
   let { lastModifiedMap, name } = getState().collections;
 
@@ -99,7 +99,6 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
           console.log('Server returned error status');
           dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed'}})
         } else {
-          console.log('i have some fresh json')
           let words = []
           if (json.words) {
             name = json.name;
@@ -145,7 +144,6 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
             pagePrev = page > 1 ? page - 1 : 0
             pageNext = (page*maxWordsOnPages) < allWordCount ? page + 1 : 0
           }
-          console.log(name)
           dispatch({
             type: FETCH_COLLECTION_FULFILLED,
             payload: { uuid, name }
@@ -166,6 +164,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
                        lastModifiedMap 
                      }
            });
+           history.push(`/${page}`);
         }
       },
       // Either fetching or parsing failed!
@@ -206,8 +205,6 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
         } else {
           // Status looks good
          let words;
-         console.log('after delete')
-         console.log(json)
          if (json.empty) {
            words = []
            allWordsMap = {}
@@ -240,7 +237,6 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
            pagePrev = page > 1 ? page - 1 : 0
            pageNext = (page*maxWordsOnPages) < allWordCount ? page + 1 : 0
          }
-         console.log(allWordsMap)
          dispatch({
             type: FETCH_WORDS_FULFILLED,
             payload: { words, 
@@ -260,7 +256,6 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
         else {
           lastModifiedMap = { ...lastModifiedMap, [uuid]: { time, 'words': lastModifiedMap[uuid]['words'], name, allWordCount } } 
         }
-        console.log(lastModifiedMap)
         dispatch({
           type: SAVE_COLLECTION_FULFILLED,
           payload: { items: collections,
@@ -312,7 +307,6 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
           // Status looks good
           const { word, name, uuid, page } = json
 
-          console.log(lastModifiedMap[uuid])
 
           let words = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['words'][page] : []
 
@@ -320,9 +314,6 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
           let pagePrev = json.page_prev ? json.page_prev : 0
           let allWordCount = json.all_word_count
 
-          console.log(pagePrev)
-          console.log(pageNext)
-          console.log(json)
 
           if (json.words) {
             words = conflateWords(json.words)
@@ -342,7 +333,6 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
             payload: { ...visibilityMap, ...{ [obj.word]: 'show' } }
           });
           if (words.length >= maxWordsOnPages) {
-            console.log('popping')
             const popped = words.pop();
             pageNext = 2;            
             allWordsMap = filterMap(allWordsMap, popped.word)
@@ -353,8 +343,6 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
             words = [ obj, ...words ]
             allWordsMap = { ...allWordsMap, ...{ [obj.word]: page } }
           }
-          console.log(allWordsMap)
-          console.log(lastModifiedMap)
           
           dispatch({
             type: FETCH_WORD_FULFILLED,

@@ -91,8 +91,6 @@ class WordTabs extends Component {
     let c4 = this.state.carouselIdx4
     let c3 = this.state.carouselIdx3
     let c2 = this.state.carouselIdx2
-    console.log(myTabs)
-    console.log(myTabs[index-1])
     
     if (index) { 
 // this is a legit tab - let's switch to it
@@ -187,7 +185,6 @@ class WordTabs extends Component {
       {return e['language'] != 'swedish' ?  ++notOnlySwedishFlag : notOnlySwedishFlag}, 0)
 
 
-    console.log(word)
 
     const isNonPronWord = element.reduce((nonPronFlag, e) => 
       {return e['language'].match('swedish|russian|ukrainian') ?  ++nonPronFlag : nonPronFlag}, 0)
@@ -198,7 +195,6 @@ class WordTabs extends Component {
     const myTabs = tabs.filter(t => (!isEnglishWord && t == 'Translations' ? 0 : 1) && 
       (isNonPronWord && t == 'Pronounciation' ? 0 : 1) && (!isVerb && t == 'Conjugate' ? 0 : 1) && (!isNotOnlyEnglishWord && (t == 'Synonyms' || t == 'Collocations') ? 0 : 1) && (!isNotOnlySwedishWord && t == 'Synonyms' ? 0 : 1))
      
-    console.log(myTabs)
 
     const iAmHidden5 = this.state.carouselIdx5
     const iAmHidden4 = this.state.carouselIdx4
@@ -274,7 +270,6 @@ class WordTabs extends Component {
           }
         </TabPanel>
         {  myTabs.slice(1).map(t => {
-             console.log(t)
     switch (t) {
       case 'WordNote':
              return <TabPanel><WordNote word={word} /></TabPanel>

@@ -27,6 +27,7 @@ def generate_examples(word_pk):
     conjugs = Conjugation.objects.filter(word=verb, tense=t)
     seen_vf = {}
     for c in conjugs:
+      print('I have these conjugations')
       print(c)
       vf = c.verb_form
       vf_re_sep = ''
