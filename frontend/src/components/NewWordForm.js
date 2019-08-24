@@ -40,7 +40,6 @@ class NewWordForm extends Component {
 
   hideLabel(e, labelRef) {
     const key = labelRef.current.htmlFor 
-    console.log(key);
     this.setState({ nwLabel: 'floating-label top-label' });
   }
 
@@ -50,7 +49,6 @@ class NewWordForm extends Component {
 
   inputOrLabel(e, labelRef) {
     if (e.target.value == "") {
-      console.log('hmm')
       this.showLabel(e, labelRef);
     } 
     else if (e.target.value != "") {
@@ -89,7 +87,6 @@ class NewWordForm extends Component {
 
   render () {
     const opened = this.props.menuOpen
-    console.log(opened)
     if (opened)
       return ''
 
@@ -98,14 +95,9 @@ class NewWordForm extends Component {
     console.log('this is my errror ', error)
 
     const word = !this.props.error ? this.state.word : this.props.word
-    console.log(this.state.nwLabel)
-    console.log(word)
-    if (word)
-      console.log('yes i have word :',  word)
     const nwLabel = error ? 'floating-label top-label error' : word ? 'floating-label top-label' : this.state.nwLabel
     const nwClass = error ? 'input error' : 'input'
     const nwLabelText = error ? "Cant' find word" : 'New Word'
-    console.log('rendering new word form');
     return (
       !fetching ? 
       <form className="new-word" onSubmit={(e) => this.onSubmitLookUp(e)}> 

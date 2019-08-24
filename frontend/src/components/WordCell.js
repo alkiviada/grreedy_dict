@@ -22,7 +22,7 @@ class WordCell extends Component {
 
   componentDidUpdate() {
     const { word, offsetMap, tabIndexMap } = this.props
-    if (offsetMap[word] && this.wordRef.current && [0,1,2].filter(i => i == tabIndexMap[word])) {
+    if (offsetMap[word] && this.wordRef.current && [0,1,2].filter(i => i == tabIndexMap[word]).length) {
       this.wordRef.current.scrollTop = offsetMap[word]
     }
     this.props.wordRefToMap(word, this.wordRef);

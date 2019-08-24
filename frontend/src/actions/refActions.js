@@ -10,6 +10,8 @@ export const wordRefToMap = (word, wref) => (dispatch, getState) => {
 
 export const logWordDivOffset = (word, offset) => (dispatch, getState) => {
   const { offsetMap } = getState().refs
+  console.log(offset)
+  console.log(word)
   dispatch({
     type: MAP_OFFSET,
     payload: { ...offsetMap, ...{ [word]: offset } }

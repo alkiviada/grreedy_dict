@@ -81,7 +81,10 @@ class WordTabs extends Component {
 
   handleSelect(prev, index, word, myTabs, parentRef) {
     const parentOffset = parentRef.current.scrollTop
-    if (parentOffset && [1, 2, 3].filter(i => i == prev)) {
+    
+    if (parentOffset && [1, 2, 3].filter(i => i == prev).length) {
+      console.log(parentOffset)
+      console.log('i am logging')
       this.props.logWordDivOffset(word, parentOffset);
     }
 
