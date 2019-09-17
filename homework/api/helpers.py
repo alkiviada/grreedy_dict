@@ -102,7 +102,7 @@ def process_file(filename, vf_re):
 def search_books(conjugs):
   matched_examples = []
   for filename in glob.glob('grreedy_library/**/*.*ml', recursive=True):
-    print(filename)
+    #print(filename)
     matched_examples.extend(process_file(filename, conjugs))
     
   return matched_examples

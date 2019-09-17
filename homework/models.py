@@ -27,10 +27,10 @@ class Pronoun(models.Model):
     ordering = ('num_id',)
 
 class Conjugation(models.Model):
-  word = models.ForeignKey(Word, related_name="verb_word")
-  tense = models.ForeignKey(Tense, related_name="verb_tense")
+  word = models.ForeignKey(Word, related_name="verb_word", on_delete=models.CASCADE)
+  tense = models.ForeignKey(Tense, related_name="verb_tense", on_delete=models.CASCADE)
   verb_form = models.CharField(max_length=33)
-  pronoun = models.ForeignKey(Pronoun, related_name="verb_pronoun")
+  pronoun = models.ForeignKey(Pronoun, related_name="verb_pronoun", on_delete=models.CASCADE)
 
   def __str__(self):
     return self.verb_form
@@ -41,7 +41,7 @@ class Conjugation(models.Model):
 
 class ConjugationExample(models.Model):
   example = models.TextField()
-  conjugation = models.ForeignKey(Conjugation, related_name="conjugation")
+  conjugation = models.ForeignKey(Conjugation, related_name="conjugation", on_delete=models.CASCADE)
   is_bad = models.BooleanField(default=False)
-  word = models.ForeignKey(Word, related_name="conjugation_word")
-  tense = models.ForeignKey(Tense, related_name="conjugation_tense")
+  word = models.ForeignKey(Word, related_name="conjugation_word", on_delete=models.CASCADE)
+  tense = models.ForeignKey(Tense, related_name="conjugation_tense", on_delete=models.CASCADE)

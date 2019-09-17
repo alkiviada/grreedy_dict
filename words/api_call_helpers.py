@@ -8,7 +8,7 @@ def try_fetch(url, **args):
   r = ''
   try:
     #print(url)
-    print(headers)
+    #print(headers)
     r = requests.get(url, headers = headers, allow_redirects=False, params=params, verify=False)
     r.raise_for_status()
   except requests.exceptions.HTTPError as errh:
