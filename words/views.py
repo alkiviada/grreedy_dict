@@ -1,6 +1,10 @@
-from .models import Word, Definition, Etymology, Example, Collection, Collocation, WordNote, Language, LookupMap, TranslationsMap
+from .models import Word, Definition, Etymology, Example, Collection, Collocation, WordNote, Language, LookupMap, TranslationsMap, WordExamples
+from django.contrib.auth import login
 from django.utils import timezone
 from knox.models import AuthToken
+from knox.views import LoginView as KnoxLoginView
+from rest_framework import permissions
+from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .constants import LANGUAGES, WORDS_ON_PAGE
 from .background import generate_examples
@@ -8,7 +12,7 @@ import datetime
 
 from .serializers import (WordSerializer, SynonymSerializer, TranslationSerializer, CollectionSerializer, 
                                CollectionDetailSerializer, CollocationSerializer, WordNoteSerializer, PronounceSerializer,
-                               CreateUserSerializer, UserSerializer, LoginUserSerializer, ConjugateSerializer)
+                               CreateUserSerializer, UserSerializer, LoginUserSerializer, ConjugateSerializer, WordExampleSerializer)
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -765,6 +769,28 @@ class WordSingleCreateCollocations(generics.RetrieveAPIView):
       print("Could not fetch collocations:" + word);
       raise Http404("No API for the word:", word)
     serializer = CollocationSerializer(all_collocs, many=True)
+    return Response(serializer.data)
+
+class WordExampleSingleDetail(APIView):
+  permission_classes = [ AllowAny, ]
+
+  def get_queryset(self):
+    word = self.kwargs['word']
+    infls = Word.objects.get(word=word, language='french').inflections
+    examples = WordExamples.objects.filter(inflections__in=infls)
+
+    return examples 
+
+  serializer_class = WordExampleSerializer
+
+  def get(self, request, word, *args, **kwargs):
+    print('hahha')
+    word = Word.objects.get(word=word, language='french')
+    infls = word.inflections
+    print(infls)
+    examples = WordExamples.objects.filter(inflections=infls)
+    print(examples)
+    serializer = WordExampleSerializer(examples, many=True)
     return Response(serializer.data)
 
 lingvo_api_key = 'OTQwMTgzY2EtYmI3NC00OGQ4LTgyNjctYzhiYTI2ZWM4NzU4OjEwNTljMTg1MTEyOTQ5ODlhMmEyMThmY2Q0Y2M2MjE5'

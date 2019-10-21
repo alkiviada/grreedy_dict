@@ -5,6 +5,7 @@ import DecorateWithLinks from "./DecorateWithLinks";
 import Translations from "./Translations";
 import Collocations from "./Collocations";
 import Conjugate from "./Conjugate";
+import Corpora from "./Corpora";
 import Synonyms from "./Synonyms";
 import WordNote from "./WordNote";
 import Pronunciation from "./Pronunciation";
@@ -12,6 +13,7 @@ import key from "weak-key";
 import { connect } from 'react-redux';
 import { switchTab } from '../actions/tabActions';
 import { lookUpTranslations, requestTranslations, } from '../actions/transActions';
+import { fetchCorpora, requestCorpora, } from '../actions/corporaActions';
 import { fetchPronunciation, requestPronunciation, } from '../actions/pronounceActions';
 import { fetchConjugations, requestConjugations, } from '../actions/conjugateActions';
 import { lookUpCollocations, requestCollocations, } from '../actions/collocationsActions';
@@ -26,6 +28,7 @@ const mapStateToProps = state => ({
   allSynonyms: state.synonyms.allSynonyms,
   allPronunciations: state.pronounce.allPronunciations,
   allConjugations: state.conjugate.allConjugations,
+  allCorpora: state.corpora.allCorpora,
   allCollocations: state.collocations.allCollocations,
   allNotes: state.notes.allNotes,
   transFetchingMap: state.translations.fetchingMap,
@@ -40,7 +43,7 @@ const carouselItems3 = 3;
 const carouselItems2 = 2;
 
 const tabPanels = [
-  'Translations', 'Collocations', 'Synonyms', 'Pronounciation', 'Add Note', 'Conjugate'
+  'Translations', 'Collocations', 'Synonyms', 'Pronounciation', 'Add Note', 'Conjugate', 'Corpora'
 ]
 
 class WordTabs extends Component {
@@ -156,6 +159,15 @@ class WordTabs extends Component {
           this.props.fetchConjugations(word)
         }
         break
+      case 'Corpora':
+        console.log('boom')
+        if (!this.props.allCorpora[word]) {
+          console.log('looking up corpora'); 
+          this.props.requestCorpora(word)
+          console.log('after request up corpora'); 
+          this.props.fetchCorpora(word)
+        }
+        break
       default:
         Function.prototype()
     }
@@ -194,9 +206,17 @@ class WordTabs extends Component {
 
     const isVerb = element.reduce((isVerbFlag, e) => 
       {return e['is_verb'] ? ++isVerbFlag : isVerbFlag}, 0)
+
+    const hasCorp = element.reduce((hasCorpFlag, e) => 
+      {return e['has_corpora'] ? ++hasCorpFlag: hasCorpFlag}, 0)
+    console.log(hasCorp)
     
     const myTabs = tabs.filter(t => (!isEnglishWord && t == 'Translations' ? 0 : 1) && 
-      (isNonPronWord && t == 'Pronounciation' ? 0 : 1) && (!isVerb && t == 'Conjugate' ? 0 : 1) && (!isNotOnlyEnglishWord && (t == 'Synonyms' || t == 'Collocations') ? 0 : 1) && (!isNotOnlySwedishWord && t == 'Synonyms' ? 0 : 1))
+      (isNonPronWord && t == 'Pronounciation' ? 0 : 1) && 
+      (!isVerb && t == 'Conjugate' ? 0 : 1) && 
+      (!hasCorp && t == 'Corpora' ? 0 : 1) && 
+      (!isNotOnlyEnglishWord && (t == 'Synonyms' || t == 'Collocations') ? 0 : 1) && 
+      (!isNotOnlySwedishWord && t == 'Synonyms' ? 0 : 1))
      
 
     const iAmHidden5 = this.state.carouselIdx5
@@ -291,6 +311,8 @@ class WordTabs extends Component {
         break
       case 'Conjugate':
              return <TabPanel><Conjugate word={word} /></TabPanel>
+      case 'Corpora':
+             return <TabPanel><Corpora word={word} addRow={addRow} parentRef={parentRef} /></TabPanel>
         break
       default:
         Function.prototype()
@@ -306,10 +328,13 @@ const mapDispatchToProps = {
           switchTab, 
           lookUpTranslations, 
           requestTranslations, 
+          requestCorpora, 
           lookUpCollocations, 
           requestCollocations,
           lookUpSynonyms, 
           requestSynonyms,
+          requestCorpora,
+          fetchCorpora,
           fetchPronunciation, 
           requestPronunciation,
           fetchConjugations, 

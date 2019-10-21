@@ -723,6 +723,15 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
   margin-left: 1em;
 }
 
+.corpora-style {
+list-style: disc;
+    font-family: var(--body-font);
+    margin-left: 2em;
+}
+.corpora-style li {
+    margin-bottom: 1em;
+}
+
 .etym-style {
   background: #FFFCF9;
   font-family: var(--body-font);

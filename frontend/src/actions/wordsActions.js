@@ -326,6 +326,7 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
                                     o['description'] = [ ...o['description'] ? o['description'] : '', 
                                     { 'language' : e['language'], 
                                       'is_verb' : e['is_verb'], 
+                                      'has_corpora' : e['has_corpora'], 
                                       'etymology': e['word_etymologies'] } ], o), {}
                                  );
           dispatch({

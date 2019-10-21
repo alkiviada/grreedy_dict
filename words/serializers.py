@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Word, Etymology, Definition, Example, Collection, Collocation, WordNote
+from .models import Word, Etymology, Definition, Example, Collection, Collocation, WordNote, WordExamples
 from homework.models import Tense
 from collections import OrderedDict
 from django.contrib.auth.models import User
@@ -69,11 +69,19 @@ class WordNoteSerializer(serializers.ModelSerializer):
         fields = ['note' ]
 
 class WordSerializer(serializers.ModelSerializer):
-    word_etymologies = EtymologySerializer(many=True)
+  word_etymologies = EtymologySerializer(many=True)
+  has_corpora = serializers.SerializerMethodField('check_corpora')
 
-    class Meta:
-        model = Word
-        fields = [ 'word', 'word_etymologies', 'language', 'is_verb' ]
+  def check_corpora(self, instance):
+    print('hmm');
+    inflections = instance.inflections
+    examples  = WordExamples.objects.filter(inflections=inflections)
+    print(examples)
+    return 1 if examples else 0
+
+  class Meta:
+    model = Word
+    fields = [ 'word', 'word_etymologies', 'language', 'is_verb', 'has_corpora' ]
 
 class TranslationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -166,3 +174,7 @@ class UserSerializer(serializers.ModelSerializer):
     model = User
     fields = ('id', 'username')
 
+class WordExampleSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = WordExamples
+    fields = ('example', )

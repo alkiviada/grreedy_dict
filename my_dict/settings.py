@@ -34,10 +34,10 @@ ALLOWED_HOSTS = [ 'grreedy-dict.appspot.com', '127.0.0.1', '209.177.145.192', 'l
 
 INSTALLED_APPS = [
     'background_task',
-    'knox',
     'rest_framework',
-    'frontend',
+    'knox',
     'homework',
+    'frontend',
     'words.apps.WordsConfig',
     'django.contrib.admin',
     'django.contrib.auth',

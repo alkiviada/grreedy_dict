@@ -697,6 +697,8 @@ class Word(models.Model):
     lookup_date = models.DateTimeField('date looked up')
     notes = models.CharField(max_length=700)
 
+    inflections = models.ForeignKey('Inflections', on_delete=models.CASCADE, related_name='word_inflections', null=True)
+
     pronounce = models.CharField(max_length=100)
     translations = models.ManyToManyField("self", blank=True, related_name='translations')
     synonyms = models.ManyToManyField("self", blank=True, related_name='synonyms')
@@ -726,6 +728,26 @@ class Word(models.Model):
 
     class Meta:
         ordering = ('collectionofwords', '-lookup_date',)
+
+class Inflections(models.Model):
+    inflections = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.inflections
+
+    class Meta:
+        ordering = ('pk',)
+
+class WordExamples(models.Model):
+    example = models.TextField()
+    inflections = models.ForeignKey('Inflections', on_delete=models.CASCADE, related_name='example_inflections', null=True)
+
+    def __str__(self):
+        return self.example
+
+    class Meta:
+        ordering = ('pk',)
+    
 
 class CollectionMixin(object):
   def update_last_modified(self):

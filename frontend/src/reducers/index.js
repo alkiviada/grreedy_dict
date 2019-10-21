@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 
 import wordsReducer from "./wordsReducers";
+import corporaReducer from "./corporaReducers";
 import transReducer from "./transReducers";
 import noteReducer from "./noteReducers";
 import synonymsReducer from "./synonymsReducers";
@@ -27,6 +28,7 @@ export default combineReducers({
   context: context,
   notes: noteReducer,
   pronounce: pronounceReducer,
-  conjugate: conjugateReducer
+  conjugate: conjugateReducer,
+  corpora: corporaReducer,
 });
 

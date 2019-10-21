@@ -41,4 +41,4 @@ export const tabs = [ 'Original word',
                'Synonyms', 
                'Pronunciation', 
                'WordNote', 
-               'Conjugate' ] 
+               'Conjugate', 'Corpora' ] 

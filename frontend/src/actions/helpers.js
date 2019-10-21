@@ -7,11 +7,11 @@ export const conflateWords = (words) => {
     const word = w.word;
     if (word_map[word]) {
       word_map[word] = [ ...word_map[word], 
-                         { 'language': w.language, 'etymology': w.word_etymologies, 'is_verb': w.is_verb }
+                         { 'language': w.language, 'etymology': w.word_etymologies, 'is_verb': w.is_verb, 'has_corpora': w.has_corpora }
                        ]
     }
     else {
-      word_map[word] = [ { 'language': w.language, 'etymology': w.word_etymologies, 'is_verb': w.is_verb } ]
+      word_map[word] = [ { 'language': w.language, 'etymology': w.word_etymologies, 'is_verb': w.is_verb, 'has_corpora': w.has_corpora } ]
         conflated_words.push(word)
     }
   }
