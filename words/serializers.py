@@ -75,7 +75,7 @@ class WordSerializer(serializers.ModelSerializer):
   def check_corpora(self, instance):
     print('hmm');
     inflections = instance.inflections
-    examples  = WordExamples.objects.filter(inflections=inflections)
+    examples  = WordExamples.objects.filter(inflections=inflections).count()
     print(examples)
     return 1 if examples else 0
 
@@ -177,4 +177,4 @@ class UserSerializer(serializers.ModelSerializer):
 class WordExampleSerializer(serializers.ModelSerializer):
   class Meta:
     model = WordExamples
-    fields = ('example', )
+    fields = ('example', 'pk')

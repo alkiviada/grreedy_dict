@@ -9,6 +9,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .constants import LANGUAGES, WORDS_ON_PAGE
 from .background import generate_examples
 import datetime
+from django.db.models import Max, Min
+from random import randint
 
 from .serializers import (WordSerializer, SynonymSerializer, TranslationSerializer, CollectionSerializer, 
                                CollectionDetailSerializer, CollocationSerializer, WordNoteSerializer, PronounceSerializer,
@@ -783,14 +785,25 @@ class WordExampleSingleDetail(APIView):
 
   serializer_class = WordExampleSerializer
 
-  def get(self, request, word, *args, **kwargs):
-    print('hahha')
+  def get(self, request, word, ids, *args, **kwargs):
     word = Word.objects.get(word=word, language='french')
     infls = word.inflections
     print(infls)
-    examples = WordExamples.objects.filter(inflections=infls)
-    print(examples)
-    serializer = WordExampleSerializer(examples, many=True)
+    ids = ids.split(',') if ids else []
+    print(ids)
+    examples = WordExamples.objects.filter(inflections=infls).exclude(pk__in=ids)
+    ex_min_pk = examples.aggregate(Min('pk'))['pk__min']
+    ex_max_pk = examples.aggregate(Max('pk'))['pk__max']
+    print(ex_min_pk)
+    print(ex_max_pk)
+    items = []
+    if ex_min_pk and ex_max_pk:
+      while len(items) < 6:
+        item = examples.filter(pk=randint(ex_min_pk, ex_max_pk))
+        if item:
+          items.extend(item)
+    print(items)
+    serializer = WordExampleSerializer(items, many=True)
     return Response(serializer.data)
 
 lingvo_api_key = 'OTQwMTgzY2EtYmI3NC00OGQ4LTgyNjctYzhiYTI2ZWM4NzU4OjEwNTljMTg1MTEyOTQ5ODlhMmEyMThmY2Q0Y2M2MjE5'

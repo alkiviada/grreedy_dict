@@ -5,9 +5,10 @@ import {
        } from './types';
 
 
-export const fetchCorpora = (word) => (dispatch, getState) => {
+export const fetchCorpora = (word, oldIds) => (dispatch, getState) => {
   console.log('fetching word corpora');
-  fetch('api/word/corpora/' + word)
+  console.log(word)
+  fetch('api/word/corpora/' + word + (oldIds ? '/' + oldIds : ''))
   .then(response =>
       response.json().then(json => ({
         status: response.status,
@@ -17,7 +18,8 @@ export const fetchCorpora = (word) => (dispatch, getState) => {
   .then(
       // Both fetching and parsing succeeded!
       ({ status, json }) => {
-        const { allCorpora, fetchingMap } = getState().corpora
+        const { allCorpora, fetchingMap, } = getState().corpora
+        let end = false
         if (status >= 400) {
           // Status looks bad
           console.log('Server returned error status when fetching corpora');
@@ -29,11 +31,21 @@ export const fetchCorpora = (word) => (dispatch, getState) => {
           })
         } else {
           // Status looks good
+          console.log(json)
+          console.log(allCorpora[word])
+          const b = allCorpora[word] ? allCorpora[word] : []
+          console.log(b)
+          const a = { ...allCorpora, ...{ [word]: [ ...b, ...json] } }
+          end = !json.length
+          console.log('end: ', end)
+          console.log('this was my copropar');
+          console.log(a)
           dispatch({
             type: FETCH_CORPORA_FULFILLED,
             payload: {
-                      allCorpora: { ...allCorpora, ...{ [word]: json } },
-                      fetchingMap: { ...fetchingMap, ...{[word]: false} }
+                      allCorpora: a,
+                      fetchingMap: { ...fetchingMap, ...{[word]: false} },
+                      end
             }
           })
         }

@@ -2,6 +2,7 @@ import { FETCH_CORPORA, FETCH_CORPORA_REJECTED, FETCH_CORPORA_FULFILLED } from '
 
 const initialState = {
   allCorpora: {},
+  end: false,
   fetchingMap: {},
   error: null
 };
@@ -12,6 +13,7 @@ export default function(state = initialState, action) {
     case FETCH_CORPORA_FULFILLED: return { ...state, 
                                              allCorpora: action.payload.allCorpora,  
                                              fetchingMap: action.payload.fetchingMap,  
+                                             end: action.payload.end,  
                                            };
     case FETCH_CORPORA_REJECTED: return {...state, 
                                            allCorpora: action.payload.allCorpora, 
