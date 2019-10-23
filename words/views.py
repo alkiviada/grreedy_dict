@@ -797,8 +797,9 @@ class WordExampleSingleDetail(APIView):
     print(ex_min_pk)
     print(ex_max_pk)
     items = []
+    limit = 6 if examples.count() > 6 else examples.count()
     if ex_min_pk and ex_max_pk:
-      while len(items) < 6:
+      while len(items) < limit:
         item = examples.filter(pk=randint(ex_min_pk, ex_max_pk))
         if item:
           items.extend(item)
