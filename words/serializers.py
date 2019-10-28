@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Word, Etymology, Definition, Example, Collection, Collocation, WordNote, WordExamples
-from homework.models import Tense
+from homework.models import Tense, ConjugationExample
 from collections import OrderedDict
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -77,6 +77,9 @@ class WordSerializer(serializers.ModelSerializer):
     inflections = instance.inflections
     examples  = WordExamples.objects.filter(inflections=inflections).count()
     print(examples)
+    if not examples:
+      examples = ConjugationExample.objects.filter(word=instance).count()
+    
     return 1 if examples else 0
 
   class Meta:

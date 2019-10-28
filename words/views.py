@@ -1,4 +1,5 @@
 from .models import Word, Definition, Etymology, Example, Collection, Collocation, WordNote, Language, LookupMap, TranslationsMap, WordExamples
+from homework.models import ConjugationExample
 from django.contrib.auth import login
 from django.utils import timezone
 from knox.models import AuthToken
@@ -792,19 +793,31 @@ class WordExampleSingleDetail(APIView):
     ids = ids.split(',') if ids else []
     print(ids)
     examples = WordExamples.objects.filter(inflections=infls).exclude(pk__in=ids)
-    ex_min_pk = examples.aggregate(Min('pk'))['pk__min']
-    ex_max_pk = examples.aggregate(Max('pk'))['pk__max']
-    print(ex_min_pk)
-    print(ex_max_pk)
-    items = []
-    limit = 6 if examples.count() > 6 else examples.count()
-    if ex_min_pk and ex_max_pk:
-      while len(items) < limit:
-        item = examples.filter(pk=randint(ex_min_pk, ex_max_pk))
-        if item:
-          items.extend(item)
+    items = pick_items(examples, 6)
     print(items)
+    if len(items) < 6 and word.is_verb:
+      extra_examples = ConjugationExample.objects.filter(word=word).exclude(pk__in=ids)
+      more_items = pick_items(extra_examples, 6)
+      if len(more_items):
+        items.extend(more_items)
     serializer = WordExampleSerializer(items, many=True)
     return Response(serializer.data)
+
+def pick_items(to_pick, hard_limit):
+  min_pk = to_pick.aggregate(Min('pk'))['pk__min']
+  max_pk = to_pick.aggregate(Max('pk'))['pk__max']
+  print(min_pk)
+  print(max_pk)
+  items = []
+  limit = hard_limit if to_pick.count() > hard_limit else to_pick.count()
+  if min_pk and max_pk:
+    while len(items) < limit:
+      new_pk = randint(min_pk, max_pk)
+      already_have = list(filter(lambda i: i.pk == new_pk, items))
+      if not len(already_have):
+        item = to_pick.filter(pk=new_pk)
+        if item:
+          items.extend(item)
+  return items
 
 lingvo_api_key = 'OTQwMTgzY2EtYmI3NC00OGQ4LTgyNjctYzhiYTI2ZWM4NzU4OjEwNTljMTg1MTEyOTQ5ODlhMmEyMThmY2Q0Y2M2MjE5'
