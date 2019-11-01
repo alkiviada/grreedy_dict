@@ -38,6 +38,8 @@ def analyze_words():
       print(word)
       if word.did_conjugations:
         continue
+      if len(word.word) < 2:
+        continue
       print(word.word)
       time.sleep(3)
       base_url = "https://www.wordreference.com/fren/" + word.word
@@ -52,14 +54,18 @@ def analyze_words():
         for l in ls:
           if re.match('Inflections', l):
             print(l)
-            ow = re.search("'(\w+)'", l).group(1)
+            ow = re.search("'(\w+(\-?\w+)+)'", l)
+            print(ow)
+            ow = ow.group(1)
             to_find.append(ow)
             match = re.findall('(\w+:\s{1}\w+,?)', l)
             for m in match:
               f = m.split(':')[1].split(',')[0].strip()
               if re.search('[A-Z]', f):
-                s = re.search('(\w+)[A-Z]\w', f)
-                to_find.append(s[1])
+                s = re.search('([A-Z]?\w+(\-?\w+)+)[A-Z]\w', f)
+                print(s)
+                if s:
+                  to_find.append(s.group(1))
               else:
                 to_find.append(f)
       else:
@@ -79,29 +85,26 @@ def analyze_words():
           examples[word.word]['examples'].extend(w_e)
         else:
           print('i have NO examples')
+      i = Inflections.objects.filter(inflections__contains=word.word).first()
+      print(i)
+      if i:
+        word.inflections = i
+        word.save()
+      else: 
+        try:
+          i = Inflections.objects.get(inflections=examples[word.word]['ifls'])
+        except ObjectDoesNotExist:
+          i = Inflections.objects.create(inflections=examples[word.word]['ifls'])
+          for ex in examples[word.word]['examples']:
+            db_ex = WordExamples.objects.create(example=ex, inflections=i)
+      
+        word.inflections = i
+        word.save()
   
     count -= 1
-  return examples
+  return 1
 
 e = analyze_words()
-for k in e.keys():
-  word = Word.objects.get(language='french', word=k)
-  i = Inflections.objects.filter(inflections__contains=word.word).first()
-  print(i)
-  if i:
-    word.inflections = i
-    word.save()
-  else: 
-    try:
-      i = Inflections.objects.get(inflections=e[k]['ifls'])
-    except ObjectDoesNotExist:
-      i = Inflections.objects.create(inflections=e[k]['ifls'])
-      for ex in e[k]['examples']:
-        db_ex = WordExamples.objects.create(example=ex, inflections=i)
-      
-    word.inflections = i
-    word.save()
-   
 
 #import json
 #with open('data.json', 'w') as fp:
@@ -109,4 +112,4 @@ for k in e.keys():
 #with open('data.json', 'r') as fp:
 #  e = json.load(fp)
 
-[ print(k, ' ', e[k]['ifls'], ' ', len(e[k]['examples']))  for k in e.keys() ] 
+#[ print(k, ' ', e[k]['ifls'], ' ', len(e[k]['examples']))  for k in e.keys() ] 
