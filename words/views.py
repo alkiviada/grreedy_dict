@@ -820,4 +820,25 @@ def pick_items(to_pick, hard_limit):
           items.extend(item)
   return items
 
+class PageCreate(generics.RetrieveAPIView):
+  permission_classes = [ AllowAny, ]
+
+  def get(self, request, page, *args, **kwargs):
+    import json
+    from bs4 import BeautifulSoup, NavigableString
+    print('Book: ', page);
+    with open('grreedy_library/flaubert/bovary/bovary.json', 'r') as fp:
+      map = json.load(fp)
+    print(map[page])
+    with open(map[page]['file'], 'r') as f:
+      output = f.read()
+    book_soup = BeautifulSoup(output, features="html.parser")
+    book_parts = book_soup.findAll('p')
+    to_return = []
+    for idx, p in enumerate(book_parts): 
+      if idx < map[page]['end'] and idx > map[page]['start']:
+        to_return.append(p.get_text())
+    print(to_return)
+    return Response({'ps': to_return })
+
 lingvo_api_key = 'OTQwMTgzY2EtYmI3NC00OGQ4LTgyNjctYzhiYTI2ZWM4NzU4OjEwNTljMTg1MTEyOTQ5ODlhMmEyMThmY2Q0Y2M2MjE5'

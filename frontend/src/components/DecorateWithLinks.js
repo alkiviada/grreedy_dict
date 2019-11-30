@@ -4,10 +4,12 @@ import PropTypes from "prop-types";
 const processString = require('react-process-string');
  
 class DecorateWithLinks extends Component {
+
   static propTypes = {
     words: PropTypes.array,
     onLinkClick: PropTypes.func.isRequired,
   }
+
   render() {
     const { words, onLinkClick, original, parentRef } = this.props;
     let config = [
@@ -39,10 +41,6 @@ const WordLink = props => {
   return (
     <a className="word-link">{props.word}</a>
   );
-};
-
-WordLink.propTypes = {
-  word: PropTypes.string,
 };
 
 export default DecorateWithLinks;

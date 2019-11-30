@@ -63,3 +63,12 @@
 2019-09-11 11:30:47.972 EDT [3239] LOG:  redo done at 0/1CE8A08
 2019-09-11 11:30:47.972 EDT [3239] LOG:  last completed transaction was at log time 2019-08-24 14:31:26.502026-04
 2019-09-11 11:30:47.998 EDT [3238] LOG:  database system is ready to accept connections
+2019-11-25 12:30:09.237 EST [2274] LOG:  listening on IPv6 address "::1", port 5432
+2019-11-25 12:30:09.238 EST [2274] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2019-11-25 12:30:09.242 EST [2274] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2019-11-25 12:30:09.321 EST [2275] LOG:  database system was interrupted; last known up at 2019-10-28 11:48:50 EDT
+2019-11-25 12:30:09.420 EST [2275] LOG:  database system was not properly shut down; automatic recovery in progress
+2019-11-25 12:30:09.423 EST [2275] LOG:  redo starts at 0/2127718
+2019-11-25 12:30:09.423 EST [2275] LOG:  invalid record length at 0/21277F8: wanted 24, got 0
+2019-11-25 12:30:09.423 EST [2275] LOG:  redo done at 0/21277C0
+2019-11-25 12:30:09.467 EST [2274] LOG:  database system is ready to accept connections

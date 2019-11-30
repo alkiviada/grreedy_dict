@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import ReactDOM from "react-dom";
+mport ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import WordTabs from "./WordTabs";
 import Word from "./Word";

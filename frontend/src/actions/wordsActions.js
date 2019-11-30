@@ -288,7 +288,8 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
       headers["Authorization"] = `Token ${token}`;
   }
 
-  const url = 'api/word/' + word + '/' + (uuid ? uuid : '')
+  const url = '/api/word/' + word + '/' + (uuid ? uuid : '')
+  console.log(url)
   return fetch(url, {headers})
   .then(response =>
       response.json().then(json => ({
@@ -306,9 +307,13 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
         } else {
           // Status looks good
           const { word, name, uuid, page } = json
+          console.log(json)
 
-
-          let words = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['words'][page] : []
+          console.log('i recieved word')
+          console.log(lastModifiedMap)
+          console.log(uuid)
+          console.log(lastModifiedMap[uuid])
+          let words = lastModifiedMap[uuid] && lastModifiedMap[uuid]['words'] ? lastModifiedMap[uuid]['words'][page] : []
 
           let pageNext = json.page_next
           let pagePrev = json.page_prev ? json.page_prev : 0
@@ -320,7 +325,7 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
             allWordsMap = { ...allWordsMap, ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) }
           }
           else {
-
+          console.log('i amd reducing etc');
           const obj = word.reduce((o, e) =>
                                   (o['word'] = e['word'], 
                                     o['description'] = [ ...o['description'] ? o['description'] : '', 
@@ -341,10 +346,12 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
               lastModifiedMap, allWordsMap = reshuffleWordsOnPages(popped, lastModifiedMap[uuid]['words'], allWordsMap, pageNext, allWordCount)
             }
           }
-            words = [ obj, ...words ]
-            allWordsMap = { ...allWordsMap, ...{ [obj.word]: page } }
-          }
-          
+          words = [ obj, ...words ]
+          console.log(words);
+          allWordsMap = { ...allWordsMap, ...{ [obj.word]: page } }
+         }
+          console.log(' i am here'); 
+          console.log(words)
           dispatch({
             type: FETCH_WORD_FULFILLED,
             payload: { words, 

@@ -37,12 +37,9 @@ class Table extends Component {
   };
 
   componentDidMount() {
-    console.log('mounting table');
-    console.log(this.props)
     let { page, page_id } = this.props; 
     page_id = page_id ? page_id : 1
     if (!this.props.data || (page_id && (page_id != page))) {
-      console.log('i do  ot have data')
       this.props.requestWords();
       this.props.fetchWords(this.props.uuid, page_id)
       .then(() => {
@@ -52,9 +49,7 @@ class Table extends Component {
   }
 
   navigateToPage(e, uuid, page) {
-    console.log('new page');
     e.preventDefault();
-    console.log(page)
     this.props.fetchWords(uuid, page)
       .then(() => {
         scrollToDomRef(this.myRef, 35)
@@ -62,7 +57,6 @@ class Table extends Component {
   }
 
   addRow (e, word, original, parentRef) {
-    console.log('look up');
     e.preventDefault();
     const opened = this.props.menuOpen
     if (opened) 
@@ -81,9 +75,7 @@ class Table extends Component {
       })
     }
     else {
-      console.log('i am here will scroll to exisitng')
       if (allWordsMap[word] != page) {
-        console.log('i used to see this word but elsewhere')
         this.props.requestWord(word);
         this.props.fetchWords(uuid, allWordsMap[word]).then(() => {
           this.props.clearFetching()
@@ -98,10 +90,8 @@ class Table extends Component {
   }
 
   componentDidUpdate() {
-    console.log('did update on table')
     const { word, page, fetched, allWordsMap, refMap } = this.props
     if (refMap[word] && refMap[word].current && fetched) {
-      console.log('i will scroll to new')
       scrollToDomRef(refMap[word], 80)
       this.props.clearFetched()
     }
@@ -125,7 +115,6 @@ class Table extends Component {
   }
 
   deleteWord(e, word) {
-    console.log('deleting');
     e.preventDefault();
     this.props.deleteWord(word);
   }
@@ -134,12 +123,10 @@ class Table extends Component {
     const { data, pagePrev, pageNext, allWordCount, uuid, page } = this.props;
 
     const allFetching = this.props.allFetching;
-    console.log('i am rendering table')
     const collFetching = this.props.collFetching;
 
     const wordFetching = this.props.newWordFetching;
     if (allFetching || collFetching) {
-      console.log('i am fetching words')
       return (
         <BodyClassName className="body-with-image">
         <div className="words-container">
@@ -149,7 +136,6 @@ class Table extends Component {
       )
     } 
     const auth = this.props.auth
-    console.log(auth.isAuthenticated)
     return !data.length ? (
       <BodyClassName className="body-with-image">
       <div className="words-container" ref={this.myRef}>

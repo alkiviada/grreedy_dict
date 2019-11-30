@@ -14,6 +14,7 @@ import tabReducer from "./tabReducers";
 import visibilityReducer from "./visibilityReducers";
 import refReducer from "./refReducers";
 import context from "./contextReducer";
+import bookReducer from "./bookReducers";
 
 export default combineReducers({
   words: wordsReducer,
@@ -30,5 +31,6 @@ export default combineReducers({
   pronounce: pronounceReducer,
   conjugate: conjugateReducer,
   corpora: corporaReducer,
+  book: bookReducer,
 });
 

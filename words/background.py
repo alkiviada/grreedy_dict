@@ -105,3 +105,6 @@ def generate_examples(word_pk):
       ConjugationExample.objects.create(example=e['example'], conjugation=e['conjugation'], tense=e['tense'], word=e['verb'])
   verb.did_book_examples = 1
   verb.save()
+
+
+

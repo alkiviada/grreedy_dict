@@ -52,7 +52,8 @@ class WordCell extends Component {
 
   render () {
     const { visibilityMap, offsetMap, deleteWord, addRow, element, word } = this.props
-
+    console.log(element)
+    console.log('element')
     return typeof(element[1]) === 'string' ? (
      <div className="word-cell">
      <Word wordElement={element} visibilityFilter={this.showHide} visibility={visibilityMap[element[1]]} deleteWord={deleteWord} /> 

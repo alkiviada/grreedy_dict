@@ -61,10 +61,9 @@ class Corpora extends React.Component {
               <b>Yay! You have seen it all</b>
             </p>}
         >
-           <ul className="corpora-style"> {
-      wordCorp.map(e => 
-        <li><DecorateWithLinks words={e.example} onLinkClick={addRow} original={word} parentRef={parentRef} /></li>
-        )
+           <ul className="corpora-style"> 
+           {
+      wordCorp.map(e => <li><DecorateWithLinks words={e.example} onLinkClick={addRow} original={word} parentRef={parentRef} /></li>)
            }
      </ul>
         </InfiniteScroll>

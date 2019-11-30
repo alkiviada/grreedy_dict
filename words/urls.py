@@ -30,4 +30,6 @@ urlpatterns = [
     url(r'api/auth/logoutall/', knox_views.LogoutAllView.as_view(), name='knox_logoutall'),
     url("^api/auth/user/$", views.UserAPI.as_view()),
     url(r'^api/auth/', include('knox.urls')),
+
+    url(r'^api/book/(?P<page>[0-9]+)$', views.PageCreate.as_view(), name='page-create'),
 ]

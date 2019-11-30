@@ -23,6 +23,7 @@ store.subscribe(throttle(() => {
     collections: store.getState().collections,
     auth: store.getState().auth,
     words: store.getState().words,
+    book: store.getState().book,
     visibility: store.getState().visibility
   });
 }, 1000));
