@@ -43,9 +43,11 @@ export const fetchPage = (start) => { return (dispatch, getState) => {
       if (newPsToShow.join(' ').length > 500)
         break
     }
-    bookPageMap[page]['psToShow'] = !start ? 
+    console.log(newStart)
+    console.log(bookPageMap[page]['psToShow'])
+    bookPageMap[page]['psToShow'] = !start || bookPageMap[page]['psToShow'].length < 6 ? 
       [ ...bookPageMap[page]['psToShow'], ...newPsToShow ] :
-      [ ...bookPageMap[page]['psToShow'].slice(newStart - 3, -1), ...newPsToShow ]
+      [ ...bookPageMap[page]['psToShow'].slice(-7), ...newPsToShow ]
     return dispatch({
           type: FETCH_PAGE_FULFILLED,
           payload: { ps, bookPageMap }
