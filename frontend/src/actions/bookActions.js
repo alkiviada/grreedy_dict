@@ -25,11 +25,23 @@ export const fetchPage = (start) => { return (dispatch, getState) => {
   console.log(bookPageMap)
   console.log(page)
   if(bookPageMap[page]) {
-     console.log('old data')
-    const newStart = start ? (bookPageMap[page]['end'] >= ps.length ? bookPageMap[page]['end'] - 2 : bookPageMap[page]['end']) : 0 
-    const newEnd = bookPageMap[page]['end'] >= ps.length ? bookPageMap[page]['end'] : bookPageMap[page]['end'] + 2
-    bookPageMap[page]['psToShow'] = ps.slice(newStart, newEnd)
-    bookPageMap[page]['end'] = newEnd
+    console.log('old data')
+    const newStart = bookPageMap[page]['end'] >= ps.length ? bookPageMap[page]['end'] - 2 : bookPageMap[page]['end'] 
+    let newEnd = 0;
+    let newPsToShow = []
+    console.log(newStart)
+    for (const p in ps) {
+      if (p < newStart)
+        continue
+      newEnd = parseInt(p) + 1
+      newPsToShow.push(ps[p])
+      bookPageMap[page]['end'] = newEnd
+      if (bookPageMap[page]['psToShow'].join(' ').length > 500)
+        break
+    }
+    bookPageMap[page]['psToShow'] = start ? 
+      [ ...bookPageMap[page]['psToShow'], ...newPsToShow ] :
+      [ ...bookPageMap[page]['psToShow'].slice(newStart-2, -1), ...newPsToShow ]
     return dispatch({
           type: FETCH_PAGE_FULFILLED,
           payload: { ps, bookPageMap }
@@ -74,7 +86,7 @@ export const fetchPage = (start) => { return (dispatch, getState) => {
             console.log(p)
             bookPageMap[page]['psToShow'].push(ps[p])
             let l = bookPageMap[page]['psToShow'].join(' ').length
-            bookPageMap[page]['end'] = ps.findIndex(e => ps[p] == e) + 1
+            bookPageMap[page]['end'] = parseInt(p) + 1
             if (l > 500) {
               break
             }
