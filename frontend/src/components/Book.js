@@ -49,7 +49,7 @@ class Book extends Component {
     if (uuid)
       this.props.registerUUId(uuid)
     this.props.requestPage(page);
-    if (!(bookPageMap[page]) || (bookPageMap[page]['end'] > 2)) {
+    if (!(bookPageMap[page]) || (bookPageMap[page]['end'] >= 1)) {
       this.props.fetchPage(1)
     }
   }
