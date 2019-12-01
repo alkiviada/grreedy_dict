@@ -839,7 +839,6 @@ class PageCreate(generics.RetrieveAPIView):
     print(map[page]['start'])
     for idx, p in enumerate(book_parts): 
       if idx < (map[page]['end'] if map[page]['end'] > 0 and map[page]['end'] > map[page]['start'] else len(book_parts)) and idx >= map[page]['start']:
-        print('pushinng')
         if p.get_text():
           to_return.append(p.get_text())
     if map[page]['end'] < map[page]['start']:
@@ -849,7 +848,6 @@ class PageCreate(generics.RetrieveAPIView):
       book_parts = book_soup.findAll('p')
       for idx, p in enumerate(book_parts): 
         if idx < map[page]['end']:
-          print('pushinng more')
           if p.get_text():
             to_return.append(p.get_text())
     return Response({'ps': to_return })

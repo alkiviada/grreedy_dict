@@ -19,7 +19,7 @@ export const postNote = (word, note) => (dispatch, getState) => {
       headers["Authorization"] = `Token ${token}`;
   }
 
-  fetch('api/word/note/post/', {headers, body, method: "POST"})
+  fetch('/api/word/note/post/', {headers, body, method: "POST"})
   .then(response =>
       response.json().then(json => ({
         status: response.status,

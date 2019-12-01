@@ -7,7 +7,7 @@ import {
 
 export const fetchPronunciation = (word) => (dispatch, getState) => {
   console.log('fetching word pronunciation');
-  fetch('api/word/pronounce/' + word)
+  fetch('/api/word/pronounce/' + word)
   .then(response =>
       response.json().then(json => ({
         status: response.status,

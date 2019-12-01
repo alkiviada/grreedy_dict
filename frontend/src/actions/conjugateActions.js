@@ -7,7 +7,7 @@ import {
 
 export const fetchConjugations = (word) => (dispatch, getState) => {
   console.log('fetching word conjugations');
-  fetch('api/word/conjugate/' + word)
+  fetch('/api/word/conjugate/' + word)
   .then(response =>
       response.json().then(json => ({
         status: response.status,

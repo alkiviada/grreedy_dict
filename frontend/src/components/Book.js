@@ -89,7 +89,7 @@ class Book extends Component {
           dataLength={psToShow.length}
           next={this.fetchMore}
           hasMore={ps.length > end}
-          height={200}
+          height={300}
           loader={<h4>Loading...</h4>}
           endMessage={
            <Link className="is-link" to={`/book/${newPage}`}>Chapter {newPage}</Link>  

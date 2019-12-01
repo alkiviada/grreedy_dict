@@ -2,7 +2,7 @@ import { FETCH_COLLOCATIONS, FETCH_COLLOCATIONS_FULFILLED, FETCH_COLLOCATIONS_RE
 
 export const lookUpCollocations = (word, allCollocations, fetchingMap) => dispatch => {
   console.log('fetching word collocations');
-  fetch('api/word/collocations/' + word)
+  fetch('/api/word/collocations/' + word)
   .then(response =>
       response.json().then(json => ({
         status: response.status,

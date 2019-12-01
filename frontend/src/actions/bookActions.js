@@ -62,11 +62,25 @@ export const fetchPage = (start) => { return (dispatch, getState) => {
           // Status looks good
           ps = json.ps
           console.log('new fresh ps')
-          console.log(ps)
+          console.log('before')
+          console.log(bookPageMap)
+          for (const k in bookPageMap) {
+             console.log(k)
+            bookPageMap[k] = undefined
+          }
           bookPageMap[page] = {}
           bookPageMap[page]['psToShow'] = []
-          bookPageMap[page]['psToShow'] = ps.slice(0, 2)
-          bookPageMap[page]['end'] = 2
+          for (const p in ps) {
+            console.log(p)
+            bookPageMap[page]['psToShow'].push(ps[p])
+            let l = bookPageMap[page]['psToShow'].join(' ').length
+            bookPageMap[page]['end'] = ps.findIndex(e => ps[p] == e) + 1
+            if (l > 500) {
+              break
+            }
+          }
+          console.log('after')
+          console.log(bookPageMap)
 
           dispatch({
             type: FETCH_PAGE_FULFILLED,

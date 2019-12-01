@@ -3,7 +3,7 @@ import { translationsToMap } from './helpers';
 
 export const lookUpSynonyms = (word, allSynonyms, fetchingMap) => dispatch => {
   console.log('fetching word synonyms');
-  fetch('api/word/synonyms/' + word)
+  fetch('/api/word/synonyms/' + word)
   .then(response =>
       response.json().then(json => ({
         status: response.status,
