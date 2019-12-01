@@ -29,10 +29,14 @@ for filename in sorted(glob.glob("grreedy_library/flaubert/bovary/OEBPS/@public@
       if re.search('([XIV]+)', part.get_text()):
         if book_head:
           book_map[page_count]['end'] = p_count
+          if book_map[page_count]['file_start'] != filename:
+            book_map[page_count]['file_end'] = filename
+          else:
+            book_map[page_count]['file_end'] = book_map[page_count]['file_start']
           page_count = page_count + 1
         book_head = part.get_text()
         if book_head:
-          book_map[page_count] = {'title': book_head, 'start': p_count+1, 'end': 0, 'file': filename}
+          book_map[page_count] = {'title': book_head, 'start': p_count, 'end': 0, 'file_start': filename}
           book_heads.append(book_head)
     else:
       if book_head:

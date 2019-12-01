@@ -830,15 +830,28 @@ class PageCreate(generics.RetrieveAPIView):
     with open('grreedy_library/flaubert/bovary/bovary.json', 'r') as fp:
       map = json.load(fp)
     print(map[page])
-    with open(map[page]['file'], 'r') as f:
+    with open(map[page]['file_start'], 'r') as f:
       output = f.read()
     book_soup = BeautifulSoup(output, features="html.parser")
     book_parts = book_soup.findAll('p')
     to_return = []
+    print(map[page]['end'])
+    print(map[page]['start'])
     for idx, p in enumerate(book_parts): 
-      if idx < map[page]['end'] and idx > map[page]['start']:
-        to_return.append(p.get_text())
-    print(to_return)
+      if idx < (map[page]['end'] if map[page]['end'] > 0 and map[page]['end'] > map[page]['start'] else len(book_parts)) and idx >= map[page]['start']:
+        print('pushinng')
+        if p.get_text():
+          to_return.append(p.get_text())
+    if map[page]['end'] < map[page]['start']:
+      with open(map[page]['file_end'], 'r') as f:
+        output = f.read()
+      book_soup = BeautifulSoup(output, features="html.parser")
+      book_parts = book_soup.findAll('p')
+      for idx, p in enumerate(book_parts): 
+        if idx < map[page]['end']:
+          print('pushinng more')
+          if p.get_text():
+            to_return.append(p.get_text())
     return Response({'ps': to_return })
 
 lingvo_api_key = 'OTQwMTgzY2EtYmI3NC00OGQ4LTgyNjctYzhiYTI2ZWM4NzU4OjEwNTljMTg1MTEyOTQ5ODlhMmEyMThmY2Q0Y2M2MjE5'
