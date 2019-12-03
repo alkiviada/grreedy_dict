@@ -19,17 +19,18 @@ export const requestPage = (page) => dispatch => {
   })
 };
 
-export const fetchPage = (start) => { return (dispatch, getState) => {
+export const fetchPage = (alreadyRead) => { return (dispatch, getState) => {
   let { bookPageMap, page, ps } = getState().book
   console.log('fetching')
   console.log(bookPageMap)
   console.log(page)
   if(bookPageMap[page]) {
-    console.log('old data')
-    console.log(start)
-    if (start) {
-      console.log('start')
+    if (alreadyRead) {
+      console.log('i am already')
+      bookPageMap[page]['psToShow'] = [ ...bookPageMap[page]['psToShow'].slice(-3) ]
     }
+    else {
+    console.log('old data')
     const newStart = bookPageMap[page]['end'] >= ps.length ? bookPageMap[page]['end'] - 2 : bookPageMap[page]['end'] 
     let newEnd = 0;
     let newPsToShow = []
@@ -45,9 +46,8 @@ export const fetchPage = (start) => { return (dispatch, getState) => {
     }
     console.log(newStart)
     console.log(bookPageMap[page]['psToShow'])
-    bookPageMap[page]['psToShow'] = !start || bookPageMap[page]['psToShow'].length < 6 ? 
-      [ ...bookPageMap[page]['psToShow'], ...newPsToShow ] :
-      [ ...bookPageMap[page]['psToShow'].slice(-7), ...newPsToShow ]
+    bookPageMap[page]['psToShow'] = [ ...bookPageMap[page]['psToShow'], ...newPsToShow ]
+    }
     return dispatch({
           type: FETCH_PAGE_FULFILLED,
           payload: { ps, bookPageMap }
