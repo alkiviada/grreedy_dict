@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<package xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="id">
+  <metadata>
+    <dc:rights>Public domain in the USA.</dc:rights>
+    <dc:identifier id="id" opf:scheme="URI">http://www.gutenberg.org/ebooks/796</dc:identifier>
+    <dc:creator opf:file-as="Stendhal">Stendhal</dc:creator>
+    <dc:title>La Chartreuse De Parme</dc:title>
+    <dc:language xsi:type="dcterms:RFC4646">fr</dc:language>
+    <dc:subject>Fiction</dc:subject>
+    <dc:subject>French literature</dc:subject>
+    <dc:date opf:event="publication">1997-01-01</dc:date>
+    <dc:date opf:event="conversion">2013-07-25T04:25:26.613871+00:00</dc:date>
+    <dc:source>http://www.gutenberg.org/files/796/796-0.txt</dc:source>
+  </metadata>
+  <manifest>
+    <item href="pgepub.css" id="item1" media-type="text/css"/>
+    <!--Chunk: size=83813 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-0.txt.html" id="id00000" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=82041 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-1.txt.html" id="id00098" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=82076 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-2.txt.html" id="id00335" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=82610 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-3.txt.html" id="id00529" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=82105 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-4.txt.html" id="id00634" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=83724 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-5.txt.html" id="id00793" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=71756 Split on h2-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-6.txt.html" id="id00898" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=82322 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-7.txt.html" id="id01063" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=80278 Split on h2-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-8.txt.html" id="id01188" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=82194 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-9.txt.html" id="id01378" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=81982 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-10.txt.html" id="id01515" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=82812 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-11.txt.html" id="id01641" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=82057 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-12.txt.html" id="id01747" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=73331 Split on h2-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-13.txt.html" id="id01936" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=82054 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-14.txt.html" id="id02044" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=82847 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-15.txt.html" id="id02192" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=82129 Split on p-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-16.txt.html" id="id02390" media-type="application/xhtml+xml"/>
+    <!--Chunk: size=72974-->
+    <item href="@public@vhost@g@gutenberg@html@files@796@796-0-17.txt.html" id="id02521" media-type="application/xhtml+xml"/>
+    <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="id00000" linear="yes"/>
+    <itemref idref="id00098" linear="yes"/>
+    <itemref idref="id00335" linear="yes"/>
+    <itemref idref="id00529" linear="yes"/>
+    <itemref idref="id00634" linear="yes"/>
+    <itemref idref="id00793" linear="yes"/>
+    <itemref idref="id00898" linear="yes"/>
+    <itemref idref="id01063" linear="yes"/>
+    <itemref idref="id01188" linear="yes"/>
+    <itemref idref="id01378" linear="yes"/>
+    <itemref idref="id01515" linear="yes"/>
+    <itemref idref="id01641" linear="yes"/>
+    <itemref idref="id01747" linear="yes"/>
+    <itemref idref="id01936" linear="yes"/>
+    <itemref idref="id02044" linear="yes"/>
+    <itemref idref="id02192" linear="yes"/>
+    <itemref idref="id02390" linear="yes"/>
+    <itemref idref="id02521" linear="yes"/>
+  </spine>
+</package>

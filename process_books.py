@@ -18,7 +18,7 @@ page_count = 1
 book_head = ''
 
 
-for filename in sorted(glob.glob("grreedy_library/flaubert/bovary/OEBPS/@public@vhost@g@gutenberg@html@files@48359@48359-h@48359-h*"), key=lambda a: (int(a.split('.')[0].split('-')[3]))):
+for filename in sorted(glob.glob("/Users/ana/clean_dict/grreedy_dict/grreedy_library/stendhal/parme/796/*.html"), key=lambda a: (int(a.split('.')[0].split('-')[2]))):
   with open(filename,'r') as f:
     output = f.read()
   p_count = 0
@@ -44,7 +44,7 @@ for filename in sorted(glob.glob("grreedy_library/flaubert/bovary/OEBPS/@public@
   
 #[ print(k, ' ', book_map[k])  for k in book_heads ] 
 import json
-with open('grreedy_library/flaubert/bovary/bovary.json', 'w') as fp:
+with open('/Users/ana/clean_dict/grreedy_dict/grreedy_library/stendhal/parme/796/parme.json', 'w') as fp:
   json.dump(book_map, fp)
 #with open('data.json', 'r') as fp:
 #  e = json.load(fp)

@@ -827,7 +827,7 @@ class PageCreate(generics.RetrieveAPIView):
     import json
     from bs4 import BeautifulSoup, NavigableString
     print('Book: ', page);
-    with open('grreedy_library/flaubert/bovary/bovary.json', 'r') as fp:
+    with open('/Users/ana/clean_dict/grreedy_dict/grreedy_library/stendhal/parme/796/parme.json', 'r') as fp:
       map = json.load(fp)
     print(map[page])
     with open(map[page]['file_start'], 'r') as f:

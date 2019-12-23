@@ -1,0 +1,239 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE ncx PUBLIC '-//NISO//DTD ncx 2005-1//EN' 'http://www.daisy.org/z3986/2005/ncx-2005-1.dtd'>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="fr">
+  <head>
+    <meta content="http://www.gutenberg.org/ebooks/796" name="dtb:uid"/>
+    <meta content="3" name="dtb:depth"/>
+    <meta content="EpubMaker 0.3.20a7 by Marcello Perathoner &lt;webmaster@gutenberg.org&gt;" name="dtb:generator"/>
+    <meta content="0" name="dtb:totalPageCount"/>
+    <meta content="0" name="dtb:maxPageNumber"/>
+  </head>
+  <docTitle>
+    <text>La Chartreuse De Parme</text>
+  </docTitle>
+  <navMap>
+    <navPoint id="np-1" playOrder="1">
+      <navLabel>
+        <text>LA CHARTREUSE DE PARME</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-0.txt.html#id00008"/>
+    </navPoint>
+    <navPoint id="np-2" playOrder="2">
+      <navLabel>
+        <text>LIVRE PREMIER</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-0.txt.html#id00010"/>
+    </navPoint>
+    <navPoint id="np-3" playOrder="3">
+      <navLabel>
+        <text>CHAPITRE PREMIER</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-0.txt.html#id00013"/>
+    </navPoint>
+    <navPoint id="np-4" playOrder="4">
+      <navLabel>
+        <text>CHAPITRE II</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-0.txt.html#id00051"/>
+    </navPoint>
+    <navPoint id="np-5" playOrder="5">
+      <navLabel>
+        <text>CHAPITRE III</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-1.txt.html#id00116"/>
+    </navPoint>
+    <navPoint id="np-6" playOrder="6">
+      <navLabel>
+        <text>CHAPITRE IV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-1.txt.html#id00254"/>
+    </navPoint>
+    <navPoint id="np-7" playOrder="7">
+      <navLabel>
+        <text>CHAPITRE V</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-2.txt.html#id00422"/>
+    </navPoint>
+    <navPoint id="np-8" playOrder="8">
+      <navLabel>
+        <text>CHAPITRE VI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-3.txt.html#id00554"/>
+    </navPoint>
+    <navPoint id="np-9" playOrder="9">
+      <navLabel>
+        <text>CHAPITRE VII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-4.txt.html#id00708"/>
+    </navPoint>
+    <navPoint id="np-10" playOrder="10">
+      <navLabel>
+        <text>CHAPITRE VIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-5.txt.html#id00796"/>
+    </navPoint>
+    <navPoint id="np-11" playOrder="11">
+      <navLabel>
+        <text>CHAPITRE IX</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-5.txt.html#id00845"/>
+    </navPoint>
+    <navPoint id="np-12" playOrder="12">
+      <navLabel>
+        <text>CHAPITRE X</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-5.txt.html#id00875"/>
+    </navPoint>
+    <navPoint id="np-13" playOrder="13">
+      <navLabel>
+        <text>CHAPITRE XI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-6.txt.html#id00910"/>
+    </navPoint>
+    <navPoint id="np-14" playOrder="14">
+      <navLabel>
+        <text>CHAPITRE XII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-7.txt.html#id01063"/>
+    </navPoint>
+    <navPoint id="np-15" playOrder="15">
+      <navLabel>
+        <text>CHAPITRE XIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-7.txt.html#id01122"/>
+    </navPoint>
+    <navPoint id="np-16" playOrder="16">
+      <navLabel>
+        <text>LIVRE SECOND</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-8.txt.html#id01231"/>
+    </navPoint>
+    <navPoint id="np-17" playOrder="17">
+      <navLabel>
+        <text>CHAPITRE XIV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-8.txt.html#id01233"/>
+    </navPoint>
+    <navPoint id="np-18" playOrder="18">
+      <navLabel>
+        <text>CHAPITRE XV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-9.txt.html#id01378"/>
+    </navPoint>
+    <navPoint id="np-19" playOrder="19">
+      <navLabel>
+        <text>CHAPITRE XVI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-9.txt.html#id01460"/>
+    </navPoint>
+    <navPoint id="np-20" playOrder="20">
+      <navLabel>
+        <text>CHAPITRE XVII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-10.txt.html#id01529"/>
+    </navPoint>
+    <navPoint id="np-21" playOrder="21">
+      <navLabel>
+        <text>CHAPITRE XVIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-10.txt.html#id01602"/>
+    </navPoint>
+    <navPoint id="np-22" playOrder="22">
+      <navLabel>
+        <text>CHAPITRE XIX</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-11.txt.html#id01657"/>
+    </navPoint>
+    <navPoint id="np-23" playOrder="23">
+      <navLabel>
+        <text>CHAPITRE XX</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-11.txt.html#id01724"/>
+    </navPoint>
+    <navPoint id="np-24" playOrder="24">
+      <navLabel>
+        <text>CHAPITRE XXI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-12.txt.html#id01841"/>
+    </navPoint>
+    <navPoint id="np-25" playOrder="25">
+      <navLabel>
+        <text>CHAPITRE XXII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-13.txt.html#id01972"/>
+    </navPoint>
+    <navPoint id="np-26" playOrder="26">
+      <navLabel>
+        <text>CHAPITRE XXIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-14.txt.html#id02044"/>
+    </navPoint>
+    <navPoint id="np-27" playOrder="27">
+      <navLabel>
+        <text>CHAPITRE XXIV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-14.txt.html#id02142"/>
+    </navPoint>
+    <navPoint id="np-28" playOrder="28">
+      <navLabel>
+        <text>CHAPITRE XXV</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-15.txt.html#id02271"/>
+    </navPoint>
+    <navPoint id="np-29" playOrder="29">
+      <navLabel>
+        <text>CHAPITRE XXVI</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-16.txt.html#id02392"/>
+    </navPoint>
+    <navPoint id="np-30" playOrder="30">
+      <navLabel>
+        <text>CHAPITRE XXVII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-16.txt.html#id02462"/>
+    </navPoint>
+    <navPoint id="np-31" playOrder="31">
+      <navLabel>
+        <text>CHAPITRE XXVIII</text>
+      </navLabel>
+      <content src="@public@vhost@g@gutenberg@html@files@796@796-0-17.txt.html#id02524"/>
+      <navPoint id="np-32" playOrder="32">
+        <navLabel>
+          <text>*** START: FULL LICENSE ***</text>
+        </navLabel>
+        <content src="@public@vhost@g@gutenberg@html@files@796@796-0-17.txt.html#id02624"/>
+        <navPoint id="np-33" playOrder="33">
+          <navLabel>
+            <text>Section 1. General Terms of Use and Redistributing Project Gutenberg-tm electronic works</text>
+          </navLabel>
+          <content src="@public@vhost@g@gutenberg@html@files@796@796-0-17.txt.html#id02627"/>
+        </navPoint>
+        <navPoint id="np-34" playOrder="34">
+          <navLabel>
+            <text>Section 2. Information about the Mission of Project Gutenberg-tm</text>
+          </navLabel>
+          <content src="@public@vhost@g@gutenberg@html@files@796@796-0-17.txt.html#id02654"/>
+        </navPoint>
+        <navPoint id="np-35" playOrder="35">
+          <navLabel>
+            <text>Section 3. Information about the Project Gutenberg Literary Archive Foundation</text>
+          </navLabel>
+          <content src="@public@vhost@g@gutenberg@html@files@796@796-0-17.txt.html#id02657"/>
+        </navPoint>
+        <navPoint id="np-36" playOrder="36">
+          <navLabel>
+            <text>Section 4. Information about Donations to the Project Gutenberg Literary Archive Foundation</text>
+          </navLabel>
+          <content src="@public@vhost@g@gutenberg@html@files@796@796-0-17.txt.html#id02661"/>
+        </navPoint>
+        <navPoint id="np-37" playOrder="37">
+          <navLabel>
+            <text>Section 5. General Information About Project Gutenberg-tm electronic works.</text>
+          </navLabel>
+          <content src="@public@vhost@g@gutenberg@html@files@796@796-0-17.txt.html#id02667"/>
+        </navPoint>
+      </navPoint>
+    </navPoint>
+  </navMap>
+</ncx>
