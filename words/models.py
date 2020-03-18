@@ -203,6 +203,7 @@ class LatinWordManager(models.Manager):
     base_url = 'http://www.perseus.tufts.edu/hopper/morph?la=la&l=' + word
     r = try_fetch(base_url, headers={})
     originals = []
+    infls_string = ''
     if not r:
       print('no r')
     if r:
@@ -210,17 +211,18 @@ class LatinWordManager(models.Manager):
       soup = BeautifulSoup(page, features="html.parser")
       links = soup.findAll('a', id=lambda x: x and x.find('59') != -1 )
       lemmas = soup.findAll('div', {'class': 'lemma'} )
-      infls_string = ''
       for l in lemmas:
-        inflections = soup.find('div', {'class': 'lemma'} ).findAll('td', {'class': '', 'style': ''}, lambda tag: tag.string is None)
+        print(l)
+        inflections = l.findAll('td', {'class': '', 'style': ''}, lambda tag: tag.string is None)
         print(inflections)
-        infls_string = [ i.string for i in inflections ]
-        infls_string = ','.join(infls_string)
+        infls = [ i.string for i in inflections ]
+        infls_string = infls_string + ','.join(infls) + ','
       for l in links:
-        print(l['onclick'])
-        lsh = re.search('Perseus:text:1999.04.0059.+?\'', l['onclick'])
-        lsh = lsh[0][:-1]
-        original = lsh.split('=')[-1].strip()
+        lsh = re.search('(Perseus:text:(2000|1999).04.0059.+?)\'', l['onclick'])
+        if not lsh:
+          continue
+        lsh = lsh.group(1)
+        original = lsh.split('=')[1].strip()
         print('original:', original, 'haha');
         try:
           o = Word.latin_objects.get(word=original)
@@ -248,10 +250,10 @@ class LatinWordManager(models.Manager):
         w = Word.objects.create(word=word, lookup_date=timezone.now(), language='latin',)
         ety = Etymology.objects.create(word=w, etymology='');
         for definition in definitions:
-          print(definition) 
           d = Definition.objects.filter(definition=definition, word=w).first()
           if not d:
             d = Definition.objects.create(word=w, definition=definition, etymology=ety);
+        print(infls_string)
         i = Inflections.objects.create(inflections=infls_string)
         w.inflections = i 
 

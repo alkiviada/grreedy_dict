@@ -19,7 +19,7 @@ book_head = ''
 
 
 #for filename in sorted(glob.glob("/Users/ana/clean_dict/grreedy_dict/grreedy_library/stendhal/parme/796/*.html"), key=lambda a: (int(a.split('.')[0].split('-')[2]))):
-for filename in sorted(glob.glob("/Users/ana/clean_dict/grreedy_dict/grreedy_library/bible/*.xhtml")):
+for filename in sorted(glob.glob("grreedy_library/bible/*.xhtml")):
   print(filename)
   with open(filename,'r') as f:
     output = f.read()
