@@ -18,7 +18,8 @@ class Book extends Component {
 
   fetchMore = () => {
     const page = this.props.match.params.page
-    this.props.requestPage(page)
+    const what = this.props.match.params.what
+    this.props.requestPage(page, what)
     console.log('doing the fetch')
     this.props.fetchPage();
   };
@@ -44,11 +45,12 @@ class Book extends Component {
     const { uuid, bookPageMap } = this.props
     console.log(this.props)
     const page = this.props.match.params.page
+    const what = this.props.match.params.what
     console.log('mounting book');
     console.log('map ', bookPageMap)
     if (uuid)
       this.props.registerUUId(uuid)
-    this.props.requestPage(page);
+    this.props.requestPage(page, what);
     if (!(bookPageMap[page]) || (bookPageMap[page]['end'] >= 1)) {
       this.props.fetchPage(1)
     }
@@ -73,6 +75,7 @@ class Book extends Component {
   render () {
     const { word, words, bookPageMap, ps } = this.props;
     const page = this.props.match.params.page
+    const what = this.props.match.params.what
 
     console.log('render')
     console.log(page)
@@ -92,7 +95,7 @@ class Book extends Component {
           height={300}
           loader={<h4>Loading...</h4>}
           endMessage={
-           <Link className="is-link" to={`/book/${newPage}`}>Chapter {newPage}</Link>  
+           <Link className="is-link" to={`/book/${what}/${newPage}`}>Chapter {newPage}</Link>  
            }
         >
           { psToShow.map(p => <DecorateWithLinks words={p} onLinkClick={this.dictionary} />) }

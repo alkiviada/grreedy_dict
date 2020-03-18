@@ -39,7 +39,7 @@ class Collocation(models.Model):
         return self.expression
 
 class Definition(models.Model):
-    definition = models.CharField(max_length=800, null=True)
+    definition = models.TextField(null=True)
     word = models.ForeignKey('Word', on_delete=models.CASCADE, related_name='word_definitions')
     etymology = models.ForeignKey(Etymology, on_delete=models.CASCADE, related_name='definitions', null=True)
 
@@ -172,6 +172,108 @@ class YandexWordMixin(models.Manager):
       if examples:
         [ Example.objects.create(definition=d, example=e, word=w) for e in examples ]
     return (w,)
+
+class LatinWordManager(models.Manager):
+  def get_queryset(self):
+    return super().get_queryset().filter(language='latin')
+
+  def fetch_inflections(self, word):
+    print('Fetching inflections for latin word')
+    base_url = "https://la.wiktionary.org/wiki/" + word.word
+    r = try_fetch(base_url, headers={})
+    if not r:
+      print('no r')
+    if r:
+      page = r.content
+      soup = BeautifulSoup(page, features="html.parser")
+      i = soup.find('table', { 'class': "inflection-table" })
+      print('creating infls')
+      i_db = Inflections.objects.create(inflections=str(i))
+      word.inflections = i_db 
+      word.did_inflections = 1 
+      word.save(update_fields=['did_inflections', 'inflections'])
+      print('i did the job')
+      return i_db
+      
+
+  def fetch_word(self, word):
+    print('Fetching latin word')
+    definitions_map = {}
+    definitions = []
+    base_url = 'http://www.perseus.tufts.edu/hopper/morph?la=la&l=' + word
+    r = try_fetch(base_url, headers={})
+    originals = []
+    if not r:
+      print('no r')
+    if r:
+      page = r.content
+      soup = BeautifulSoup(page, features="html.parser")
+      links = soup.findAll('a', id=lambda x: x and x.find('59') != -1 )
+      lemmas = soup.findAll('div', {'class': 'lemma'} )
+      infls_string = ''
+      for l in lemmas:
+        inflections = soup.find('div', {'class': 'lemma'} ).findAll('td', {'class': '', 'style': ''}, lambda tag: tag.string is None)
+        print(inflections)
+        infls_string = [ i.string for i in inflections ]
+        infls_string = ','.join(infls_string)
+      for l in links:
+        print(l['onclick'])
+        lsh = re.search('Perseus:text:1999.04.0059.+?\'', l['onclick'])
+        lsh = lsh[0][:-1]
+        original = lsh.split('=')[-1].strip()
+        print('original:', original, 'haha');
+        try:
+          o = Word.latin_objects.get(word=original)
+          print(o.definition)
+          definitions.append(o.definition)
+        except:
+          lsh_base_url = 'http://www.perseus.tufts.edu/hopper/loadquery?doc=' + lsh
+          print('will fetch fresh');
+          print(lsh_base_url)
+          r = try_fetch(lsh_base_url, headers={})
+          if not r:
+            print('no r')
+          if r:
+            originals.append(original)
+            page = r.content
+            soup = BeautifulSoup(page, features="html.parser")
+            definition = soup.get_text()
+            definitions_map[original] = definition
+            definitions.append(definition)
+
+      try:
+        w = Word.latin_objects.get(word=word)
+        w.from_translation = False
+      except:
+        w = Word.objects.create(word=word, lookup_date=timezone.now(), language='latin',)
+        ety = Etymology.objects.create(word=w, etymology='');
+        for definition in definitions:
+          print(definition) 
+          d = Definition.objects.filter(definition=definition, word=w).first()
+          if not d:
+            d = Definition.objects.create(word=w, definition=definition, etymology=ety);
+        i = Inflections.objects.create(inflections=infls_string)
+        w.inflections = i 
+
+      for o in originals:
+        orig = ''
+        try:
+          orig = Word.latin_objects.get(word=o)
+          orig.from_translation = False
+        except:
+          orig = Word.objects.create(word=o, lookup_date=timezone.now(), language='latin', )
+          LookupMap.objects.create(word=o, language=Language.objects.get(language='latin'), lookup_date=timezone.now())
+          definition = definitions_map[o]
+          print(definition) 
+          d = Definition.objects.filter(definition=definition, word=orig).first()
+          if not d:
+            ety = Etymology.objects.create(word=orig, etymology='');
+            d = Definition.objects.create(word=orig, definition=definition, etymology=ety);
+        w.origin_word.add(orig)
+       
+      w.save() 
+      return (w, )
+
 
 class WordRefWordMixin(models.Manager):
   
@@ -319,13 +421,14 @@ class FrontendOrderCollectionManager(models.Manager):
 
 class SingleWordManager(models.Manager):
   def get_queryset(self):
-    return super().get_queryset().filter(language__in=['english', 'french', 'italian', 'swedish', 'russian', 'ukrainian']).annotate(order=Case(
+    return super().get_queryset().filter(language__in=['english', 'french', 'italian', 'swedish', 'russian', 'ukrainian', 'latin']).annotate(order=Case(
       When(language='english', then=Value(0)),
       When(language='french', then=Value(1)),
       When(language='italian', then=Value(2)),
       When(language='swedish', then=Value(3)),
       When(language='russian', then=Value(4)),
       When(language='ukrainian', then=Value(5)),
+      When(language='latin', then=Value(6)),
       output_field=IntegerField())).order_by('order')
 
 class EnglishWordManager(models.Manager):
@@ -708,7 +811,9 @@ class Word(models.Model):
     is_verb = models.BooleanField(default=False)
     conjugations = models.TextField(blank=True, null=True)
     origin_verb = models.ForeignKey("self", blank=True, related_name='verb', null=True, on_delete=models.CASCADE)
+    origin_word = models.ManyToManyField("self", blank=True, related_name='original_word', symmetrical=False,)
     did_conjugations = models.BooleanField(default=False)
+    did_inflections = models.BooleanField(default=False)
     did_book_examples = models.BooleanField(default=False)
     
     objects = models.Manager()
@@ -716,9 +821,12 @@ class Word(models.Model):
     english_objects = EnglishWordManager()
     russian_objects = RussianWordManager()
     ukrainian_objects = UkrainianWordManager()
+
     french_objects = FrenchWordManager()
     swedish_objects = SwedishWordManager()
     italian_objects = ItalianWordManager()
+    latin_objects = LatinWordManager()
+
     free_words = FreeWordsManager()
     romance_words = RomanceWordManager()
     true_verb_objects = VerbManager()
@@ -730,7 +838,7 @@ class Word(models.Model):
         ordering = ('collectionofwords', '-lookup_date',)
 
 class Inflections(models.Model):
-    inflections = models.CharField(max_length=100)
+    inflections = models.TextField()
 
     def __str__(self):
         return self.inflections

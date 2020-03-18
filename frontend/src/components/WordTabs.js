@@ -5,6 +5,7 @@ import DecorateWithLinks from "./DecorateWithLinks";
 import Translations from "./Translations";
 import Collocations from "./Collocations";
 import Conjugate from "./Conjugate";
+import Inflections from "./Inflections";
 import Corpora from "./Corpora";
 import Synonyms from "./Synonyms";
 import WordNote from "./WordNote";
@@ -16,6 +17,7 @@ import { lookUpTranslations, requestTranslations, } from '../actions/transAction
 import { fetchCorpora, requestCorpora, } from '../actions/corporaActions';
 import { fetchPronunciation, requestPronunciation, } from '../actions/pronounceActions';
 import { fetchConjugations, requestConjugations, } from '../actions/conjugateActions';
+import { fetchInflections, requestInflections, } from '../actions/inflectionsActions';
 import { lookUpCollocations, requestCollocations, } from '../actions/collocationsActions';
 import { lookUpSynonyms, requestSynonyms, } from '../actions/synonymsActions';
 import { fetchNote, requestNote } from '../actions/notesActions';
@@ -28,6 +30,7 @@ const mapStateToProps = state => ({
   allSynonyms: state.synonyms.allSynonyms,
   allPronunciations: state.pronounce.allPronunciations,
   allConjugations: state.conjugate.allConjugations,
+  allInflections: state.inflections.allInflections,
   allCorpora: state.corpora.allCorpora,
   allCollocations: state.collocations.allCollocations,
   allNotes: state.notes.allNotes,
@@ -43,7 +46,7 @@ const carouselItems3 = 3;
 const carouselItems2 = 2;
 
 const tabPanels = [
-  'Translations', 'Collocations', 'Synonyms', 'Pronounciation', 'Add Note', 'Conjugate', 'Corpora'
+  'Translations', 'Inflections', 'Collocations', 'Synonyms', 'Pronounciation', 'Add Note', 'Conjugate', 'Corpora'
 ]
 
 class WordTabs extends Component {
@@ -159,6 +162,15 @@ class WordTabs extends Component {
           this.props.fetchConjugations(word)
         }
         break
+      case 'Inflections':
+        console.log('Inflections')
+        if (!this.props.allInflections[word]) {
+          console.log('looking up inflections'); 
+          this.props.requestInflections(word)
+          console.log('after request up inflections'); 
+          this.props.fetchInflections(word)
+        }
+        break
       case 'Corpora':
         console.log('boom')
         if (!this.props.allCorpora[word]) {
@@ -189,9 +201,18 @@ class WordTabs extends Component {
 
   render() {
     const { word, element, addRow, parentRef } = this.props;
+    console.log(element)
 
     const isEnglishWord = element.reduce((englishFlag, e) => 
       {return e['language'] === 'english' ?  ++englishFlag : englishFlag}, 0)
+
+    const isLatinWord = element.reduce((latinFlag, e) => 
+      {return e['language'] === 'latin' ?  ++latinFlag : latinFlag}, 0)
+    console.log(isLatinWord)
+
+    const isNotOnlyLatinWord = element.reduce((onlyLatinFlag, e) => 
+      {return e['language'] != 'latin' ?  ++onlyLatinFlag : onlyLatinFlag}, 0)
+
 
     const isNotOnlyEnglishWord = element.reduce((onlyEnglishFlag, e) => 
       {return e['language'] != 'english' ?  ++onlyEnglishFlag : onlyEnglishFlag}, 0)
@@ -200,23 +221,25 @@ class WordTabs extends Component {
       {return e['language'] != 'swedish' ?  ++notOnlySwedishFlag : notOnlySwedishFlag}, 0)
 
 
-
     const isNonPronWord = element.reduce((nonPronFlag, e) => 
-      {return e['language'].match('swedish|russian|ukrainian') ?  ++nonPronFlag : nonPronFlag}, 0)
+      {return e['language'].match('swedish|russian|ukrainian|latin') ?  ++nonPronFlag : nonPronFlag}, 0)
+    console.log(isNonPronWord)
 
     const isVerb = element.reduce((isVerbFlag, e) => 
       {return e['is_verb'] ? ++isVerbFlag : isVerbFlag}, 0)
 
     const hasCorp = element.reduce((hasCorpFlag, e) => 
       {return e['has_corpora'] ? ++hasCorpFlag: hasCorpFlag}, 0)
-    console.log(hasCorp)
     
     const myTabs = tabs.filter(t => (!isEnglishWord && t == 'Translations' ? 0 : 1) && 
-      (isNonPronWord && t == 'Pronounciation' ? 0 : 1) && 
+      (isNonPronWord && t == 'Pronunciation' ? 0 : 1) && 
       (!isVerb && t == 'Conjugate' ? 0 : 1) && 
+      (!isLatinWord && t == 'Inflections' ? 0 : 1) && 
       (!hasCorp && t == 'Corpora' ? 0 : 1) && 
       (!isNotOnlyEnglishWord && (t == 'Synonyms' || t == 'Collocations') ? 0 : 1) && 
+      (!isNotOnlyLatinWord && (t == 'Synonyms' || t == 'Collocations') ? 0 : 1) && 
       (!isNotOnlySwedishWord && t == 'Synonyms' ? 0 : 1))
+    
      
 
     const iAmHidden5 = this.state.carouselIdx5
@@ -287,7 +310,10 @@ class WordTabs extends Component {
           { element.map(e => 
                 <div>
                 <p className={`heading lang-head lang-${e['language']}`}>{e['language']}</p>
+                 <details>
+                 <summary></summary>
                 { renderList(e['etymology'], addRow, parentRef, word, listStyles, 0) }
+                </details>
                 </div>
                )
           }
@@ -311,6 +337,8 @@ class WordTabs extends Component {
         break
       case 'Conjugate':
              return <TabPanel><Conjugate word={word} /></TabPanel>
+      case 'Inflections':
+             return <TabPanel><Inflections word={word} /></TabPanel>
       case 'Corpora':
              return <TabPanel><Corpora word={word} addRow={addRow} parentRef={parentRef} /></TabPanel>
         break
@@ -339,6 +367,8 @@ const mapDispatchToProps = {
           requestPronunciation,
           fetchConjugations, 
           requestConjugations,
+          fetchInflections, 
+          requestInflections,
           fetchNote, 
           requestNote,
           logWordDivOffset

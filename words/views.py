@@ -15,7 +15,8 @@ from random import randint
 
 from .serializers import (WordSerializer, SynonymSerializer, TranslationSerializer, CollectionSerializer, 
                                CollectionDetailSerializer, CollocationSerializer, WordNoteSerializer, PronounceSerializer,
-                               CreateUserSerializer, UserSerializer, LoginUserSerializer, ConjugateSerializer, WordExampleSerializer)
+                               CreateUserSerializer, UserSerializer, LoginUserSerializer, ConjugateSerializer, WordExampleSerializer,
+                               InflectionSerializer)
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -304,8 +305,9 @@ class WordSingleCreate(generics.ListAPIView):
     print('GET ' + word);
     word = word.lower()
     db_words = ()
-    langs = Language.objects.all()
+    langs = Language.objects.all() 
     print(langs)
+    
     for l in langs: 
       print(l)
       w = Word.single_object.filter(word=word, language=l.language, from_translation=False)
@@ -823,11 +825,12 @@ def pick_items(to_pick, hard_limit):
 class PageCreate(generics.RetrieveAPIView):
   permission_classes = [ AllowAny, ]
 
-  def get(self, request, page, *args, **kwargs):
+  def get(self, request, what, page, *args, **kwargs):
     import json
     from bs4 import BeautifulSoup, NavigableString
     print('Book: ', page);
-    with open('/Users/ana/clean_dict/grreedy_dict/grreedy_library/stendhal/parme/796/parme.json', 'r') as fp:
+    print('Book: ', what);
+    with open('/Users/ana/clean_dict/grreedy_dict/grreedy_library/maps/' + what + '.json', 'r') as fp:
       map = json.load(fp)
     print(map[page])
     with open(map[page]['file_start'], 'r') as f:
@@ -841,7 +844,7 @@ class PageCreate(generics.RetrieveAPIView):
       if idx < (map[page]['end'] if map[page]['end'] > 0 and map[page]['end'] > map[page]['start'] else len(book_parts)) and idx >= map[page]['start']:
         if p.get_text():
           to_return.append(p.get_text())
-    if map[page]['end'] < map[page]['start']:
+    if map[page]['end'] <= map[page]['start']:
       with open(map[page]['file_end'], 'r') as f:
         output = f.read()
       book_soup = BeautifulSoup(output, features="html.parser")
@@ -851,5 +854,60 @@ class PageCreate(generics.RetrieveAPIView):
           if p.get_text():
             to_return.append(p.get_text())
     return Response({'ps': to_return })
+
+class WordSingleCreateInflection(generics.RetrieveAPIView):
+  permission_classes = [ AllowAny, ]
+  def get_queryset(self):
+    word = self.kwargs['word']
+    words = Word.objects.filter(word=word, language='latin')
+    inflections = [ w.inflections for w in words ]
+    return inflections
+
+  lookup_field = 'word'
+
+  def get(self, request, word, *args, **kwargs):
+    orig_word = ''
+    print(word);
+    word = word.lower()
+    inflections = []
+    origin_words = []
+    words = Word.latin_objects.filter(word=word)
+    print('haha', words)
+    for w in words:
+      print('inflect: ', w, w.language) 
+      print(w.word)
+      if w.inflections:
+        print('hmm');
+        inflections.append(w.inflections)  
+      else: 
+        if w.did_inflections:
+          print('i have');
+          continue
+        try:
+          objects_manager = getattr(Word, w.language + '_objects')
+          print(objects_manager)
+          try:
+            inflections_method = getattr(objects_manager, 'fetch_inflections')
+            infls = inflections_method(ow)
+            if infls:
+              inflections.append(infls)
+          except Exception as e: 
+            print(e)
+            print('No method to get inflections')
+            raise Http404("No Inflections API for the word: ", word)
+        except Exception as e: 
+          print(e)
+          print('No method to get inflections')
+          raise Http404("No Inflections API for the word: ", word)
+      if not w.did_inflections:
+        print('not inflections')
+        w.did_inflections = 1
+        w.save()
+    if not inflections:
+      print("Could not fetch inflections: " + word);
+      raise Http404("No Conjugation API for the word: ", word)
+    
+    serializer = InflectionSerializer(inflections, many=True)
+    return Response(serializer.data)
 
 lingvo_api_key = 'OTQwMTgzY2EtYmI3NC00OGQ4LTgyNjctYzhiYTI2ZWM4NzU4OjEwNTljMTg1MTEyOTQ5ODlhMmEyMThmY2Q0Y2M2MjE5'

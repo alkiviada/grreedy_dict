@@ -12,15 +12,15 @@ export const registerUUId = (uuid) => dispatch => {
   })
 };
 
-export const requestPage = (page) => dispatch => {
+export const requestPage = (page, what) => dispatch => {
   dispatch({
     type: FETCH_PAGE,
-    payload: page,
+    payload: { page, what},
   })
 };
 
 export const fetchPage = (alreadyRead) => { return (dispatch, getState) => {
-  let { bookPageMap, page, ps } = getState().book
+  let { bookPageMap, page, ps, what } = getState().book
   console.log('fetching')
   console.log(bookPageMap)
   console.log(page)
@@ -61,7 +61,7 @@ export const fetchPage = (alreadyRead) => { return (dispatch, getState) => {
       headers["Authorization"] = `Token ${token}`;
   }
 
-  const url = '/api/book/' + page 
+  const url = '/api/book/' + what + '/' + page 
   return fetch(url, {headers})
   .then(response =>
       response.json().then(json => ({

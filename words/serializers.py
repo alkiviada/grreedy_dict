@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Word, Etymology, Definition, Example, Collection, Collocation, WordNote, WordExamples
+from .models import Word, Etymology, Definition, Example, Collection, Collocation, WordNote, WordExamples, Inflections
 from homework.models import Tense, ConjugationExample
 from collections import OrderedDict
 from django.contrib.auth.models import User
@@ -181,3 +181,9 @@ class WordExampleSerializer(serializers.ModelSerializer):
   class Meta:
     model = WordExamples
     fields = ('example', 'pk')
+
+class InflectionSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Inflections 
+    fields = ['inflections', ]
+

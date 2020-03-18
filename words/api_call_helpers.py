@@ -7,8 +7,8 @@ def try_fetch(url, **args):
   headers['User-Agent'] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36"
   r = ''
   try:
-    #print(url)
-    #print(headers)
+    print(url)
+    print(headers)
     r = requests.get(url, headers = headers, allow_redirects=False, params=params, verify=False)
     r.raise_for_status()
   except requests.exceptions.HTTPError as errh:
@@ -22,13 +22,13 @@ def try_fetch(url, **args):
   return r;
 
 def fetch_straight_word(word):
-  base_url = "http://www.wordreference.com/fren/" + word.word
+  base_url = "https://www.wordreference.com/fren/" + word.word
   r = try_fetch(base_url)
   if r:
     return parse_straight_word(r)
 
 def fetch_reverse_collocations(word):
-  base_url = "http://www.wordreference.com/fren/reverse/" + word.word
+  base_url = "https://www.wordreference.com/fren/reverse/" + word.word
   r = try_fetch(base_url)
   if r:
     return parse_reverse_collocations(r)

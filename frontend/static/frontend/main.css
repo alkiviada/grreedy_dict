@@ -740,6 +740,7 @@ list-style: disc;
   padding-right: .3em;
   padding-bottom: .3em;
   margin-left: 0.5em;
+  font-size: calc(18px + 0.25vw);
 }
 
 
@@ -1221,6 +1222,12 @@ ul {
   font-size: 1rem;
   line-height: 1.5;
   padding: .3em 0;
+  color: var(--sky-color);
+}
+
+.lang-head + details {
+  font-size: 2rem;
+  margin-left: .5em;
   color: var(--sky-color);
 }
 

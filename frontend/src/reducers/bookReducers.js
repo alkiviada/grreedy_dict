@@ -10,6 +10,7 @@ const initialState = {
   uuid: null,
   error: null,
   page: 0,
+  what: '',
   ps: [],
   pageFetching: false,
   bookPageMap: {}
@@ -20,7 +21,8 @@ export default function(state = initialState, action) {
     case REGISTER_UUID: return { ...state, uuid: action.payload };
     case FETCH_PAGE: return { ...state, 
                                pageFetching: true, 
-                               page: action.payload
+                               page: action.payload.page,
+                               what: action.payload.what,
                              };
     case FETCH_PAGE_FULFILLED: return { ...state, 
                                          pageFetching: false, 

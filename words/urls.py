@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^api/word/translate/(?P<word>[-\'\w() ]+)$', views.WordSingleCreateTranslate.as_view(), name='word-translate'),
     url(r'^api/word/pronounce/(?P<word>[-\'\w() ]+)$', views.WordSingleCreatePronounce.as_view(), name='word-pronounce'),
     url(r'^api/word/conjugate/(?P<word>[-\'\w() ]+)$', views.WordSingleCreateConjugate.as_view(), name='word-conjugate'),
+    url(r'^api/word/inflection/(?P<word>[-\'\w() ]+)$', views.WordSingleCreateInflection.as_view(), name='word-inflection'),
     url(r'^api/word/corpora/(?P<word>[-\'\w() ]+)/(?P<ids>[0-9,]+)?$', views.WordExampleSingleDetail.as_view(), name='word-corpora'),
     url(r'^api/word/synonyms/(?P<word>[-\'\w() ]+)$', views.WordSingleCreateSynonyms.as_view(), name='word-synonyms'),
     url(r'^api/word/collocations/(?P<word>[-\'\w() ]+)$', views.WordSingleCreateCollocations.as_view(), name='word-collocations'),
@@ -31,5 +32,5 @@ urlpatterns = [
     url("^api/auth/user/$", views.UserAPI.as_view()),
     url(r'^api/auth/', include('knox.urls')),
 
-    url(r'^api/book/(?P<page>[0-9]+)$', views.PageCreate.as_view(), name='page-create'),
+    url(r'^api/book/(?P<what>[-\'\w() ]+)/(?P<page>[0-9]+)$', views.PageCreate.as_view(), name='page-create'),
 ]

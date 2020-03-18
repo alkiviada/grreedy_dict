@@ -72,3 +72,7 @@
 2019-11-25 12:30:09.423 EST [2275] LOG:  invalid record length at 0/21277F8: wanted 24, got 0
 2019-11-25 12:30:09.423 EST [2275] LOG:  redo done at 0/21277C0
 2019-11-25 12:30:09.467 EST [2274] LOG:  database system is ready to accept connections
+2020-01-10 12:17:34.255 EST [2274] LOG:  received smart shutdown request
+2020-01-10 12:17:34.265 EST [2274] LOG:  worker process: logical replication launcher (PID 2281) exited with exit code 1
+2020-01-10 12:17:34.265 EST [2276] LOG:  shutting down
+2020-01-10 12:17:34.326 EST [2274] LOG:  database system is shut down
