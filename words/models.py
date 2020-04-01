@@ -177,6 +177,34 @@ class LatinWordManager(models.Manager):
   def get_queryset(self):
     return super().get_queryset().filter(language='latin')
 
+  def fetch_translation(self, orig_word):
+    trans_to_return = []
+    translations_for_db = []
+    print('Fetching translations for latin word')
+    base_url = "http://www.latin-dictionary.net/search/english/" + orig_word.word
+    r = try_fetch(base_url, headers={})
+    if not r:
+      print('no r')
+    if r:
+      page = r.content
+      soup = BeautifulSoup(page, features="html.parser")
+      entry = soup.findAll('div', { 'class': 'entry' })
+      print(entry)
+      for e in entry:
+        translations = e.findAll('h3')
+        print(translations)
+        for t in translations:
+          translations_for_db.append(t.get_text())
+    for trans_for_db in translations_for_db:
+      print(trans_for_db)
+      w = Word.objects.filter(word=trans_for_db, language='latin').first()
+      if not w:
+        w = Word.objects.create(word=trans_for_db, lookup_date=timezone.now(), language='latin', from_translation=True) 
+      w.translations.add(orig_word)
+      trans_to_return.append(w)
+
+    return trans_to_return
+
   def fetch_inflections(self, word):
     print('Fetching inflections for latin word')
     base_url = "https://la.wiktionary.org/wiki/" + word.word
@@ -211,6 +239,8 @@ class LatinWordManager(models.Manager):
       soup = BeautifulSoup(page, features="html.parser")
       links = soup.findAll('a', id=lambda x: x and x.find('59') != -1 )
       lemmas = soup.findAll('div', {'class': 'lemma'} )
+      if not lemmas:
+        return ();
       for l in lemmas:
         print(l)
         inflections = l.findAll('td', {'class': '', 'style': ''}, lambda tag: tag.string is None)
@@ -239,7 +269,20 @@ class LatinWordManager(models.Manager):
             originals.append(original)
             page = r.content
             soup = BeautifulSoup(page, features="html.parser")
-            definition = soup.get_text()
+            definitions = soup.findAll('div', { 'class': 'lex_sense'})
+            for d in definitions:
+              print(d.get_text())
+              print(len(d.findAll('b')))
+              if len(d.findAll('b')):
+                for b in d.findAll('b'):
+                  print(b.get_text())
+                  b.decompose()
+            print(definitions)
+            definitions = [ d.get_text() for d in definitions]
+            print('done')
+            definition = ''.join(definitions)
+            definition = re.sub(r'[;]+', r';', definition)  
+            print(definition)
             definitions_map[original] = definition
             definitions.append(definition)
 

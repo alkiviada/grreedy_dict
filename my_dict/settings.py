@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'knox',
     'homework',
     'frontend',
+    'lessons',
     'words.apps.WordsConfig',
     'django.contrib.admin',
     'django.contrib.auth',

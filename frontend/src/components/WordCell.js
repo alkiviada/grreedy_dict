@@ -22,7 +22,16 @@ class WordCell extends Component {
 
   componentDidUpdate() {
     const { word, offsetMap, tabIndexMap } = this.props
-    if (offsetMap[word] && this.wordRef.current && [0,1,2].filter(i => i == tabIndexMap[word]).length) {
+    console.log('did update')
+    console.log(offsetMap[word]);
+    if (this.wordRef.current) {
+    console.log(this.wordRef.current.scrollHeight)
+    console.log(this.wordRef.current.clientlHeight)
+    }
+    if (offsetMap[word] && this.wordRef.current && [0, 1,2].filter(i => i == tabIndexMap[word]).length) {
+      console.log(this)
+      console.log('setting scroll top to ', offsetMap[word])
+      console.log(tabIndexMap[word])
       this.wordRef.current.scrollTop = offsetMap[word]
     }
     this.props.wordRefToMap(word, this.wordRef);
@@ -52,8 +61,7 @@ class WordCell extends Component {
 
   render () {
     const { visibilityMap, offsetMap, deleteWord, addRow, element, word } = this.props
-    console.log(element)
-    console.log('element')
+    console.log('rendering cell')
     return typeof(element[1]) === 'string' ? (
      <div className="word-cell">
      <Word wordElement={element} visibilityFilter={this.showHide} visibility={visibilityMap[element[1]]} deleteWord={deleteWord} /> 

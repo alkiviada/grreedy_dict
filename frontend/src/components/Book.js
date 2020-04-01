@@ -80,11 +80,13 @@ class Book extends Component {
     console.log('render')
     console.log(page)
     const psToShow = bookPageMap[page] ? bookPageMap[page]['psToShow'] : []
+
     const end = bookPageMap[page] ? bookPageMap[page]['end'] : 0
     const newPage = parseInt(page) + 1
 
     const wordElementIndex = words.findIndex(w => w.word == word);
     const displayWord = words[wordElementIndex] ? words[wordElementIndex] : words[0]
+
     return (
     <div className="book">
     <div className="book-page">

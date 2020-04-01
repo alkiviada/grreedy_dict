@@ -16,6 +16,7 @@ import visibilityReducer from "./visibilityReducers";
 import refReducer from "./refReducers";
 import context from "./contextReducer";
 import bookReducer from "./bookReducers";
+import lessonReducer from "./lessonReducers";
 
 export default combineReducers({
   words: wordsReducer,
@@ -33,6 +34,7 @@ export default combineReducers({
   conjugate: conjugateReducer,
   corpora: corporaReducer,
   book: bookReducer,
+  lesson: lessonReducer,
   inflections: inflectionsReducer,
 });
 

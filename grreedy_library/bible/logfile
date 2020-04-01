@@ -1,0 +1,15 @@
+2020-03-24 11:12:10.819 EDT [4775] LOG:  listening on IPv6 address "::1", port 5432
+2020-03-24 11:12:10.819 EDT [4775] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2020-03-24 11:12:10.822 EDT [4775] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2020-03-24 11:12:10.895 EDT [4776] LOG:  database system was interrupted; last known up at 2020-03-18 12:43:17 EDT
+2020-03-24 11:12:11.022 EDT [4776] LOG:  database system was not properly shut down; automatic recovery in progress
+2020-03-24 11:12:11.025 EDT [4776] LOG:  redo starts at 0/3349C80
+2020-03-24 11:12:11.025 EDT [4776] LOG:  invalid record length at 0/3349D60: wanted 24, got 0
+2020-03-24 11:12:11.025 EDT [4776] LOG:  redo done at 0/3349D28
+2020-03-24 11:12:11.068 EDT [4775] LOG:  database system is ready to accept connections
+2020-03-25 19:38:19.146 EDT [7848] ERROR:  null value in column "lesson_id" violates not-null constraint
+2020-03-25 19:38:19.146 EDT [7848] DETAIL:  Failing row contains (1, daskhda, null, null, null, null).
+2020-03-25 19:38:19.146 EDT [7848] STATEMENT:  INSERT INTO "lessons_lesson" ("text", "work", "title", "collection_id", "lesson_id") VALUES ('daskhda', NULL, NULL, NULL, NULL) RETURNING "lessons_lesson"."id"
+2020-03-25 19:42:35.196 EDT [7904] ERROR:  null value in column "collection_id" violates not-null constraint
+2020-03-25 19:42:35.196 EDT [7904] DETAIL:  Failing row contains (2, daskhda, null, null, 48fba164-6f7a-46b6-a704-6fff32443be8, null).
+2020-03-25 19:42:35.196 EDT [7904] STATEMENT:  INSERT INTO "lessons_lesson" ("text", "work", "title", "collection_id", "lesson_id") VALUES ('daskhda', NULL, NULL, NULL, '48fba164-6f7a-46b6-a704-6fff32443be8'::uuid) RETURNING "lessons_lesson"."id"

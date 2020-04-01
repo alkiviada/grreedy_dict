@@ -288,7 +288,7 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
       headers["Authorization"] = `Token ${token}`;
   }
 
-  const url = '/api/word/' + word + '/' + (uuid ? uuid : '')
+  const url = '/api/word/' + word.toLowerCase() + '/' + (uuid ? uuid : '')
   console.log(url)
   return fetch(url, {headers})
   .then(response =>

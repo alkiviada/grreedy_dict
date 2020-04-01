@@ -463,7 +463,7 @@ class WordSingleCreateSynonyms(generics.RetrieveAPIView):
       words = Word.single_object.filter(word=word)
       for w in words:
         language = w.language
-        if language == 'english' or language == 'swedish':
+        if language == 'english' or language == 'swedish' or language == 'latin':
           continue
         print(language)
         try:
@@ -753,6 +753,9 @@ class WordSingleCreateCollocations(generics.RetrieveAPIView):
     for w in words:
       collocs = w.word_collocations.all()
       if not collocs:
+        language = w.language
+        if language == 'english' or language == 'latin':
+          continue
         try:
           objects_manager = getattr(Word, w.language + '_objects')
           print(objects_manager)

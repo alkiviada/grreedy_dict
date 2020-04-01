@@ -71,7 +71,7 @@ export const fetchNote = (word) => (dispatch, getState) => {
   const { uuid } = getState().collections
 
 
-  fetch('api/word/note/' + word + '/' + uuid)
+  fetch('/api/word/note/' + word + '/' + uuid)
   .then(response =>
       response.json().then(json => ({
         status: response.status,

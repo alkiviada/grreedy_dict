@@ -25,10 +25,11 @@ const Synonyms = (props) => {
       </div>
     ) : 
     ( Object.keys(wordSyns).map(e =>  
+         <div className="stuff-container">
         <div className="etym-style">
         <p className={`heading lang-head lang-${e}`}>{e}</p>
         <DecorateWithLinks words={wordSyns[e].join(', ')} onLinkClick={addRow} parentRef={parentRef} original={word} />
-        </div>)
+        </div></div>)
       
     );
 }

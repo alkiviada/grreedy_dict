@@ -9,6 +9,7 @@ import { Switch, Route, Router } from 'react-router-dom'
 import { Redirect } from "react-router-dom";
 import Dictionary from "./Dictionary";
 import Book from "./Book";
+import Lesson from "./Lesson";
 import { loadUser } from '../actions/authActions';
 
 import createBrowserHistory from 'history/createBrowserHistory'
@@ -42,6 +43,8 @@ class WordsRoot extends Component {
           <Route exact path="/logout" component={Dictionary} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/book/:what/:page?" component={Book} />
+          <Route exact path="/lesson/post/:lesson_id?" component={Lesson} />
+          <Route exact path="/lesson/:lesson_id?" component={Lesson} />
           <PrivateRoute path="/:page_id?" component={Dictionary} />
           <Route component={NotFound} />
         </Switch>

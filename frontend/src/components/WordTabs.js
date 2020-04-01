@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
-import DecorateWithLinks from "./DecorateWithLinks";
 import Translations from "./Translations";
 import Collocations from "./Collocations";
 import Conjugate from "./Conjugate";
@@ -87,10 +86,13 @@ class WordTabs extends Component {
 
   handleSelect(prev, index, word, myTabs, parentRef) {
     const parentOffset = parentRef.current.scrollTop
-    
+    console.log(parentRef.current.children[0].children[3]);
+    console.log('parent ', parentOffset);  
+    console.log('parent offset', parentRef.current.scrollTop);  
     if (parentOffset && [1, 2, 3].filter(i => i == prev).length) {
-      console.log(parentOffset)
+      console.log(parentRef)
       console.log('i am logging')
+      console.log('parent offset', parentRef.current.scrollTop);  
       this.props.logWordDivOffset(word, parentOffset);
     }
 
@@ -307,16 +309,15 @@ class WordTabs extends Component {
           </TabList>
           <TabPanel className="carousel-dummy-tab" />
           <TabPanel>
+                <div class="stuff-container">
           { element.map(e => 
                 <div>
                 <p className={`heading lang-head lang-${e['language']}`}>{e['language']}</p>
-                 <details>
-                 <summary></summary>
                 { renderList(e['etymology'], addRow, parentRef, word, listStyles, 0) }
-                </details>
                 </div>
                )
           }
+                </div>
         </TabPanel>
         {  myTabs.slice(1).map(t => {
     switch (t) {

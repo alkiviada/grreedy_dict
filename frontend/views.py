@@ -7,3 +7,8 @@ def index(request, page=''):
 
 def book(request, what='', page=''):
     return render(request, 'frontend/index.html')
+
+def lesson(request, lesson_id='', ):
+    print('lesson')
+    print(lesson_id)
+    return render(request, 'frontend/index.html')

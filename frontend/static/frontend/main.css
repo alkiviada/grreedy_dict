@@ -742,6 +742,9 @@ list-style: disc;
   margin-left: 0.5em;
   font-size: calc(18px + 0.25vw);
 }
+.stuff-container {
+  height: 20em;
+}
 
 
 ul {
@@ -754,8 +757,8 @@ ul {
   font-family: var(--word-font);
   font-feature-settings: 'liga', 'clig', 'dlig';
   max-height: 19.5em;
-  height: auto;
-  overflow: auto;
+  height: 20em;
+  overflow: scroll;
   padding-left: .2em;
 }
 
@@ -990,7 +993,7 @@ ul {
 } 
 
 
-.save-btn, .register-btn, .add-note-btn {
+.save-btn, .register-btn, .add-note-btn, .lesson-submit-btn {
   font-size: .9rem;
   cursor: pointer;
   border-radius: .2em;
@@ -1001,7 +1004,7 @@ ul {
   user-select: none;
 }
 
-.save-btn, .register-btn, .add-note-btn {
+.save-btn, .register-btn, .add-note-btn, .lesson-submit-btn {
   background-color: var(--sky-color);
 }
 
@@ -1224,10 +1227,13 @@ ul {
   padding: .3em 0;
   color: var(--sky-color);
 }
-
+summary {
+  outline: none;
+}
 .lang-head + details {
   font-size: 2rem;
   margin-left: .5em;
+  margin-bottom: .5em;
   color: var(--sky-color);
 }
 
@@ -1392,6 +1398,7 @@ a[href^="/homework/conjugate"]::after {
 .react-tabs__tab-panel--selected {
   display: block;
   padding-top: 3em;
+  overflow: scroll;
 }
 
 
@@ -1512,7 +1519,7 @@ font-family: FontAwesome;
 }
 
 @media (min-width:1124px) {
-  .arrow-tab5, .arrow-tab4, .arrow-tab3 {
+  .arrow-tab5, .arrow-tab4, .arrow-tab3, .arrow-tab2 {
     display: none;
   }
   .hide-tab-item {
@@ -1869,4 +1876,110 @@ padding: 2em 1em;
 .book-dict {
   width: 100%;
 }
+}
+
+.lesson {
+  display: grid;
+  grid-template-rows: 2em 80vh 1fr;
+  grid-template-areas:
+        ". . ."
+        ". lesson ."
+        ". . .";
+    grid-template-columns: 2em 1fr 2em;
+}
+
+.lesson-add-form {
+  grid-area: lesson;
+  max-width: 40rem;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-areas:
+      "text"
+      "button";
+  grid-template-rows: 1fr 3em;
+}
+.lesson-add-btn {
+  font-size: .9rem;
+  font-weight: bolder;
+  background-color: var(--field-color-light);
+  cursor: pointer;
+  border-radius: .2em;
+  align-items: center;
+  border-color: transparent;
+  color: #fff;
+  -webkit-box-pack: center;
+  user-select: none;
+}
+
+.work {
+  display: grid;
+  height: 100%;
+  grid-template-rows: 25em 15em; 
+  min-height: 100vh;
+  grid-template-areas: "lesson" "work";
+  grid-row-gap: 2em;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  grid-template-columns: 1fr;
+}
+
+.lesson-tabs {
+  font-weight: bolder;
+  color: var(--sky-color);
+  width: 100%;
+  justify-content: start;
+}
+
+.lesson-tabs .react-tabs__tab--selected {
+  color: var(--field-color-dark);
+}
+
+.lesson-tab-panel {
+  padding-top: 2em;
+}
+
+.lesson-material {
+  grid-area: lesson;
+  padding: 1em 1.3em;
+  overflow-y: scroll;
+  background: #FFFCF9;
+  font-family: var(--body-font);
+}
+
+.work-add-form {
+  grid-area: work;
+  max-width: 40rem;
+  margin: 0 auto;
+  width: 95%;
+  display: grid;
+  grid-template-areas:
+      "text"
+      "button";
+  grid-template-rows: 1fr 3em;
+
+}
+
+.lesson-txtarea {
+  height: 100%;
+  resize: vertical;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-size: 1rem;
+  justify-content: flex-start;
+  line-height: 1.5;
+  position: relative;
+  vertical-align: top;
+  background-color: white;
+  border-color: #dbdbdb;
+  color: #363636;
+  -webkit-box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+  box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+  max-width: 100%;
+  width: 100%;
+  padding-bottom: calc(0.375em - 5px);
+  padding-left: calc(0.625em - 5px);
+  padding-right: calc(0.625em - 5px);
+  padding-top: calc(0.375em - 5px);
 }
