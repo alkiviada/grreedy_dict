@@ -20,6 +20,7 @@ class Lesson extends Component {
     this.state = {
       tabIndex: 0,
       text: '',
+      name: '',
       work: ''
     };
   }
@@ -39,13 +40,13 @@ class Lesson extends Component {
     }
     this.setState({...this.state, tabIndex: 1});
   }
-handleChange(event) {
-   if (this.props.fetched) {
-     this.props.clearFetchedLesson();
+  handleChange(event) {
+    if (this.props.fetched) {
+      this.props.clearFetchedLesson();
    }
    console.log(event.target.name)
    console.log(event.target.value)
-   this.setState({...this.state, [event.target.name]: event.target.value});
+   this.setState({ [event.target.name]: event.target.value});
   }
 
   handleLessonSubmit(event) {
@@ -53,10 +54,11 @@ handleChange(event) {
     console.log('adding lesson');
     const { lessonId } = this.props;
     console.log(lessonId)
-    const text = this.state.text ? this.state.text : ''
+    const text = this.state.text
+    const name = this.state.name 
     if (text) {
       this.props.requestLesson()
-      this.props.postLesson(lessonId, text);
+      this.props.postLesson(lessonId, text, name);
     }
   }
   handleWorkSubmit(event) {
@@ -107,10 +109,12 @@ handleChange(event) {
     console.log('render')
 
     if (this.props.match.path.includes('post')) {
-      const text = !this.props.fetched ? this.state.text : this.props.text;
+      const text = this.state.text ? this.state.text : this.props.text;
+      const name = this.state.name ? this.state.name : this.props.name;
       return (
         <div className="lesson">
           <form className="lesson-add-form" onSubmit={this.handleAddNote}>
+            <input className="lesson-name" value={name} name="name" onChange={this.handleChange} />
             <textarea className="lesson-txtarea" value={text} name="text" onChange={this.handleChange} />
             <button type="submit" className="lesson-add-btn" onClick={(e) => this.handleLessonSubmit(e)}>Create Lesson</button>
           </form>

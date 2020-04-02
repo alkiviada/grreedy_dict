@@ -1888,6 +1888,10 @@ padding: 2em 1em;
     grid-template-columns: 2em 1fr 2em;
 }
 
+.lesson-container {
+  background: #fffcf9;
+}
+
 .lesson-add-form {
   grid-area: lesson;
   max-width: 40rem;
@@ -1895,9 +1899,10 @@ padding: 2em 1em;
   width: 100%;
   display: grid;
   grid-template-areas:
+      "name"
       "text"
       "button";
-  grid-template-rows: 1fr 3em;
+  grid-template-rows: 3em 1fr 3em;
 }
 .lesson-add-btn {
   font-size: .9rem;

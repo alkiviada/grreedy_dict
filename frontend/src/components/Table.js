@@ -61,8 +61,8 @@ class Table extends Component {
     const opened = this.props.menuOpen
     if (opened) 
       this.props.closeMenu() 
-    
-    const parentOffset = parentRef.current.scrollTop
+    const parentOffset = parentRef.current.offsetTop
+    console.log(parentRef)  
     if (parentOffset) {
       this.props.logWordDivOffset(original, parentOffset);
     }

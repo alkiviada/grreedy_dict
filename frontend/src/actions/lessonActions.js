@@ -2,9 +2,12 @@ import {
   REGISTER_LESSON_ID,
   CLEAR_FETCHED_LESSON,
   FETCH_LESSON,
+  FETCH_LESSONS,
   FETCH_WORK_FULFILLED,
   FETCH_LESSON_FULFILLED,
+  FETCH_LESSONS_FULFILLED,
   FETCH_LESSON_REJECTED,
+  FETCH_LESSONS_REJECTED,
   POST_LESSON,
   POST_LESSON_FULFILLED,
   POST_WORK_FULFILLED,
@@ -31,6 +34,13 @@ export const requestLesson = () => (dispatch) => {
   console.log('requesting lesson')
   dispatch({
     type: FETCH_LESSON,
+  })
+};
+
+export const requestLessons = () => (dispatch) => {
+  console.log('requesting lessons')
+  dispatch({
+    type: FETCH_LESSONS,
   })
 };
 
@@ -196,4 +206,40 @@ export const postWork = (lessonId, work) => (dispatch, getState) => {
         dispatch({type: POST_WORK_REJECTED, error: 'posting work problem'})
       }
     ); 
+};
+
+export const fetchLessons = () => { return (dispatch, getState) => {
+  console.log('fetching lessons');
+  return fetch('/api/lessons/')
+  .then(response =>
+      response.json().then(json => ({
+        status: response.status,
+        json
+      })
+    ))
+  .then(
+      // Both fetching and parsing succeeded!
+      ({ status, json }) => {
+        if (status >= 400) {
+          // Status looks bad
+          console.log(status);
+          console.log(json);
+          console.log('Server returned error status when fetching lessons');
+          dispatch({type: FETCH_LESSONS_REJECTED, })
+        } else {
+          // Status looks good
+          console.log(json.lessons)
+          dispatch({
+            type: FETCH_LESSONS_FULFILLED,
+            payload: json.lessons,
+          })
+        }
+      },
+      // Either fetching or parsing failed!
+      err => {
+        console.log('problems');
+        dispatch({type: FETCH_LESSONS_REJECTED, })
+      }
+    ); 
+};
 };

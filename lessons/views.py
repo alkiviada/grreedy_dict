@@ -3,7 +3,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from .models import Lesson
 
-from .serializers import (LessonPostSerializer, LessonWorkSerializer)
+from .serializers import (LessonPostSerializer, LessonWorkSerializer, LessonBareSerializer)
 
 
 class LessonWork(generics.RetrieveUpdateAPIView):
@@ -23,13 +23,15 @@ class LessonWork(generics.RetrieveUpdateAPIView):
   def post(self, request, format=None):
     print('ADD Lesson Work')
     work = request.data.get('work')
+    title = request.data.get('name')
     print(request.data)
     lesson_id = request.data.get('lessonId')
 
 
     lesson = Lesson.objects.get(lesson_id=lesson_id)
     lesson.work = work
-    lesson.save(update_fields=['work'])
+    lesson.name = name
+    lesson.save(update_fields=['work', 'title'])
     return Response(LessonPostSerializer(lesson).data)
 
 class LessonCreateUpdate(generics.GenericAPIView):
@@ -52,8 +54,21 @@ class LessonCreateUpdate(generics.GenericAPIView):
     if lesson_id:
       lesson = Lesson.objects.get(lesson_id=lesson_id)
       lesson.text = text
-      lesson.save(update_fields=['text'])
+      lesson.name = name
+      lesson.save(update_fields=['text', 'name'])
     else:
-      lesson = Lesson.objects.create(**{'text': text})
+      lesson = Lesson.objects.create(**{'text': text, 'name': name})
 
     return Response(LessonPostSerializer(lesson).data)
+
+class LessonList(generics.ListAPIView):
+  serializer_class = LessonPostSerializer
+
+  def get_queryset(self):
+    return Lesson.objects.all()
+
+  def get(self, request, *args, **kwargs):
+    print('many')
+    lessons = Lesson.objects.all()
+    serializer = LessonBareSerializer(lessons, many=True)
+    return Response({ 'lessons': serializer.data, })

@@ -281,7 +281,7 @@ class LatinWordManager(models.Manager):
             definitions = [ d.get_text() for d in definitions]
             print('done')
             definition = ''.join(definitions)
-            definition = re.sub(r'[;]+', r';', definition)  
+            definition = re.sub(r'(; )\1+', r'\1', definition)  
             print(definition)
             definitions_map[original] = definition
             definitions.append(definition)
@@ -296,7 +296,6 @@ class LatinWordManager(models.Manager):
           d = Definition.objects.filter(definition=definition, word=w).first()
           if not d:
             d = Definition.objects.create(word=w, definition=definition, etymology=ety);
-        print(infls_string)
         i = Inflections.objects.create(inflections=infls_string)
         w.inflections = i 
 
@@ -309,7 +308,6 @@ class LatinWordManager(models.Manager):
           orig = Word.objects.create(word=o, lookup_date=timezone.now(), language='latin', )
           LookupMap.objects.create(word=o, language=Language.objects.get(language='latin'), lookup_date=timezone.now())
           definition = definitions_map[o]
-          print(definition) 
           d = Definition.objects.filter(definition=definition, word=orig).first()
           if not d:
             ety = Etymology.objects.create(word=orig, etymology='');
