@@ -86,6 +86,12 @@ class WordSerializer(serializers.ModelSerializer):
     model = Word
     fields = [ 'word', 'word_etymologies', 'language', 'is_verb', 'has_corpora' ]
 
+class WordBareSerializer(serializers.ModelSerializer):
+
+  class Meta:
+    model = Word
+    fields = [ 'word' ]
+
 class TranslationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Word
@@ -152,7 +158,8 @@ class CollectionDetailSerializer(serializers.ModelSerializer):
 
   def get_words_list(self, instance):
     words = Word.objects.filter(words=instance).order_by('collectionofwords')
-    return WordSerializer(words, many=True).data
+    print('getting words')
+    return WordBareSerializer(words, many=True).data
 
   class Meta:
     model = Collection

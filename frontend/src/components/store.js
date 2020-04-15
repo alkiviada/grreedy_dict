@@ -24,7 +24,6 @@ store.subscribe(throttle(() => {
     auth: store.getState().auth,
     words: store.getState().words,
     book: store.getState().book,
-    visibility: store.getState().visibility
   });
 }, 1000));
 

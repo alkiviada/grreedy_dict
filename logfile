@@ -76,3 +76,30 @@
 2020-01-10 12:17:34.265 EST [2274] LOG:  worker process: logical replication launcher (PID 2281) exited with exit code 1
 2020-01-10 12:17:34.265 EST [2276] LOG:  shutting down
 2020-01-10 12:17:34.326 EST [2274] LOG:  database system is shut down
+2020-04-03 17:04:59.590 EDT [637] LOG:  listening on IPv6 address "::1", port 5432
+2020-04-03 17:04:59.590 EDT [637] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2020-04-03 17:04:59.592 EDT [637] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2020-04-03 17:04:59.660 EDT [638] LOG:  database system was interrupted; last known up at 2020-04-03 14:35:04 EDT
+2020-04-03 17:04:59.753 EDT [638] LOG:  database system was not properly shut down; automatic recovery in progress
+2020-04-03 17:04:59.755 EDT [638] LOG:  redo starts at 0/46D7B78
+2020-04-03 17:04:59.755 EDT [638] LOG:  invalid record length at 0/46D7C58: wanted 24, got 0
+2020-04-03 17:04:59.755 EDT [638] LOG:  redo done at 0/46D7C20
+2020-04-03 17:04:59.795 EDT [637] LOG:  database system is ready to accept connections
+2020-04-08 08:41:34.280 EDT [637] LOG:  worker process: logical replication launcher (PID 644) exited with exit code 1
+2020-04-08 08:41:34.287 EDT [637] LOG:  received smart shutdown request
+2020-04-08 08:41:34.296 EDT [639] LOG:  shutting down
+2020-04-08 08:41:34.324 EDT [637] LOG:  database system is shut down
+2020-04-08 09:53:38.865 EDT [656] LOG:  listening on IPv6 address "::1", port 5432
+2020-04-08 09:53:38.865 EDT [656] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2020-04-08 09:53:38.871 EDT [656] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2020-04-08 09:53:39.017 EDT [658] LOG:  database system was shut down at 2020-04-08 08:41:34 EDT
+2020-04-08 09:53:39.060 EDT [656] LOG:  database system is ready to accept connections
+2020-04-14 16:27:45.572 EDT [693] LOG:  listening on IPv6 address "::1", port 5432
+2020-04-14 16:27:45.573 EDT [693] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2020-04-14 16:27:45.574 EDT [693] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2020-04-14 16:27:45.685 EDT [694] LOG:  database system was interrupted; last known up at 2020-04-14 12:16:06 EDT
+2020-04-14 16:27:45.769 EDT [694] LOG:  database system was not properly shut down; automatic recovery in progress
+2020-04-14 16:27:45.770 EDT [694] LOG:  redo starts at 0/4BFF330
+2020-04-14 16:27:45.770 EDT [694] LOG:  invalid record length at 0/4BFF410: wanted 24, got 0
+2020-04-14 16:27:45.770 EDT [694] LOG:  redo done at 0/4BFF3D8
+2020-04-14 16:27:45.809 EDT [693] LOG:  database system is ready to accept connections

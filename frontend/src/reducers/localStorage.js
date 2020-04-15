@@ -7,10 +7,6 @@ export const loadState = () => {
     // return JSON.parse(serializedState)
     const state = JSON.parse(serializedState)
     console.log(state)
-    if (!Object.keys(state.visibility.visibilityMap).length && state.words.items.length) {
-      const visibilityMap = state.words.items.reduce((visibilityMap, e) => (visibilityMap[e.word] = 'show', visibilityMap), {})
-      state.visibility.visibilityMap = visibilityMap
-    }
     
     return state
   } catch (err) {

@@ -7,7 +7,8 @@ import NotFound from "./NotFound";
 import Register from "./Register";
 import { Switch, Route, Router } from 'react-router-dom'
 import { Redirect } from "react-router-dom";
-import Dictionary from "./Dictionary";
+import DictionaryList from "./DictionaryList";
+import DictionaryEntry from "./DictionaryEntry";
 import Book from "./Book";
 import Lesson from "./Lesson";
 import LessonsList from "./LessonsList";
@@ -37,17 +38,21 @@ class WordsRoot extends Component {
 
   render() {
     let {PrivateRoute} = this;
+    console.log(this.state)
+    console.log(this.props)
+    console.log('render root')
     return (
       <Router history={history}>
         <Switch>
           <Route exact path="/login" component={Login} />
-          <Route exact path="/logout" component={Dictionary} />
+          <Route exact path="/logout" component={DictionaryList} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/book/:what/:page?" component={Book} />
+          <Route exact path="/word/:word?" component={DictionaryEntry} />
           <Route exact path="/lesson/post/:lesson_id?" component={Lesson} />
           <Route exact path="/lessons" component={LessonsList} />
           <Route exact path="/lesson/:lesson_id?" component={Lesson} />
-          <PrivateRoute path="/:page_id?" component={Dictionary} />
+          <PrivateRoute path="/:page_id?" component={DictionaryList} />
           <Route component={NotFound} />
         </Switch>
       </Router>
@@ -57,6 +62,8 @@ class WordsRoot extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
+  collections: state.collections,
+  words: state.words,
 });
 
 export default connect(mapStateToProps, { loadUser })(WordsRoot);

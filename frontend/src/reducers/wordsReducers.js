@@ -9,7 +9,7 @@ import { CLEAR_NEW_WORD_ERROR,
        } from '../actions/types';
 
 const initialState = {
-  items: [],
+  words: [],
   word: '',
   allWordsMap: {},
   newWordFetching: false,
@@ -46,7 +46,7 @@ export default function(state = initialState, action) {
                                          allWordsFetching: false, 
                                          error: null, 
                                          allWordsFetched: true,
-                                         items: action.payload.words, 
+                                         words: action.payload.words, 
                                          pagePrev: action.payload.pagePrev, 
                                          pageNext: action.payload.pageNext, 
                                          allWordCount: action.payload.allWordCount,
@@ -57,7 +57,7 @@ export default function(state = initialState, action) {
                                         newWordFetching: false, 
                                         error: null, 
                                         newWordFetched: true,
-                                        items: action.payload.words, 
+                                        words: action.payload.words, 
                                         pageNext: action.payload.pageNext,
                                         pagePrev: action.payload.pagePrev ? action.payload.pagePrev: state.pagePrev,
                                         allWordCount: action.payload.allWordCount,

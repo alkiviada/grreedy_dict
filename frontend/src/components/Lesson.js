@@ -7,6 +7,7 @@ import DecorateWithLinks from "./DecorateWithLinks";
 import WordCell from "./WordCell";
 import DictionaryWidget from "./DictionaryWidget";
 import { fetchWord, requestWord, clearFetching } from '../actions/wordsActions';
+import { registerCollection } from '../actions/collectionsActions';
 import { registerLessonId, requestLesson, postLesson, clearFetchedLesson, fetchLesson, fetchWork, postWork } from '../actions/lessonActions';
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 
@@ -20,26 +21,34 @@ class Lesson extends Component {
     this.state = {
       tabIndex: 0,
       text: '',
-      name: '',
+      title: '',
       work: ''
     };
   }
+
   dictionary(e, word) {
     e.preventDefault();
     console.log('dictionary')
-    const { words } = this.props
+    const { words, collId } = this.props
     const wordElementIndex = words.findIndex(w => w.word == word);
     console.log(wordElementIndex)
-      this.props.requestWord(word)
+    this.props.requestWord(word)
     if (wordElementIndex < 0) { 
       console.log('looking up')
       this.props.fetchWord(word).then(() => {
         console.log(this.props.words)
         this.props.clearFetching()
+        if (!collId) {
+        }
+        this.setState({...this.state, tabIndex: 1});
       })
     }
-    this.setState({...this.state, tabIndex: 1});
+    else {
+        this.setState({...this.state, tabIndex: 1});
+
+    }
   }
+
   handleChange(event) {
     if (this.props.fetched) {
       this.props.clearFetchedLesson();
@@ -54,19 +63,21 @@ class Lesson extends Component {
     console.log('adding lesson');
     const { lessonId } = this.props;
     console.log(lessonId)
-    const text = this.state.text
-    const name = this.state.name 
+    const text = this.state.text ? this.state.text : this.props.text
+    const title = this.state.title ? this.state.title : this.props.title
+    console.log(text)
+    console.log(title)
     if (text) {
       this.props.requestLesson()
-      this.props.postLesson(lessonId, text, name);
+      this.props.postLesson(lessonId, text, title);
     }
   }
   handleWorkSubmit(event) {
     event.preventDefault();
     console.log('submitting work');
-    const { lessonId } = this.props;
+    const { lessonId, collId } = this.props;
     console.log(lessonId)
-    const work = this.state.work ? this.state.work : ''
+    const work = this.props.work ? this.props.work : this.props.work
     console.log(work)
     console.log(this.state)
     if (work) {
@@ -98,7 +109,10 @@ class Lesson extends Component {
       this.props.registerLessonId(lessonId)
     if (lessonId) {
       this.props.requestLesson();
-      this.props.fetchWork(lessonId).then(() => { })
+      this.props.fetchWork(lessonId).then(() => { 
+       this.props.fetchWords().then(() => { 
+      })
+      })
     }
   }
 
@@ -110,11 +124,11 @@ class Lesson extends Component {
 
     if (this.props.match.path.includes('post')) {
       const text = this.state.text ? this.state.text : this.props.text;
-      const name = this.state.name ? this.state.name : this.props.name;
+      const title = this.state.title ? this.state.title : this.props.title;
       return (
         <div className="lesson">
           <form className="lesson-add-form" onSubmit={this.handleAddNote}>
-            <input className="lesson-name" value={name} name="name" onChange={this.handleChange} />
+            <input className="lesson-name" value={title} name="title" onChange={this.handleChange} />
             <textarea className="lesson-txtarea" value={text} name="text" onChange={this.handleChange} />
             <button type="submit" className="lesson-add-btn" onClick={(e) => this.handleLessonSubmit(e)}>Create Lesson</button>
           </form>
@@ -123,11 +137,7 @@ class Lesson extends Component {
     }
     else {
       const work = !this.props.fetched ? this.state.work : this.props.work;
-      console.log(this.props);
-      console.log(work)
       const { word, words } = this.props;
-      const wordElementIndex = words.findIndex(w => w.word == word);
-      const displayWord = words[wordElementIndex] ? words[wordElementIndex] : words[0]
       return (
         <div className="work">
           <div className="lesson-container">
@@ -140,7 +150,7 @@ class Lesson extends Component {
           <div className="lesson-material"><DecorateWithLinks words={this.props.text} onLinkClick={this.dictionary} original={null} parentRef={null} /></div> 
           </TabPanel>
           { words.length ? 
-          <TabPanel className="react-tabs__tab-panel lesson-tab-panel"><DictionaryWidget word={displayWord} addToDict={this.dictionary} /></TabPanel> : '' 
+          <TabPanel className="react-tabs__tab-panel lesson-tab-panel"><DictionaryWidget addToDict={this.dictionary} /></TabPanel> : '' 
           }
           </Tabs>
           </div>
@@ -158,10 +168,10 @@ class Lesson extends Component {
 const mapStateToProps = state => ({
   words: state.words.items,
   word: state.words.word,
-  uuid: state.collections.uuid,
   text: state.lesson.text,
   work: state.lesson.work,
   lessonId: state.lesson.lessonId,
+  collId: state.collections.uuid,
   fetched: state.lesson.fetched,
   fetching: state.lesson.fetching,
 });
@@ -173,6 +183,7 @@ export default withRouter(connect(mapStateToProps, {
   fetchWord, 
   fetchWork, 
   registerLessonId,
+  registerCollection,
   requestLesson,
   postLesson,
   postWork,

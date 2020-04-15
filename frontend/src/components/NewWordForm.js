@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { lookUpWord, requestWord, clearNewWordError, fetchWords, clearFetched, clearFetching } from '../actions/wordsActions';
 import { scrollToDomRef } from './helpers';
+import { history } from '../components/WordsRoot'
 
 class NewWordForm extends Component {
   constructor(props) { 
@@ -24,7 +25,9 @@ class NewWordForm extends Component {
 
 
   componentDidUpdate() {
+    console.log('i updated NEW WORD FORM')
     const { word, page, fetched, allWordsMap, refMap } = this.props
+    console.log(this.props)
     if (refMap[word] && refMap[word].current && fetched) {
       scrollToDomRef(refMap[word], 80)
       this.props.clearFetched()
@@ -47,6 +50,13 @@ class NewWordForm extends Component {
     this.setState({ nwLabel: 'floating-label' });
   }
 
+  componentDidMount() {
+    const { fetching } = this.props; 
+    if (fetching) {
+      this.props.clearFetching()
+    }
+  }
+
   inputOrLabel(e, labelRef) {
     if (e.target.value == "") {
       this.showLabel(e, labelRef);
@@ -61,16 +71,15 @@ class NewWordForm extends Component {
     const { word } = this.state
     const { page, allWordsMap, refMap, uuid } = this.props
     if (!allWordsMap[word]) {
-      console.log('ive never seen this word')
+      console.log('LOOKing up')
       this.props.requestWord(word);
       this.props.lookUpWord(word, uuid).then(() => {
-        console.log('strange')
+      history.push(`/word/${word}`);
+      this.props.clearFetching()
       })
     }
     else {
-      console.log('i am here will scroll to exisitng')
       if (allWordsMap[word] != page) {
-        console.log('i used to see this word but elsewhere')
         this.props.requestWord(word);
         this.props.fetchWords(uuid, allWordsMap[word]).then(() => {
           this.props.clearFetching()
@@ -87,12 +96,12 @@ class NewWordForm extends Component {
 
   render () {
     const opened = this.props.menuOpen
+    console.log('new owrd')
     if (opened)
       return ''
 
     const { fetching, error } = this.props;
 
-    console.log('this is my errror ', error)
 
     const word = !this.props.error ? this.state.word : this.props.word
     const nwLabel = error ? 'floating-label top-label error' : word ? 'floating-label top-label' : this.state.nwLabel
@@ -129,7 +138,6 @@ class NewWordForm extends Component {
 const mapStateToProps = state => ({
   uuid: state.collections.uuid,
   allWordsMap: state.words.allWordsMap,
-  allWords: state.words.items,
   fetching: state.words.newWordFetching,
   fetched: state.words.newWordFetched,
   error: state.words.error,

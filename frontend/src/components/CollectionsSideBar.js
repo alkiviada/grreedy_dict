@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
   auth: state.auth,
   origUUId: state.collections.uuid,
   origName: state.collections.name,
-  allWords: state.words.items,
+  allWords: state.collections.collWords,
 });
 
 class CollectionsSideBar extends Component {
@@ -44,6 +44,7 @@ class CollectionsSideBar extends Component {
 
   onCollectionClick(e, uuid) {
     e.preventDefault();
+    console.log('click')
     this.setState({isSidebarOpen: false});
     this.props.requestCollection();
     const { origUUId, allWords } = this.props
@@ -54,7 +55,7 @@ class CollectionsSideBar extends Component {
     else {
       console.log('fetch words')
       this.props.requestWords();
-      this.props.fetchWords(uuid);
+      this.props.fetchWords(uuid).then(() => {});
     }
   }
   
@@ -75,7 +76,7 @@ class CollectionsSideBar extends Component {
       <div className="colls-list">
       <ul className="coll-ul">
        { colls.map(e => 
-          <li><a target="_blank" href={`/api/collection/${e.uuid}`} 
+          <li><a target="_blank" href=""
           onClick={(c) => this.onCollectionClick(c, e.uuid)} className="coll-link">
             <span className="coll-name">{e.name}</span> <span className="coll-date">{e.last_modified_date}</span>
          </a></li>

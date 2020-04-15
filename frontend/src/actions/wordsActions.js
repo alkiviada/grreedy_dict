@@ -13,7 +13,7 @@ import {
 } from './types';
 import { history } from '../components/WordsRoot'
 
-import { conflateWords, filterMap, reshuffleWordsOnPages, shiftWordsOnPages } from './helpers';
+import { conflateWords, conflateBareWords, filterMap, reshuffleWordsOnPages, shiftWordsOnPages } from './helpers';
 import { maxWordsOnPages } from './constants';
 
 export const requestWords = () => dispatch => {
@@ -48,33 +48,33 @@ export const requestWord = (word) => dispatch => {
 };
 
 export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
-  const { items } = getState().words;
-  let { pagePrev, pageNext, allWordCount, allWordsMap } = getState().words;
-  const { visibilityMap } = getState().visibility
+  let { pagePrev, pageNext, allWordCount, allWordsMap, words } = getState().words;
 
-  let { lastModifiedMap, name } = getState().collections;
+  let { lastModifiedMap, name, collWords } = getState().collections;
 
   let time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : ''
 
   if (!uuid) {
+  console.log('fetch WOTRDS')
+  console.log(uuid)
     return dispatch({
       type: FETCH_WORDS_FULFILLED,
       payload: { 'words': [], page, 'allWordsMap': {} } 
     });
   }
-  else if (!lastModifiedMap[uuid] && items.length && !page) {
+  else if (!lastModifiedMap[uuid] && words.length && !page) {
 
 // we have a collection but we never saved it 
 // - let's load it from the storage of words' reducer  
 
     dispatch({
       type: FETCH_COLLECTION_FULFILLED,
-      payload: { uuid, name }
+      payload: { uuid, name, collWords }
     });
     return dispatch({
       type: FETCH_WORDS_FULFILLED,
-      payload: { 'words': items, 
-                 'allWordsMap': { ...items.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) },
+      payload: { 'words': words, 
+                 'allWordsMap': { ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) },
                  page, pagePrev, pageNext, 
                  allWordCount 
                }
@@ -83,7 +83,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
   else {
     page = page || 1
     time = (lastModifiedMap[uuid] && lastModifiedMap[uuid]['words'][page]) ? time : ''
-    const url = 'api/words/' + (uuid ? uuid + `/${page}/` + time : '')
+    const url = '/api/words/' + (uuid ? uuid + `/${page}/` + time : '')
     return fetch(url)
       .then(response =>
       response.json().then(json => ({
@@ -99,11 +99,13 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
           console.log('Server returned error status');
           dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed'}})
         } else {
-          let words = []
+          collWords = []
           if (json.words) {
             name = json.name;
             uuid = json.uuid
-            words = conflateWords(json.words)
+            collWords = conflateBareWords(json.words)
+            console.log('this are my words')
+            console.log(collWords)
             pagePrev = json.page_prev
             pageNext = json.page_next
             allWordCount = json.all_word_count
@@ -118,36 +120,29 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
 // and as i do have some stale cache of it,
 // let's nuke it 
              lastModifiedMap[uuid]['words'] = { page: [] }
-             allWordsMap = { ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) }
+             allWordsMap = { ...collWords.reduce((o, e) => (o[e] = page, o), {}) }
            }
            else {
 // this is just a new page of a collection that did not change meanwhile:
-             allWordsMap = { ...allWordsMap, ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) }
+             allWordsMap = { ...allWordsMap, ...collWords.reduce((o, e) => (o[e] = page, o), {}) }
            }
-           lastModifiedMap[uuid]['words'][page] = words
+           lastModifiedMap[uuid]['words'][page] = collWords
            lastModifiedMap[uuid]['name'] = name 
            lastModifiedMap[uuid]['time'] = time 
            lastModifiedMap[uuid]['allWordCount'] = allWordCount
 
-           dispatch({
-             type: SWITCH_VISIBILITY,
-             payload: { ...getState().visibility.visibilityMap, 
-                        ...words.reduce((v, w) => (v[w.word] = 'show',v), {}) 
-                      }
-           });
           }
           else {
             console.log('i fetched from local')
-            words = lastModifiedMap[uuid]['words'][page]
+            collWords = lastModifiedMap[uuid]['words'][page]
             name = lastModifiedMap[uuid]['name']
             allWordCount = lastModifiedMap[uuid]['allWordCount']
             pagePrev = page > 1 ? page - 1 : 0
             pageNext = (page*maxWordsOnPages) < allWordCount ? page + 1 : 0
           }
-          dispatch({
-            type: FETCH_COLLECTION_FULFILLED,
-            payload: { uuid, name }
-          });
+          console.log(collWords)
+          console.log('i will dispatch to coll state')
+          console.log('i am dispatchingt ow ords')
           dispatch({
             type: FETCH_WORDS_FULFILLED,
             payload: { words, 
@@ -158,13 +153,14 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
           });
           dispatch({
             type: SAVE_COLLECTION_FULFILLED,
-            payload: { items: getState().collections.items,
-                       uuid, 
-                       name, 
-                       lastModifiedMap 
-                     }
+            payload: { uuid, name, lastModifiedMap }
            });
+           console.log('haha')
            history.push(`/${page}`);
+           return dispatch({
+            type: FETCH_COLLECTION_FULFILLED,
+            payload: { uuid, name, collWords }
+          });
         }
       },
       // Either fetching or parsing failed!
@@ -181,7 +177,6 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
   const { uuid, name, items } = getState().collections
   let { lastModifiedMap } = getState().collections
   let { page, allWordsMap, pagePrev, pageNext, allWordCount } = getState().words
-  const { visibilityMap } = getState().visibility
   const { refMap } = getState().refs
 
   let time = lastModifiedMap[uuid] && lastModifiedMap[uuid]['words'][pageNext] ? lastModifiedMap[uuid]['time'] : ''
@@ -243,10 +238,6 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
                        allWordsMap,
                        pagePrev, pageNext, allWordCount, page }
           });
-        dispatch({
-          type: SWITCH_VISIBILITY,
-          payload: filterMap(visibilityMap, word)
-        });
 
         let time = Date.now();
         time = Math.floor(time/1000);
@@ -277,9 +268,13 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
 
 export const fetchWord = (word) => { return (dispatch, getState) => {
   const { uuid, items } = getState().collections
+  let { words } = getState().words
+  console.log('will fetch')
+  console.log(uuid)
+  console.log(items)
+
   let { lastModifiedMap } = getState().collections
   let { allWordsMap } = getState().words
-  const { visibilityMap } = getState().visibility
   const { refMap } = getState().refs
 
   let headers = {"Content-Type": "application/json"};
@@ -308,12 +303,14 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
           // Status looks good
           const { word, name, uuid, page } = json
           console.log(json)
-
           console.log('i recieved word')
+
           console.log(lastModifiedMap)
           console.log(uuid)
+
           console.log(lastModifiedMap[uuid])
-          let words = lastModifiedMap[uuid] && lastModifiedMap[uuid]['words'] ? lastModifiedMap[uuid]['words'][page] : []
+
+          let wordsOnPage = lastModifiedMap[uuid] && lastModifiedMap[uuid]['words'] ? lastModifiedMap[uuid]['words'][page] : [ ]
 
           let pageNext = json.page_next
           let pagePrev = json.page_prev ? json.page_prev : 0
@@ -321,7 +318,7 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
 
 
           if (json.words) {
-            words = conflateWords(json.words)
+            wordsOnPage = conflateBareWords(json.words)
             allWordsMap = { ...allWordsMap, ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) }
           }
           else {
@@ -334,12 +331,9 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
                                       'has_corpora' : e['has_corpora'], 
                                       'etymology': e['word_etymologies'] } ], o), {}
                                  );
-          dispatch({
-            type: SWITCH_VISIBILITY,
-            payload: { ...visibilityMap, ...{ [obj.word]: 'show' } }
-          });
-          if (words.length >= maxWordsOnPages) {
-            const popped = words.pop();
+          wordsOnPage = [ obj.word, ...wordsOnPage.filter(w => w != obj.word) ]
+          if (wordsOnPage.length >= maxWordsOnPages) {
+            const popped = wordsOnPage.pop();
             pageNext = 2;            
             allWordsMap = filterMap(allWordsMap, popped.word)
             if (lastModifiedMap[uuid]['words'][pageNext]) {
@@ -368,29 +362,35 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
 
           let time = Date.now();
           time = Math.floor(time/1000);
+          console.log(words)
+          console.log(uuid)
+          console.log(wordsOnPage)
+          console.log('dispatching to collection')
+          const onPage = { ...lastModifiedMap[uuid] ? lastModifiedMap[uuid]['words'] : {}, ...{ [page]: wordsOnPage }};
+          console.log(onPage) 
           dispatch({
             type: SAVE_COLLECTION_FULFILLED,
-            payload: { items, 
+            payload: { collWords: wordsOnPage, 
                        uuid, 
                        name, 
                        lastModifiedMap: { ...lastModifiedMap, 
                                           [uuid]: { time, name, allWordCount,
                                                     'words': { ...lastModifiedMap[uuid] ? lastModifiedMap[uuid]['words'] : {}, 
-                                                               ...{ [page]: words } }, 
+                                                               ...{ [page]: wordsOnPage } }, 
                                                   }
                        } 
             }
           });
-          dispatch({
+          return dispatch({
             type: FETCH_COLLECTION_FULFILLED,
-            payload: { uuid, name }
+            payload: { uuid, name, collWords: wordsOnPage }
           });
         }
       },
       // Either fetching or parsing failed!
       err => {
         console.log('problems');
-        dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching words failed', word: word}})
+        dispatch({type: FETCH_WORDS_REJECTED, payload: {error: 'fetching word failed', word: word}})
       }
     ); 
 };
@@ -429,3 +429,40 @@ export const lookUpWord = (word, uuid) => {
   }
   }
 };
+export const nextWord = (word) =>  { return (dispatch, getState) => {
+  console.log('word')
+  const wIdx = getState().words.words.findIndex(w => w.word == word);
+  console.log(wIdx)
+  const nw = getState().words.words[wIdx-1]
+  return dispatch({
+    payload: nw.word,
+    type: FETCH_WORD,
+  })
+};
+};
+
+export const prevWord = (word) => {
+  return (dispatch, getState) => {
+  console.log('prev word')
+  console.log(word)
+  console.log(getState().words)
+  console.log(getState().collections)
+  let wIdx = getState().words.words.findIndex(w => w.word == word);
+  console.log('my idx ', wIdx)
+  let pw = getState().words.words[wIdx+1]
+  if (pw) {
+  console.log(pw)
+  history.push(`/word/${pw.word}`);
+  return dispatch({
+    type: FETCH_WORD,
+    payload: pw.word
+  })
+  }
+  const collWords = getState().collections.collWords
+  console.log(collWords)
+  wIdx = collWords.findIndex(w => w == word);
+  const collPrevWord = collWords[wIdx+1]
+  console.log(collPrevWord)
+};
+};
+

@@ -9,6 +9,7 @@ import {
   FETCH_LESSON_REJECTED,
   FETCH_LESSONS_REJECTED,
   POST_LESSON,
+  REGISTER_COLLECTION,
   POST_LESSON_FULFILLED,
   POST_WORK_FULFILLED,
   POST_LESSON_REJECTED,
@@ -44,11 +45,11 @@ export const requestLessons = () => (dispatch) => {
   })
 };
 
-export const postLesson = (lessonId, text) => (dispatch, getState) => {
+export const postLesson = (lessonId, text, title) => (dispatch, getState) => {
   console.log('posting lesson');
   console.log(lessonId)
   let headers = {"Content-Type": "application/json"};
-  let body = JSON.stringify({lessonId, text});
+  let body = JSON.stringify({lessonId, text, title});
 
   fetch('/api/lesson/post/', {headers, body, method: "POST"})
   .then(response =>
@@ -117,6 +118,12 @@ export const fetchLesson = (lessonId) => { return (dispatch, getState) => {
             type: REGISTER_LESSON_ID,
             payload: json.lesson_id,
           })
+          if(json.collId) {
+          dispatch({
+            type: REGISTER_COLLECTION,
+            payload: json.collId,
+          })
+          }
         }
       },
       // Either fetching or parsing failed!
@@ -158,6 +165,10 @@ export const fetchWork = (lessonId) => { return (dispatch, getState) => {
             type: REGISTER_LESSON_ID,
             payload: json.lesson_id,
           })
+          dispatch({
+            type: REGISTER_COLLECTION,
+            payload: json.collection,
+          })
         }
       },
       // Either fetching or parsing failed!
@@ -169,11 +180,13 @@ export const fetchWork = (lessonId) => { return (dispatch, getState) => {
 };
 };
 
-export const postWork = (lessonId, work) => (dispatch, getState) => {
+export const postWork = (lessonId, work, collId) => (dispatch, getState) => {
   console.log('posting lesson work');
   console.log(lessonId)
+  console.log(getState().collections)
+  const collId = getState().collections.uuid;
   let headers = {"Content-Type": "application/json"};
-  let body = JSON.stringify({lessonId, work});
+  let body = JSON.stringify({lessonId, work, collId});
 
   fetch('/api/lesson/post/work/', {headers, body, method: "POST"})
   .then(response =>

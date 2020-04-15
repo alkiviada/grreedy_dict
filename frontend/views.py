@@ -12,3 +12,8 @@ def lesson(request, lesson_id='', ):
     print('lesson')
     print(lesson_id)
     return render(request, 'frontend/index.html')
+
+def word(request, word='', ):
+    print('word')
+    print(word)
+    return render(request, 'frontend/index.html')

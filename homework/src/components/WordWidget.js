@@ -31,7 +31,7 @@ class WordWidget extends Component {
     const { addWord, word, words, fetching } = this.props
     const wordElementIndex = words.findIndex(w => w.word == word);
     console.log(wordElementIndex)
-    const wordElement = typeof wordElementIndex !== 'undefined' ? words[wordElementIndex] : ''
+    const wordElement = typeof wordElementIndex !== 'undefined' ? words[wordElementIndex] : words[0]
     if (wordElement) {
       return (
         <Fragment> 

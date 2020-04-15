@@ -13,7 +13,7 @@ import datetime
 from django.db.models import Max, Min
 from random import randint
 
-from .serializers import (WordSerializer, SynonymSerializer, TranslationSerializer, CollectionSerializer, 
+from .serializers import (WordBareSerializer, WordSerializer, SynonymSerializer, TranslationSerializer, CollectionSerializer, 
                                CollectionDetailSerializer, CollocationSerializer, WordNoteSerializer, PronounceSerializer,
                                CreateUserSerializer, UserSerializer, LoginUserSerializer, ConjugateSerializer, WordExampleSerializer,
                                InflectionSerializer)
@@ -62,7 +62,7 @@ class UserAPI(generics.RetrieveAPIView):
   def get_object(self):
     return self.request.user
 
-class WordList(generics.ListAPIView):
+class WordListOld(generics.ListAPIView):
   serializer_class = WordSerializer
   permission_classes = [ AllowAny, ]
   def get_queryset(self):
@@ -97,6 +97,65 @@ class WordList(generics.ListAPIView):
         else:
           words = coll.words.all()
         serializer = WordSerializer(words, many=True)
+        print('i will return here');
+        if page_count > 1:
+          print(999999999)
+          print(page)
+          print(len(serializer.data))
+          return Response({ 
+                            'words': serializer.data, 
+                            'page_next': int(page) + 1 if int(page) + 1 <= page_count else 0,
+                            'page_prev': int(page) - 1 if int(page) - 1 > 0 else 0,
+                            'name': coll.name,
+                            'uuid': coll.uuid,
+                            'all_word_count': len(distinct_words) if len(distinct_words) > WORDS_ON_PAGE else 0
+                         })
+        else:
+          return Response({
+                            'words': serializer.data, 
+                            'name': coll.name,
+                            'uuid': coll.uuid
+                         })
+      else:
+        return Response({})
+    else:
+      return Response({})
+
+class WordList(generics.ListAPIView):
+  serializer_class = WordBareSerializer
+  permission_classes = [ AllowAny, ]
+  def get_queryset(self):
+    return Word.free_words.all()
+
+  def get(self, request, uuid, time, page, *args, **kwargs):
+    words = []
+    page_count = 0
+    print(page)
+    if uuid:
+      print('I have UUID: ' + uuid)
+      print(time)
+      coll = Collection.objects.get(uuid=uuid) 
+      print(int(coll.last_modified_date.timestamp()))
+      if coll and ((not time or int(coll.last_modified_date.timestamp()) > int(time))):
+        all_words = coll.words.all()
+        distinct_words = set()
+        words = [w for w in all_words if w.word not in distinct_words and (distinct_words.add(w.word) or True)]
+        print(len(words))
+        if len(words) > WORDS_ON_PAGE:
+          p = Paginator(words, WORDS_ON_PAGE)
+          page_count = p.num_pages 
+          print(page)
+          all_words_for_page = []
+          for w in p.page(page).object_list:
+            all_words_for_page.append(w)
+            omonyms = Word.single_object.filter(words=coll, word=w.word).exclude(language=w.language)
+            all_words_for_page.extend(omonyms)
+            
+          print(all_words_for_page)
+          words = all_words_for_page
+        else:
+          words = coll.words.all()
+        serializer = WordBareSerializer(words, many=True)
         print('i will return here');
         if page_count > 1:
           print(999999999)
@@ -417,9 +476,11 @@ class WordSingleCreate(generics.ListAPIView):
             
         print(all_words_for_page)
         words = all_words_for_page
-        serializer = WordSerializer(words, many=True)
+        serializer = WordSerializer(db_words, many=True)
+    #    serializer = WordSerializer(words, many=True)
+        print('WORDSER')
         return Response({ 
-                          'words': serializer.data, 
+                          'word': serializer.data, 
                           'page_next': int(page) + 1 if int(page) + 1 <= p.num_pages else 0,
                           'page_prev': int(page) - 1 if int(page) - 1 > 0 else 0,
                           'name': coll.name,

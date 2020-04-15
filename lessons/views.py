@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
 from .models import Lesson
+from words.models import Collection
 
 from .serializers import (LessonPostSerializer, LessonWorkSerializer, LessonBareSerializer)
 
@@ -23,15 +24,17 @@ class LessonWork(generics.RetrieveUpdateAPIView):
   def post(self, request, format=None):
     print('ADD Lesson Work')
     work = request.data.get('work')
-    title = request.data.get('name')
+    collId  = request.data.get('collId')
     print(request.data)
     lesson_id = request.data.get('lessonId')
 
 
     lesson = Lesson.objects.get(lesson_id=lesson_id)
+    collection = Collection.objects.get(uuid=collId)
+
     lesson.work = work
-    lesson.name = name
-    lesson.save(update_fields=['work', 'title'])
+    lesson.collection = collection
+    lesson.save(update_fields=['work', 'collection'])
     return Response(LessonPostSerializer(lesson).data)
 
 class LessonCreateUpdate(generics.GenericAPIView):
@@ -45,6 +48,7 @@ class LessonCreateUpdate(generics.GenericAPIView):
   def post(self, request, format=None):
     print('ADD Lesson')
     text = request.data.get('text')
+    title = request.data.get('title')
     print(request.data)
     lesson_id = request.data.get('lessonId')
 
@@ -54,10 +58,10 @@ class LessonCreateUpdate(generics.GenericAPIView):
     if lesson_id:
       lesson = Lesson.objects.get(lesson_id=lesson_id)
       lesson.text = text
-      lesson.name = name
-      lesson.save(update_fields=['text', 'name'])
+      lesson.title = title 
+      lesson.save(update_fields=['text', 'title'])
     else:
-      lesson = Lesson.objects.create(**{'text': text, 'name': name})
+      lesson = Lesson.objects.create(**{'text': text, 'title': name})
 
     return Response(LessonPostSerializer(lesson).data)
 

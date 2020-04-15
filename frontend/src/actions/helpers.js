@@ -18,6 +18,21 @@ export const conflateWords = (words) => {
   return conflated_words.map(w => ({'word': w, 'description': word_map[w]}))
 }
 
+export const conflateBareWords = (words) => {
+  let conflated_words = [];
+  const word_map = {}
+  for (let w of words) {
+    const word = w.word;
+    if (word_map[word]) 
+      continue
+    else {
+      word_map[word] = 1
+      conflated_words.push(word)
+    }
+  }
+  return conflated_words
+}
+
 export const reshuffleWordsOnPages = (newEl, wordsToPagesMap, allWordsMap, page, allWordCount, maxWords = maxWordsOnPages) => {
   let wordsOnPage = wordsToPagesMap[page] ? wordsToPagesMap[page] : []
   if (allWordCount > (page-1)*maxWords) {

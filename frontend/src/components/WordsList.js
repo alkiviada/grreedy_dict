@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
-import WordCell from "./WordCell";
+import WordBare from "./WordBare";
 import WordLabel from "./WordLabel";
-import key from "weak-key";
 import { connect } from 'react-redux';
 import { closeMenu } from '../actions/contextActions';
 import { 
@@ -11,14 +10,13 @@ import {
          lookUpWord, fetchWords, requestWords, requestWord, 
          clearFetched,
          clearFetching } from '../actions/wordsActions';
-import { switchVisibility } from '../actions/visibilityActions';
 import { logWordDivOffset, setAllDataRef } from '../actions/refActions';
 import { scrollToDomRef } from './helpers';
 import { Link, withRouter } from "react-router-dom";
 import BodyClassName from 'react-body-classname';
 
 
-class Table extends Component {
+class WordsList extends Component {
   constructor(props) { 
     super(props)
     this.addRow = this.addRow.bind(this) 
@@ -31,8 +29,6 @@ class Table extends Component {
     data: PropTypes.array.isRequired,
     lookUpWord: PropTypes.func.isRequired,
     deleteWord: PropTypes.func.isRequired,
-    switchVisibility: PropTypes.func.isRequired,
-    fetchWords: PropTypes.func.isRequired,
     requestWords: PropTypes.func.isRequired,
     requestWord: PropTypes.func.isRequired,
   };
@@ -40,10 +36,13 @@ class Table extends Component {
   componentDidMount() {
     let { page, page_id } = this.props; 
     page_id = page_id ? page_id : 1
-    if (!this.props.data || (page_id && (page_id != page))) {
+    console.log(this.props)
+    if ((!this.props.data.length && this.props.uuid) || (page_id && (page_id != page))) {
       this.props.requestWords();
-      this.props.fetchWords(this.props.uuid, page_id)
-      .then(() => {
+        console.log('mounting')
+        console.log(this.props)
+      this.props.fetchWords(this.props.uuid, page_id).then(() => {
+        console.log('fetchwords returned')
       })
     }
     this.props.setAllDataRef(this.myRef)
@@ -56,6 +55,7 @@ class Table extends Component {
         scrollToDomRef(this.myRef, 35)
       })
   }
+
 
   addRow (e, word, original, parentRef) {
     e.preventDefault();
@@ -121,6 +121,7 @@ class Table extends Component {
 
   render () {
     const { data, pagePrev, pageNext, allWordCount, uuid, page } = this.props;
+    console.log(this.props)
 
     const allFetching = this.props.allFetching;
     const collFetching = this.props.collFetching;
@@ -136,6 +137,9 @@ class Table extends Component {
       )
     } 
     const auth = this.props.auth
+    console.log('this is the data i have')
+    console.log(data);
+    let idx = 0;
     return !data.length ? (
       <BodyClassName className="body-with-image">
       <div className="words-container" ref={this.myRef}>
@@ -163,22 +167,14 @@ class Table extends Component {
         { allWordCount ? ` out of ${allWordCount} ` : ' ' } 
         <strong>word{data.length > 1 ? 's' : ''}</strong>
       </h2>
-      <div className="words-table">
-        <div className="words-rows">
-          {data.map(el => {
-            let word = el.word;
-            return (
-              Object.entries(el).map(el => 
-                                     <WordCell word={word} 
-                                               element={el} 
-                                               addRow={this.addRow} 
-                                               deleteWord={this.deleteWord} 
-                                               />)
-            )
+        <ul className="words-list">
+          {data.map(w => {
+            idx++;
+            console.log('haha')
+            return <WordBare word={w} deleteWord={this.deleteWord} key={idx} /> 
           })}
-        </div>
+        </ul>
       </div>
-    </div>
     </BodyClassName>
     );
   }
@@ -189,7 +185,7 @@ const mapStateToProps = state => ({
   auth: state.auth,
   refMap: state.refs.refMap,
   uuid: state.collections.uuid,
-  data: state.words.items,
+  data: state.collections.collWords,
   allWordsMap: state.words.allWordsMap,
   allFetching: state.words.allWordsFetching,
   collFetching: state.collections.fetching,
@@ -210,5 +206,4 @@ export default withRouter(connect(mapStateToProps, { setAllDataRef,
                                           requestWord, 
                                           clearFetching,
                                           clearFetched,
-                                          switchVisibility, 
-                                          logWordDivOffset  })(Table));
+                                          logWordDivOffset  })(WordsList));

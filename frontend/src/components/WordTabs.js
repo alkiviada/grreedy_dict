@@ -202,7 +202,7 @@ class WordTabs extends Component {
   }
 
   render() {
-    const { word, element, addRow, parentRef } = this.props;
+    const { word, element, addToDict, parentRef } = this.props;
     console.log(element)
 
     const isEnglishWord = element.reduce((englishFlag, e) => 
@@ -313,7 +313,7 @@ class WordTabs extends Component {
           { element.map(e => 
                 <div>
                 <p className={`heading lang-head lang-${e['language']}`}>{e['language']}</p>
-                { renderList(e['etymology'], addRow, parentRef, word, listStyles, 0) }
+                { renderList(e['etymology'], addToDict, parentRef, word, listStyles, 0) }
                 </div>
                )
           }
@@ -325,13 +325,13 @@ class WordTabs extends Component {
              return <TabPanel><WordNote word={word} /></TabPanel>
         break
       case 'Translations':
-             return <TabPanel><Translations word={word} addRow={addRow} parentRef={parentRef} /></TabPanel>
+             return <TabPanel><Translations word={word} addToDict={addToDict} parentRef={parentRef} /></TabPanel>
         break
       case 'Collocations':
-             return <TabPanel><Collocations word={word} addRow={addRow} parentRef={parentRef} /></TabPanel>
+             return <TabPanel><Collocations word={word} addToDict={addToDict} parentRef={parentRef} /></TabPanel>
         break
       case 'Synonyms':
-             return <TabPanel><Synonyms word={word} addRow={addRow} parentRef={parentRef} /></TabPanel>
+             return <TabPanel><Synonyms word={word} addToDict={addToDict} parentRef={parentRef} /></TabPanel>
         break
       case 'Pronunciation':
              return <TabPanel><Pronunciation word={word} /></TabPanel>
@@ -341,7 +341,7 @@ class WordTabs extends Component {
       case 'Inflections':
              return <TabPanel><Inflections word={word} /></TabPanel>
       case 'Corpora':
-             return <TabPanel><Corpora word={word} addRow={addRow} parentRef={parentRef} /></TabPanel>
+             return <TabPanel><Corpora word={word} addToDict={addToDict} parentRef={parentRef} /></TabPanel>
         break
       default:
         Function.prototype()

@@ -13,6 +13,7 @@ import { SAVE_COLLECTION,
          SWITCH_VISIBILITY,
          FETCH_COLLECTIONS, 
          FETCH_COLLECTION, 
+         REGISTER_COLLECTION, 
          CLEAR_FETCHED
        } from './types';
 
@@ -22,6 +23,14 @@ import { fetchWords } from './wordsActions';
 export const requestSave = () => dispatch => {
   dispatch({
     type: SAVE_COLLECTION,
+  })
+};
+
+export const registerCollection = (uuid) => dispatch => {
+  console.log('registering ' + uuid);
+  dispatch({
+    type: REGISTER_COLLECTION,
+    payload: uuid
   })
 };
 
@@ -53,7 +62,7 @@ export const fetchCollections = () => (dispatch, getState) => {
   if (token) {
       headers["Authorization"] = `Token ${token}`;
   }
-  fetch('api/collection/', {headers, })
+  fetch('/api/collection/', {headers, })
     .then(res => res.json())
     .then(items => {
       dispatch({
@@ -75,7 +84,7 @@ export const fetchCollection = (uuid, page) => { return (dispatch, getState) => 
   const { lastModifiedMap } = getState().collections;
   const time = lastModifiedMap[uuid] ? lastModifiedMap[uuid]['time'] : '';
 
-  return fetch('api/collection/' + uuid + (time ? '/' + time : ''), {headers, })
+  return fetch('/api/collection/' + uuid + (time ? '/' + time : ''), {headers, })
   .then(response =>
       response.json().then(json => ({
         status: response.status,
@@ -113,10 +122,6 @@ export const fetchCollection = (uuid, page) => { return (dispatch, getState) => 
             type: FETCH_COLLECTION_FULFILLED,
             payload: { uuid: uuid, name: name }
           });
-          dispatch({
-            type: SWITCH_VISIBILITY,
-            payload: { ...words.reduce((visibilityMap, e) => (visibilityMap[e.word] = 'show', visibilityMap), {}) }
-          });
          return json;
         }
       },
@@ -142,7 +147,7 @@ export const saveCollection = (name, wordsString) => { return (dispatch, getStat
   if (token) {
       headers["Authorization"] = `Token ${token}`;
   }
-  return fetch('api/collection/', {
+  return fetch('/api/collection/', {
     method: 'POST',
     headers: headers,
     body: JSON.stringify({
@@ -170,7 +175,7 @@ export const saveCollection = (name, wordsString) => { return (dispatch, getStat
           time = Math.floor(time/1000);
           
           const { lastModifiedMap } = getState().collections
-          const words = getState().words.items || []
+          const words = getState().collections.collWords || []
           const { page, allWordCount } = getState().words 
           lastModifiedMap[uuid]['words'][page] = words
 
@@ -224,7 +229,7 @@ export const saveCollectionAndLoadNew = (name, newUuid) => { return (dispatch, g
   if (token) {
       headers["Authorization"] = `Token ${token}`;
   }
-  return fetch('api/collection/', {
+  return fetch('/api/collection/', {
     method: 'POST',
     headers: headers,
     body: JSON.stringify({
@@ -252,7 +257,7 @@ export const saveCollectionAndLoadNew = (name, newUuid) => { return (dispatch, g
           time = Math.floor(time/1000);
           
           const { lastModifiedMap } = getState().collections
-          const words = getState().words.items || []
+          const words = getState().collections.collWords || []
           const { page, allWordCount } = getState().words
           lastModifiedMap[uuid]['words'][page] = words
 

@@ -46,17 +46,20 @@ class Menu extends Component {
 
   onCollectionClick(e, uuid) {
     e.preventDefault();
+    console.log('click')
     this.props.closeMenu();
     this.setState({ collsClass: 'collections-button full' });
     this.props.requestCollection();
     const { origUUId, allWords } = this.props
-    
+    console.log(this.props) 
+
     if (origUUId && allWords.length) {
       this.props.saveCollectionAndLoadNew(this.props.origName, uuid);
     }
     else {
+      console.log('i will fetch words')
       this.props.requestWords();
-      this.props.fetchWords(uuid);
+      this.props.fetchWords(uuid).then(() => { console.log('loading') });
     }
   }
 
@@ -233,7 +236,7 @@ const mapStateToProps = state => ({
   auth: state.auth,
   origUUId: state.collections.uuid,
   origName: state.collections.name,
-  allWords: state.words.items,
+  allWords: state.collections.collWords,
 });
 
 export default connect(mapStateToProps, { 

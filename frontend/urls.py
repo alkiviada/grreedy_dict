@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^lessons$', views.lesson, name='lesson-list'),
     url(r'^book/(?P<what>[-\'\w() ]+)/(?P<page>\d+)$', views.book, name='book'),
+    url(r'^word/(?P<word>[-\'\w() ]+)$', views.word, name='word'),
     url(r'^lesson/post/(?P<lesson_id>[0-9a-f-]+)?$', views.lesson, name='lesson-post'),
     url(r'^lesson/(?P<lesson_id>[0-9a-f-]+)?$', views.lesson, name='lesson'),
     url(r'^(?P<page>\d+)$', views.index, name='index'),

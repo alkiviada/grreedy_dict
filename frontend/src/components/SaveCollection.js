@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { history } from '../components/WordsRoot'
 import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -60,15 +61,18 @@ class SaveCollection extends Component {
     this.props.requestSave();
     const { uuid } = this.props
     const name = this.state.name ? this.state.name : this.props.name
-    this.props.saveCollection(name, this.props.allWords.map(e => e.word).join(','));
-    const root = ReactDOM.findDOMNode(this).parentNode;
-    window.scrollTo(0, root.offsetTop-35)
-    this.setState({name: ''})
+    this.props.saveCollection(name, this.props.allWords.map(e => e.word).join(',')).then(() => {
+      const root = ReactDOM.findDOMNode(this).parentNode;
+      window.scrollTo(0, root.offsetTop-35)
+      history.push('/');
+      this.setState({name: ''})
+    });
   }
 
   render () {
     const words = this.props.allWords;
-    console.log(this.props.name);
+    console.log('collections')
+    console.log(words);
     const { fetched, error, saving } = this.props;
     const name = !fetched ? this.state.name : this.props.name
     const label = error ? 'floating-label top-label error' : name ? 'floating-label top-label' : this.state.label
@@ -119,7 +123,7 @@ class SaveCollection extends Component {
 };
 
 const mapStateToProps = state => ({
-  allWords: state.words.items,
+  allWords: state.collections.collWords,
   saving: state.collections.saving,
   fetched: state.collections.fetched,
   name: state.collections.name,
