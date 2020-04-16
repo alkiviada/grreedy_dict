@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { history } from '../components/WordsRoot'
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import WordTabs from "./WordTabs";
@@ -13,8 +12,6 @@ import { nextWord, prevWord, requestWord, fetchWord, clearFetching, lookUpWord }
 class WordCell extends Component {
   constructor(props) { 
     super(props)
-    this.wordRef = React.createRef();
-    this.addToDict = this.addToDict.bind(this) 
   }
 
   static propTypes = {
@@ -22,70 +19,54 @@ class WordCell extends Component {
   };
 
   componentDidUpdate() {
+    console.log('I DID UPDATE')
     const { word, offsetMap, tabIndexMap } = this.props
-    if (offsetMap[word] && this.wordRef.current && ([0, 1,2].filter(i => i == tabIndexMap[word]).length || !tabIndexMap[word])) {
+    console.log(offsetMap)
+    console.log(this.props.wordRef.current)
+    if (offsetMap[word] && this.props.wordRef.current && ([0, 1,2].filter(i => i == tabIndexMap[word]).length || !tabIndexMap[word])) {
       console.log('setting scroll top to ', offsetMap[word])
-      this.wordRef.current.scrollTop = offsetMap[word]
+      this.props.wordRef.current.scrollTop = offsetMap[word]
     }
-    this.props.wordRefToMap(word, this.wordRef);
+    console.log(this.props.wordRef.current.children[0].children[2].scrollTop)
+    if (this.props.wordRef.current) {
+    this.props.wordRef.current.children[0].children[2].scrollTop = offsetMap[word];
+    }
+    this.props.wordRefToMap(word, this.props.wordRef);
   }
 
   componentDidMount() {
     const { word } = this.props
-    this.props.wordRefToMap(word, this.wordRef);
+    this.props.wordRefToMap(word, this.props.wordRef);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     const { word } = nextProps 
-    console.log(this.wordRef)
+    console.log('shoud i update')
+    console.log(nextProps)
+    console.log(this.props)
 
-    if (nextProps.word == this.props.word && (nextProps.refMap[word] && (nextProps.refMap[word] == this.props.refMap[word])) && (nextProps.tabIndexMap[word] == this.props.tabIndexMap[word])) {
+    if ((nextProps.word == this.props.word) && (nextProps.refMap[word] && (nextProps.refMap[word] == this.props.refMap[word])) && (nextProps.tabIndexMap[word] == this.props.tabIndexMap[word])) {
+      console.log('i will NOT update')
       return 0
     }
     else {
-    console.log('should?')
+      console.log('i WILL update')
       return 1
     }
   }
 
-  addToDict(e, word, original, parentRef) {
-    e.preventDefault();
-    const { words, page, allWordsMap, refMap, uuid } = this.props
-    console.log(allWordsMap)
-    console.log('i will FETCH NEXT')
-    console.log(word)
-
-    const parentOffset = this.wordRef.current.offsetTop
-    console.log(parentOffset)
-
-    if (parentOffset) {
-      this.props.logWordDivOffset(original, parentOffset);
-    }
-    this.props.requestWord(word)
-    console.log('REQUEST FOR WORD')
-    history.push(`/word/${word}`);
-    if ((words.findIndex(w => w.word == word) == -1) && word) {
-      console.log('LOOKing up')
-      this.props.requestWord(word);
-      this.props.fetchWord(word, uuid).then(() => {
-      this.props.clearFetching()
-      })
-    }
-    else 
-      this.props.clearFetching()
-  }
 
   render () {
-    const { offsetMap, deleteWord, element, word, prev, next } = this.props
-    return typeof(element[1]) === 'string' ? (
-     <div ref={this.wordRef} className="word-cell">
-     <Word wordElement={element} deleteWord={deleteWord} nextWord={next} prevWord={prev} addToDict={this.addToDict} parentRef={this.wordRef} /> 
-     </div>
-     ) :
+    console.log('render WORD CELL')
+    const { offsetMap, element, word, prev, next, wordRef } = this.props
+    console.log(element)
+    console.log(offsetMap)
+    console.log(this.props.refMap)
+    return (
      <div className="word-cell">
-       <div ref={this.wordRef} className="word-about" key={key(element)}><WordTabs word={word} element={element[1]} addToDict={this.addToDict} parentRef={this.wordRef}/>
+       <div ref={wordRef} className="word-about" key={key(element)}><WordTabs word={word} element={element['description']} addToDict={this.props.addToDict} parentRef={this.props.wordRef}/>
       </div>
-    </div>  
+    </div>) 
   }
 }
 

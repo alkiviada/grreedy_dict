@@ -170,7 +170,6 @@ class WordsList extends Component {
         <ul className="words-list">
           {data.map(w => {
             idx++;
-            console.log('haha')
             return <WordBare word={w} deleteWord={this.deleteWord} key={idx} /> 
           })}
         </ul>

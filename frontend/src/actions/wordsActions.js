@@ -141,8 +141,7 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
             pageNext = (page*maxWordsOnPages) < allWordCount ? page + 1 : 0
           }
           console.log(collWords)
-          console.log('i will dispatch to coll state')
-          console.log('i am dispatchingt ow ords')
+          console.log('i am dispatchingt FETCH WORDS FUL ow ords')
           dispatch({
             type: FETCH_WORDS_FULFILLED,
             payload: { words, 
@@ -151,11 +150,11 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
                        allWordCount, page 
                      }
           });
+          console.log('i will SAVE FULFILL dispatch to coll state')
           dispatch({
             type: SAVE_COLLECTION_FULFILLED,
             payload: { uuid, name, lastModifiedMap }
            });
-           console.log('haha')
            history.push(`/${page}`);
            return dispatch({
             type: FETCH_COLLECTION_FULFILLED,
@@ -266,12 +265,10 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
 };
 };
 
-export const fetchWord = (word) => { return (dispatch, getState) => {
+export const fetchWord = (word, direction) => { return (dispatch, getState) => {
   const { uuid, items } = getState().collections
   let { words } = getState().words
   console.log('will fetch')
-  console.log(uuid)
-  console.log(items)
 
   let { lastModifiedMap } = getState().collections
   let { allWordsMap } = getState().words
@@ -284,7 +281,6 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
   }
 
   const url = '/api/word/' + word.toLowerCase() + '/' + (uuid ? uuid : '')
-  console.log(url)
   return fetch(url, {headers})
   .then(response =>
       response.json().then(json => ({
@@ -305,12 +301,9 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
           console.log(json)
           console.log('i recieved word')
 
-          console.log(lastModifiedMap)
-          console.log(uuid)
-
-          console.log(lastModifiedMap[uuid])
-
-          let wordsOnPage = lastModifiedMap[uuid] && lastModifiedMap[uuid]['words'] ? lastModifiedMap[uuid]['words'][page] : [ ]
+          let wordsOnPage = lastModifiedMap[uuid] && lastModifiedMap[uuid]['words'] ? 
+                            lastModifiedMap[uuid]['words'][page] : 
+                            getState().collections.collWords
 
           let pageNext = json.page_next
           let pagePrev = json.page_prev ? json.page_prev : 0
@@ -331,7 +324,8 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
                                       'has_corpora' : e['has_corpora'], 
                                       'etymology': e['word_etymologies'] } ], o), {}
                                  );
-          wordsOnPage = [ obj.word, ...wordsOnPage.filter(w => w != obj.word) ]
+          console.log(wordsOnPage)
+          wordsOnPage = wordsOnPage.findIndex(w => w == obj.word) == -1 ? [ obj.word, ...wordsOnPage ] : wordsOnPage
           if (wordsOnPage.length >= maxWordsOnPages) {
             const popped = wordsOnPage.pop();
             pageNext = 2;            
@@ -340,11 +334,10 @@ export const fetchWord = (word) => { return (dispatch, getState) => {
               lastModifiedMap, allWordsMap = reshuffleWordsOnPages(popped, lastModifiedMap[uuid]['words'], allWordsMap, pageNext, allWordCount)
             }
           }
-          words = [ obj, ...words ]
+          words = direction == 'next' ? [ obj, ...words ] : [ ...words, obj ]
           console.log(words);
           allWordsMap = { ...allWordsMap, ...{ [obj.word]: page } }
          }
-          console.log(' i am here'); 
           console.log(words)
           dispatch({
             type: FETCH_WORD_FULFILLED,

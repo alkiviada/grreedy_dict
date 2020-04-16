@@ -27,7 +27,6 @@ class NewWordForm extends Component {
   componentDidUpdate() {
     console.log('i updated NEW WORD FORM')
     const { word, page, fetched, allWordsMap, refMap } = this.props
-    console.log(this.props)
     if (refMap[word] && refMap[word].current && fetched) {
       scrollToDomRef(refMap[word], 80)
       this.props.clearFetched()

@@ -51,6 +51,8 @@ const tabPanels = [
 class WordTabs extends Component {
   constructor(props) { 
     super(props)
+    this.origTabRef = React.createRef();
+    this.domRefCallback= this.domRefCallback.bind(this);
     this.handleSelect = this.handleSelect.bind(this) 
     let i = this.props.mapTabIndex[this.props.word];
     this.state = { tabIndex: i ? i : 1,
@@ -59,6 +61,12 @@ class WordTabs extends Component {
                    carouselIdx3: 0,
                    carouselIdx2: 0,
     };
+  }
+
+
+  domRefCallback(node) {
+    return node
+    
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -85,14 +93,9 @@ class WordTabs extends Component {
   };
 
   handleSelect(prev, index, word, myTabs, parentRef) {
-    const parentOffset = parentRef.current.scrollTop
-    console.log(parentRef.current.children[0].children[3]);
-    console.log('parent ', parentOffset);  
-    console.log('parent offset', parentRef.current.scrollTop);  
+    const parentOffset = parentRef.current.children[0].children[2].scrollTop
+
     if (parentOffset && [1, 2, 3].filter(i => i == prev).length) {
-      console.log(parentRef)
-      console.log('i am logging')
-      console.log('parent offset', parentRef.current.scrollTop);  
       this.props.logWordDivOffset(word, parentOffset);
     }
 
@@ -203,14 +206,12 @@ class WordTabs extends Component {
 
   render() {
     const { word, element, addToDict, parentRef } = this.props;
-    console.log(element)
 
     const isEnglishWord = element.reduce((englishFlag, e) => 
       {return e['language'] === 'english' ?  ++englishFlag : englishFlag}, 0)
 
     const isLatinWord = element.reduce((latinFlag, e) => 
       {return e['language'] === 'latin' ?  ++latinFlag : latinFlag}, 0)
-    console.log(isLatinWord)
 
     const isNotOnlyLatinWord = element.reduce((onlyLatinFlag, e) => 
       {return e['language'] != 'latin' ?  ++onlyLatinFlag : onlyLatinFlag}, 0)
@@ -225,7 +226,6 @@ class WordTabs extends Component {
 
     const isNonPronWord = element.reduce((nonPronFlag, e) => 
       {return e['language'].match('swedish|russian|ukrainian|latin') ?  ++nonPronFlag : nonPronFlag}, 0)
-    console.log(isNonPronWord)
 
     const isVerb = element.reduce((isVerbFlag, e) => 
       {return e['is_verb'] ? ++isVerbFlag : isVerbFlag}, 0)
