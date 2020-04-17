@@ -325,7 +325,7 @@ export const fetchWord = (word, direction) => { return (dispatch, getState) => {
                                       'etymology': e['word_etymologies'] } ], o), {}
                                  );
           console.log(wordsOnPage)
-          wordsOnPage = wordsOnPage.findIndex(w => w == obj.word) == -1 ? [ obj.word, ...wordsOnPage ] : wordsOnPage
+          wordsOnPage = wordsOnPage.findIndex(w => w == obj.word) == -1 ? (direction == 'next' ? [ obj.word, ...wordsOnPage ] : [ ...wordsOnPage, obj.word ]) : wordsOnPage
           if (wordsOnPage.length >= maxWordsOnPages) {
             const popped = wordsOnPage.pop();
             pageNext = 2;            

@@ -24,7 +24,7 @@ class DecorateWithLinks extends Component {
      {
       regex: /([a-zA-Z\-À-ÿА-Я\ǣāēіїœiĭī]+)/gim,
       fn: (key, result) => 
-        <a target="_blank" href={`/api/word/${result[1].toLowerCase()}`} data-word-tool-tip="look up"
+        <a target="_blank" href={`/word/${result[1].toLowerCase()}`} data-word-tool-tip="look up"
           onClick={(e) => onLinkClick(e, result[1].toLowerCase(), original, parentRef)} className="word-link">
         {result[1]}
         </a>

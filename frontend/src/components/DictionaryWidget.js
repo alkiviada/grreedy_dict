@@ -14,6 +14,7 @@ class DictionaryWidget extends Component {
     this.wordRef = React.createRef();
   }
   addToDict(e, word, original, direction) {
+    direction = direction == 'prev' ? direction : 'next'
     e.preventDefault();
     const { words, page, allWordsMap, refMap, uuid } = this.props
     console.log('i will FETCH NEXT')
@@ -36,6 +37,7 @@ class DictionaryWidget extends Component {
     }
     else 
       this.props.clearFetching()
+    history.push(`/word/${word}`);
   }
 
   componentDidMount() {
