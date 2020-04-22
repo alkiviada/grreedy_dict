@@ -92,18 +92,11 @@ body {
   flex-grow: 1;
   font-weight: 900;
 }
-@media(max-width: 888px) {
-.word-bare-svg {
-}
-}
 
-@media(max-width: 600px) {
-.word-bare-svg {
-}
-}
 .word-svg-text {
   letter-spacing: 1.1px;
 }
+
 .word-bare-svg-text {
   letter-spacing: .1px;
     font-size: 1rem;
@@ -114,6 +107,11 @@ body {
   width: unset;
   height: 70%;
 }
+}
+
+.work .word {
+  height: 4em;
+  flex-direction: row;
 }
 
 .word-hide {
@@ -298,12 +296,11 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-rows: .15fr .4fr auto;
+  grid-template-rows: 3em 1fr;
   grid-template-columns: .5fr 2fr .5fr;
   grid-template-areas: 
     ". . ."
     ". login-form ."
-    ". . ."
 }
 
 .login-form {
@@ -413,12 +410,12 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
 }
 
 .login-container .is-link {
-  color: var(--field-color-light);
+  color: var(--sky-color);
 }
 .login-container .is-link:hover {
   color: white;
-  -webkit-text-stroke: var(--outline) var(--field-color-light);
-    text-stroke: var(--outline) var(--field-color-light);
+  -webkit-text-stroke: var(--outline-small) var(--field-color-light);
+    text-stroke: var(--outline-small) var(--field-color-light);
 }
 
 @media (min-width: 530px) {
@@ -1255,6 +1252,14 @@ ul {
   grid-template-columns: minmax(6em, 15%) 1fr;
   grid-auto-rows: minmax(auto, max-content);
   grid-auto-rows: minmax(auto, -webkit-max-content);
+  width: 100%;
+  max-width: 55rem;
+  margin: 0 auto;
+}
+
+.work .words-rows {
+  grid-template-columns: 1fr;
+
 }
 
 .coll-title {
@@ -1384,12 +1389,16 @@ a[href^="/homework/conjugate"]::after {
   display: flex;
   justify-content: space-between;
 }
+
 @media (min-width:888px) {
 .react-tabs__tab-list {
-  width: 84%;
+  width: 100%;
+  max-width: 43rem;
 }
 }
-
+.work .react-tabs__tab-list {
+  max-width: 39rem;
+}
 
 .react-tabs__tab {
   display: inline-block;
@@ -1932,6 +1941,11 @@ padding: 2em 1em;
   background: #fffcf9;
 }
 
+.lesson .word-about {
+  max-height: 50vh;
+  height: 50vh;
+}
+
 .lesson-add-form {
   grid-area: lesson;
   max-width: 40rem;
@@ -1964,8 +1978,8 @@ padding: 2em 1em;
   min-height: 100vh;
   grid-template-areas: "lesson" "work";
   grid-row-gap: 2em;
-  margin-top: 2em;
-  margin-bottom: 2em;
+  margin: 2em auto;
+  max-width: 40rem;
   grid-template-columns: 1fr;
 }
 
@@ -1973,6 +1987,7 @@ padding: 2em 1em;
   font-weight: bolder;
   color: var(--sky-color);
   width: 100%;
+  max-width: 40rem;
   justify-content: start;
 }
 

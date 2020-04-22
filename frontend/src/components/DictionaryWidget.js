@@ -17,6 +17,8 @@ class DictionaryWidget extends Component {
     direction = direction == 'prev' ? direction : 'next'
     e.preventDefault();
     const { words, page, allWordsMap, refMap, uuid } = this.props
+    let redirect = this.props.redirect != 0 ? 1 : 0
+    console.log(redirect)
     console.log('i will FETCH NEXT')
     console.log(this.wordRef.current.children[0].children[2].scrollTop)
     const parentOffset = this.wordRef.current.children[0].children[2].scrollTop
@@ -37,7 +39,10 @@ class DictionaryWidget extends Component {
     }
     else 
       this.props.clearFetching()
-    history.push(`/word/${word}`);
+      if (redirect) {
+        console.log(redirect)
+        history.push(`/word/${word}`);
+      }
   }
 
   componentDidMount() {

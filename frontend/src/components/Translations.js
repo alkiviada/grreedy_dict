@@ -10,7 +10,7 @@ const mapStateToProps = state => ({
 });
 
 const Translations = (props) => {
-    const { word, trans, addRow, fetchingMap, parentRef } = props;
+    const { word, trans, addToDict, fetchingMap, parentRef } = props;
     const word_trans = trans[word];
     if (fetchingMap[word]) {
       return (
@@ -27,7 +27,7 @@ const Translations = (props) => {
     ( Object.keys(word_trans).map(e =>  
         <div className="etym-style">
         <p className={`heading lang-head lang-${e}`}>{e}</p>
-        <DecorateWithLinks words={word_trans[e].join(', ')} onLinkClick={addRow} original={word} parentRef={parentRef} />
+        <DecorateWithLinks words={word_trans[e].join(', ')} onLinkClick={addToDict} original={word} parentRef={parentRef} />
         </div>)
       
     );
@@ -37,7 +37,7 @@ Translations.propTypes = {
   word: PropTypes.string.isRequired,
   trans: PropTypes.object.isRequired,
   fetchingMap: PropTypes.object.isRequired,
-  addRow: PropTypes.func.isRequired,
+  addToRow: PropTypes.func.isRequired,
 };  
     
 export default connect(mapStateToProps)(Translations);

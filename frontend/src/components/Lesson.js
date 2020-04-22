@@ -38,14 +38,13 @@ class Lesson extends Component {
       this.props.fetchWord(word).then(() => {
         console.log(this.props.words)
         this.props.clearFetching()
-        if (!collId) {
-        }
+        console.log('need to register?')
+        console.log(collId)
         this.setState({...this.state, tabIndex: 1});
       })
     }
     else {
         this.setState({...this.state, tabIndex: 1});
-
     }
   }
 
@@ -77,7 +76,7 @@ class Lesson extends Component {
     console.log('submitting work');
     const { lessonId, collId } = this.props;
     console.log(lessonId)
-    const work = this.props.work ? this.props.work : this.props.work
+    const work = this.props.work ? this.props.work : this.state.work
     console.log(work)
     console.log(this.state)
     if (work) {
@@ -105,13 +104,17 @@ class Lesson extends Component {
     const lessonId = this.props.match.params.lesson_id
     console.log(lessonId)
     console.log('mounting lesson');
-    if (lessonId)
-      this.props.registerLessonId(lessonId)
     if (lessonId) {
+      this.props.registerLessonId(lessonId)
       this.props.requestLesson();
       this.props.fetchWork(lessonId).then(() => { 
-       this.props.fetchWords().then(() => { 
-      })
+        
+        console.log(this.props.collWords)
+        console.log('i will fetch first word')
+        if (this.props.collWords.length) {
+        this.props.requestWord(this.props.collWords[0])
+        this.props.fetchWord(this.props.collWords[0]).then(() => {})
+        }
       })
     }
   }
@@ -150,7 +153,7 @@ class Lesson extends Component {
           <div className="lesson-material"><DecorateWithLinks words={this.props.text} onLinkClick={this.dictionary} original={null} parentRef={null} /></div> 
           </TabPanel>
           { words.length ? 
-          <TabPanel className="react-tabs__tab-panel lesson-tab-panel"><DictionaryWidget addToDict={this.dictionary} /></TabPanel> : '' 
+          <TabPanel className="react-tabs__tab-panel lesson-tab-panel"><DictionaryWidget redirect={0} /></TabPanel> : '' 
           }
           </Tabs>
           </div>
@@ -166,7 +169,8 @@ class Lesson extends Component {
 }
 
 const mapStateToProps = state => ({
-  words: state.words.items,
+  words: state.words.words,
+  collWords: state.collections.collWords,
   word: state.words.word,
   text: state.lesson.text,
   work: state.lesson.work,

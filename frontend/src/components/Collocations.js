@@ -12,7 +12,7 @@ const mapStateToProps = state => ({
 });
 
 const Collocations = (props) => {
-    const { word, collocs, addRow, fetchingMap, parentRef } = props;
+    const { word, collocs, addToDict, fetchingMap, parentRef } = props;
     const wordCollocs = collocs[word];
     if (fetchingMap[word]) {
       return (
@@ -35,10 +35,10 @@ const Collocations = (props) => {
            new_el['trans'][0]['exmpl'] = [{'exmpl': e['example']}]
          }
          return isEnglishWord ? (<div className="etym-style"><a target="_blank" href={`/api/word/${e['expression']}`}
-                                 onClick={(i) => addRow(i, e['expression'], word, parentRef)} className="word-link">
+                                 onClick={(i) => addToDict(i, e['expression'], word, parentRef)} className="word-link">
                                  {e['expression']}</a></div>) : (
            <ul className="etym-style">
-           { renderList([new_el], addRow, parentRef, word, listStyles, 0) }
+           { renderList([new_el], addToDict, parentRef, word, listStyles, 0) }
            </ul>)})
     );
 }

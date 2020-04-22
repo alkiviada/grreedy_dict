@@ -116,7 +116,7 @@ class WordsList extends Component {
 
   deleteWord(e, word) {
     e.preventDefault();
-    this.props.deleteWord(word);
+    this.props.deleteWord(word).then(() => { console.log('after delete returned')});
   }
 
   render () {

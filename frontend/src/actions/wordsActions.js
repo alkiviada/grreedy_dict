@@ -173,9 +173,10 @@ export const fetchWords = (uuid, page) => { return (dispatch, getState) => {
 };
 
 export const deleteWord = (word) => { return (dispatch, getState) => {
-  const { uuid, name, items } = getState().collections
+  const { uuid, name, collWords, items } = getState().collections
   let { lastModifiedMap } = getState().collections
   let { page, allWordsMap, pagePrev, pageNext, allWordCount } = getState().words
+  const oldWords = getState().words.words
   const { refMap } = getState().refs
 
   let time = lastModifiedMap[uuid] && lastModifiedMap[uuid]['words'][pageNext] ? lastModifiedMap[uuid]['time'] : ''
@@ -198,18 +199,21 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
                      payload: {error: 'fetching words failed', word: word}})
         } else {
           // Status looks good
+         console.log(json)
+         console.log('after delete')
          let words;
          if (json.empty) {
            words = []
            allWordsMap = {}
          }
          else if (json.words) {
+console.log('i was sent words')
 // the collection changed - let's  nuke its cache
            pagePrev = json.page_prev
            pageNext = json.page_next
            allWordCount = json.all_word_count
            page = json.page ? json.page : page
-           words = conflateWords(json.words)
+           words = json.words.map(w => w.word)
            lastModifiedMap[uuid]['words'] = { [page]: words }
            allWordsMap = { ...words.map(e => e.word).reduce((o, e) => (o[e] = page, o), {}) }
          }
@@ -217,13 +221,14 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
 // let's deal with local changes
 // filter the deleted word from the words' array
 // rearrange the allWordsMap and lastModified's page cache if words' array was from not the last page
-           words = lastModifiedMap[uuid]['words'][page].filter(w => w.word != word)
+
+           words = lastModifiedMap[uuid]['words'][page].filter(w => w != word)
            lastModifiedMap[uuid]['words'] = { ...lastModifiedMap[uuid]['words'], [page]: words }
            allWordsMap = filterMap(allWordsMap, word)
            if (lastModifiedMap[uuid]['words'][pageNext]) {
              let wordsOnPage = lastModifiedMap[uuid]['words'][pageNext]
              const shifted = wordsOnPage.shift()
-             allWordsMap = filterMap(allWordsMap, shifted.word)
+             allWordsMap = filterMap(allWordsMap, shifted)
              let cachedWords
              cachedWords, allWordsMap = shiftWordsOnPages(shifted, lastModifiedMap[uuid]['words'], allWordsMap, pageNext)
            }
@@ -233,7 +238,7 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
          }
          dispatch({
             type: FETCH_WORDS_FULFILLED,
-            payload: { words, 
+            payload: { words: oldWords.filter(w => w.word != word), 
                        allWordsMap,
                        pagePrev, pageNext, allWordCount, page }
           });
@@ -252,8 +257,15 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
                      lastModifiedMap,
                      uuid: json.empty ? false: uuid, 
                      name: json.empty ? false : name, 
+                     collWords: words,
                    }
         })
+          return dispatch({
+            type: FETCH_COLLECTION_FULFILLED,
+            payload: { uuid: json.empty ? false: uuid, 
+                       name: json.empty ? false : name, 
+                       collWords: words }
+          });
       }
     },
       // Either fetching or parsing failed!
@@ -266,6 +278,7 @@ export const deleteWord = (word) => { return (dispatch, getState) => {
 };
 
 export const fetchWord = (word, direction) => { return (dispatch, getState) => {
+  direction = direction ? direction : 'next'
   const { uuid, items } = getState().collections
   let { words } = getState().words
   console.log('will fetch')

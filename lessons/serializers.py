@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import Lesson
 from words.models import Word
-from words.serializers import WordSerializer
+from words.serializers import WordBareSerializer
+from django.core.paginator import Paginator, EmptyPage
 
 class LessonPostSerializer(serializers.ModelSerializer):
 
@@ -32,8 +33,14 @@ class LessonWorkSerializer(serializers.ModelSerializer):
 
   def get_collection_words(self, instance):
     if instance.collection:
-      words = Word.objects.filter(words=instance.collection).order_by('collectionofwords')
-      return WordSerializer(words, many=True).data
+      coll = instance.collection
+      page = 1
+      all_words = coll.words.all()
+      distinct_words = set()
+      words = [w for w in all_words if w.word not in distinct_words and (distinct_words.add(w.word) or True)]
+      print(len(words))
+          
+      return WordBareSerializer(words, many=True).data
     else:
       return []
 

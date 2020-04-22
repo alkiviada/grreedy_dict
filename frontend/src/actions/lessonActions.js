@@ -9,7 +9,8 @@ import {
   FETCH_LESSON_REJECTED,
   FETCH_LESSONS_REJECTED,
   POST_LESSON,
-  REGISTER_COLLECTION,
+  FETCH_COLLECTION_FULFILLED,
+  SAVE_COLLECTION_FULFILLED,
   POST_LESSON_FULFILLED,
   POST_WORK_FULFILLED,
   POST_LESSON_REJECTED,
@@ -165,10 +166,22 @@ export const fetchWork = (lessonId) => { return (dispatch, getState) => {
             type: REGISTER_LESSON_ID,
             payload: json.lesson_id,
           })
+          const lastModifiedMap = getState().collections.lastModifiedMap
+          const uuid = json.collId
+          lastModifiedMap[uuid] = lastModifiedMap[uuid] ? lastModifiedMap[uuid] : {'words': {}, 'time': 0, 'name': ''}
+           let time = Date.now();
+           time = Math.floor(time/1000);
+          lastModifiedMap[uuid]['words'][1] = json.words.map(w => w.word) 
+          lastModifiedMap[uuid]['time'] = time 
+          lastModifiedMap[uuid]['allWordCount'] = json.words.length 
           dispatch({
-            type: REGISTER_COLLECTION,
-            payload: json.collection,
-          })
+            type: SAVE_COLLECTION_FULFILLED,
+            payload: { uuid, name, lastModifiedMap }
+           });
+          return dispatch({
+            type: FETCH_COLLECTION_FULFILLED,
+            payload: { uuid: json.collId, collWords: json.words.map(w => w.word), },
+          });
         }
       },
       // Either fetching or parsing failed!
@@ -185,6 +198,7 @@ export const postWork = (lessonId, work, collId) => (dispatch, getState) => {
   console.log(lessonId)
   console.log(getState().collections)
   const collId = getState().collections.uuid;
+  console.log(collId)
   let headers = {"Content-Type": "application/json"};
   let body = JSON.stringify({lessonId, work, collId});
 

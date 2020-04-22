@@ -315,15 +315,8 @@ class WordSingleDelete(generics.RetrieveAPIView):
             page = int(page) - 1
             words_on_page = p.page(page).object_list
 
-          for w in words_on_page:
-            all_words_for_page.append(w)
-            omonyms = Word.single_object.filter(words=coll, word=w.word).exclude(language=w.language)
-            all_words_for_page.extend(omonyms)
-            
-          words = all_words_for_page
-        else:
-          words = coll.words.all()
-        serializer = WordSerializer(words, many=True)
+          words = words_on_page
+        serializer = WordBareSerializer(words, many=True)
         print('i will return here');
         coll.update_fields({ 'last_modified_date': timezone.now() })
         if page_count > 1:
