@@ -109,7 +109,7 @@ body {
 }
 }
 
-.work .word {
+.work .word, .book .word {
   height: 4em;
   flex-direction: row;
 }
@@ -280,6 +280,8 @@ i.defect {color: var(--field-color-dark);font-style:normal;}
 
 .dict {
   grid-area: words;
+  display: grid;
+  grid-template-areas: "words-rows";
 }
 
 @media (min-width: 630px) {
@@ -1253,11 +1255,11 @@ ul {
   grid-auto-rows: minmax(auto, max-content);
   grid-auto-rows: minmax(auto, -webkit-max-content);
   width: 100%;
-  max-width: 55rem;
+  max-width: 57rem;
   margin: 0 auto;
 }
 
-.work .words-rows {
+.work .words-rows, .book .words-rows {
   grid-template-columns: 1fr;
 
 }
@@ -1384,7 +1386,7 @@ a[href^="/homework/conjugate"]::after {
   padding: 0 .8em 0 0;
   position: absolute;
   background: #F5FBFD;
-  width: 100%;
+  width: 99%;
   z-index: 8;
   display: flex;
   justify-content: space-between;
@@ -1392,11 +1394,10 @@ a[href^="/homework/conjugate"]::after {
 
 @media (min-width:888px) {
 .react-tabs__tab-list {
-  width: 100%;
-  max-width: 43rem;
+  width: 99%;
 }
 }
-.work .react-tabs__tab-list {
+.work .react-tabs__tab-list, .book .react-tabs__tab-list {
   max-width: 39rem;
 }
 
@@ -1600,8 +1601,7 @@ font-family: FontAwesome;
 .words-rows {
   grid-area: words-rows;
   display: grid;
-
-  grid-template-columns: 1fr;
+  grid-template-columns: 100vw;
   grid-auto-rows: minmax(auto, max-content);
   grid-auto-rows: minmax(auto, -webkit-max-content);
 }
@@ -1886,14 +1886,16 @@ font-family: FontAwesome;
 
 
 .book {
-  margin: 3em 0;
-
+  margin: 3em auto;
+  background: #F5FBFD;
+  max-width: 40rem;
+  width: 100%;
 }
 
 .book-page {
   max-width: 45rem;
   background-color: #FFFCF9;
-  padding: 2em 6em;
+  padding: 2em 1em;
   width: 80%;
   margin: 3em auto;
 }
@@ -1983,7 +1985,7 @@ padding: 2em 1em;
   grid-template-columns: 1fr;
 }
 
-.lesson-tabs {
+.lesson-tabs, .book-tabs {
   font-weight: bolder;
   color: var(--sky-color);
   width: 100%;
@@ -1991,7 +1993,7 @@ padding: 2em 1em;
   justify-content: start;
 }
 
-.lesson-tabs .react-tabs__tab--selected {
+.lesson-tabs .react-tabs__tab--selected, .book-tabs .react-tabs__tab--selected {
   color: var(--field-color-dark);
 }
 

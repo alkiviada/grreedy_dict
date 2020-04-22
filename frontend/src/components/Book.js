@@ -83,6 +83,8 @@ class Book extends Component {
   dictionary(e, word) {
     e.preventDefault();
     console.log('dictionary')
+    console.log('logging scroll top')
+    this.setState( { bookScrollTop: this.bookRef.current.children[0].children[1].children[0].children[0].children[0].scrollTop} );
     const { words } = this.props
     const wordElementIndex = words.findIndex(w => w.word == word);
     console.log(wordElementIndex)
@@ -92,7 +94,12 @@ class Book extends Component {
       this.props.fetchWord(word).then(() => {
         console.log(this.props.words)
         this.props.clearFetching()
+        this.setState( { tabIndex: 1 } );
       })
+    }
+    else {
+
+        this.setState( { tabIndex: 1 } );
     }
   }
 
@@ -109,7 +116,6 @@ class Book extends Component {
     const newPage = parseInt(page) + 1
 
     const wordElementIndex = words.findIndex(w => w.word == word);
-    console.log(words)
     const displayWord = words[wordElementIndex] ? words[wordElementIndex] : words[0]
 
     return (
