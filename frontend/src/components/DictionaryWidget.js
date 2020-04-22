@@ -102,7 +102,7 @@ class DictionaryWidget extends Component {
   <div className="word-cell" ref={this.wordRef}><Word parentRef={this.wordRef} wordElement={wordElement} nextWord={nextWord} prevWord={prevWord} addToDict={this.addToDict} /></div> 
   <WordCell addToDict={this.addToDict} wordRef={this.wordRef} word={this.props.word} element={wordElement} next={nextWord} prev={prevWord} />
   </div></div>
-  ) : ''
+  ) : <div className="dict-widget-loading">Loading...</div>
  }
 }
 

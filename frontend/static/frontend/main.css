@@ -1398,7 +1398,7 @@ a[href^="/homework/conjugate"]::after {
 }
 }
 .work .react-tabs__tab-list, .book .react-tabs__tab-list {
-  max-width: 39rem;
+  max-width: 43rem;
 }
 
 .react-tabs__tab {
@@ -1888,7 +1888,7 @@ font-family: FontAwesome;
 .book {
   margin: 3em auto;
   background: #F5FBFD;
-  max-width: 40rem;
+  max-width: 44rem;
   width: 100%;
 }
 
@@ -2053,4 +2053,8 @@ padding: 2em 1em;
     color: var(--field-color-dark);
   font-weight: 900;
   cursor: pointer;
+}
+
+.dict-widget-loading {
+  background: red;
 }

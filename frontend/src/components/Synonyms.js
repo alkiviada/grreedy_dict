@@ -28,7 +28,7 @@ const Synonyms = (props) => {
          <div className="stuff-container">
         <div className="etym-style">
         <p className={`heading lang-head lang-${e}`}>{e}</p>
-        <DecorateWithLinks words={wordSyns[e].join(', ')} onLinkClick={addRow} parentRef={parentRef} original={word} />
+        <DecorateWithLinks words={wordSyns[e].join(', ')} onLinkClick={this.props.addToDict} parentRef={parentRef} original={word} />
         </div></div>)
       
     );
