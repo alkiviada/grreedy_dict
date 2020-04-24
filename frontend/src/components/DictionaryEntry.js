@@ -10,7 +10,7 @@ const DictionaryEntry = (props) => (
   <NewWordForm />
   <DictionaryWidget word={props.match.params.word}/>
   <Menu />
-  <SaveCollection />
+  <SaveCollection link={1}/>
   </div>
 )
 

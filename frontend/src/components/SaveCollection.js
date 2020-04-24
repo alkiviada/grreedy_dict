@@ -80,6 +80,12 @@ class SaveCollection extends Component {
     const labelText = error ? "Cant' save collection" : 'Name Collection'
 
     const auth = this.props.auth
+    if (this.props.link) {
+      console.log('i am in wideget')
+// we are in widget (word) mode
+      return <div className="save-coll"><Link className="is-link to-coll" to="/">Back to Collection</Link></div>
+    }
+    
 
     if (auth.isAuthenticated) { 
       if (words.length) {

@@ -1395,6 +1395,7 @@ a[href^="/homework/conjugate"]::after {
 @media (min-width:888px) {
 .react-tabs__tab-list {
   width: 99%;
+  max-width: 47rem;
 }
 }
 .work .react-tabs__tab-list, .book .react-tabs__tab-list {
@@ -2060,4 +2061,11 @@ padding: 2em 1em;
     font-style: italic;
     height: 500px;
     margin: .5em 2em;
+}
+
+.is-link.to-coll {
+  justify-self: center;
+    align-self: center;
+    color: var(--sky-color-light);
+    font-size: 2rem;
 }

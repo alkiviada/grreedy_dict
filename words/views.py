@@ -472,11 +472,14 @@ class WordSingleCreate(generics.ListAPIView):
         serializer = WordSerializer(db_words, many=True)
     #    serializer = WordSerializer(words, many=True)
         print('WORDSER')
+        print(page)
+        print(WordBareSerializer(p.page(page).object_list, many=True).data)
         return Response({ 
                           'word': serializer.data, 
                           'page_next': int(page) + 1 if int(page) + 1 <= p.num_pages else 0,
                           'page_prev': int(page) - 1 if int(page) - 1 > 0 else 0,
                           'name': coll.name,
+                          'pwords': WordBareSerializer(p.page(page).object_list, many=True).data,
                           'page': page,
                           'uuid': coll.uuid,
                           'all_word_count': len(distinct_words) if len(distinct_words) > WORDS_ON_PAGE else 0
