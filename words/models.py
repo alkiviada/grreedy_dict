@@ -269,18 +269,17 @@ class LatinWordManager(models.Manager):
             originals.append(original)
             page = r.content
             soup = BeautifulSoup(page, features="html.parser")
-            definitions = soup.findAll('div', { 'class': 'lex_sense'})
-            for d in definitions:
+            page_definitions = soup.findAll('div', { 'class': 'lex_sense'})
+            for d in page_definitions:
               print(d.get_text())
               print(len(d.findAll('b')))
               if len(d.findAll('b')):
                 for b in d.findAll('b'):
                   print(b.get_text())
                   b.decompose()
-            print(definitions)
-            definitions = [ d.get_text() for d in definitions]
+            page_definitions = [ d.get_text() for d in page_definitions]
             print('done')
-            definition = ''.join(definitions)
+            definition = ''.join(page_definitions)
             definition = re.sub(r'(; )\1+', r'\1', definition)  
             print(definition)
             definitions_map[original] = definition

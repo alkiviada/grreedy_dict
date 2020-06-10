@@ -803,6 +803,10 @@ ul {
   padding-left: .2em;
 }
 
+.lesson-container .word-about {
+  height: 39vh;
+}
+
 .word {
   font-family: var(--word-font);
   font-feature-settings: 'liga', 'clig', 'dlig';
@@ -877,8 +881,8 @@ ul {
   z-index: 12;
   right: 0;
   bottom: 1.5em;
-  width: 4em;
-  height: 4em;
+  width: 3em;
+  height: 3em;
   border: none;
   background: transparent;
   transition: transform 200ms ease-in-out;
@@ -1260,7 +1264,6 @@ ul {
 }
 
 .work .words-rows, .book .words-rows {
-  grid-template-columns: 1fr;
 
 }
 
@@ -1977,7 +1980,7 @@ padding: 2em 1em;
 .work {
   display: grid;
   height: 100%;
-  grid-template-rows: 25em 15em; 
+  grid-template-rows: minmax(auto, 50%) 15em;
   min-height: 100vh;
   grid-template-areas: "lesson" "work";
   grid-row-gap: 2em;

@@ -172,3 +172,16 @@
 2020-04-20 09:47:03.175 EDT [2555] STATEMENT:  SELECT DISTINCT ON ("words_word"."word") "words_word"."id", "words_word"."word", "words_word"."language", "words_word"."lookup_date", "words_word"."notes", "words_word"."inflections_id", "words_word"."pronounce", "words_word"."from_translation", "words_word"."is_verb", "words_word"."conjugations", "words_word"."origin_verb_id", "words_word"."did_conjugations", "words_word"."did_inflections", "words_word"."did_book_examples" FROM "words_word" INNER JOIN "words_collectionofwords" ON ("words_word"."id" = "words_collectionofwords"."word_id") WHERE "words_collectionofwords"."collection_id" = 133 ORDER BY "words_collectionofwords"."date_added" DESC LIMIT 21
 2020-04-20 09:47:03.177 EDT [2555] ERROR:  SELECT DISTINCT ON expressions must match initial ORDER BY expressions at character 21
 2020-04-20 09:47:03.177 EDT [2555] STATEMENT:  SELECT DISTINCT ON ("words_word"."word") "words_word"."id", "words_word"."word", "words_word"."language", "words_word"."lookup_date", "words_word"."notes", "words_word"."inflections_id", "words_word"."pronounce", "words_word"."from_translation", "words_word"."is_verb", "words_word"."conjugations", "words_word"."origin_verb_id", "words_word"."did_conjugations", "words_word"."did_inflections", "words_word"."did_book_examples" FROM "words_word" INNER JOIN "words_collectionofwords" ON ("words_word"."id" = "words_collectionofwords"."word_id") WHERE "words_collectionofwords"."collection_id" = 133 ORDER BY "words_collectionofwords"."date_added" DESC LIMIT 21
+2020-06-09 15:32:41.476 EDT [16239] LOG:  listening on IPv6 address "::1", port 5432
+2020-06-09 15:32:41.477 EDT [16239] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2020-06-09 15:32:41.480 EDT [16239] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2020-06-09 15:32:41.556 EDT [16240] LOG:  database system was interrupted; last known up at 2020-04-24 08:19:56 EDT
+2020-06-09 15:32:41.684 EDT [16240] LOG:  database system was not properly shut down; automatic recovery in progress
+2020-06-09 15:32:41.688 EDT [16240] LOG:  redo starts at 0/5D7EEE0
+2020-06-09 15:32:41.689 EDT [16240] LOG:  invalid record length at 0/5D7EFC0: wanted 24, got 0
+2020-06-09 15:32:41.689 EDT [16240] LOG:  redo done at 0/5D7EF88
+2020-06-09 15:32:41.730 EDT [16239] LOG:  database system is ready to accept connections
+2020-06-10 12:53:08.517 EDT [16239] LOG:  received smart shutdown request
+2020-06-10 12:53:08.521 EDT [16239] LOG:  worker process: logical replication launcher (PID 16246) exited with exit code 1
+2020-06-10 12:53:08.521 EDT [16241] LOG:  shutting down
+2020-06-10 12:53:08.540 EDT [16239] LOG:  database system is shut down

@@ -43,6 +43,7 @@ export default function(state = initialState, action) {
                saved: true, 
                name: action.payload.name ? action.payload.name : '', 
                uuid: action.payload.uuid ? action.payload.uuid : '', 
+               items: action.payload.items ? action.payload.items : state.items,
                lastModifiedMap: action.payload.lastModifiedMap
              };
     case SAVE_COLLECTION_REJECTED: 

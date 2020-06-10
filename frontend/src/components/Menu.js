@@ -65,6 +65,7 @@ class Menu extends Component {
 
   handleCollectionsClick(e) {
     e.preventDefault();
+    console.log(this.props.colls)
     if (!this.props.colls.length) {
 // I clicked - but the data is not loaded yet
 // which means this can only be to open for the first time
