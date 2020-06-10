@@ -2011,6 +2011,7 @@ padding: 2em 1em;
   overflow-y: scroll;
   background: #FFFCF9;
   font-family: var(--body-font);
+  max-height: 18em;
 }
 
 .work-add-form {

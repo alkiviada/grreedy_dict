@@ -185,3 +185,8 @@
 2020-06-10 12:53:08.521 EDT [16239] LOG:  worker process: logical replication launcher (PID 16246) exited with exit code 1
 2020-06-10 12:53:08.521 EDT [16241] LOG:  shutting down
 2020-06-10 12:53:08.540 EDT [16239] LOG:  database system is shut down
+2020-06-10 18:27:33.663 EDT [735] LOG:  listening on IPv6 address "::1", port 5432
+2020-06-10 18:27:33.664 EDT [735] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2020-06-10 18:27:33.666 EDT [735] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2020-06-10 18:27:33.758 EDT [736] LOG:  database system was shut down at 2020-06-10 12:53:08 EDT
+2020-06-10 18:27:33.830 EDT [735] LOG:  database system is ready to accept connections
