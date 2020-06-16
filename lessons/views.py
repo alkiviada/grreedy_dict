@@ -61,7 +61,7 @@ class LessonCreateUpdate(generics.GenericAPIView):
       lesson.title = title 
       lesson.save(update_fields=['text', 'title'])
     else:
-      lesson = Lesson.objects.create(**{'text': text, 'title': name})
+      lesson = Lesson.objects.create(**{'text': text, 'title': title })
 
     return Response(LessonPostSerializer(lesson).data)
 

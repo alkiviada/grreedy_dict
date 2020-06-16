@@ -1264,6 +1264,7 @@ ul {
 }
 
 .work .words-rows, .book .words-rows {
+  grid-template-columns: 100%;
 
 }
 
@@ -1402,7 +1403,7 @@ a[href^="/homework/conjugate"]::after {
 }
 }
 .work .react-tabs__tab-list, .book .react-tabs__tab-list {
-  max-width: 43rem;
+  max-width: 39rem;
 }
 
 .react-tabs__tab {
