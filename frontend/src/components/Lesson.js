@@ -18,18 +18,34 @@ class Lesson extends Component {
     this.handleLessonSubmit = this.handleLessonSubmit.bind(this);
     this.handleWorkSubmit = this.handleWorkSubmit.bind(this);
     this.dictionary = this.dictionary.bind(this) 
+    this.workRef = React.createRef();
     this.state = {
       tabIndex: 0,
       text: '',
       title: '',
-      work: ''
+      work: '',
+      workScrollTop: 0,
     };
+  }
+  handleSelect(prev, index, workRef) {
+    console.log('select')
+    console.log(prev)
+     if (prev == 0) {
+       console.log('logging scroll top')
+       console.log(this.workRef.current); 
+       console.log(this.workRef.current.children[0]); 
+       this.setState( { workScrollTop: this.workRef.current.children[0].children[0].children[1].children[0].scrollTop} );
+     }
+     else {
+     }
+     this.setState( { tabIndex: index } );
   }
 
   dictionary(e, word) {
     e.preventDefault();
     console.log('dictionary')
     const { words, collId } = this.props
+    this.setState( { workScrollTop: this.workRef.current.children[0].children[0].children[1].children[0].scrollTop} );
     const wordElementIndex = words.findIndex(w => w.word == word);
     console.log(wordElementIndex)
     this.props.requestWord(word)
@@ -95,6 +111,9 @@ class Lesson extends Component {
   componentDidUpdate() {
     console.log('update')
     const lessonId = this.props.match.params.lesson_id
+    if (this.state.workScrollTop && this.workRef.current && this.state.tabIndex == 0) {
+      workScrollTop: this.workRef.current.children[0].children[0].children[1].children[0].scrollTop = this.state.workScrollTop;
+    }
   }
   
 
@@ -142,9 +161,9 @@ class Lesson extends Component {
       const work = !this.props.fetched ? this.state.work : this.props.work;
       const { word, words } = this.props;
       return (
-        <div className="work">
+        <div className="work" ref={this.workRef}>
           <div className="lesson-container">
-          <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
+          <Tabs selectedIndex={this.state.tabIndex} onSelect={(prev, index) => this.handleSelect(index, prev, this.workRef)}>
           <TabList className="react-tabs__tab-list lesson-tabs">
            <Tab>Lesson</Tab>
            { words.length ? <Tab>Dictionary</Tab> : '' }

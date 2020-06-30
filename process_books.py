@@ -17,9 +17,15 @@ p_count = 0
 page_count = 1
 book_head = ''
 
+#for f in glob.glob("grreedy_library/zola/nana/*/*.txt.html"):
+#  print(f.split('.')[0].split('-')[2])
+
+
+#print(sorted(glob.glob("grreedy_library/zola/nana/*/*.txt.html"), key=lambda a: (int(a.split('.')[0].split('-')[1]))))
 
 #for filename in sorted(glob.glob("/Users/ana/clean_dict/grreedy_dict/grreedy_library/stendhal/parme/796/*.html"), key=lambda a: (int(a.split('.')[0].split('-')[2]))):
-for filename in sorted(glob.glob("grreedy_library/bible/*.xhtml")):
+#for filename in sorted(glob.glob("grreedy_library/bible/*.xhtml")):
+for filename in sorted(glob.glob("grreedy_library/zola/nana/*/*txt.html"), key=lambda a: (int(a.split('.')[0].split('-')[2]))):
   print(filename)
   with open(filename,'r') as f:
     output = f.read()
@@ -48,7 +54,7 @@ for filename in sorted(glob.glob("grreedy_library/bible/*.xhtml")):
   
 #[ print(k, ' ', book_map[k])  for k in book_heads ] 
 import json
-with open('/Users/ana/clean_dict/grreedy_dict/grreedy_library/maps/bible.json', 'w') as fp:
+with open('/Users/ana/clean_dict/grreedy_dict/grreedy_library/maps/nana.json', 'w') as fp:
   json.dump(book_map, fp)
 #with open('data.json', 'r') as fp:
 #  e = json.load(fp)
