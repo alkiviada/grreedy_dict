@@ -54,6 +54,8 @@ class Book extends Component {
   componentDidUpdate() {
     console.log('update')
     const page = this.props.match.params.page
+    console.log(this.props.match.params)
+    const what = this.props.match.params.what
     console.log(page)
     console.log(this.state.bookScrollTop)
     console.log(this.bookRef.current)
@@ -66,16 +68,20 @@ class Book extends Component {
   
 
   componentDidMount() {
-    const { uuid, bookPageMap } = this.props
+    const { uuid, bookPageMap, what } = this.props
     console.log(this.props)
     const page = this.props.match.params.page
-    const what = this.props.match.params.what
+    const whatReq = this.props.match.params.what
     console.log('mounting book');
     console.log('map ', bookPageMap)
     if (uuid)
       this.props.registerUUId(uuid)
     this.props.requestPage(page, what);
-    if (!(bookPageMap[page]) || (bookPageMap[page]['end'] >= 1)) {
+    if (whatReq != what) {
+      this.props.requestPage(page, whatReq);
+      this.props.fetchPage();
+    }
+    else if (!(bookPageMap[page]) || (bookPageMap[page]['end'] >= 1)) {
       this.props.fetchPage(1)
     }
   }
@@ -131,7 +137,7 @@ class Book extends Component {
           dataLength={psToShow.length}
           next={this.fetchMore}
           hasMore={ps.length > end}
-          height={500}
+          height={400}
           loader={<h4>Loading...</h4>}
           endMessage={
            <Link className="is-link" to={`/book/${what}/${newPage}`}>Chapter {newPage}</Link>  
@@ -157,6 +163,7 @@ const mapStateToProps = state => ({
   ps: state.book.ps,
   pageFetching: state.book.pageFetching,
   page: state.book.page,
+  what: state.book.what,
   bookPageMap: state.book.bookPageMap,
 });
 

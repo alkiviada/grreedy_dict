@@ -15,7 +15,7 @@ export const registerUUId = (uuid) => dispatch => {
 export const requestPage = (page, what) => dispatch => {
   dispatch({
     type: FETCH_PAGE,
-    payload: { page, what},
+    payload: { page, what },
   })
 };
 
