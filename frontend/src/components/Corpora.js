@@ -54,7 +54,7 @@ class Corpora extends React.Component {
           dataLength={wordCorp.length}
           next={this.fetchMoreCorpora}
           hasMore={!end}
-          height={200}
+          height={280}
           loader={<h4>Loading...</h4>}
           endMessage={
             <p style={{ textAlign: "center" }}>
