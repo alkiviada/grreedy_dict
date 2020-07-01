@@ -6,7 +6,7 @@ import {
 
 
 export const fetchCorpora = (word, oldIds) => (dispatch, getState) => {
-  console.log('fetching word corpora');
+  console.log('fetching word orpora');
   console.log(word)
   fetch('/api/word/corpora/' + word + (oldIds ? '/' + oldIds : ''))
   .then(response =>

@@ -27,7 +27,7 @@ class Corpora extends React.Component {
   };
 
   render() {
-    const { word, end, corpora, addRow, parentRef, fetchingMap, uuid } = this.props;
+    const { word, end, corpora, addToDict, parentRef, fetchingMap, uuid } = this.props;
     console.log('my end: ', end)
     const wordCorp = corpora[word] ? corpora[word] : [];
     console.log(wordCorp)
@@ -63,7 +63,7 @@ class Corpora extends React.Component {
         >
            <ul className="corpora-style"> 
            {
-      wordCorp.map(e => <li><DecorateWithLinks words={e.example} onLinkClick={addRow} original={word} parentRef={parentRef} /></li>)
+      wordCorp.map(e => <li><DecorateWithLinks words={e.example} onLinkClick={addToDict} original={word} parentRef={parentRef} /></li>)
            }
      </ul>
         </InfiniteScroll>
