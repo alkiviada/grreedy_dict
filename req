@@ -1,7 +1,0 @@
-headers = {}
-params = {};
-headers['User-Agent'] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36"
-r = ''
-import requests
-r = requests.get("https://www.wordreference.com/fren/carmen", headers = headers, allow_redirects=False, params=params, verify=False)
-print(r.content)

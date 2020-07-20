@@ -41,7 +41,7 @@ export const fetchPage = (alreadyRead) => { return (dispatch, getState) => {
       newEnd = parseInt(p) + 1
       newPsToShow.push(ps[p])
       bookPageMap[page]['end'] = newEnd
-      if (newPsToShow.join(' ').length > 500)
+      if (newPsToShow.join(' ').length > 700)
         break
     }
     console.log(newStart)
@@ -93,7 +93,7 @@ export const fetchPage = (alreadyRead) => { return (dispatch, getState) => {
             bookPageMap[page]['psToShow'].push(ps[p])
             let l = bookPageMap[page]['psToShow'].join(' ').length
             bookPageMap[page]['end'] = parseInt(p) + 1
-            if (l > 500) {
+            if (l > 700) {
               break
             }
           }

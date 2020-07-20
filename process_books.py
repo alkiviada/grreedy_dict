@@ -54,7 +54,7 @@ for filename in sorted(glob.glob("grreedy_library/zola/nana/*/*txt.html"), key=l
   
 #[ print(k, ' ', book_map[k])  for k in book_heads ] 
 import json
-with open('/Users/ana/clean_dict/grreedy_dict/grreedy_library/maps/nana.json', 'w') as fp:
+with open('grreedy_library/maps/nana.json', 'w') as fp:
   json.dump(book_map, fp)
 #with open('data.json', 'r') as fp:
 #  e = json.load(fp)

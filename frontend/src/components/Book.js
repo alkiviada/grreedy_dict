@@ -51,7 +51,7 @@ class Book extends Component {
   };
 
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState, snapshot) {
     console.log('update')
     const page = this.props.match.params.page
     console.log(this.props.match.params)
@@ -60,7 +60,7 @@ class Book extends Component {
     console.log(this.state.bookScrollTop)
     console.log(this.bookRef.current)
     
-    if (this.state.bookScrollTop && this.bookRef.current && this.state.tabIndex == 0) {
+    if (this.state.bookScrollTop && this.bookRef.current && this.state.tabIndex == 0 && prevState.tabIndex != 0) {
       bookScrollTop: this.bookRef.current.children[0].children[1].children[0].children[0].children[0].scrollTop = this.state.bookScrollTop;
     }
     
@@ -137,7 +137,7 @@ class Book extends Component {
           dataLength={psToShow.length}
           next={this.fetchMore}
           hasMore={ps.length > end}
-          height={400}
+          height={500}
           loader={<h4>Loading...</h4>}
           endMessage={
            <Link className="is-link" to={`/book/${what}/${newPage}`}>Chapter {newPage}</Link>  
