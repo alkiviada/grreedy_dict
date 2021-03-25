@@ -45,7 +45,7 @@ pycparser==2.18
 pyOpenSSL==18.0.0
 python-dateutil==2.7.3
 pytz==2018.5
-PyYAML==3.13
+PyYAML==5.4
 regex==2018.1.10
 requests==2.18.4
 semantic-version==2.5.0
