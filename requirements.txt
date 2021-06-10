@@ -14,7 +14,7 @@ cryptography==2.3.1
 cymem==2.0.2
 cytoolz==0.9.0.1
 dill==0.2.9
-Django==1.11
+Django==2.2.24
 django-background-tasks==1.2.0
 django-compat==1.0.15
 django-rest-knox==3.1.5
